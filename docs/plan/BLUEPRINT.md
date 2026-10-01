@@ -1,140 +1,133 @@
-# BLUEPRINT: Work-State Graph Engine MVP
+# BLUEPRINT: Work-State Graph Engine MVP (v2)
 
 *ECC `blueprint`. Objective: build the MVP defined in [`docs/product/CAPABILITY.md`](../product/CAPABILITY.md) following [`docs/adr/`](../adr/README.md).*
-*Mode: **direct** (all steps are commits on branch `claude/awesome-volta-p33adu`; no per-step PRs unless the founder asks).*
+*Mode: **direct**: every step is one or more commits on branch `claude/awesome-volta-p33adu`; no per-step PRs unless the founder asks.*
+*v2 incorporates the adversarial review (ECC `planner`, 2026-10-01): see Log.*
 
 ## Pre-flight (2026-10-01)
-- Git remote `cristianosousaa-dev/Test-APP`, working branch `claude/awesome-volta-p33adu`.
-- Node 22, pnpm 10, PostgreSQL 16 installed locally (cluster `16/main`, start with `pg_ctlcluster 16 main start`). Docker daemon not running in the cloud container: local Postgres is used here; `docker-compose.yml` is provided for other machines.
+- Remote `cristianosousaa-dev/Test-APP`; branch `claude/awesome-volta-p33adu`.
+- Node 22, pnpm 10, PostgreSQL 16 local cluster (`pg_ctlcluster 16 main start`). Docker daemon unavailable in the cloud container; `docker-compose.yml` serves other machines.
 - Chromium for Playwright at `/opt/pw-browsers`.
-- No GitHub App or Slack app credentials yet → fixtures + seeded demo workspace (CAPABILITY open question 1).
+- No GitHub App / Slack credentials yet → fixtures + seeded demo workspace.
 
-## Global invariants (verified after every step)
-1. `pnpm check` is green (Biome + `tsc --noEmit` + Vitest).
-2. `packages/core` imports nothing from `db`, `integrations`, `apps/*` or Node built-ins (Biome rule).
-3. No secrets or `.env` files committed; env is validated with zod at boot.
-4. Every `packages/db` query function takes `workspaceId` as its first argument.
-5. No source-code contents stored; `signal.data` only holds whitelisted metadata.
+## Packages
+`@wsg/core` (pure engine) · `@wsg/db` (schema, migrations, queries, ingest pipeline, job helpers) · `@wsg/integrations` (GitHub, Slack) · `@wsg/web` (Next.js) · `@wsg/worker` (pg-boss).
+
+## Global invariants (checked after every step)
+1. `pnpm check` green (Biome + `tsc --noEmit` + Vitest).
+2. `@wsg/core` imports no Node built-ins (`node:*` or bare) and nothing from `@wsg/db`, `@wsg/integrations`, `apps/*` (Biome rule, verified in S1).
+3. No secrets or `.env` committed; env validated with zod at boot.
+4. Every tenant data query takes `workspaceId` first. **Documented exceptions:** Better Auth tables, `integrations.findByInstallationId` (resolves the workspace from a verified webhook), `worker_heartbeat`, pg-boss tables, operator-only `/admin` queries.
+5. `signal.data` holds whitelisted metadata only; never bodies or file contents.
+6. Migrations are **forward-fix only**; generated one step at a time (no parallel steps adding migrations).
 
 ## Dependency graph
 
 ```
-S1 ─► S2 ─┬─► S3 ─┬─► S5 ─┬─► S7 ─┬─► S8 (UI)        ─┐
-          └─► S4 ─┘       │       ├─► S9 (Slack)       ├─► S11
-                  S3,S4 ─► S6 ────┘   S10 (onboarding) ─┘
+S1 ─► S2 ─┬─► S3 ─┬─► S5 ─► S6a ─┬─► S6b ─┐
+          └─► S4 ─┘              └─► S6c ─┴─► S7 ─► S8a ─► S8b ─► S9 ─► S10 ─► S11
 ```
-- **Parallel:** S3 ∥ S4 (after S2). S8 ∥ S9 ∥ S10 (after S7; they touch disjoint routes, but S8/S10 share `app/(app)/layout.tsx`: S8 owns it).
-- **Strongest model:** S2 (engine), S5 (recompute pipeline), S6 (auth + webhook path). Default model elsewhere.
+- **Parallel:** S3 ∥ S4; S6b ∥ S6c. Everything after S7 is serial (shared settings layout and migrations).
+- **Strongest model:** S2, S5, S6a/S6b. Default elsewhere.
+- **First demo** (state + evidence visible in UI): end of S8a.
 
 ---
 
-## S1: Workspace scaffold and quality gates
-**Context brief.** Greenfield repo with docs only. ADR-0001 (layout), ADR-0010 (tooling: Biome, Vitest, TS 6.0.3 pinned, `erasableSyntaxOnly`).
+## S1: Workspace scaffold and quality gates ✅ (commit `11ffa4e`)
+pnpm workspace, TS 6.0.3, Biome purity rule (blocks `node:fs`, bare `fs`, `@wsg/db`), Vitest projects + `@vitest/coverage-v8`, compose, `.env.example`, CI.
+
+## S2: Inference engine (`@wsg/core`), TDD
+**Context.** ADR-0006, CAPABILITY §States. Pure `infer(signals, corrections, config, now)`.
 **Tasks.**
-- Root `package.json` (`packageManager: pnpm@10`), `pnpm-workspace.yaml` (`apps/*`, `packages/*`), `.npmrc`, `.gitignore`, `.editorconfig`, `.nvmrc` (22).
-- `tsconfig.base.json` (strict, `noUncheckedIndexedAccess`, `erasableSyntaxOnly`, `verbatimModuleSyntax`, ES2023, bundler resolution).
-- `biome.json` incl. `noRestrictedImports` for `packages/core`.
-- `vitest.workspace` / root `vitest.config.ts` with projects.
-- Empty packages `core`, `db`, `integrations` with `exports` to `src/index.ts`.
-- Scripts: `check`, `lint`, `format`, `typecheck`, `test`.
-- `docker-compose.yml` (Postgres 16), `.env.example`.
-- `.github/workflows/ci.yml`: Biome → tsc → Vitest (Postgres service) → build.
-**Verify.** `pnpm install && pnpm check`.
-**Exit.** Green check on an empty workspace; a deliberate `import 'node:fs'` in core fails lint.
-**Rollback.** Revert the commit.
+- Types + zod: `Signal` (`id`, `externalId`, `kind`, `occurredAt`, `receivedAt`, `actor`, `refs {prNumber?, branch?, sha?, headRepoId?, baseRef?}`, `data`), `Correction`, `EngineConfig` (`timezone`, `staleAfterBusinessDays`), `StreamState` (`phase`, `attention`, `waitingOn`, `reasonCode`, `reasonText`, `evidenceIds`, `stateSince`, `revalidateAt`).
+- `normalize` (stable sort by `(occurredAt, externalId)`, semantic dedupe), `fold` → `Snapshot` (multiple PRs per stream; head SHA tracking incl. force-push), `phaseOf`, `attentionOf`, `applyCorrections`, `renderReason`, `businessDaysBetween`, `computeRevalidateAt`, `parseTicketKey`, `ENGINE_VERSION`.
+- **Corrections rule:** `phase`/`attention` corrections apply while no signal has `receivedAt > correction.createdAt` (both server clocks, no skew). `not_work` and `merge_into` are sticky.
+- **Golden scenarios:** draft PR; ready + review requested; changes requested then push; CI failing then fixed; force-push changes head (old CI result ignored); approved waiting merge; merged; closed; reopened; new PR on same branch after merge; two open PRs from one branch to different bases; stale across weekend; DST boundary; correction then newer signal; sticky `not_work`; check arriving before its push; duplicates and permutations.
+- **Property tests (fast-check):** permutation invariance, duplicate invariance, non-empty evidence.
+**Verify.** `pnpm --filter @wsg/core exec vitest run --coverage` (≥90% lines).
+**Exit.** All scenarios and properties (500 runs) pass. **Rollback.** Revert.
 
-## S2: Inference engine (`packages/core`), TDD
-**Context brief.** ADR-0006. Pure `infer(signals, corrections, config, now)`. States/attention rules from CAPABILITY §States. Evidence ids mandatory. Corrections: phase/attention apply until a newer signal; `not_work`/`merge_into` sticky. Staleness in business days, workspace tz.
-**Tasks (red → green → refactor per rule).**
-- Types: `Signal`, `SignalKind`, `Correction`, `EngineConfig`, `StreamState`, `Phase`, `Attention`, `ReasonCode`; zod schemas for `Signal`.
-- `normalize` (stable sort, semantic dedupe), `fold` → `Snapshot`, `phaseOf`, `attentionOf` (priority list), `applyCorrections`, `renderReason`, `businessDaysBetween`, `revalidateAt`.
-- `ENGINE_VERSION` constant.
-- Golden scenarios (`test/scenarios/*.ts`): draft PR, ready + review requested, changes requested then push, CI failing, approved waiting merge, merged, closed, reopened, stale over weekend, DST boundary, correction then newer signal, duplicate/out-of-order signals.
-- Property tests (fast-check): permutation invariance, duplicate invariance, evidence non-empty.
-- `DigestModel` builder (pure) for S9.
-**Verify.** `pnpm --filter @wsg/core test --coverage` ≥ 90% lines.
-**Exit.** All scenarios pass; property tests pass with 500 runs.
-**Rollback.** Revert; nothing depends on it yet.
-
-## S3: Database (`packages/db`)
-**Context brief.** ADR-0003. Entities from CAPABILITY §Domain model. Composite FKs for tenant safety. pg-boss schema is managed by pg-boss itself.
+## S3: Database (`@wsg/db`): schema, queries, isolation
+**Context.** ADR-0003. Entities: CAPABILITY §Domain model.
 **Tasks.**
-- Drizzle schema: `workspace`, `member`, `identity`, `integration`, `repository`, `signal`, `stream`, `stream_transition`, `correction`, `digest_run`, `job_cursor`, `worker_heartbeat` + Better Auth tables (`user`, `session`, `account`, `verification`).
-- Constraints and indexes listed in ADR-0003; `ON DELETE CASCADE` from workspace; RLS enabled, no policies.
-- Generated SQL migration committed; `migrate` script.
-- Query modules: `signals.insertMany` (ON CONFLICT DO NOTHING, returns inserted), `streams.upsertByKey`, `streams.list(workspaceId, filters)`, `streams.get`, `streams.saveState` (+ transition if changed), `corrections.add`, `repositories.*`, `workspaces.*`, `digests.*`.
-- Test harness: create template DB once, clone per test file; tenant-isolation suite.
-**Verify.** `pnpm --filter @wsg/db test` against local Postgres.
-**Exit.** Migrations apply cleanly from zero; isolation suite proves no cross-workspace reads.
-**Rollback.** Revert; drop dev database.
+- Drizzle schema: `workspace` (+ `timezone`, `stale_after_business_days`, `digest_channel_id`, `digest_local_time`), `member`, `identity`, `integration` (+ `status`), `repository` (+ `tracked`), `signal` (+ `received_at`, `stream_id` nullable), `stream` (+ `ticket_key`, `engine_version`, `revalidate_at`, `hidden_reason`, `merged_into_stream_id`), `stream_transition`, `correction`, `digest_run`, `job_cursor`, `worker_heartbeat`, Better Auth tables.
+- Constraints/indexes from ADR-0003 plus `signal(workspace_id, (refs->>'sha'))` and partial `signal(workspace_id) WHERE stream_id IS NULL`.
+- Query modules: `workspaces`, `members`, `identities` (`linkGithubLogin`, `findMemberByLogin`), `integrations` (`findByInstallationId`, `setStatus`), `repositories`, `signals`, `streams`, `corrections`, `digests`.
+- Test harness: template DB cloned per test file; tenant-isolation suite.
+**Verify.** `pg_ctlcluster 16 main start; createdb wsg_test; DATABASE_URL=postgres://…/wsg_test pnpm --filter @wsg/db test`.
+**Exit.** Migrations apply from zero; isolation suite proves no cross-workspace reads. **Rollback.** Revert; drop dev DB.
 
-## S4: GitHub integration (`packages/integrations/github`)
-**Context brief.** ADR-0007. Map webhook payloads to `Signal[]` with deterministic `external_id`s and stream keys; HMAC verify; backfill client.
+## S4: GitHub mappers (`@wsg/integrations/github`)
+**Context.** ADR-0007.
 **Tasks.**
-- `verifySignature(rawBody, header, secret)` constant-time.
-- Event mappers: `pull_request` (opened, ready_for_review, converted_to_draft, reopened, closed→merged/closed, review_requested, review_request_removed, synchronize→branch_pushed), `pull_request_review`, `push`, `check_suite`, `status`, `installation*`.
-- Field whitelist (no bodies, no file contents).
-- Fixtures from `@octokit/webhooks-examples` (dev dependency).
-- Backfill: list PRs updated in last N days, reviews, check suites → same mappers' signal shapes; Octokit throttling/retry; cursor.
-**Verify.** `pnpm --filter @wsg/integrations test`.
-**Exit.** Every subscribed event fixture maps to valid `Signal`s; tampered body fails verification.
-**Rollback.** Revert.
+- `verifySignature(rawBody, header, secret)` (constant time); `ALLOWED_EVENTS` allowlist.
+- **Signal mappers:** `pull_request`, `pull_request_review`, `push` (ignores default branch and `deleted: true` except to close branch), `check_suite`, `status`. Deterministic `external_id`s; refs include `headRepoId` for forks.
+- **Control-event mappers** (not Signals): `installation`, `installation_repositories`, `repository` → `ControlEvent` (connect, disconnect, repos added/removed).
+- Fixtures from `@octokit/webhooks-examples` + hand-made fork/force-push/status fixtures.
+- Backfill client (Octokit throttling/retry) producing the same Signal shapes.
+**Verify.** `pnpm --filter @wsg/integrations test`. **Exit.** Every fixture maps to valid Signals/ControlEvents; tampered body rejected. **Rollback.** Revert.
 
-## S5: Worker and recompute pipeline (`apps/worker`)
-**Context brief.** ADR-0004. pg-boss queues: `recompute-stream` (stately, singletonKey stream id), `sweep-revalidate` (cron 15 min), `backfill-repo`, `digest-tick` (S9). Heartbeat row.
-**Tasks.**
-- `packages/db/jobs.ts`: queue names, typed payloads, `enqueueRecompute(tx, …)` used inside the signal transaction.
-- `ingestSignals(workspaceId, signals)`: one transaction → insert signals, resolve/create streams, enqueue recompute per affected stream.
-- Recompute handler: load stream signals + corrections → `infer` → `saveState` (+ transition) → `revalidate_at`.
-- Sweep cron; backfill handler; heartbeat every 30 s; graceful shutdown.
-**Verify.** Integration test: ingest fixture sequence → run worker once → stream state equals golden expectation.
-**Exit.** Duplicate ingestion produces no extra transitions; replay of a stream reproduces the same state.
-**Rollback.** Revert; stop worker.
+## S5: Ingest pipeline and worker
+**Context.** ADR-0004. Pipeline lives in `@wsg/db/pipeline` so both web and worker import it.
+**Tasks (in order).**
+1. **Spike first:** pg-boss `send` inside a Drizzle/`pg` transaction; test that a rolled-back transaction leaves no job.
+2. **Stream resolution:** key = `branch` for same-repo PRs and pushes, `fork:{headRepoId}:{branch}` for forks; SHA → stream fallback for `status`/`check_suite`; orphan signals (`stream_id IS NULL`) re-attached when their SHA becomes known.
+3. `ingestSignals(workspaceId, signals)`: one transaction → insert (ON CONFLICT DO NOTHING) → resolve streams → enqueue `recompute-stream` (stately, singletonKey = stream id).
+4. `applyControlEvent(...)`: integration status, repositories tracked/untracked.
+5. Recompute handler: load signals (+ signals of streams merged into it) + corrections → `infer` → `saveState` + transition; skip hidden streams.
+6. Jobs: `sweep-revalidate` (cron 15 min), `replay-workspace` (+ boot check on `ENGINE_VERSION`), `backfill-repo` (resumable cursor), `reconcile` (redeliver failed GitHub deliveries) and nightly 48 h incremental backfill (both mocked Octokit in tests).
+7. Structured logger (pino; `workspace_id`, `delivery_id`, `stream_id`, `job_id`; redaction), worker heartbeat, `drainOnce()` test helper.
+**Verify.** Integration tests: fixture sequence → `drainOnce()` → state equals golden; duplicates add no transitions; replay reproduces state; fork and SHA-only scenarios resolve correctly.
+**Exit.** All of the above green. **Rollback.** Revert; stop worker.
 
-## S6: Web foundation (`apps/web`): auth, webhook, API
-**Context brief.** ADR-0002, ADR-0005, ADR-0009. Next.js 16 App Router; Better Auth (GitHub + guarded dev login); webhook route; `/api/v1`.
-**Tasks.**
-- Next app with Tailwind v4, tokens (dark-first), Inter + JetBrains Mono, shadcn/ui base.
-- `env.ts` zod validation; boot guard for `DEV_LOGIN` in production.
-- Better Auth config + routes; sign-in page; session helper `requireMember()`.
-- `POST /api/webhooks/github`: size cap → verify → map → `ingestSignals` → 202.
-- `GET /api/v1/streams`, `GET /api/v1/streams/[id]`, `POST /api/v1/streams/[id]/corrections` with zod bodies and Origin check.
-- Security headers (CSP, HSTS, frame-ancestors).
-**Verify.** Route-handler integration tests (signed fixture → 202 → signal rows; bad signature → 401, no rows).
-**Exit.** Sign-in works with dev login; API returns scoped data only.
-**Rollback.** Revert.
+## S6a: Web foundation and auth (`@wsg/web`)
+**Context.** ADR-0002, ADR-0005.
+**Tasks.** Next.js 16 app (Tailwind v4 base), `env.ts` (zod) with `DEV_LOGIN` production guard (+ test), Better Auth (GitHub + dev email), sign-in page, `requireMember()`; on GitHub sign-in, link `identity` and confirm membership via `GET /user/installations`; `/api/health` (DB + heartbeat age); security headers.
+**Verify.** Tests for env guard and session helper; `pnpm --filter @wsg/web build`. **Exit.** Dev login reaches an authenticated empty page. **Rollback.** Revert.
 
-## S7: Seed and replay tooling
-**Context brief.** Development without real GitHub. Fixtures must exercise the real HMAC + ingest path.
-**Tasks.** `pnpm seed` (demo workspace, members, repos, dev user) and `pnpm replay` (time-shifted realistic scenario signed with dev secret, POSTed to the webhook) covering every attention state.
-**Verify.** After `pnpm seed && pnpm replay`, `/api/v1/streams` returns streams in every attention bucket.
-**Exit.** One command produces a believable demo.
+## S6b: GitHub webhook route
+**Tasks.** `POST /api/webhooks/github`: body cap → event allowlist → verify (no DB access before this; tested with a spy) → resolve workspace via installation → control event or `ingestSignals` → 202; unknown installation → 202 + log; rate limiting.
+**Verify.** Route tests with signed fixtures. **Exit.** Bad signature → 401 and zero DB calls. **Rollback.** Revert.
 
-## S8: Product UI: Now, stream detail, corrections
-**Context brief.** ADR-0009; ECC `frontend-patterns`, `make-interfaces-feel-better`, `design-system`. One central idea: what needs attention and why.
-**Tasks.** App shell; Now view grouped by attention with reason, waiting-on, age; stream detail with evidence timeline and state history; correction menu with optimistic update; empty/loading (skeleton)/error states; visibility-aware polling with ETag; j/k + Enter navigation; ⌘K palette; responsive layout.
-**Verify.** Playwright: sign in → Now shows buckets → open stream → correct state → persisted after reload.
-**Exit.** Lighthouse-equivalent check: no layout shift on load, keyboard-only flow works.
+## S6c: Internal API
+**Tasks.** `GET /api/v1/streams` (filters, ETag from `max(computed_at)`), `GET /api/v1/streams/[id]`, `POST /api/v1/streams/[id]/corrections` (phase, attention, not_work, merge_into), `GET|PUT /api/v1/workspace/settings`; zod bodies, Origin check.
+**Verify.** Route integration tests incl. cross-workspace access → 404. **Exit.** Green. **Rollback.** Revert.
+
+## S7: Seed and replay
+**Tasks.** `pnpm seed`: demo workspace, members + identities, `integration` row with fixture installation id, repos, dev user; realistic time-shifted scenario inserted via `ingestSignals` + `drainOnce()`. `pnpm replay`: same scenario as signed HTTP webhooks against a running app.
+**Verify.** `pnpm seed:verify` asserts streams exist in all five attention buckets. **Exit.** One command gives a believable demo. **Rollback.** Revert; drop dev DB.
+
+## S8a: Now view and stream detail (read-only) → first demo
+**Context.** ADR-0009; ECC `frontend-patterns`, `make-interfaces-feel-better`, `design-system`.
+**Tasks.** Design tokens (dark-first), Inter + JetBrains Mono, app shell, Now grouped by attention (reason, waiting-on, age, ticket key), stream detail with evidence timeline and state history, empty/loading/error states, responsive.
+**Verify.** Playwright: sign in → buckets visible → open stream → evidence listed; CLS assertion ≈ 0. **Exit.** Green. **Rollback.** Revert.
+
+## S8b: Corrections and live feel
+**Tasks.** Correction menu (state, not work, merge into…) with `useOptimistic`; hidden/merged filtering; visibility-aware polling with ETag; j/k/Enter navigation; ⌘K palette.
+**Verify.** Playwright: correct a state → persists after reload; keyboard-only journey passes. **Exit.** Green. **Rollback.** Revert.
 
 ## S9: Slack digest
-**Context brief.** ADR-0008.
-**Tasks.** Slack OAuth v2 install, encrypted token storage, Block Kit renderer from `DigestModel`, `digest-tick` cron, `digest_run` idempotency, `/settings/digest` with preview.
-**Verify.** Unit tests for renderer (≤50 blocks, text fallback); integration: tick twice same day → one run.
+**Tasks.** `DigestModel` builder (pure, in core), Block Kit renderer (≤50 blocks, text fallback), Slack OAuth v2 install, encrypted token (AES-256-GCM), job `digest-tick` (single name; replaces `send-digest` in CAPABILITY), `digest_run` idempotency, `/settings/digest` preview.
+**Verify.** Renderer unit tests; tick twice same day → one run. **Exit.** Preview renders seeded data; idempotency test green. **Rollback.** Revert.
 
-## S10: Onboarding and settings
-**Context brief.** GitHub App install flow and repository selection.
-**Tasks.** Install URL, setup callback linking installation → workspace, repo list with track toggle, backfill progress, members, workspace deletion (hard cascade).
-**Verify.** Integration tests with mocked GitHub API responses; e2e of settings pages with seeded data.
+## S10: Onboarding, settings, data policy
+**Tasks.** S10 owns `settings/layout.tsx`. GitHub App install URL + setup callback (installation → workspace), repository tracking toggles, backfill progress, members, workspace settings (timezone, staleness), workspace deletion (hard cascade), public `/data-policy` page.
+**Verify.** Integration tests with mocked GitHub; e2e of settings with seeded data. **Exit.** Install callback creates/links workspace in tests; deletion removes all rows. **Rollback.** Revert.
 
 ## S11: Verification and hardening
-**Context brief.** ECC `verification-loop`, `security-reviewer`, `database-reviewer`, `silent-failure-hunter`, `code-reviewer`.
-**Tasks.** Full e2e journeys, `/admin` KPIs from SQL, `/api/health`, review findings fixed, README with setup.
-**Exit.** Verification report PASS.
+**Tasks.** ECC `verification-loop`; `security-reviewer`, `database-reviewer`, `silent-failure-hunter`, `code-reviewer`, `react-reviewer` passes with fixes; `/admin` restricted to operator allowlist (env) showing KPIs (signals inserted/duplicate, job states, corrections per 100 streams, digest runs); heartbeat staleness surfaced on `/api/health` and `/admin`; README setup guide.
+**Verify.** `pnpm check && pnpm --filter @wsg/web build && pnpm e2e`. **Exit.** All commands green; no open CRITICAL/HIGH review findings. **Rollback.** Revert individual fixes.
 
 ---
 
+## Deferred (explicit)
+- **Signal retention (CAPABILITY Q4):** no pruning in the MVP. Pruning conflicts with replay (invariant 2). Future rule: prune only signals of terminal streams after N days and freeze those streams from replay.
+- Slack Events ingestion (slice 2), Figma (slice 3), LLM narrative/linking.
+
 ## Plan mutation protocol
-Split, insert, skip or reorder steps by editing this file in the same commit as the change, with a one-line reason in the log below.
+Edit this file in the same commit as the change, with a one-line entry in the Log.
 
 ### Log
-- 2026-10-01: plan created.
+- 2026-10-01: v1 created.
+- 2026-10-01: S1 done (`11ffa4e`).
+- 2026-10-01: v2 after adversarial review: fork-safe stream identity and SHA fallback (C1); workspace resolution, control events, identity linking (C2); engine_version replay (C3); reconcile + nightly backfill (C4); pipeline moved to `@wsg/db` and S5→S6 edge (H1); transactional-enqueue spike first (H2); workspace config columns + settings API (H3); retention deferred (H4); event allowlist, pre-verify zero-DB test, rate limits, operator-only admin (H5); merge/not_work behaviour (H6); serial post-S7 steps (H7); S6/S8 split, DigestModel moved to S9, health moved to S6a (M1–M4); corrections compare `receivedAt` (server clock) instead of source time.

@@ -28,7 +28,7 @@ Outcome that changes: the team can drop or shorten its standup/status meeting an
 3. **Out-of-order delivery is tolerated.** Ordering uses `occurred_at` from the source, not arrival time.
 4. **Tenant isolation.** Every row carries `workspace_id`; every query is scoped by it; no cross-workspace joins.
 5. **Webhooks are authenticated before persistence** (GitHub `X-Hub-Signature-256` HMAC with constant-time comparison). Unverified payloads are rejected with no side effects.
-6. **A correction overrides inference until a newer signal arrives** for that stream (`signal.occurred_at > correction.created_at`). After that, inference resumes and the correction remains in history.
+6. **A correction overrides inference until a newer signal arrives** for that stream (`signal.received_at > correction.created_at`; both are our server clock, so there is no clock skew with the source). After that, inference resumes and the correction remains in history. `not_work` and `merge_into` corrections are sticky (ADR-0006).
 
 ### Trust boundaries
 - External: GitHub webhooks and API (untrusted input, validated with schemas), Slack API (outbound messages only in the MVP), browser (authenticated session).
@@ -67,7 +67,7 @@ Outcome that changes: the team can drop or shorten its standup/status meeting an
    - `GET /api/v1/streams/{id}` with signals, transitions and corrections
    - `POST /api/v1/streams/{id}/corrections`
    - `GET|PUT /api/v1/workspace/settings`
-4. **Jobs:** `recompute-stream`, `backfill-repo`, `send-digest`.
+4. **Jobs:** `recompute-stream`, `backfill-repo`, `digest-tick`, `sweep-revalidate`, `replay-workspace`, `reconcile`.
 
 ### Domain model
 | Entity | Key fields |
