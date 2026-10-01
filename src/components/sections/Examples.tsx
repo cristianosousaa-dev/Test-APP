@@ -188,8 +188,13 @@ export function Examples() {
                       />
                     </motion.div>
                   </AnimatePresence>
-                  {enabled && <Sweep key={`${preview.id}-${pos.step}`} />}
-                  <StatusPill preview={preview} step={pos.step} reduced={reduced} />
+                  {enabled && visible && <Sweep key={`${preview.id}-${pos.step}`} />}
+                  <StatusPill
+                    preview={preview}
+                    step={pos.step}
+                    reduced={reduced}
+                    enabled={enabled}
+                  />
                 </div>
               </FitHeight>
               <ToolChain preview={preview} step={pos.step} onPick={(s) => goTo(pos.chapter, s)} />
@@ -564,10 +569,13 @@ function StatusPill({
   preview,
   step,
   reduced,
+  enabled,
 }: {
   preview: PreviewConfig;
   step: number;
   reduced: boolean;
+  /** False when reduced motion or the pause toggle is on: the spinner stops. */
+  enabled: boolean;
 }) {
   const done = step === preview.steps.length - 1;
   const t = reduced ? instant : spring;
@@ -595,11 +603,13 @@ function StatusPill({
               viewBox="0 0 24 24"
               className="size-6"
               initial={reduced ? false : { scale: 0 }}
-              animate={{ scale: 1, rotate: reduced ? 0 : 360 }}
+              animate={{ scale: 1, rotate: enabled ? 360 : 0 }}
               exit={reduced ? undefined : { scale: 0 }}
               transition={{
                 scale: t,
-                rotate: { duration: 1.1, repeat: Number.POSITIVE_INFINITY, ease: "linear" },
+                rotate: enabled
+                  ? { duration: 1.1, repeat: Number.POSITIVE_INFINITY, ease: "linear" }
+                  : instant,
               }}
             >
               <circle

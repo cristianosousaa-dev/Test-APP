@@ -60,17 +60,24 @@ export function Connector({ from, fromMobile = 0.5, label, icon }: ConnectorProp
   const sx = Math.max(NODE_X, w * (mobile ? fromMobile : from));
   const d = w ? `M ${sx} 0 C ${sx} ${h * 0.55}, ${NODE_X} ${h * 0.45}, ${NODE_X} ${h + 10}` : "";
 
+  const total = useRef(0);
   function place(p: number) {
     const el = path.current;
     if (!el || !d) return;
-    const total = el.getTotalLength();
-    const pt = el.getPointAtLength(Math.min(Math.max(p, 0), 1) * total);
+    if (!total.current) total.current = el.getTotalLength();
+    const pt = el.getPointAtLength(Math.min(Math.max(p, 0), 1) * total.current);
     x.set(pt.x);
     y.set(pt.y);
   }
-  useMotionValueEvent(scrollYProgress, "change", place);
-  // biome-ignore lint/correctness/useExhaustiveDependencies: re-place when the path changes.
-  useLayoutEffect(() => place(scrollYProgress.get()), [d]);
+  // Off-screen connectors sit at 0 or 1; only move the packet while it is travelling.
+  useMotionValueEvent(scrollYProgress, "change", (p) => {
+    if (p > 0 && p < 1) place(p);
+  });
+  // biome-ignore lint/correctness/useExhaustiveDependencies: re-measure when the path changes.
+  useLayoutEffect(() => {
+    total.current = 0;
+    place(scrollYProgress.get());
+  }, [d]);
 
   return (
     <Container>
@@ -100,7 +107,7 @@ export function Connector({ from, fromMobile = 0.5, label, icon }: ConnectorProp
               r={9}
               className="fill-none stroke-ink/30"
               strokeWidth={1}
-              style={{ scale: enabled ? endScale : 1, transformOrigin: `${NODE_X}px ${h + 10}px` }}
+              style={{ scale: enabled ? endScale : 1 }}
             />
           </svg>
         )}

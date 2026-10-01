@@ -275,10 +275,7 @@ export function HeroStage() {
 function useDelayed<T>(value: T, ms: number): T {
   const [shown, setShown] = useState(value);
   useEffect(() => {
-    if (ms === 0) {
-      setShown(value);
-      return;
-    }
+    if (ms === 0) return;
     const id = window.setTimeout(() => setShown(value), ms);
     return () => window.clearTimeout(id);
   }, [value, ms]);
@@ -352,7 +349,7 @@ function Wire({
         ? `M ${x1} ${y1} C ${x1} ${midY}, ${x2} ${midY}, ${x2} ${y2}`
         : `M ${x1} ${y1} C ${x1} ${y2}, ${x2 - 60} ${y2}, ${x2} ${y2}`;
       setGeo({ d, x: x2, y: y2, w: box.width, h: box.height });
-    }, 260);
+    }, 560); // after the notification's entrance spring has settled
     return () => window.clearTimeout(id);
   }, [root, noteId, step]);
 
@@ -383,7 +380,6 @@ function Wire({
         fill="none"
         stroke="#1e8e5a"
         strokeWidth={1.5}
-        style={{ transformOrigin: `${geo.x}px ${geo.y}px` }}
         initial={{ scale: 0, opacity: 0 }}
         animate={{ scale: [0, 1, 2.6], opacity: [0, 1, 0] }}
         transition={{ duration: 1.1, delay: 0.42, times: [0, 0.2, 1] }}

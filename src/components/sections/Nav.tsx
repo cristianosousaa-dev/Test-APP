@@ -8,7 +8,7 @@ import {
   useScroll,
 } from "motion/react";
 import { useEffect, useRef, useState } from "react";
-import { LinkButton } from "@/components/ui/Button";
+import { Arrow, LinkButton } from "@/components/ui/Button";
 import { Logo } from "@/components/ui/Logo";
 import { cn } from "@/lib/cn";
 import { useIslandDetail } from "@/lib/island";
@@ -146,20 +146,36 @@ export function Nav() {
             onDark ? "opacity-100" : "opacity-0",
           )}
         />
-        <AnimatePresence mode="popLayout" initial={false}>
-          {island ? (
-            <motion.div
-              key="island"
+        {/*
+          Controls stay mounted in both states so keyboard focus never disappears: in the
+          island they are visually hidden (still focusable), and focusing one expands the bar.
+        */}
+        <motion.a
+          layout="position"
+          transition={t}
+          href="#top"
+          aria-label={`${site.name}, início`}
+          className={cn(
+            "shrink-0 transition-opacity duration-200 hover:opacity-70",
+            !island && "mr-auto md:mr-4",
+          )}
+        >
+          <Logo markOnly={island} />
+        </motion.a>
+
+        <AnimatePresence initial={false} mode="popLayout">
+          {island && (
+            <motion.span
+              key="readout"
+              aria-hidden
+              layout="position"
               className="flex items-center gap-2.5"
               initial={reduced ? false : { opacity: 0, filter: "blur(6px)", scale: 0.9 }}
               animate={{ opacity: 1, filter: "blur(0px)", scale: 1 }}
               exit={reduced ? undefined : { opacity: 0, filter: "blur(6px)", scale: 0.9 }}
               transition={t}
             >
-              <a href="#top" aria-label={`${site.name}, início`} className="shrink-0">
-                <Logo markOnly />
-              </a>
-              <span className="flex min-w-0 flex-col pr-1 leading-tight">
+              <span className="flex min-w-0 flex-col pr-1 pl-0.5 leading-tight">
                 <Roll
                   text={where}
                   className="text-[13.5px] font-medium text-ink"
@@ -181,98 +197,75 @@ export function Nav() {
                 </AnimatePresence>
               </span>
               <ProgressRing progress={scrollYProgress} />
-              <a
-                href={contactHref()}
-                className="grid size-9 shrink-0 place-items-center rounded-full bg-ink text-white transition-transform duration-200 hover:scale-105 active:scale-95"
-              >
-                <span className="sr-only">Falar connosco</span>
-                <svg viewBox="0 0 16 16" className="size-3.5" fill="none" aria-hidden>
-                  <path
-                    d="M3 8h9.5M8.5 4l4 4-4 4"
-                    stroke="currentColor"
-                    strokeWidth="1.7"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
-                </svg>
-              </a>
-              <button
-                ref={toggleRef}
-                type="button"
-                className="grid size-9 shrink-0 place-items-center rounded-full text-ink transition-colors hover:bg-white/70 md:hidden"
-                aria-expanded={open}
-                aria-controls="mobile-menu"
-                aria-label="Menu"
-                onClick={() => setOpen((v) => !v)}
-              >
-                <MenuIcon open={open} />
-              </button>
-            </motion.div>
-          ) : (
-            <motion.div
-              key="full"
-              className="flex w-full items-center gap-2"
-              initial={reduced ? false : { opacity: 0, filter: "blur(6px)" }}
-              animate={{ opacity: 1, filter: "blur(0px)" }}
-              exit={reduced ? undefined : { opacity: 0, filter: "blur(6px)" }}
-              transition={t}
-            >
-              <a
-                href="#top"
-                aria-label={`${site.name}, início`}
-                className="mr-auto transition-opacity duration-200 hover:opacity-70 md:mr-4"
-              >
-                <Logo />
-              </a>
-              <nav
-                className="hidden flex-1 items-center gap-0.5 md:flex"
-                aria-label="Principal"
-                onPointerLeave={() => setHovered(null)}
-              >
-                {nav.map((item) => (
-                  <a
-                    key={item.href}
-                    href={item.href}
-                    aria-current={active === item.href ? "location" : undefined}
-                    onPointerEnter={() => setHovered(item.href)}
-                    onFocus={() => setHovered(item.href)}
-                    onBlur={() => setHovered(null)}
-                    className={cn(
-                      "relative rounded-full px-3.5 py-2 text-[14px] whitespace-nowrap transition-colors duration-200",
-                      active === item.href ? "text-ink" : "text-ink-2 hover:text-ink",
-                    )}
-                  >
-                    {pill === item.href && (
-                      <motion.span
-                        layoutId="nav-pill"
-                        className="nav-pill absolute inset-0 rounded-full bg-white/80 shadow-[0_1px_2px_rgb(15_16_18/0.06)]"
-                        transition={reduced ? instant : spring}
-                      />
-                    )}
-                    <span className="relative">{item.label}</span>
-                  </a>
-                ))}
-              </nav>
-              <MotionToggle />
-              <span className="hidden md:block">
-                <LinkButton href={contactHref()} size="sm" arrow>
-                  Falar connosco
-                </LinkButton>
-              </span>
-              <button
-                ref={toggleRef}
-                type="button"
-                className="grid size-10 place-items-center rounded-full text-ink transition-colors hover:bg-white/70 md:hidden"
-                aria-expanded={open}
-                aria-controls="mobile-menu"
-                aria-label="Menu"
-                onClick={() => setOpen((v) => !v)}
-              >
-                <MenuIcon open={open} />
-              </button>
-            </motion.div>
+            </motion.span>
           )}
         </AnimatePresence>
+
+        <motion.nav
+          layout="position"
+          transition={t}
+          aria-label="Principal"
+          onPointerLeave={() => setHovered(null)}
+          className={island ? "sr-only" : "hidden flex-1 items-center gap-0.5 md:flex"}
+          animate={{ opacity: island ? 0 : 1 }}
+        >
+          {nav.map((item) => (
+            <a
+              key={item.href}
+              href={item.href}
+              aria-current={active === item.href ? "location" : undefined}
+              onPointerEnter={() => setHovered(item.href)}
+              onFocus={() => setHovered(item.href)}
+              onBlur={() => setHovered(null)}
+              className={cn(
+                "relative rounded-full px-3.5 py-2 text-[14px] whitespace-nowrap transition-colors duration-200",
+                active === item.href ? "text-ink" : "text-ink-2 hover:text-ink",
+              )}
+            >
+              {!island && pill === item.href && (
+                <motion.span
+                  layoutId="nav-pill"
+                  className="nav-pill absolute inset-0 rounded-full bg-white/80 shadow-[0_1px_2px_rgb(15_16_18/0.06)]"
+                  transition={reduced ? instant : spring}
+                />
+              )}
+              <span className="relative">{item.label}</span>
+            </a>
+          ))}
+        </motion.nav>
+
+        <span className={island ? "sr-only" : "contents"}>
+          <MotionToggle />
+        </span>
+
+        <motion.a
+          layout="position"
+          transition={t}
+          href={contactHref()}
+          className={cn(
+            "group/btn btn-shine shrink-0 items-center justify-center rounded-full bg-ink text-white shadow-[0_6px_16px_-8px_rgb(15_16_18/0.5)] transition-[background-color,transform] duration-200 hover:bg-[#1d1f23] active:scale-95",
+            island
+              ? "inline-flex size-9"
+              : "hidden h-9 gap-2 px-4 text-[14px] font-medium tracking-[-0.01em] md:inline-flex",
+          )}
+        >
+          <span className={island ? "sr-only" : "whitespace-nowrap"}>Falar connosco</span>
+          <Arrow />
+        </motion.a>
+
+        <motion.button
+          layout="position"
+          transition={t}
+          ref={toggleRef}
+          type="button"
+          className="grid size-10 shrink-0 place-items-center rounded-full text-ink transition-colors hover:bg-white/70 md:hidden"
+          aria-expanded={open}
+          aria-controls="mobile-menu"
+          aria-label="Menu"
+          onClick={() => setOpen((v) => !v)}
+        >
+          <MenuIcon open={open} />
+        </motion.button>
         {/* Reading progress along the bottom edge of the full bar. */}
         {!island && (
           <motion.span
