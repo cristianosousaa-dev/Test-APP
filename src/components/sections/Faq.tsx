@@ -1,27 +1,26 @@
-import { Plus } from "lucide-react";
+import { Container } from "@/components/ui/Container";
 import { Reveal } from "@/components/ui/Reveal";
-import { SectionHeader } from "@/components/ui/SectionHeader";
 
-const faqs = [
+const FAQS = [
   {
     q: "Que tipo de negócios podem automatizar?",
-    a: "Praticamente qualquer negócio com tarefas repetitivas: clínicas, oficinas, imobiliárias, restaurantes, lojas online, escritórios e serviços. Se uma tarefa se repete e segue regras, provavelmente pode ser automatizada.",
+    a: "Clínicas, oficinas, imobiliárias, restaurantes, lojas online, escritórios e serviços. Se uma tarefa se repete e segue regras, provavelmente pode ser automatizada.",
   },
   {
     q: "Tenho de mudar de software?",
-    a: "Não. Ligamos as automações às ferramentas que já usa: WhatsApp, email, agenda, faturação, CRM ou folhas de cálculo. A sua equipa continua a trabalhar como está habituada.",
+    a: "Não. Ligamos as automações ao que já usa: WhatsApp, email, agenda, faturação, CRM ou folhas de cálculo. A sua equipa continua a trabalhar como está habituada.",
   },
   {
     q: "Quanto custa?",
-    a: "Depende do que for automatizado. Depois do diagnóstico gratuito recebe uma proposta com preço fechado, para saber exatamente o que paga antes de começarmos.",
+    a: "Depende do que for automatizado. Depois da conversa inicial recebe uma proposta com preço fechado, para saber exatamente o que paga antes de começarmos.",
   },
   {
     q: "Quanto tempo demora?",
-    a: "Depende da complexidade de cada automação. O prazo fica definido na proposta, antes de começarmos, e vai acompanhando cada etapa.",
+    a: "Depende da complexidade. O prazo fica escrito na proposta, antes de começarmos.",
   },
   {
     q: "Usam inteligência artificial?",
-    a: "Quando acrescenta valor: perceber mensagens, ler documentos ou redigir respostas. Para o resto, usamos regras simples e fiáveis. As decisões importantes podem ficar sempre sujeitas à sua aprovação.",
+    a: "Quando ajuda: perceber mensagens, ler documentos ou redigir respostas. Para o resto usamos regras simples e previsíveis. As decisões importantes podem ficar sempre sujeitas à sua aprovação.",
   },
   {
     q: "Os meus dados ficam seguros?",
@@ -29,37 +28,46 @@ const faqs = [
   },
 ];
 
-/**
- * Native <details> accordion: accessible, works without JS, and the answers are in the HTML
- * (findable with Ctrl+F). `name` makes it exclusive; the open/close animation is CSS-only.
- */
 export function Faq() {
   return (
-    <section id="faq" className="border-t border-line bg-surface py-24 sm:py-32">
-      <div className="mx-auto grid max-w-6xl gap-12 px-5 sm:px-8 lg:grid-cols-[1fr_1.5fr]">
-        <SectionHeader
-          align="left"
-          eyebrow="Perguntas frequentes"
-          title="Tudo o que precisa de saber"
-          description="Não encontrou a sua pergunta? Fale connosco, respondemos com todo o gosto."
-        />
+    <section id="faq" className="py-24 sm:py-32">
+      <Container className="grid gap-12 lg:grid-cols-[minmax(0,0.72fr)_minmax(0,1.28fr)] lg:gap-12">
         <Reveal>
-          <div className="divide-y divide-line border-y border-line">
-            {faqs.map((f, i) => (
-              <details key={f.q} name="faq" open={i === 0} className="faq-item group">
-                <summary className="flex cursor-pointer list-none items-center justify-between gap-6 py-5 text-left text-[16.5px] font-medium tracking-[-0.01em] text-ink [&::-webkit-details-marker]:hidden">
-                  <h3>{f.q}</h3>
-                  <Plus
+          <p className="text-[14px] text-mute">Perguntas</p>
+          <h2 className="mt-3 text-[34px] leading-[1.1] font-medium tracking-[-0.028em] sm:text-[44px]">
+            Antes de falarmos.
+          </h2>
+        </Reveal>
+        <Reveal>
+          <div className="border-t border-hair">
+            {FAQS.map((f, i) => (
+              <details
+                key={f.q}
+                name="faq"
+                open={i === 0}
+                className="faq-item group border-b border-hair"
+              >
+                <summary className="flex cursor-pointer list-none items-center justify-between gap-6 py-5 text-[17px] font-medium tracking-[-0.01em] [&::-webkit-details-marker]:hidden">
+                  {f.q}
+                  <svg
+                    viewBox="0 0 16 16"
+                    className="size-4 shrink-0 text-mute transition-transform duration-300 ease-out-soft group-open:rotate-45 motion-reduce:transition-none"
                     aria-hidden
-                    className="size-5 shrink-0 text-muted transition-transform duration-300 ease-premium group-open:rotate-45 group-open:text-ink motion-reduce:transition-none"
-                  />
+                  >
+                    <path
+                      d="M8 3v10M3 8h10"
+                      stroke="currentColor"
+                      strokeWidth="1.5"
+                      strokeLinecap="round"
+                    />
+                  </svg>
                 </summary>
-                <p className="pr-10 pb-6 text-[15px] leading-relaxed text-muted">{f.a}</p>
+                <p className="max-w-[40rem] pb-6 text-[16px] leading-[1.65] text-ink-2">{f.a}</p>
               </details>
             ))}
           </div>
         </Reveal>
-      </div>
+      </Container>
     </section>
   );
 }

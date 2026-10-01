@@ -19,7 +19,7 @@ export const site = {
 export const nav = [
   { href: "#exemplos", label: "Exemplos" },
   { href: "#servicos", label: "O que automatizamos" },
-  { href: "#processo", label: "Como funciona" },
+  { href: "#processo", label: "Como trabalhamos" },
   { href: "#faq", label: "Perguntas" },
 ] as const;
 

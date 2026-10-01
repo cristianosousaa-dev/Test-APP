@@ -1,14 +1,10 @@
-/**
- * Brand motion identity (Premium): one signature curve, three durations,
- * one entrance pattern. See motion-design skill.
- */
-export const ease = [0.22, 1, 0.36, 1] as const;
-export const easeInOut = [0.4, 0, 0.2, 1] as const;
+import type { Transition } from "motion/react";
 
-export const duration = { quick: 0.2, base: 0.45, slow: 0.7 } as const;
+/** No-bounce spring for anything that moves. */
+export const spring: Transition = { type: "spring", duration: 0.6, bounce: 0 };
+/** Slightly slower spring for larger surfaces. */
+export const springSlow: Transition = { type: "spring", duration: 0.9, bounce: 0 };
+/** Quiet fade for appear/disappear. */
+export const fade: Transition = { duration: 0.2, ease: [0.22, 1, 0.36, 1] };
 
-/** Compositor-only (opacity + transform) so entrances stay cheap. */
-export const entrance = {
-  hidden: { opacity: 0, y: 16 },
-  visible: { opacity: 1, y: 0 },
-} as const;
+export const instant: Transition = { duration: 0 };

@@ -1,18 +1,16 @@
 "use client";
 
-import { Menu, Pause, Play, X } from "lucide-react";
-import { AnimatePresence, motion, useMotionValueEvent, useScroll } from "motion/react";
+import { AnimatePresence, motion } from "motion/react";
 import { useEffect, useRef, useState } from "react";
-import { Button } from "@/components/ui/Button";
+import { LinkButton } from "@/components/ui/Button";
 import { Logo } from "@/components/ui/Logo";
-import { cn } from "@/lib/cn";
-import { duration, ease } from "@/lib/motion";
+import { instant, spring } from "@/lib/motion";
 import { useMotionPreference } from "@/lib/motion-preference";
 import { contactHref, nav, site } from "@/lib/site";
 
-function MotionToggle({ className }: { className?: string }) {
+function MotionToggle() {
   const { paused, reduced, togglePaused } = useMotionPreference();
-  if (reduced) return null; // OS setting already stops motion.
+  if (reduced) return null;
   const label = paused ? "Retomar animações" : "Pausar animações";
   return (
     <button
@@ -21,25 +19,27 @@ function MotionToggle({ className }: { className?: string }) {
       aria-pressed={paused}
       aria-label={label}
       title={label}
-      className={cn(
-        "grid size-10 place-items-center rounded-full text-ink-2 transition-colors duration-200 hover:bg-line hover:text-ink",
-        className,
-      )}
+      className="grid size-10 place-items-center rounded-full text-ink-2 transition-colors duration-200 hover:bg-white/70 hover:text-ink"
     >
-      {paused ? <Play className="size-4" aria-hidden /> : <Pause className="size-4" aria-hidden />}
+      <svg viewBox="0 0 16 16" className="size-3.5" aria-hidden>
+        {paused ? (
+          <path d="M5 3.5v9l7-4.5z" fill="currentColor" />
+        ) : (
+          <>
+            <rect x="4" y="3.5" width="2.4" height="9" rx="0.8" fill="currentColor" />
+            <rect x="9.6" y="3.5" width="2.4" height="9" rx="0.8" fill="currentColor" />
+          </>
+        )}
+      </svg>
     </button>
   );
 }
 
 export function Nav() {
-  const { scrollY } = useScroll();
   const { reduced } = useMotionPreference();
-  const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
   const toggleRef = useRef<HTMLButtonElement>(null);
-  useMotionValueEvent(scrollY, "change", (y) => setScrolled(y > 12));
 
-  // Escape closes the menu and returns focus; growing to desktop closes it too.
   useEffect(() => {
     if (!open) return;
     const onKey = (e: KeyboardEvent) => {
@@ -59,76 +59,73 @@ export function Nav() {
   }, [open]);
 
   return (
-    <header
-      className={cn(
-        "fixed inset-x-0 top-0 z-50 transition-[background-color,border-color,backdrop-filter] duration-300 ease-premium",
-        scrolled || open
-          ? "border-b border-line bg-page/80 backdrop-blur-xl"
-          : "border-b border-transparent",
-      )}
-    >
-      <div className="mx-auto flex h-16 max-w-6xl items-center gap-8 px-5 sm:px-8">
-        <a href="#top" aria-label={`${site.name} — início`}>
+    <header className="fixed inset-x-0 top-3 z-50 px-3 sm:top-4">
+      <div className="glass mx-auto flex h-14 max-w-[880px] items-center gap-2 rounded-full pr-2 pl-5">
+        <a href="#top" aria-label={`${site.name}, início`} className="mr-auto md:mr-4">
           <Logo />
         </a>
-        <nav className="hidden items-center gap-1 md:flex" aria-label="Principal">
+        <nav className="hidden flex-1 items-center gap-0.5 md:flex" aria-label="Principal">
           {nav.map((item) => (
             <a
               key={item.href}
               href={item.href}
-              className="rounded-full px-3 py-2 text-[14px] text-ink-2 transition-colors duration-200 hover:text-ink"
+              className="rounded-full px-3.5 py-2 text-[14px] text-ink-2 transition-colors duration-200 hover:bg-white/70 hover:text-ink"
             >
               {item.label}
             </a>
           ))}
         </nav>
-        <div className="ml-auto hidden items-center gap-2 md:flex">
-          <MotionToggle />
-          <Button href={contactHref()} className="h-9 px-4 text-[13.5px]">
+        <MotionToggle />
+        <span className="hidden md:block">
+          <LinkButton href={contactHref()} size="sm">
             Falar connosco
-          </Button>
-        </div>
-        <div className="ml-auto flex items-center gap-1 md:hidden">
-          <MotionToggle />
-          <button
-            ref={toggleRef}
-            type="button"
-            className="grid size-10 place-items-center rounded-full text-ink"
-            aria-expanded={open}
-            aria-controls="mobile-menu"
-            aria-label={open ? "Fechar menu" : "Abrir menu"}
-            onClick={() => setOpen((v) => !v)}
-          >
-            {open ? <X className="size-5" aria-hidden /> : <Menu className="size-5" aria-hidden />}
-          </button>
-        </div>
+          </LinkButton>
+        </span>
+        <button
+          ref={toggleRef}
+          type="button"
+          className="grid size-10 place-items-center rounded-full text-ink md:hidden"
+          aria-expanded={open}
+          aria-controls="mobile-menu"
+          aria-label={open ? "Fechar menu" : "Abrir menu"}
+          onClick={() => setOpen((v) => !v)}
+        >
+          <svg viewBox="0 0 16 16" className="size-4" aria-hidden>
+            <path
+              d={open ? "M3.5 3.5l9 9M12.5 3.5l-9 9" : "M2.5 5.5h11M2.5 10.5h11"}
+              stroke="currentColor"
+              strokeWidth="1.6"
+              strokeLinecap="round"
+            />
+          </svg>
+        </button>
       </div>
+
       <AnimatePresence>
         {open && (
           <motion.nav
             id="mobile-menu"
             aria-label="Menu"
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: "auto" }}
-            exit={{ opacity: 0, height: 0 }}
-            transition={reduced ? { duration: 0 } : { duration: duration.base, ease }}
-            className="overflow-hidden md:hidden"
+            className="glass glass-thick mx-auto mt-2 max-w-[880px] rounded-[28px] p-2 md:hidden"
+            initial={{ opacity: 0, y: -8, scale: 0.98 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: -8, scale: 0.98 }}
+            transition={reduced ? instant : spring}
+            style={{ transformOrigin: "top center" }}
           >
-            <div className="flex flex-col gap-1 px-5 pt-2 pb-6">
-              {nav.map((item) => (
-                <a
-                  key={item.href}
-                  href={item.href}
-                  onClick={() => setOpen(false)}
-                  className="rounded-xl px-3 py-3 text-[16px] text-ink"
-                >
-                  {item.label}
-                </a>
-              ))}
-              <Button href={contactHref()} arrow className="mt-3">
-                {site.cta}
-              </Button>
-            </div>
+            {nav.map((item) => (
+              <a
+                key={item.href}
+                href={item.href}
+                onClick={() => setOpen(false)}
+                className="block rounded-[20px] px-4 py-3 text-[16px] text-ink hover:bg-white/60"
+              >
+                {item.label}
+              </a>
+            ))}
+            <LinkButton href={contactHref()} className="mt-1 w-full">
+              {site.cta}
+            </LinkButton>
           </motion.nav>
         )}
       </AnimatePresence>

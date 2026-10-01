@@ -1,14 +1,11 @@
-import { BeforeAfter } from "@/components/sections/BeforeAfter";
-import { Capabilities } from "@/components/sections/Capabilities";
+import { Automations } from "@/components/sections/Automations";
+import { Closing } from "@/components/sections/Closing";
 import { Examples } from "@/components/sections/Examples";
 import { Faq } from "@/components/sections/Faq";
-import { FinalCta } from "@/components/sections/FinalCta";
-import { Footer } from "@/components/sections/Footer";
 import { Hero } from "@/components/sections/Hero";
-import { Integrations } from "@/components/sections/Integrations";
 import { Nav } from "@/components/sections/Nav";
-import { Principles } from "@/components/sections/Principles";
 import { Process } from "@/components/sections/Process";
+import { Tools } from "@/components/sections/Tools";
 
 export default function Home() {
   return (
@@ -16,16 +13,13 @@ export default function Home() {
       <Nav />
       <main id="conteudo">
         <Hero />
-        <Integrations />
-        <BeforeAfter />
+        <Tools />
         <Examples />
-        <Capabilities />
+        <Automations />
         <Process />
-        <Principles />
         <Faq />
-        <FinalCta />
+        <Closing />
       </main>
-      <Footer />
     </>
   );
 }

@@ -1,10 +1,16 @@
-import { GeistMono } from "geist/font/mono";
-import { GeistSans } from "geist/font/sans";
 import type { Metadata, Viewport } from "next";
+import { Mona_Sans } from "next/font/google";
 import type { ReactNode } from "react";
 import { MotionPreferenceProvider } from "@/lib/motion-preference";
 import { site } from "@/lib/site";
 import "./globals.css";
+
+const mona = Mona_Sans({
+  subsets: ["latin", "latin-ext"],
+  axes: ["wdth"],
+  variable: "--font-mona",
+  display: "swap",
+});
 
 export const metadata: Metadata = {
   metadataBase: new URL(site.url),
@@ -19,12 +25,12 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: "#fbfbfc",
+  themeColor: "#f4f5f7",
 };
 
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
-    <html lang="pt-PT" className={`${GeistSans.variable} ${GeistMono.variable}`}>
+    <html lang="pt-PT" className={mona.variable}>
       <head>
         <noscript>
           <style>{".reveal{opacity:1!important;transform:none!important}"}</style>

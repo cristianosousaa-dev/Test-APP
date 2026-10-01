@@ -1,154 +1,209 @@
 "use client";
 
-import { Check } from "lucide-react";
 import { AnimatePresence, motion } from "motion/react";
 import { type KeyboardEvent, useRef, useState } from "react";
-import { AutomationDemo } from "@/components/demos/AutomationDemo";
-import { demos } from "@/components/demos/data";
+import { bookings } from "@/components/previews/Bookings";
+import { leads } from "@/components/previews/Leads";
+import { payments } from "@/components/previews/Payments";
+import { quotes } from "@/components/previews/Quotes";
+import type { PreviewConfig } from "@/components/previews/types";
+import { Container } from "@/components/ui/Container";
 import { Reveal } from "@/components/ui/Reveal";
-import { SectionHeader } from "@/components/ui/SectionHeader";
+import { Check } from "@/components/visual/Bits";
 import { cn } from "@/lib/cn";
-import { duration, ease } from "@/lib/motion";
+import { fade, instant, spring } from "@/lib/motion";
 import { useMotionPreference } from "@/lib/motion-preference";
+import { useLoop } from "@/lib/useLoop";
+
+const PREVIEWS: PreviewConfig[] = [bookings, quotes, leads, payments];
 
 export function Examples() {
-  const [activeId, setActiveId] = useState(demos[0]?.id ?? "");
-  const { reduced } = useMotionPreference();
+  const [activeId, setActiveId] = useState(PREVIEWS[0]?.id ?? "");
   const tabRefs = useRef<(HTMLButtonElement | null)[]>([]);
-  const active = demos.find((d) => d.id === activeId) ?? demos[0];
+  const { reduced } = useMotionPreference();
+  const active = PREVIEWS.find((p) => p.id === activeId) ?? PREVIEWS[0];
 
   function onKeyDown(e: KeyboardEvent<HTMLDivElement>) {
-    const i = demos.findIndex((d) => d.id === activeId);
-    const last = demos.length - 1;
-    const targets: Record<string, number> = {
+    const i = PREVIEWS.findIndex((p) => p.id === activeId);
+    const last = PREVIEWS.length - 1;
+    const target = {
       ArrowRight: i === last ? 0 : i + 1,
       ArrowLeft: i === 0 ? last : i - 1,
       Home: 0,
       End: last,
-    };
-    const next = targets[e.key];
-    if (next === undefined) return;
+    }[e.key];
+    if (target === undefined) return;
     e.preventDefault();
-    const demo = demos[next];
-    if (demo) {
-      setActiveId(demo.id);
-      tabRefs.current[next]?.focus();
+    const next = PREVIEWS[target];
+    if (next) {
+      setActiveId(next.id);
+      tabRefs.current[target]?.focus();
     }
   }
 
   if (!active) return null;
 
   return (
-    <section id="exemplos" className="relative bg-surface py-24 sm:py-32">
-      <div className="mx-auto max-w-6xl px-5 sm:px-8">
-        <SectionHeader
-          eyebrow="Exemplos"
-          title="Veja automações a trabalhar"
-          description="Seis exemplos de automações que construímos à medida de cada negócio. Escolha um setor e veja o fluxo a acontecer."
-        />
+    <section id="exemplos" className="py-24 sm:py-32">
+      <Container>
+        <Reveal className="max-w-[40rem]">
+          <p className="text-[14px] text-mute">Exemplos</p>
+          <h2 className="mt-3 text-[34px] leading-[1.1] font-medium tracking-[-0.028em] sm:text-[44px]">
+            Veja como fica no seu dia a dia.
+          </h2>
+          <p className="mt-4 text-[17px] leading-[1.6] text-ink-2">
+            Quatro automações que construímos à medida. Os nomes e valores são ilustrativos; os
+            fluxos são reais.
+          </p>
+        </Reveal>
 
-        <Reveal className="mt-12">
+        <Reveal className="mt-10 -mx-6 overflow-x-auto px-6 pb-1 sm:mx-0 sm:px-0">
           <div
             role="tablist"
-            aria-label="Setores"
+            aria-label="Exemplos de automações"
             onKeyDown={onKeyDown}
-            className="-mx-5 flex gap-2 overflow-x-auto px-5 pt-1.5 pb-2 sm:mx-0 sm:flex-wrap sm:justify-center sm:px-1.5"
+            className="glass inline-flex gap-0.5 rounded-full p-1"
           >
-            {demos.map((d, i) => {
-              const selected = d.id === activeId;
-              const Icon = d.sectorIcon;
+            {PREVIEWS.map((p, i) => {
+              const selected = p.id === activeId;
               return (
                 <button
-                  key={d.id}
+                  key={p.id}
                   ref={(el) => {
                     tabRefs.current[i] = el;
                   }}
                   type="button"
                   role="tab"
-                  id={`tab-${d.id}`}
+                  id={`tab-${p.id}`}
                   aria-selected={selected}
-                  aria-controls={`panel-${d.id}`}
+                  aria-controls={`panel-${p.id}`}
                   tabIndex={selected ? 0 : -1}
-                  onClick={() => setActiveId(d.id)}
+                  onClick={() => setActiveId(p.id)}
                   className={cn(
-                    "relative flex h-10 shrink-0 items-center gap-2 rounded-full px-4 text-[14px] font-medium whitespace-nowrap",
-                    "transition-colors duration-200",
-                    selected ? "text-white" : "text-ink-2 hover:text-ink",
+                    "relative h-10 rounded-full px-4 text-[14px] font-medium whitespace-nowrap transition-colors duration-200 sm:px-5",
+                    selected ? "text-ink" : "text-ink-2 hover:text-ink",
                   )}
                 >
                   {selected && (
                     <motion.span
-                      layoutId="sector-pill"
-                      className="absolute inset-0 rounded-full bg-ink shadow-card"
-                      transition={reduced ? { duration: 0 } : { duration: duration.base, ease }}
+                      layoutId="tab-thumb"
+                      className="absolute inset-0 rounded-full bg-paper shadow-[0_1px_2px_rgb(15_16_18/0.08),0_4px_12px_-4px_rgb(15_16_18/0.16)]"
+                      transition={reduced ? instant : spring}
                     />
                   )}
-                  {!selected && (
-                    <span className="absolute inset-0 rounded-full border border-line bg-page" />
-                  )}
-                  <Icon className="relative size-4" aria-hidden />
-                  <span className="relative">{d.sector}</span>
+                  <span className="relative">{p.tab}</span>
                 </button>
               );
             })}
           </div>
         </Reveal>
 
-        <Reveal delay={0.1} className="mt-8">
-          <div
-            role="tabpanel"
-            id={`panel-${active.id}`}
-            aria-labelledby={`tab-${active.id}`}
-            // biome-ignore lint/a11y/noNoninteractiveTabindex: APG tabs pattern, the panel has no focusable content so it must be focusable itself.
-            tabIndex={0}
-            className="rounded-[28px] border border-line bg-page p-4 sm:p-6 lg:p-8"
-          >
-            <AnimatePresence mode="wait" initial={false}>
-              <motion.div
-                key={active.id}
-                initial={reduced ? false : { opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={
-                  reduced
-                    ? undefined
-                    : { opacity: 0, y: -6, transition: { duration: duration.quick } }
-                }
-                transition={{ duration: duration.base, ease }}
+        <div
+          role="tabpanel"
+          id={`panel-${active.id}`}
+          aria-labelledby={`tab-${active.id}`}
+          // biome-ignore lint/a11y/noNoninteractiveTabindex: APG tabs pattern, the panel has no focusable content so it must be focusable itself.
+          tabIndex={0}
+          className="mt-8 rounded-[28px]"
+        >
+          <AnimatePresence mode="wait" initial={false}>
+            <motion.div
+              key={active.id}
+              initial={reduced ? false : { opacity: 0, y: 8 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={reduced ? undefined : { opacity: 0, transition: fade }}
+              transition={reduced ? instant : spring}
+            >
+              <PreviewPanel preview={active} />
+            </motion.div>
+          </AnimatePresence>
+        </div>
+      </Container>
+    </section>
+  );
+}
+
+function PreviewPanel({ preview }: { preview: PreviewConfig }) {
+  const ref = useRef<HTMLDivElement>(null);
+  const { step, cycle, animate, running } = useLoop(ref, preview.durations);
+  const { Stage } = preview;
+
+  return (
+    <div
+      ref={ref}
+      className="grid gap-8 lg:grid-cols-[minmax(0,0.72fr)_minmax(0,1.28fr)] lg:gap-12"
+    >
+      <div className="flex flex-col">
+        <p className="text-[13.5px] text-mute">{preview.sector}</p>
+        <h3 className="mt-2 text-[22px] leading-[1.2] font-medium tracking-[-0.02em] sm:text-[26px]">
+          {preview.title}
+        </h3>
+        <p className="mt-3 text-[15.5px] leading-[1.6] text-ink-2">{preview.description}</p>
+
+        <ol className="mt-8 flex flex-col">
+          {preview.steps.map((label, i) => {
+            const state = i < step ? "done" : i === step ? "current" : "next";
+            return (
+              <li
+                key={label}
+                className="border-t border-hair py-3"
+                aria-current={state === "current" ? "step" : undefined}
               >
-                <div className="mb-6 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
-                  <div className="max-w-xl">
-                    <h3 className="text-[22px] leading-tight font-semibold tracking-[-0.025em] text-ink sm:text-[26px]">
-                      {active.title}
-                    </h3>
-                    <p className="mt-2 text-[15px] leading-relaxed text-muted">{active.summary}</p>
-                  </div>
-                  <span className="self-start rounded-full border border-line bg-surface px-3 py-1 text-[12px] text-muted sm:self-auto">
-                    Exemplo ilustrativo
+                <div className="flex items-center gap-3 text-[15px]">
+                  <span
+                    className={cn(
+                      "grid size-5 shrink-0 place-items-center rounded-full text-[11px] tabular-nums transition-colors duration-300",
+                      state === "done" && "bg-ink text-white",
+                      state === "current" && "bg-ink text-white",
+                      state === "next" && "text-mute ring-1 ring-hair-2",
+                    )}
+                  >
+                    {state === "done" ? <Check className="size-3" /> : i + 1}
+                  </span>
+                  <span
+                    className={cn(
+                      "transition-colors duration-300",
+                      state === "current"
+                        ? "font-medium text-ink"
+                        : state === "done"
+                          ? "text-ink-2"
+                          : "text-mute",
+                    )}
+                  >
+                    {label}
                   </span>
                 </div>
+                {state === "current" && (
+                  <div className="mt-2.5 ml-8 h-[2px] overflow-hidden rounded-full bg-hair">
+                    <motion.div
+                      key={`${cycle}-${step}`}
+                      className="h-full bg-ink"
+                      initial={{ width: running ? "0%" : "100%" }}
+                      animate={{ width: "100%" }}
+                      transition={
+                        running
+                          ? { duration: (preview.durations[step] ?? 2000) / 1000, ease: "linear" }
+                          : instant
+                      }
+                    />
+                  </div>
+                )}
+              </li>
+            );
+          })}
+        </ol>
 
-                <AutomationDemo demo={active} />
-
-                <ul className="mt-6 grid gap-3 border-t border-line pt-6 sm:grid-cols-3">
-                  {active.outcomes.map((o) => (
-                    <li key={o} className="flex items-start gap-2.5 text-[14.5px] text-ink-2">
-                      <span className="mt-0.5 grid size-5 shrink-0 place-items-center rounded-full bg-ok-soft text-ok">
-                        <Check className="size-3" strokeWidth={3} aria-hidden />
-                      </span>
-                      {o}
-                    </li>
-                  ))}
-                </ul>
-              </motion.div>
-            </AnimatePresence>
-          </div>
-        </Reveal>
-
-        <p className="mt-6 text-center text-[13px] text-muted">
-          Cada automação é desenhada para os seus processos e ferramentas. Estes são apenas pontos
-          de partida.
-        </p>
+        <ul className="mt-6 flex flex-col gap-2 text-[14.5px] text-ink-2">
+          {preview.outcomes.map((o) => (
+            <li key={o} className="flex items-center gap-2.5">
+              <Check className="text-go" />
+              {o}
+            </li>
+          ))}
+        </ul>
       </div>
-    </section>
+
+      <Stage step={step} cycle={cycle} animate={animate} running={running} />
+    </div>
   );
 }
