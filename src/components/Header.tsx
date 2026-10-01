@@ -82,7 +82,7 @@ export function Header() {
                 href={n.href}
                 aria-current={active === n.href ? "location" : undefined}
                 className={cn(
-                  "relative rounded-full px-3.5 py-2 text-[14.5px] transition-colors hover:bg-ink/5",
+                  "group relative rounded-full px-3.5 py-2 text-[14.5px] transition-colors hover:bg-ink/5",
                   active === n.href ? "text-ink" : "text-ink-2 hover:text-ink",
                 )}
               >
@@ -90,8 +90,8 @@ export function Header() {
                 <span
                   aria-hidden
                   className={cn(
-                    "absolute inset-x-3.5 -bottom-0.5 h-[3px] origin-left rounded-full bg-lime transition-transform duration-300 ease-out-soft",
-                    active === n.href ? "scale-x-100" : "scale-x-0",
+                    "absolute inset-x-3.5 -bottom-0.5 h-[3px] origin-left rounded-full bg-brand transition-transform duration-300 ease-out-soft",
+                    active === n.href ? "scale-x-100" : "scale-x-0 group-hover:scale-x-50",
                   )}
                 />
               </a>

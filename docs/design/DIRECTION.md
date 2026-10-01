@@ -1,4 +1,4 @@
-# Design direction — landing (v6: light, clear, fast)
+# Design direction — landing (v7: polished, official logos, light motion)
 
 ## Why v6
 v2–v5 piled on heavy effects (fixed animated backdrop, backdrop-filter glass on dozens of
@@ -14,14 +14,30 @@ with one rule: **every effect must be cheap**.
   button (WCAG 2.2.2). Reduced motion shows final states with no movement.
 - Normal document flow: no pinned/sticky storytelling sections.
 
-## Palette (catchy, with meaning)
+## Palette (calm, with meaning)
 | Token | Value | Meaning |
 |---|---|---|
-| `paper` | `#F5F4EF` | page |
-| `ink` | `#0E0F12` | text, dark surfaces |
-| `lime` | `#D4FF3A` | **automatic / done**: CTAs, ticks, highlights |
-| `violet` | `#6B4EFF` | **trigger**: something happened |
-| `night` | `#0E0F12` → `#22242A` | the live feed, the process section |
+| `paper` | `#F6F5F1` | page |
+| `ink` | `#111315` | text |
+| `brand` | `#1F6F4A` forest green | **automatic / done**: CTAs, ticks, highlights |
+| `brand-soft` | `#E4F1E9` | "with the automation" surfaces |
+| `amber` | `#F2B33D` | **trigger** (something happened), the drawn underline, current step |
+| `mint` | `#8EDDB0` | green on dark surfaces |
+| `night` | `#0F1513` → `#1F2925` | live feed, process, closing card |
+
+## Logos
+Official marks from open libraries, generated into a small module by `pnpm icons`
+(`scripts/build-brand-icons.mjs`): Iconify **logos** (CC0), Iconify **vscode-icons** (MIT,
+Outlook/Excel) and **Simple Icons** (CC0). Gradients are hoisted into one shared `<defs>`
+sprite. Portuguese tools without an open-licence logo (Moloni, InvoiceXpress, PHC,
+Primavera, MB WAY) are shown as name chips until official SVGs are supplied.
+
+## Motion (lively, still light)
+- Reveals use CSS scroll-driven animations (`animation-timeline: view()`), with an
+  IntersectionObserver fallback; reveal and hover never share an element.
+- Spotlight hover on cards (pointer-following light + border), one delegated listener.
+- Floating logo tiles (CSS bob), drawn underline in the hero, sliding tab thumb,
+  one-shot sequences inside cards, travelling dot between "how it works" steps.
 
 ## Page structure (each section answers one question)
 1. Header — sticky, scrollspy underline in lime, one CTA.

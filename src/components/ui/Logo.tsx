@@ -2,8 +2,8 @@ import { site } from "@/lib/site";
 
 /** Two nodes joined by a flow: something happens, something gets done. */
 export function Logo({ tone = "dark" }: { tone?: "dark" | "light" }) {
-  const bg = tone === "dark" ? "#0E0F12" : "#D4FF3A";
-  const fg = tone === "dark" ? "#D4FF3A" : "#0E0F12";
+  const bg = tone === "dark" ? "#1F6F4A" : "#FFFFFF";
+  const fg = tone === "dark" ? "#FFFFFF" : "#1F6F4A";
   return (
     <span className="inline-flex items-center gap-2.5">
       <svg viewBox="0 0 32 32" className="size-8" aria-hidden>

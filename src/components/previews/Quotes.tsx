@@ -1,4 +1,5 @@
-import { Check, Globe, Mail } from "lucide-react";
+import { Check, FileText, Globe } from "lucide-react";
+import { BrandIcon } from "@/components/brand/BrandIcon";
 import { cn } from "@/lib/cn";
 import { At, Stage, Tag } from "./parts";
 import type { Example, PreviewProps } from "./types";
@@ -9,13 +10,13 @@ const LINES = [
   { label: "Deslocação", value: "25,00 €" },
 ];
 
-const STATUS: { tone: "neutral" | "violet" | "sky" | "lime"; label: string }[] = [
+const STATUS: { tone: "neutral" | "wait" | "sky" | "done"; label: string }[] = [
   { tone: "neutral", label: "A preparar" },
   { tone: "neutral", label: "Rascunho pronto" },
-  { tone: "violet", label: "Aguarda a sua aprovação" },
+  { tone: "wait", label: "Aguarda a sua aprovação" },
   { tone: "sky", label: "Enviado ao cliente" },
   { tone: "sky", label: "Lembrete enviado" },
-  { tone: "lime", label: "Aceite" },
+  { tone: "done", label: "Aceite" },
 ];
 
 function QuotesPreview({ step }: PreviewProps) {
@@ -46,7 +47,7 @@ function QuotesPreview({ step }: PreviewProps) {
             </div>
             <span key={status?.label} className="animate-feed-in">
               <Tag tone={status?.tone ?? "neutral"}>
-                {status?.tone === "lime" && <Check className="size-3" strokeWidth={3} />}
+                {status?.tone === "done" && <Check className="size-3" strokeWidth={3} />}
                 {status?.label}
               </Tag>
             </span>
@@ -75,14 +76,14 @@ function QuotesPreview({ step }: PreviewProps) {
             <At step={step} at={2} until={3}>
               <div className="flex items-center justify-between gap-3 rounded-2xl bg-ink p-3 text-white">
                 <span className="text-[13px]">Rever e enviar ao cliente?</span>
-                <span className="rounded-full bg-lime px-3.5 py-1.5 text-[13px] font-semibold text-ink">
+                <span className="rounded-full bg-mint px-3.5 py-1.5 text-[13px] font-semibold text-night">
                   Aprovar
                 </span>
               </div>
             </At>
             <At step={step} at={3} until={5}>
               <p className="flex items-center gap-2 rounded-2xl bg-sky-soft px-3 py-2.5 text-[13px] text-sky-ink">
-                <Mail className="size-4" />
+                <BrandIcon brand="gmail" className="size-4" />
                 {step >= 4
                   ? "Sem resposta há 3 dias: seguimento enviado"
                   : "Enviado por email a Rui Almeida"}
@@ -93,7 +94,7 @@ function QuotesPreview({ step }: PreviewProps) {
           {/* Accepted stamp */}
           <div
             className={cn(
-              "pointer-events-none absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rotate-[-12deg] rounded-2xl border-4 border-ink bg-lime px-6 py-2 text-[28px] font-bold tracking-[0.08em] text-ink transition-[opacity,transform] duration-300",
+              "pointer-events-none absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rotate-[-12deg] rounded-2xl border-4 border-brand bg-white/90 px-6 py-2 text-[28px] font-bold tracking-[0.08em] text-brand transition-[opacity,transform] duration-300",
               step >= 5 ? "scale-100 opacity-100" : "scale-150 opacity-0",
             )}
           >
@@ -108,7 +109,7 @@ function QuotesPreview({ step }: PreviewProps) {
 export const quotes: Example = {
   id: "orcamentos",
   tab: "Orçamentos",
-  app: "site",
+  mark: FileText,
   sector: "Oficinas, reparações e serviços técnicos",
   title: "Do pedido no site ao orçamento aceite, no mesmo dia",
   before: "Orçamentos feitos à noite, e alguns ficam esquecidos.",
@@ -122,6 +123,6 @@ export const quotes: Example = {
     "Orçamento aceite",
   ],
   durations: [1800, 2400, 2000, 1800, 2000, 3600],
-  tools: ["Formulário do site", "Tabela de preços", "Email"],
+  tools: ["Formulário do site", "googleSheets", "gmail"],
   Preview: QuotesPreview,
 };

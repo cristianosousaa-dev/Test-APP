@@ -1,4 +1,5 @@
 import { Plus } from "lucide-react";
+import { BrandIcon } from "@/components/brand/BrandIcon";
 import { LinkButton } from "@/components/ui/Button";
 import { Container } from "@/components/ui/Container";
 import { SectionHead } from "@/components/ui/SectionHead";
@@ -40,6 +41,16 @@ export function Faq() {
             As dúvidas que nos chegam mais vezes, respondidas sem rodeios.
           </SectionHead>
           <div data-reveal className="card mt-8 max-w-[24rem] p-6">
+            <span className="mb-4 flex -space-x-2">
+              {(["whatsapp", "gmail", "outlook"] as const).map((b) => (
+                <span
+                  key={b}
+                  className="grid size-9 place-items-center rounded-full bg-white shadow-[0_0_0_2px_#fff,0_0_0_3px_rgb(17_19_21/0.08)]"
+                >
+                  <BrandIcon brand={b} className="size-[18px]" />
+                </span>
+              ))}
+            </span>
             <p className="text-[16px] font-semibold">A sua pergunta não está aqui?</p>
             <p className="mt-1 text-[14.5px] text-ink-2">Escreva-nos. Respondemos por email.</p>
             <LinkButton
@@ -59,11 +70,11 @@ export function Faq() {
               key={f.q}
               name="faq"
               open={i === 0}
-              className="faq-item card group transition-shadow duration-200 open:shadow-[0_0_0_2px_var(--color-ink)] hover:shadow-[0_0_0_1px_var(--color-line-2),0_10px_24px_-16px_rgb(14_15_18/0.3)]"
+              className="faq-item card group transition-shadow duration-200 open:shadow-[0_0_0_2px_var(--color-brand)] hover:shadow-[0_0_0_1px_var(--color-line-2),0_10px_24px_-16px_rgb(17_19_21/0.3)]"
             >
               <summary className="flex list-none items-center justify-between gap-6 px-6 py-5 text-[17px] font-semibold tracking-[-0.01em] [&::-webkit-details-marker]:hidden">
                 {f.q}
-                <span className="grid size-8 shrink-0 place-items-center rounded-full bg-paper transition-[transform,background-color] duration-300 group-open:rotate-45 group-open:bg-lime">
+                <span className="grid size-8 shrink-0 place-items-center rounded-full bg-paper transition-[transform,background-color] duration-300 group-open:rotate-45 group-open:bg-brand group-open:text-white group-hover:bg-brand-soft">
                   <Plus className="size-4" />
                 </span>
               </summary>

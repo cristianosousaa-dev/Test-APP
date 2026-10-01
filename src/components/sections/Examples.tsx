@@ -1,13 +1,13 @@
 "use client";
 
 import { Check } from "lucide-react";
-import { type KeyboardEvent, useRef, useState } from "react";
+import { type KeyboardEvent, useLayoutEffect, useRef, useState } from "react";
+import { BrandIcon, ToolChip } from "@/components/brand/BrandIcon";
 import { bookings } from "@/components/previews/Bookings";
 import { leads } from "@/components/previews/Leads";
 import { payments } from "@/components/previews/Payments";
 import { quotes } from "@/components/previews/Quotes";
 import type { Example } from "@/components/previews/types";
-import { AppIcon } from "@/components/ui/AppIcon";
 import { Container } from "@/components/ui/Container";
 import { PauseButton } from "@/components/ui/PauseButton";
 import { SectionHead } from "@/components/ui/SectionHead";
@@ -20,6 +20,18 @@ export function Examples() {
   const [activeId, setActiveId] = useState(EXAMPLES[0]?.id ?? "");
   const tabs = useRef<(HTMLButtonElement | null)[]>([]);
   const active = EXAMPLES.find((e) => e.id === activeId) ?? EXAMPLES[0];
+  const [thumb, setThumb] = useState<{ x: number; w: number } | null>(null);
+
+  // Slide one dark thumb under the active tab (transform + width, measured once per change).
+  useLayoutEffect(() => {
+    const i = EXAMPLES.findIndex((e) => e.id === activeId);
+    const el = tabs.current[i];
+    if (!el) return;
+    const measure = () => setThumb({ x: el.offsetLeft, w: el.offsetWidth });
+    measure();
+    window.addEventListener("resize", measure);
+    return () => window.removeEventListener("resize", measure);
+  }, [activeId]);
 
   function onKeyDown(e: KeyboardEvent<HTMLDivElement>) {
     const i = EXAMPLES.findIndex((x) => x.id === activeId);
@@ -53,8 +65,15 @@ export function Examples() {
           aria-label="Exemplos de automações"
           onKeyDown={onKeyDown}
           data-reveal
-          className="-mx-5 mt-10 flex gap-2 overflow-x-auto px-5 pb-1 [scrollbar-width:none] sm:mx-0 sm:px-0"
+          className="relative -mx-5 mt-10 flex gap-2 overflow-x-auto px-5 pb-1 [scrollbar-width:none] sm:mx-0 sm:px-0"
         >
+          {thumb && (
+            <span
+              aria-hidden
+              className="absolute top-0 left-0 h-12 rounded-full bg-ink transition-[transform,width] duration-500 ease-out-soft motion-reduce:transition-none"
+              style={{ width: thumb.w, transform: `translateX(${thumb.x}px)` }}
+            />
+          )}
           {EXAMPLES.map((ex, i) => {
             const selected = ex.id === activeId;
             return (
@@ -71,13 +90,14 @@ export function Examples() {
                 tabIndex={selected ? 0 : -1}
                 onClick={() => setActiveId(ex.id)}
                 className={cn(
-                  "flex h-12 shrink-0 items-center gap-2.5 rounded-full pr-5 pl-1.5 text-[15px] font-medium transition-[background-color,color,box-shadow] duration-200",
+                  "relative flex h-12 shrink-0 items-center gap-2.5 rounded-full pr-5 pl-1.5 text-[15px] font-medium transition-[background-color,color,box-shadow] duration-300",
                   selected
-                    ? "bg-ink text-white"
+                    ? "text-white"
                     : "bg-paper text-ink-2 ring-1 ring-line hover:bg-white hover:text-ink hover:ring-line-2",
+                  selected && !thumb && "bg-ink",
                 )}
               >
-                <AppIcon app={ex.app} className="size-9 rounded-full" />
+                <Mark mark={ex.mark} />
                 {ex.tab}
               </button>
             );
@@ -120,9 +140,9 @@ function ExamplePanel({ example }: { example: Example }) {
             </span>
             <span className="text-ink-2">{example.before}</span>
           </p>
-          <p className="rounded-2xl bg-lime-soft px-4 py-3 ring-1 ring-lime-2/50">
-            <span className="mb-0.5 flex items-center gap-2 text-[12px] font-semibold text-lime-ink uppercase">
-              <span className="size-2 rounded-full bg-lime-ink" />
+          <p className="rounded-2xl bg-brand-soft px-4 py-3 ring-1 ring-brand/15">
+            <span className="mb-0.5 flex items-center gap-2 text-[12px] font-semibold text-brand-ink uppercase">
+              <span className="size-2 rounded-full bg-brand" />
               Com a automação
             </span>
             <span className="font-medium text-ink">{example.after}</span>
@@ -144,8 +164,8 @@ function ExamplePanel({ example }: { example: Example }) {
                 <span
                   className={cn(
                     "grid size-6 shrink-0 place-items-center rounded-full text-[11.5px] font-semibold transition-colors duration-300",
-                    state === "done" && "bg-ink text-lime",
-                    state === "now" && "bg-lime text-ink",
+                    state === "done" && "bg-brand text-white",
+                    state === "now" && "bg-amber text-ink",
                     state === "next" && "text-mute ring-1 ring-line-2",
                   )}
                 >
@@ -160,12 +180,7 @@ function ExamplePanel({ example }: { example: Example }) {
         <div className="mt-auto flex flex-wrap items-center gap-2 pt-6">
           <span className="text-[12.5px] text-mute">Ligado a</span>
           {example.tools.map((t) => (
-            <span
-              key={t}
-              className="rounded-full bg-white px-3 py-1 text-[12.5px] font-medium ring-1 ring-line"
-            >
-              {t}
-            </span>
+            <ToolChip key={t} tool={t} />
           ))}
         </div>
       </div>
@@ -178,5 +193,22 @@ function ExamplePanel({ example }: { example: Example }) {
         </div>
       </div>
     </div>
+  );
+}
+
+/** Tab mark: the tool's official logo, or a generic icon on a neutral tile. */
+function Mark({ mark }: { mark: Example["mark"] }) {
+  if (typeof mark === "string") {
+    return (
+      <span className="grid size-9 place-items-center rounded-full bg-white shadow-[0_0_0_1px_rgb(17_19_21/0.08)]">
+        <BrandIcon brand={mark} className="size-5" />
+      </span>
+    );
+  }
+  const Icon = mark;
+  return (
+    <span className="grid size-9 place-items-center rounded-full bg-brand-soft text-brand">
+      <Icon className="size-[18px]" />
+    </span>
   );
 }

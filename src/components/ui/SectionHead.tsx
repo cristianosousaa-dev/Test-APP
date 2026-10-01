@@ -25,7 +25,7 @@ export function SectionHead({
           tone === "light" ? "text-ink-2" : "text-white/70",
         )}
       >
-        <span className="size-2.5 rounded-[3px] bg-lime" />
+        <span className={cn("size-2.5 rounded-[3px]", tone === "light" ? "bg-brand" : "bg-mint")} />
         {kicker}
       </p>
       <h2

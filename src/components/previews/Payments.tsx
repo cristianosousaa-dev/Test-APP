@@ -1,4 +1,5 @@
-import { Check, Mail } from "lucide-react";
+import { Check, Wallet } from "lucide-react";
+import { BrandIcon } from "@/components/brand/BrandIcon";
 import { cn } from "@/lib/cn";
 import { At, Stage, Tag } from "./parts";
 import type { Example, PreviewProps } from "./types";
@@ -13,10 +14,10 @@ function PaymentsPreview({ step }: PreviewProps) {
   const paid = step >= 2;
   const focus = [
     { tone: "rose", label: "Vencida há 5 dias" },
-    { tone: "violet", label: "Lembrete enviado" },
-    { tone: "lime", label: "Paga" },
-    { tone: "lime", label: "Paga · lançada" },
-  ][step] as { tone: "rose" | "violet" | "lime"; label: string } | undefined;
+    { tone: "wait", label: "Lembrete enviado" },
+    { tone: "done", label: "Paga" },
+    { tone: "done", label: "Paga · lançada" },
+  ][step] as { tone: "rose" | "wait" | "done"; label: string } | undefined;
 
   return (
     <Stage>
@@ -39,7 +40,7 @@ function PaymentsPreview({ step }: PreviewProps) {
               )}
             >
               4 740,00 €{" "}
-              <span className="align-middle text-[14px] font-semibold text-ok">+420 €</span>
+              <span className="align-middle text-[14px] font-semibold text-brand">+420 €</span>
             </span>
           </div>
         </div>
@@ -52,7 +53,7 @@ function PaymentsPreview({ step }: PreviewProps) {
                 key={r.doc}
                 className={cn(
                   "flex items-center gap-3 border-b border-line px-4 py-3 text-[13.5px] transition-colors duration-500 last:border-b-0",
-                  isFocus && (paid ? "bg-lime-soft" : "bg-rose-soft/60"),
+                  isFocus && (paid ? "bg-brand-soft" : "bg-rose-soft/60"),
                 )}
               >
                 <span className="min-w-0 flex-1">
@@ -64,12 +65,12 @@ function PaymentsPreview({ step }: PreviewProps) {
                   {isFocus && focus ? (
                     <span key={focus.label} className="inline-block animate-feed-in">
                       <Tag tone={focus.tone}>
-                        {focus.tone === "lime" && <Check className="size-3" strokeWidth={3} />}
+                        {focus.tone === "done" && <Check className="size-3" strokeWidth={3} />}
                         {focus.label}
                       </Tag>
                     </span>
                   ) : (
-                    <Tag tone="lime">
+                    <Tag tone="done">
                       <Check className="size-3" strokeWidth={3} />
                       Paga
                     </Tag>
@@ -83,8 +84,8 @@ function PaymentsPreview({ step }: PreviewProps) {
         <div className="relative mt-auto min-h-[92px]">
           <At step={step} at={1} until={3} className="absolute inset-0">
             <div className="flex h-full gap-3 rounded-2xl bg-white p-4 ring-1 ring-line">
-              <span className="grid size-9 shrink-0 place-items-center rounded-[10px] bg-[#0ea5b7] text-white">
-                <Mail className="size-[18px]" />
+              <span className="grid size-9 shrink-0 place-items-center rounded-[10px] bg-white ring-1 ring-line">
+                <BrandIcon brand="gmail" className="size-5" />
               </span>
               <div className="min-w-0 text-[13px]">
                 <p className="text-mute">Para: Oficina Lopes</p>
@@ -97,7 +98,7 @@ function PaymentsPreview({ step }: PreviewProps) {
           </At>
           <At step={step} at={3} className="absolute inset-0">
             <div className="flex h-full items-center gap-3 rounded-2xl bg-ink p-4 text-white">
-              <span className="grid size-9 place-items-center rounded-full bg-lime text-ink">
+              <span className="grid size-9 place-items-center rounded-full bg-mint text-night">
                 <Check className="size-4" strokeWidth={3} />
               </span>
               <p className="text-[13.5px]">
@@ -114,7 +115,7 @@ function PaymentsPreview({ step }: PreviewProps) {
 export const payments: Example = {
   id: "cobrancas",
   tab: "Cobranças",
-  app: "payments",
+  mark: Wallet,
   sector: "Qualquer negócio que emite faturas",
   title: "Faturas em atraso cobradas com educação e a tempo",
   before: "Telefona aos clientes para lembrar faturas em atraso.",
@@ -126,6 +127,6 @@ export const payments: Example = {
     "Lançado na contabilidade",
   ],
   durations: [2200, 2800, 2400, 3600],
-  tools: ["Moloni", "Email", "MB WAY", "Contabilidade"],
+  tools: ["Moloni", "gmail", "MB WAY", "excel"],
   Preview: PaymentsPreview,
 };

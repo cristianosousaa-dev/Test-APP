@@ -11,14 +11,14 @@ const sizes = {
 export function LinkButton({
   href,
   children,
-  variant = "lime",
+  variant = "primary",
   size = "md",
   className,
   arrow = false,
 }: {
   href: string;
   children: ReactNode;
-  variant?: "lime" | "dark" | "line";
+  variant?: "primary" | "dark" | "light" | "line";
   size?: keyof typeof sizes;
   className?: string;
   arrow?: boolean;

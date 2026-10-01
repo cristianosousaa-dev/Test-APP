@@ -1,6 +1,18 @@
+import { type Brand, BrandIcon, brandLabel } from "@/components/brand/BrandIcon";
 import { Container } from "@/components/ui/Container";
 import { Logo } from "@/components/ui/Logo";
 import { contactHref, nav, site } from "@/lib/site";
+
+const INTEGRATIONS: Brand[] = [
+  "whatsapp",
+  "gmail",
+  "outlook",
+  "googleCalendar",
+  "excel",
+  "stripe",
+  "hubspot",
+  "shopify",
+];
 
 export function Footer() {
   return (
@@ -15,13 +27,28 @@ export function Footer() {
               Automações à medida para pequenas e médias empresas. Ligamos as ferramentas que já usa
               para que o trabalho repetitivo aconteça sozinho.
             </p>
+            <ul className="mt-5 flex flex-wrap gap-2" aria-label="Algumas integrações">
+              {INTEGRATIONS.map((b) => (
+                <li
+                  key={b}
+                  title={brandLabel(b)}
+                  className="grid size-9 place-items-center rounded-xl bg-white shadow-[0_0_0_1px_var(--color-line)] transition-transform duration-200 hover:-translate-y-0.5"
+                >
+                  <BrandIcon brand={b} className="size-[18px]" />
+                  <span className="sr-only">{brandLabel(b)}</span>
+                </li>
+              ))}
+            </ul>
           </div>
           <nav aria-label="Rodapé">
             <p className="text-[13px] font-semibold tracking-wide text-mute uppercase">Página</p>
             <ul className="mt-4 flex flex-col gap-2.5 text-[15px]">
               {nav.map((n) => (
                 <li key={n.href}>
-                  <a href={n.href} className="text-ink-2 transition-colors hover:text-ink">
+                  <a
+                    href={n.href}
+                    className="text-ink-2 underline-offset-4 transition-colors hover:text-brand hover:underline"
+                  >
                     {n.label}
                   </a>
                 </li>
@@ -32,7 +59,10 @@ export function Footer() {
             <p className="text-[13px] font-semibold tracking-wide text-mute uppercase">Contacto</p>
             <ul className="mt-4 flex flex-col gap-2.5 text-[15px]">
               <li>
-                <a href={contactHref()} className="text-ink-2 transition-colors hover:text-ink">
+                <a
+                  href={contactHref()}
+                  className="text-ink-2 underline-offset-4 transition-colors hover:text-brand hover:underline"
+                >
                   {site.email}
                 </a>
               </li>

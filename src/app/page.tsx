@@ -1,3 +1,4 @@
+import { BrandDefs } from "@/components/brand/BrandIcon";
 import { Footer } from "@/components/Footer";
 import { Header } from "@/components/Header";
 import { Cta } from "@/components/sections/Cta";
@@ -8,11 +9,12 @@ import { HowItWorks } from "@/components/sections/HowItWorks";
 import { Process } from "@/components/sections/Process";
 import { Services } from "@/components/sections/Services";
 import { Tools } from "@/components/sections/Tools";
-import { RevealObserver } from "@/components/ui/RevealObserver";
+import { PageEffects } from "@/components/ui/PageEffects";
 
 export default function Home() {
   return (
     <>
+      <BrandDefs />
       <Header />
       <main id="conteudo">
         <Hero />
@@ -25,7 +27,7 @@ export default function Home() {
         <Cta />
       </main>
       <Footer />
-      <RevealObserver />
+      <PageEffects />
     </>
   );
 }

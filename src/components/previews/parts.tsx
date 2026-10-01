@@ -47,7 +47,7 @@ export function Stage({ children, className }: { children: ReactNode; className?
     <div
       aria-hidden
       className={cn(
-        "relative h-[500px] overflow-hidden rounded-[28px] bg-[#ecebe5] ring-1 ring-line",
+        "relative h-[500px] overflow-hidden rounded-[28px] bg-[linear-gradient(160deg,#edf3ee,#f1efe9_60%)] ring-1 ring-line",
         className,
       )}
     >
@@ -60,12 +60,12 @@ export function Tag({
   tone,
   children,
 }: {
-  tone: "lime" | "violet" | "rose" | "sky" | "neutral";
+  tone: "done" | "wait" | "rose" | "sky" | "neutral";
   children: ReactNode;
 }) {
   const t = {
-    lime: "bg-lime text-ink",
-    violet: "bg-violet-soft text-violet",
+    done: "bg-brand-soft text-brand-ink",
+    wait: "bg-amber-soft text-amber-ink",
     rose: "bg-rose-soft text-rose-ink",
     sky: "bg-sky-soft text-sky-ink",
     neutral: "bg-paper text-ink-2",
