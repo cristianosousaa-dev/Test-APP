@@ -1,148 +1,131 @@
-"use client";
-
-import { AnimatePresence, motion } from "motion/react";
-import { Check, Pill, Stage } from "@/components/visual/Bits";
-import { Counter } from "@/components/visual/Counter";
+import { Check, Mail } from "lucide-react";
 import { cn } from "@/lib/cn";
-import { fade, instant, spring } from "@/lib/motion";
-import type { PreviewConfig, StageProps } from "./types";
+import { At, Stage, Tag } from "./parts";
+import type { Example, PreviewProps } from "./types";
 
 const ROWS = [
-  { client: "Clínica Dentária Sol", doc: "FT 1186", value: "320,00 €", state: "paid" },
-  { client: "Restaurante O Pátio", doc: "FT 1184", value: "96,40 €", state: "paid" },
-  { client: "Oficina Lopes", doc: "FT 1182", value: "420,00 €", state: "focus" },
-  { client: "Ana Pires", doc: "FT 1181", value: "185,00 €", state: "paid" },
-  { client: "Loja da Esquina", doc: "FT 1179", value: "64,90 €", state: "due" },
-] as const;
+  { who: "Clínica Dentária Sol", doc: "FT 1186", value: "320,00 €", paid: true },
+  { who: "Oficina Lopes", doc: "FT 1182", value: "420,00 €", paid: false },
+  { who: "Restaurante O Pátio", doc: "FT 1184", value: "96,40 €", paid: true },
+];
 
-function PaymentsStage({ step, cycle, animate }: StageProps) {
-  const t = animate ? spring : instant;
-  const received = step >= 2 ? 4740 : 4320;
-  const focus =
-    step >= 3
-      ? { tone: "go" as const, label: "Paga · lançada" }
-      : step >= 2
-        ? { tone: "go" as const, label: "Paga" }
-        : step >= 1
-          ? { tone: "sand" as const, label: "Lembrete enviado" }
-          : { tone: "rose" as const, label: "Vencida há 5 dias" };
+function PaymentsPreview({ step }: PreviewProps) {
+  const paid = step >= 2;
+  const focus = [
+    { tone: "rose", label: "Vencida há 5 dias" },
+    { tone: "violet", label: "Lembrete enviado" },
+    { tone: "lime", label: "Paga" },
+    { tone: "lime", label: "Paga · lançada" },
+  ][step] as { tone: "rose" | "violet" | "lime"; label: string } | undefined;
 
   return (
     <Stage>
-      <div className="absolute inset-4 flex flex-col overflow-hidden rounded-[22px] bg-paper ring-1 ring-hair">
-        <div className="flex items-end justify-between gap-4 border-b border-hair p-5">
-          <div>
-            <p className="text-[12px] font-medium tracking-wide text-ink-2 uppercase">
-              Faturas · outubro
-            </p>
-            <p className="mt-1 text-[28px] font-medium tracking-[-0.025em]">
-              <Counter value={received} animate={animate} />
-            </p>
-            <p className="text-[12.5px] text-mute">recebidos este mês</p>
+      <div className="absolute inset-0 flex flex-col gap-3 p-4 sm:p-5">
+        <div className="rounded-2xl bg-white p-5 ring-1 ring-line">
+          <p className="text-[12px] font-semibold text-mute uppercase">Recebido em outubro</p>
+          <div className="relative mt-1 h-10 text-[34px] leading-10 font-semibold tracking-[-0.03em] tabular-nums">
+            <span
+              className={cn(
+                "absolute inset-0 transition-[opacity,transform] duration-500",
+                paid ? "-translate-y-3 opacity-0" : "opacity-100",
+              )}
+            >
+              4 320,00 €
+            </span>
+            <span
+              className={cn(
+                "absolute inset-0 transition-[opacity,transform] duration-500",
+                paid ? "opacity-100" : "translate-y-3 opacity-0",
+              )}
+            >
+              4 740,00 €{" "}
+              <span className="align-middle text-[14px] font-semibold text-ok">+420 €</span>
+            </span>
           </div>
-          <span className="hidden sm:block">
-            <Pill tone="neutral">Cobrança automática ativa</Pill>
-          </span>
         </div>
-        <ul className="flex-1">
+
+        <ul className="overflow-hidden rounded-2xl bg-white ring-1 ring-line">
           {ROWS.map((r) => {
-            const isFocus = r.state === "focus";
+            const isFocus = !r.paid;
             return (
               <li
                 key={r.doc}
                 className={cn(
-                  "flex items-center gap-3 border-b border-hair px-5 py-3 text-[13.5px] transition-colors duration-500",
-                  isFocus && step === 0 && "bg-rose/50",
+                  "flex items-center gap-3 border-b border-line px-4 py-3 text-[13.5px] transition-colors duration-500 last:border-b-0",
+                  isFocus && (paid ? "bg-lime-soft" : "bg-rose-soft/60"),
                 )}
               >
                 <span className="min-w-0 flex-1">
-                  <span className="block truncate font-medium">{r.client}</span>
-                  <span className="block text-[12px] text-mute">{r.doc}</span>
+                  <span className="block truncate font-semibold">{r.who}</span>
+                  <span className="text-mute">{r.doc}</span>
                 </span>
                 <span className="hidden tabular-nums sm:block">{r.value}</span>
                 <span className="w-[150px] text-right">
-                  {isFocus ? (
-                    <AnimatePresence mode="wait" initial={false}>
-                      <motion.span
-                        key={focus.label}
-                        className="inline-block"
-                        initial={animate ? { opacity: 0, y: 4 } : false}
-                        animate={{ opacity: 1, y: 0 }}
-                        exit={{ opacity: 0, transition: fade }}
-                        transition={t}
-                      >
-                        <Pill tone={focus.tone}>
-                          {focus.tone === "go" && <Check />}
-                          {focus.label}
-                        </Pill>
-                      </motion.span>
-                    </AnimatePresence>
-                  ) : r.state === "paid" ? (
-                    <Pill tone="go">
-                      <Check />
-                      Paga
-                    </Pill>
+                  {isFocus && focus ? (
+                    <span key={focus.label} className="inline-block animate-feed-in">
+                      <Tag tone={focus.tone}>
+                        {focus.tone === "lime" && <Check className="size-3" strokeWidth={3} />}
+                        {focus.label}
+                      </Tag>
+                    </span>
                   ) : (
-                    <Pill tone="neutral">Vence a 10 out</Pill>
+                    <Tag tone="lime">
+                      <Check className="size-3" strokeWidth={3} />
+                      Paga
+                    </Tag>
                   )}
                 </span>
               </li>
             );
           })}
         </ul>
-      </div>
 
-      {/* The reminder that was sent, shown as glass over the list */}
-      <AnimatePresence>
-        {step === 1 && (
-          <motion.div
-            key={`${cycle}-reminder`}
-            className="glass absolute right-4 bottom-4 left-4 rounded-[22px] p-4 sm:right-6 sm:left-auto sm:w-[330px]"
-            initial={animate ? { opacity: 0, y: 16 } : false}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: 10, transition: fade }}
-            transition={t}
-          >
-            <p className="text-[12px] font-medium tracking-wide text-ink-2 uppercase">
-              Email enviado · Oficina Lopes
-            </p>
-            <p className="mt-2 text-[13.5px] leading-snug text-ink">
-              Olá Sr. Lopes, a fatura FT 1182 de 420,00 € venceu a 26 de setembro. Pode pagar
-              diretamente por este link. Obrigado!
-            </p>
-          </motion.div>
-        )}
-      </AnimatePresence>
+        <div className="relative mt-auto min-h-[92px]">
+          <At step={step} at={1} until={3} className="absolute inset-0">
+            <div className="flex h-full gap-3 rounded-2xl bg-white p-4 ring-1 ring-line">
+              <span className="grid size-9 shrink-0 place-items-center rounded-[10px] bg-[#0ea5b7] text-white">
+                <Mail className="size-[18px]" />
+              </span>
+              <div className="min-w-0 text-[13px]">
+                <p className="text-mute">Para: Oficina Lopes</p>
+                <p className="font-semibold">Fatura FT 1182 · lembrete amigável</p>
+                <p className="truncate text-ink-2">
+                  Olá! Ainda não recebemos o pagamento. Pode pagar por MB WAY.
+                </p>
+              </div>
+            </div>
+          </At>
+          <At step={step} at={3} className="absolute inset-0">
+            <div className="flex h-full items-center gap-3 rounded-2xl bg-ink p-4 text-white">
+              <span className="grid size-9 place-items-center rounded-full bg-lime text-ink">
+                <Check className="size-4" strokeWidth={3} />
+              </span>
+              <p className="text-[13.5px]">
+                Pagamento conciliado e lançado na contabilidade. Ninguém teve de telefonar.
+              </p>
+            </div>
+          </At>
+        </div>
+      </div>
     </Stage>
   );
 }
 
-export const payments: PreviewConfig = {
+export const payments: Example = {
   id: "cobrancas",
   tab: "Cobranças",
+  app: "payments",
   sector: "Qualquer negócio que emite faturas",
   title: "Faturas em atraso cobradas com educação e a tempo",
-  description:
-    "Quando uma fatura vence, o cliente recebe um lembrete simpático com o link de pagamento. Quando paga, fica registado e lançado.",
+  before: "Telefona aos clientes para lembrar faturas em atraso.",
+  after: "Lembrete simpático com o link de pagamento; quando paga, fica lançado.",
   steps: [
     "Fatura vencida detetada",
     "Lembrete enviado ao cliente",
     "Pagamento recebido",
-    "Registado na contabilidade",
+    "Lançado na contabilidade",
   ],
-  before: "Telefona aos clientes para cobrar faturas em atraso.",
-  after: "Lembrete educado e pagamento registado sem tocar em nada.",
-  outcomes: [
-    "Menos dinheiro parado",
-    "Ninguém tem de fazer telefonemas incómodos",
-    "Contas sempre em dia",
-  ],
-  tools: [
-    { label: "Moloni", at: 0 },
-    { label: "Email", at: 1 },
-    { label: "MB WAY", at: 2 },
-    { label: "Contabilidade", at: 3 },
-  ],
-  theme: "payments",
-  Stage: PaymentsStage,
+  durations: [2200, 2800, 2400, 3600],
+  tools: ["Moloni", "Email", "MB WAY", "Contabilidade"],
+  Preview: PaymentsPreview,
 };

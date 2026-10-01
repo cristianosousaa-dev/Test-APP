@@ -1,82 +1,72 @@
 @import "tailwindcss";
 
+/*
+ * Palette: warm paper, deep ink, and one electric lime that always means
+ * "automatic / done". Violet marks the trigger (something happened).
+ */
 @theme {
   --font-sans: var(--font-mona), ui-sans-serif, system-ui, sans-serif;
 
-  --color-canvas: #f4f5f7;
-  --color-paper: #ffffff;
-  --color-ink: #0f1012;
-  --color-ink-2: #41444b;
-  --color-mute: #6b6f78;
-  --color-hair: rgb(15 16 18 / 0.08);
-  --color-hair-2: rgb(15 16 18 / 0.14);
+  --color-paper: #f5f4ef;
+  --color-card: #ffffff;
+  --color-ink: #0e0f12;
+  --color-ink-2: #45474e;
+  --color-mute: #6c6e76;
+  --color-line: rgb(14 15 18 / 0.1);
+  --color-line-2: rgb(14 15 18 / 0.16);
 
-  --color-sage: #e3efe6;
-  --color-sage-ink: #2f6b47;
-  --color-sky: #e1ecf8;
-  --color-sky-ink: #285a92;
-  --color-sand: #f4eadb;
-  --color-sand-ink: #80571f;
-  --color-rose: #f7e3e5;
-  --color-rose-ink: #93394a;
-  --color-lilac: #ebe7f7;
-  --color-lilac-ink: #54469a;
-  --color-go: #1e8e5a;
+  --color-lime: #d4ff3a;
+  --color-lime-2: #c4f01c;
+  --color-lime-soft: #f1ffc4;
+  --color-lime-ink: #3d5600;
+  --color-violet: #6b4eff;
+  --color-violet-soft: #ece8ff;
+  --color-sky-soft: #e5efff;
+  --color-sky-ink: #24508f;
+  --color-rose-soft: #ffe6e6;
+  --color-rose-ink: #a1263a;
+  --color-ok: #17834a;
+
+  --color-night: #0e0f12;
+  --color-night-2: #17181d;
+  --color-night-3: #22242a;
+  --color-night-line: rgb(255 255 255 / 0.09);
 
   --ease-out-soft: cubic-bezier(0.22, 1, 0.36, 1);
 
-  --animate-drift-a: drift-a 26s ease-in-out infinite alternate;
-  --animate-drift-b: drift-b 32s ease-in-out infinite alternate;
-  --animate-drift-c: drift-c 38s ease-in-out infinite alternate;
-  --animate-marquee: marquee 48s linear infinite;
-  --animate-rise: rise 0.9s cubic-bezier(0.22, 1, 0.36, 1) both;
-  --animate-fade-up: fade-up 0.9s cubic-bezier(0.22, 1, 0.36, 1) both;
-  --animate-flow: flow 1.6s cubic-bezier(0.45, 0, 0.55, 1) infinite;
-  --animate-float: float 7s ease-in-out infinite alternate;
+  --animate-marquee: marquee 40s linear infinite;
+  --animate-travel: travel 2.8s cubic-bezier(0.65, 0, 0.35, 1) infinite;
+  --animate-feed-in: feed-in 0.5s cubic-bezier(0.22, 1, 0.36, 1) both;
+  --animate-pop: pop 0.45s cubic-bezier(0.34, 1.56, 0.64, 1) both;
 
-  @keyframes drift-a {
-    to {
-      transform: translate(8vmax, 6vmax) scale(1.12);
-    }
-  }
-  @keyframes drift-b {
-    to {
-      transform: translate(-9vmax, 5vmax) scale(0.9);
-    }
-  }
-  @keyframes drift-c {
-    to {
-      transform: translate(5vmax, -8vmax) scale(1.08);
-    }
-  }
   @keyframes marquee {
     to {
       transform: translateX(-50%);
     }
   }
-  @keyframes rise {
-    from {
-      transform: translateY(105%);
+  @keyframes travel {
+    0% {
+      transform: translateX(0);
+      opacity: 0;
+    }
+    10%,
+    85% {
+      opacity: 1;
+    }
+    100% {
+      transform: translateX(var(--travel, 100px));
+      opacity: 0;
     }
   }
-  @keyframes fade-up {
+  @keyframes feed-in {
     from {
       opacity: 0;
-      transform: translateY(14px);
-      filter: blur(6px);
+      transform: translateY(-10px) scale(0.98);
     }
   }
-  @keyframes float {
-    to {
-      transform: translateY(-10px);
-    }
-  }
-  @keyframes flow {
+  @keyframes pop {
     from {
-      transform: translateX(-100%);
-    }
-    to {
-      transform: translateX(260%);
+      transform: scale(0);
     }
   }
 }
@@ -84,14 +74,13 @@
 @layer base {
   html {
     scroll-behavior: smooth;
-    scroll-padding-top: 96px;
+    scroll-padding-top: 88px;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     color-scheme: light;
-    text-rendering: optimizeLegibility;
   }
   body {
-    background: var(--color-canvas);
+    background: var(--color-paper);
     color: var(--color-ink);
     font-family: var(--font-sans);
   }
@@ -104,232 +93,132 @@
   li {
     text-wrap: pretty;
   }
-  /* Everything that can be clicked says so. */
   a[href],
   button:not(:disabled),
   summary,
   label[for],
-  select,
-  [role="button"],
-  [role="tab"],
-  [role="link"] {
+  [role="tab"] {
     cursor: pointer;
   }
-  :disabled {
-    cursor: not-allowed;
-  }
   ::selection {
-    background: var(--color-sky);
+    background: var(--color-lime);
+    color: var(--color-ink);
   }
   :focus-visible {
-    outline: 2px solid var(--color-ink);
+    outline: 2px solid var(--color-violet);
     outline-offset: 3px;
   }
 }
 
 @layer components {
-  /* ---------------------------------------------------------------------------
-     Liquid glass (web adaptation of the iOS 26 material). Use only over real content.
-     --------------------------------------------------------------------------- */
-  .glass {
-    position: relative;
-    isolation: isolate;
-    /* Specular light that follows the pointer across every glass surface (viewport-fixed),
-       over the translucent body of the material. */
-    background:
-      radial-gradient(
-        520px circle at var(--px, 50%) var(--py, -30%),
-        rgb(255 255 255 / 0.5),
-        rgb(255 255 255 / 0) 42%
-      )
-      fixed,
-      linear-gradient(180deg, rgb(255 255 255 / 0.58), rgb(255 255 255 / 0.34));
-    -webkit-backdrop-filter: blur(14px) saturate(210%) brightness(1.04);
-    backdrop-filter: blur(14px) saturate(210%) brightness(1.04);
-    box-shadow:
-      inset 0 1px 0 rgb(255 255 255 / 0.95),
-      inset 0 -1px 0 rgb(255 255 255 / 0.4),
-      inset 0 0 0 1px rgb(255 255 255 / 0.35),
-      0 1px 1px rgb(15 16 18 / 0.04),
-      0 10px 30px -10px rgb(15 16 18 / 0.16);
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    border-radius: 999px;
+    font-weight: 500;
+    letter-spacing: -0.01em;
+    white-space: nowrap;
+    transition:
+      background-color 0.2s,
+      color 0.2s,
+      box-shadow 0.25s,
+      transform 0.15s;
   }
-  /* Specular rim: a bright edge that fades around the shape. */
-  .glass::before {
-    content: "";
-    position: absolute;
-    inset: 0;
-    z-index: -1;
-    border-radius: inherit;
-    padding: 1px;
+  .btn:active {
+    transform: scale(0.97);
+  }
+  .btn-lime {
+    background: var(--color-lime);
+    color: var(--color-ink);
+    box-shadow: inset 0 -2px 0 rgb(14 15 18 / 0.12);
+  }
+  .btn-lime:hover {
+    background: var(--color-lime-2);
+    box-shadow:
+      inset 0 -2px 0 rgb(14 15 18 / 0.12),
+      0 0 0 5px rgb(212 255 58 / 0.35);
+  }
+  .btn-dark {
+    background: var(--color-ink);
+    color: #fff;
+  }
+  .btn-dark:hover {
+    background: #26282e;
+  }
+  .btn-line {
+    color: var(--color-ink);
+    box-shadow: inset 0 0 0 1px var(--color-line-2);
+  }
+  .btn-line:hover {
+    background: #fff;
+    box-shadow: inset 0 0 0 1px var(--color-ink);
+  }
+  .card {
+    background: var(--color-card);
+    border-radius: 24px;
+    box-shadow:
+      0 0 0 1px var(--color-line),
+      0 1px 2px rgb(14 15 18 / 0.04);
+  }
+  /* Highlighter stroke behind a word. */
+  .mark {
     background: linear-gradient(
-      150deg,
-      rgb(255 255 255 / 0.95),
-      rgb(255 255 255 / 0.15) 35%,
-      rgb(15 16 18 / 0.06) 65%,
-      rgb(255 255 255 / 0.6)
+      transparent 58%,
+      var(--color-lime) 58%,
+      var(--color-lime) 92%,
+      transparent 92%
     );
-    -webkit-mask:
-      linear-gradient(#000 0 0) content-box,
-      linear-gradient(#000 0 0);
-    -webkit-mask-composite: xor;
-    mask-composite: exclude;
-    pointer-events: none;
-  }
-  /* Soft sheen across the top, like light on a curved surface. */
-  .glass::after {
-    content: "";
-    position: absolute;
-    inset: 0 0 auto 0;
-    height: 45%;
-    z-index: -1;
-    border-radius: inherit;
-    border-bottom-left-radius: 0;
-    border-bottom-right-radius: 0;
-    background: linear-gradient(180deg, rgb(255 255 255 / 0.55), rgb(255 255 255 / 0));
-    pointer-events: none;
-  }
-  /* Large panels: thinner, more refractive glass with a deeper inner glow. */
-  .glass-panel {
-    background:
-      radial-gradient(
-        700px circle at var(--px, 50%) var(--py, -30%),
-        rgb(255 255 255 / 0.55),
-        rgb(255 255 255 / 0) 45%
-      )
-      fixed,
-      linear-gradient(
-        160deg,
-        rgb(255 255 255 / 0.52),
-        rgb(255 255 255 / 0.22) 60%,
-        rgb(255 255 255 / 0.34)
-      );
-    -webkit-backdrop-filter: blur(22px) saturate(190%) brightness(1.05);
-    backdrop-filter: blur(22px) saturate(190%) brightness(1.05);
-    box-shadow:
-      inset 0 1px 0 rgb(255 255 255 / 0.95),
-      inset 0 0 0 1px rgb(255 255 255 / 0.4),
-      inset 0 0 36px rgb(255 255 255 / 0.28),
-      0 1px 2px rgb(15 16 18 / 0.04),
-      0 24px 60px -28px rgb(15 16 18 / 0.28);
-  }
-  /* Dark glass for surfaces on the closing card. */
-  .glass-dark {
-    position: relative;
-    isolation: isolate;
-    background:
-      radial-gradient(
-        520px circle at var(--px, 50%) var(--py, -30%),
-        rgb(255 255 255 / 0.14),
-        rgb(255 255 255 / 0) 45%
-      )
-      fixed,
-      linear-gradient(160deg, rgb(255 255 255 / 0.12), rgb(255 255 255 / 0.04));
-    -webkit-backdrop-filter: blur(24px) saturate(160%);
-    backdrop-filter: blur(24px) saturate(160%);
-    box-shadow:
-      inset 0 1px 0 rgb(255 255 255 / 0.18),
-      inset 0 0 0 1px rgb(255 255 255 / 0.08),
-      0 30px 60px -30px rgb(0 0 0 / 0.6);
-  }
-  /* Thicker material for chrome that sits over text (menus), so labels stay legible. */
-  .glass-thick {
-    background: linear-gradient(180deg, rgb(255 255 255 / 0.84), rgb(255 255 255 / 0.72));
-    -webkit-backdrop-filter: blur(28px) saturate(180%);
-    backdrop-filter: blur(28px) saturate(180%);
-  }
-  @supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
-    .glass {
-      background: rgb(255 255 255 / 0.92);
-    }
+    padding-inline: 0.06em;
+    -webkit-box-decoration-break: clone;
+    box-decoration-break: clone;
   }
 }
 
-/* Navigation glass while it floats over a dark surface. */
-.glass.is-dark {
-  box-shadow:
-    inset 0 1px 0 rgb(255 255 255 / 0.14),
-    inset 0 0 0 1px rgb(255 255 255 / 0.06),
-    0 10px 30px -10px rgb(0 0 0 / 0.5);
+/* Scroll reveal: elements start lowered and transparent only once JS is running. */
+.js [data-reveal] {
+  opacity: 0;
+  transform: translateY(18px);
+  transition:
+    opacity 0.7s var(--ease-out-soft),
+    transform 0.7s var(--ease-out-soft);
+  transition-delay: var(--d, 0ms);
 }
-.glass.is-dark::before {
-  opacity: 0.25;
-}
-.glass.is-dark::after {
-  opacity: 0.1;
-}
-.glass.is-dark :is(.text-ink, .text-ink-2) {
-  color: rgb(255 255 255 / 0.78);
-}
-.glass.is-dark :is(.text-ink, .text-ink-2):hover,
-.glass.is-dark [aria-current] {
-  color: #fff;
-}
-.glass.is-dark .nav-pill {
-  background: rgb(255 255 255 / 0.12);
-}
-.glass.is-dark .nav-ring {
-  color: #fff;
-}
-.glass.is-dark .nav-progress {
-  background: rgb(255 255 255 / 0.45);
-}
-.glass.is-dark .logo-mark rect {
-  fill: #fff;
-}
-.glass.is-dark .logo-mark :is(circle, path) {
-  fill: var(--color-ink);
-  stroke: var(--color-ink);
-}
-.glass.is-dark .logo-mark path {
-  fill: none;
-}
-.glass.is-dark a.bg-ink {
-  background: #fff;
-  color: var(--color-ink);
+.js [data-reveal].is-in {
+  opacity: 1;
+  transform: none;
 }
 
-/* Film grain over the backdrop so the light fields never band. */
-.grain {
-  opacity: 0.045;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.5 0 0 0 0 0.5 0 0 0 0 0.5 0 0 0 0.9 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+/* Above-the-fold entrance: pure CSS, starts with the first paint (no JS needed). */
+[data-rise] {
+  animation: rise 0.8s var(--ease-out-soft) both;
+  animation-delay: var(--d, 0ms);
 }
-
-/* Cards that lean towards the pointer (vars set by the Tilt helper). */
-.tilt {
-  transform: perspective(1000px) rotateX(var(--tx, 0deg)) rotateY(var(--ty, 0deg))
-    translateY(var(--lift, 0px));
-  transition: transform 0.5s var(--ease-out-soft);
-  will-change: transform;
-}
-@media (prefers-reduced-motion: reduce) {
-  .tilt {
-    transform: none;
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
   }
 }
 
-/* Light sweep across the solid button on hover. */
-.btn-shine {
-  position: relative;
-  overflow: hidden;
-  isolation: isolate;
+/* Continuous loops only run while their section is on screen. */
+[data-loop]:not(.is-playing) .animate-marquee,
+[data-loop]:not(.is-playing) .animate-travel {
+  animation-play-state: paused;
 }
-.btn-shine::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  z-index: -1;
-  background: linear-gradient(
-    105deg,
-    transparent 30%,
-    rgb(255 255 255 / 0.22) 45%,
-    rgb(255 255 255 / 0.05) 55%,
-    transparent 70%
-  );
-  transform: translateX(-120%);
-  transition: transform 0.8s var(--ease-out-soft);
+
+/* Stepper-driven preview pieces: hidden until their step, then they ease in. */
+.step-in {
+  opacity: 0;
+  transform: translateY(10px);
+  transition:
+    opacity 0.45s var(--ease-out-soft),
+    transform 0.45s var(--ease-out-soft);
 }
-.btn-shine:hover::after {
-  transform: translateX(120%);
+.step-in[data-on="true"] {
+  opacity: 1;
+  transform: none;
 }
 
 /* Native FAQ accordion with smooth height where supported. */
@@ -340,8 +229,8 @@
   block-size: 0;
   overflow: clip;
   transition:
-    block-size 0.5s var(--ease-out-soft),
-    content-visibility 0.5s allow-discrete;
+    block-size 0.4s var(--ease-out-soft),
+    content-visibility 0.4s allow-discrete;
 }
 .faq-item[open]::details-content {
   block-size: auto;
@@ -351,22 +240,25 @@
   html {
     scroll-behavior: auto;
   }
+  .js [data-reveal] {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+  [data-rise] {
+    animation: none;
+  }
+  .step-in {
+    transform: none;
+    transition: none;
+  }
+  .animate-marquee.animate-marquee,
+  .animate-travel.animate-travel,
+  .animate-feed-in.animate-feed-in,
+  .animate-pop.animate-pop {
+    animation: none;
+  }
   .faq-item::details-content {
     transition: none;
   }
-  .animate-rise.animate-rise,
-  .animate-fade-up.animate-fade-up,
-  .animate-marquee.animate-marquee,
-  .animate-flow.animate-flow,
-  .animate-float.animate-float {
-    animation: none;
-  }
-}
-html[data-paused] .animate-marquee,
-html[data-paused] .animate-flow,
-html[data-paused] .animate-drift-a,
-html[data-paused] .animate-drift-b,
-html[data-paused] .animate-drift-c,
-html[data-paused] .animate-float {
-  animation-play-state: paused;
 }

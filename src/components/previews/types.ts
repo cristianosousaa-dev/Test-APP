@@ -1,30 +1,20 @@
 import type { ComponentType } from "react";
-import type { BackdropTheme } from "@/lib/backdrop";
+import type { App } from "@/components/ui/AppIcon";
 
-export interface StageProps {
+export interface PreviewProps {
   step: number;
-  cycle: number;
-  /** Motion allowed (no reduced motion, not paused). */
-  animate: boolean;
-  /** Motion allowed and visible: ambient loops may play. */
-  running: boolean;
 }
 
-export interface PreviewConfig {
+export interface Example {
   id: string;
   tab: string;
+  app: App;
   sector: string;
   title: string;
-  description: string;
-  /** One label per step; the stage receives the current step index. */
-  steps: string[];
-  outcomes: string[];
-  /** How this task is done today, by hand. */
   before: string;
-  /** What changes once it is automated. */
   after: string;
-  /** The tools this automation touches, lit from the step where each joins in. */
-  tools: { label: string; at: number }[];
-  theme: BackdropTheme;
-  Stage: ComponentType<StageProps>;
+  steps: string[];
+  durations: number[];
+  tools: string[];
+  Preview: ComponentType<PreviewProps>;
 }

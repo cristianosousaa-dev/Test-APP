@@ -1,242 +1,158 @@
-"use client";
-
-import { AnimatePresence, motion } from "motion/react";
-import { Check, Stage, Typing } from "@/components/visual/Bits";
-import { Notification } from "@/components/visual/Notification";
+import { Check, Video } from "lucide-react";
+import type { ReactNode } from "react";
 import { cn } from "@/lib/cn";
-import { fade, instant, spring } from "@/lib/motion";
-import type { PreviewConfig, StageProps } from "./types";
-
-function BookingsStage({ step, cycle, animate, running }: StageProps) {
-  const t = animate ? spring : instant;
-  const enter = animate ? { opacity: 0, y: 10, scale: 0.98 } : false;
-  const booked = step >= 3;
-
-  return (
-    <Stage>
-      {/* Chat */}
-      <div className="absolute inset-x-4 top-4 bottom-[214px] flex flex-col overflow-hidden rounded-[22px] bg-paper ring-1 ring-hair sm:right-[34%] sm:bottom-4">
-        <div className="flex h-14 shrink-0 items-center gap-3 border-b border-hair px-4">
-          <span className="grid size-8 place-items-center rounded-full bg-lilac text-[12px] font-semibold text-lilac-ink">
-            MC
-          </span>
-          <span className="leading-tight">
-            <span className="block text-[14px] font-semibold">Marta Costa</span>
-            <span className="block text-[12px] text-mute">Cliente desde 2024</span>
-          </span>
-        </div>
-        <div className="flex flex-1 flex-col justify-end gap-2 bg-canvas/60 p-4">
-          <AnimatePresence initial={false} mode="popLayout">
-            <motion.div
-              key={`${cycle}-in1`}
-              layout={animate ? "position" : false}
-              initial={enter}
-              animate={{ opacity: 1, y: 0, scale: 1 }}
-              transition={t}
-              className="max-w-[80%] self-start"
-            >
-              <Bubble side="in" time="21:47">
-                Olá! Têm vaga para uma limpeza esta semana?
-              </Bubble>
-            </motion.div>
-
-            {step === 1 && (
-              <motion.div
-                key={`${cycle}-typing`}
-                layout={animate ? "position" : false}
-                initial={enter}
-                animate={{ opacity: 1, y: 0, scale: 1 }}
-                exit={{ opacity: 0, transition: fade }}
-                transition={t}
-                className="self-end"
-              >
-                <Typing running={running} />
-              </motion.div>
-            )}
-
-            {step >= 2 && (
-              <motion.div
-                key={`${cycle}-out1`}
-                layout={animate ? "position" : false}
-                initial={enter}
-                animate={{ opacity: 1, y: 0, scale: 1 }}
-                transition={t}
-                className="max-w-[80%] self-end"
-              >
-                <Bubble side="out" time="21:47">
-                  Olá Marta! Tenho quinta às 10:00 ou sexta às 15:30. Qual prefere?
-                </Bubble>
-              </motion.div>
-            )}
-
-            {step >= 2 && (
-              <motion.div
-                key={`${cycle}-in2`}
-                layout={animate ? "position" : false}
-                initial={enter}
-                animate={{ opacity: 1, y: 0, scale: 1 }}
-                transition={animate ? { ...spring, delay: 0.9 } : instant}
-                className="max-w-[80%] self-start"
-              >
-                <Bubble side="in" time="21:48">
-                  Sexta às 15:30, por favor.
-                </Bubble>
-              </motion.div>
-            )}
-
-            {step >= 4 && (
-              <motion.div
-                key={`${cycle}-out2`}
-                layout={animate ? "position" : false}
-                initial={enter}
-                animate={{ opacity: 1, y: 0, scale: 1 }}
-                transition={t}
-                className="max-w-[80%] self-end"
-              >
-                <Bubble side="out" time="21:48">
-                  Está marcado: sexta, 15:30. Enviamos-lhe um lembrete na véspera.
-                </Bubble>
-              </motion.div>
-            )}
-          </AnimatePresence>
-        </div>
-      </div>
-
-      {/* Agenda widget (glass over the chat) */}
-      <div className="glass absolute right-4 bottom-4 left-4 rounded-[24px] p-4 sm:top-[72px] sm:bottom-auto sm:left-auto sm:w-[300px]">
-        <div className="flex items-baseline justify-between">
-          <span className="text-[12px] font-medium tracking-wide text-ink-2 uppercase">Agenda</span>
-          <span className="text-[12px] text-mute">Sexta, 2 out</span>
-        </div>
-        <ul className="mt-3 flex flex-col gap-1.5">
-          <Slot time="14:30" label="Revisão · Miguel Teles" tone="busy" />
-          <li className="relative">
-            <motion.div
-              layout={animate}
-              transition={t}
-              className={cn(
-                "flex h-11 items-center gap-3 rounded-[14px] px-3 text-[13px] transition-colors duration-500",
-                booked ? "bg-lilac text-lilac-ink" : "bg-white/60 text-mute ring-1 ring-hair",
-              )}
-            >
-              <span className="w-10 font-medium tabular-nums">15:30</span>
-              <AnimatePresence mode="wait" initial={false}>
-                {booked ? (
-                  <motion.span
-                    key="booked"
-                    className="flex flex-1 items-center justify-between font-medium"
-                    initial={animate ? { opacity: 0, y: 4 } : false}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0 }}
-                    transition={t}
-                  >
-                    Limpeza · Marta Costa
-                    <Check className="text-lilac-ink" />
-                  </motion.span>
-                ) : (
-                  <motion.span key="free" initial={false} exit={{ opacity: 0, transition: fade }}>
-                    Livre
-                  </motion.span>
-                )}
-              </AnimatePresence>
-            </motion.div>
-          </li>
-          <Slot time="16:30" label="Livre" tone="free" />
-        </ul>
-      </div>
-
-      {/* Reminder toast */}
-      <AnimatePresence>
-        {step >= 4 && (
-          <motion.div
-            key={`${cycle}-toast`}
-            className="absolute top-[340px] right-4 hidden w-[300px] sm:block"
-            initial={animate ? { opacity: 0, y: 12 } : false}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, transition: fade }}
-            transition={animate ? { ...spring, delay: 0.6 } : instant}
-          >
-            <Notification
-              id="reminder"
-              app="calendar"
-              title="Lembrete agendado"
-              body="Quinta, 18:00 · enviado a Marta Costa"
-            />
-          </motion.div>
-        )}
-      </AnimatePresence>
-    </Stage>
-  );
-}
+import { At, Stage } from "./parts";
+import type { Example, PreviewProps } from "./types";
 
 function Bubble({
   side,
-  time,
   children,
+  meta,
 }: {
   side: "in" | "out";
-  time: string;
-  children: React.ReactNode;
+  children: ReactNode;
+  meta: string;
 }) {
-  const out = side === "out";
   return (
-    <div
-      className={cn(
-        "rounded-[18px] px-3.5 py-2 text-[14px] leading-snug",
-        out
-          ? "rounded-br-[6px] bg-ink text-white"
-          : "rounded-bl-[6px] bg-paper text-ink ring-1 ring-hair",
-      )}
-    >
-      {children}
-      <span
+    <div className={cn("flex", side === "out" ? "justify-end" : "justify-start")}>
+      <div
         className={cn(
-          "mt-0.5 block text-right text-[11px] tabular-nums",
-          out ? "text-white/70" : "text-mute",
+          "max-w-[85%] rounded-2xl px-3.5 py-2 text-[14px] leading-snug shadow-[0_1px_1px_rgb(14_15_18/0.08)]",
+          side === "out" ? "rounded-br-md bg-[#dcf8c6]" : "rounded-bl-md bg-white",
         )}
       >
-        {out ? `Automático · ${time}` : time}
-      </span>
+        {children}
+        <span className="mt-0.5 block text-right text-[11px] text-ink/50">{meta}</span>
+      </div>
     </div>
   );
 }
 
-function Slot({ time, label, tone }: { time: string; label: string; tone: "busy" | "free" }) {
+function BookingsPreview({ step }: PreviewProps) {
+  const booked = step >= 4;
   return (
-    <li
-      className={cn(
-        "flex h-11 items-center gap-3 rounded-[14px] px-3 text-[13px]",
-        tone === "busy" ? "bg-sage text-sage-ink" : "bg-white/60 text-mute ring-1 ring-hair",
-      )}
-    >
-      <span className="w-10 font-medium tabular-nums">{time}</span>
-      <span className={tone === "busy" ? "font-medium" : undefined}>{label}</span>
-    </li>
+    <Stage>
+      <div className="absolute inset-0 grid sm:grid-cols-[minmax(0,1fr)_230px]">
+        {/* WhatsApp-style chat */}
+        <div className="flex min-h-0 flex-col bg-[#efeae2]">
+          <div className="flex h-14 shrink-0 items-center gap-3 bg-[#1f7a5a] px-4 text-white">
+            <span className="grid size-8 place-items-center rounded-full bg-white/20 text-[12px] font-semibold">
+              MC
+            </span>
+            <span className="leading-tight">
+              <span className="block text-[14px] font-semibold">Marta Costa</span>
+              <span className="block text-[11.5px] text-white/70">online</span>
+            </span>
+            <Video className="ml-auto size-4 text-white/70" />
+          </div>
+          <div className="flex flex-1 flex-col justify-end p-4 [&>*]:mt-2">
+            <At collapse step={step} at={0}>
+              <Bubble side="in" meta="21:47">
+                Olá! Têm vaga para uma limpeza na sexta à tarde?
+              </Bubble>
+            </At>
+            <At collapse step={step} at={1} until={2}>
+              <div className="flex justify-end">
+                <span className="flex gap-1 rounded-2xl rounded-br-md bg-[#dcf8c6] px-3.5 py-3">
+                  {[0, 1, 2].map((i) => (
+                    <span
+                      key={i}
+                      className="size-1.5 animate-pulse rounded-full bg-ink/40"
+                      style={{ animationDelay: `${i * 150}ms` }}
+                    />
+                  ))}
+                </span>
+              </div>
+            </At>
+            <At collapse step={step} at={2}>
+              <Bubble side="out" meta="21:47 · automático">
+                Olá Marta! Temos sexta às 15:30 ou às 17:00. Qual prefere?
+              </Bubble>
+            </At>
+            <At collapse step={step} at={3}>
+              <Bubble side="in" meta="21:48">
+                15:30, por favor!
+              </Bubble>
+            </At>
+            <At collapse step={step} at={4}>
+              <Bubble side="out" meta="21:48 · automático">
+                Ficou marcado: sexta, 15:30. Enviamos um lembrete na véspera.
+              </Bubble>
+            </At>
+            {/* Small screens: the result as a toast. */}
+            <At collapse step={step} at={4} className="sm:hidden">
+              <div className="flex items-center gap-2 rounded-2xl bg-ink px-3 py-2.5 text-[13px] text-white">
+                <span className="grid size-5 place-items-center rounded-full bg-lime text-ink">
+                  <Check className="size-3" strokeWidth={3} />
+                </span>
+                Marcação criada na agenda · Sex 15:30
+              </div>
+            </At>
+          </div>
+        </div>
+
+        {/* Agenda side panel */}
+        <div className="hidden flex-col border-l border-line bg-white p-4 sm:flex">
+          <p className="text-[12px] font-semibold text-mute uppercase">Agenda</p>
+          <p className="text-[16px] font-semibold tracking-[-0.01em]">Sexta, 2 out</p>
+          <ul className="mt-4 flex flex-col gap-2 text-[13px]">
+            <li className="rounded-xl bg-violet-soft px-3 py-2.5">
+              <span className="font-semibold text-violet">14:30</span>
+              <span className="block text-ink-2">Revisão · Miguel Teles</span>
+            </li>
+            <li
+              className={cn(
+                "rounded-xl px-3 py-2.5 transition-[background-color,box-shadow] duration-500",
+                booked
+                  ? "bg-lime shadow-[0_0_0_4px_rgb(212_255_58/0.35)]"
+                  : "bg-paper ring-1 ring-line",
+              )}
+            >
+              <span className="flex items-center justify-between font-semibold">
+                15:30
+                {booked && (
+                  <span className="animate-pop rounded-full bg-ink px-2 py-0.5 text-[10.5px] text-lime">
+                    NOVO
+                  </span>
+                )}
+              </span>
+              <span className={cn("block", booked ? "text-ink" : "text-mute")}>
+                {booked ? "Limpeza · Marta Costa" : "Livre"}
+              </span>
+            </li>
+            <li className="rounded-xl bg-paper px-3 py-2.5 ring-1 ring-line">
+              <span className="font-semibold">17:00</span>
+              <span className="block text-mute">Livre</span>
+            </li>
+          </ul>
+          <At step={step} at={4} className="mt-auto">
+            <p className="flex items-center gap-2 rounded-xl bg-ink px-3 py-2.5 text-[12.5px] text-white">
+              <Check className="size-3.5 text-lime" strokeWidth={3} />
+              Lembrete agendado para quinta
+            </p>
+          </At>
+        </div>
+      </div>
+    </Stage>
   );
 }
 
-export const bookings: PreviewConfig = {
+export const bookings: Example = {
   id: "marcacoes",
   tab: "Marcações",
+  app: "whatsapp",
   sector: "Clínicas, estética e serviços com agenda",
-  title: "Marcações por mensagem, sem atender o telefone",
-  description:
-    "O cliente pede uma vaga às 21h. A automação responde com horários livres, marca na agenda e envia o lembrete na véspera.",
+  title: "O cliente marca por mensagem, sem ninguém atender",
+  before: "Atende chamadas e mensagens e marca à mão, até ao jantar.",
+  after: "Responde em segundos com horários livres, marca e lembra o cliente.",
   steps: [
     "O cliente pede uma vaga",
-    "Consulta a agenda",
+    "A automação consulta a agenda",
     "Propõe horários livres",
-    "Marca na agenda",
-    "Confirma e agenda o lembrete",
+    "O cliente escolhe",
+    "Marca na agenda e agenda o lembrete",
   ],
-  before: "Atende chamadas e marca à mão, até ao jantar.",
-  after: "O cliente marca por mensagem e recebe o lembrete sozinho.",
-  outcomes: ["Resposta em segundos, mesmo fora de horas", "Menos chamadas", "Menos faltas"],
-  tools: [
-    { label: "WhatsApp", at: 0 },
-    { label: "Google Calendar", at: 1 },
-    { label: "Lembrete por SMS", at: 4 },
-  ],
-  theme: "bookings",
-  Stage: BookingsStage,
+  durations: [1800, 1400, 2200, 1600, 3800],
+  tools: ["WhatsApp", "Google Calendar", "SMS"],
+  Preview: BookingsPreview,
 };

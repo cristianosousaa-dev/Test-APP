@@ -1,177 +1,127 @@
-"use client";
-
-import { AnimatePresence, motion } from "motion/react";
-import { Check, Pill, Stage } from "@/components/visual/Bits";
-import { Counter } from "@/components/visual/Counter";
-import { Notification } from "@/components/visual/Notification";
-import { fade, instant, spring } from "@/lib/motion";
-import type { PreviewConfig, StageProps } from "./types";
+import { Check, Globe, Mail } from "lucide-react";
+import { cn } from "@/lib/cn";
+import { At, Stage, Tag } from "./parts";
+import type { Example, PreviewProps } from "./types";
 
 const LINES = [
-  { label: "Diagnóstico e mão de obra (2 h)", value: 90 },
-  { label: "Válvula de gás e vedantes", value: 70 },
-  { label: "Deslocação", value: 25 },
+  { label: "Diagnóstico e mão de obra (2 h)", value: "90,00 €" },
+  { label: "Válvula de gás e vedantes", value: "70,00 €" },
+  { label: "Deslocação", value: "25,00 €" },
 ];
 
-function QuotesStage({ step, cycle, animate }: StageProps) {
-  const t = animate ? spring : instant;
-  const linesShown = step >= 1 ? LINES.length : 0;
-  const total = LINES.slice(0, linesShown).reduce((sum, l) => sum + l.value, 0);
-  const status =
-    step >= 5
-      ? { tone: "go" as const, label: "Aceite pelo cliente" }
-      : step >= 4
-        ? { tone: "sand" as const, label: "Lembrete enviado · 3 dias depois" }
-        : step >= 3
-          ? { tone: "sky" as const, label: "Enviado por email e WhatsApp" }
-          : step >= 2
-            ? { tone: "lilac" as const, label: "A aguardar a sua aprovação" }
-            : { tone: "neutral" as const, label: "Rascunho" };
+const STATUS: { tone: "neutral" | "violet" | "sky" | "lime"; label: string }[] = [
+  { tone: "neutral", label: "A preparar" },
+  { tone: "neutral", label: "Rascunho pronto" },
+  { tone: "violet", label: "Aguarda a sua aprovação" },
+  { tone: "sky", label: "Enviado ao cliente" },
+  { tone: "sky", label: "Lembrete enviado" },
+  { tone: "lime", label: "Aceite" },
+];
 
+function QuotesPreview({ step }: PreviewProps) {
+  const status = STATUS[step] ?? STATUS[0];
   return (
     <Stage>
-      {/* Incoming request */}
-      <motion.div
-        className="glass absolute top-4 right-4 left-4 rounded-[22px] p-4 sm:right-auto sm:w-[290px]"
-        initial={false}
-        animate={{ opacity: step >= 1 ? 0 : 1, y: step >= 1 ? -8 : 0 }}
-        transition={t}
-      >
-        <span className="text-[12px] font-medium tracking-wide text-ink-2 uppercase">
-          Novo pedido · site
-        </span>
-        <p className="mt-1.5 text-[14px] font-semibold">Reparação de esquentador</p>
-        <p className="text-[13px] text-ink-2">Rui Almeida · Lisboa · “Não acende desde ontem.”</p>
-      </motion.div>
-
-      {/* The quote document */}
-      <motion.div
-        className="absolute top-[112px] right-4 left-4 flex flex-col rounded-[20px] bg-paper p-5 ring-1 ring-hair sm:right-[10%] sm:left-[10%]"
-        initial={false}
-        animate={{ y: step >= 1 ? -84 : 0 }}
-        transition={t}
-      >
-        <div className="flex flex-col-reverse items-start gap-2 sm:flex-row sm:justify-between sm:gap-4">
-          <div className="min-w-0">
-            <p className="text-[12px] text-mute">Orçamento Nº 0412</p>
-            <p className="mt-0.5 text-[16px] font-semibold tracking-[-0.01em]">
-              Reparação de esquentador
-            </p>
-            <p className="text-[13px] text-ink-2">Para Rui Almeida</p>
-          </div>
-          <AnimatePresence mode="wait" initial={false}>
-            <motion.span
-              key={status.label}
-              initial={animate ? { opacity: 0, y: 4 } : false}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, transition: fade }}
-              transition={t}
-            >
-              <Pill tone={status.tone}>
-                {status.tone === "go" && <Check />}
-                {status.label}
-              </Pill>
-            </motion.span>
-          </AnimatePresence>
-        </div>
-
-        <ul className="mt-5 flex flex-col border-t border-hair">
-          {LINES.map((line, i) => (
-            <motion.li
-              key={line.label}
-              className="flex items-center justify-between border-b border-hair py-2.5 text-[13.5px]"
-              initial={false}
-              animate={{ opacity: i < linesShown ? 1 : 0.25 }}
-              transition={animate ? { ...spring, delay: i < linesShown ? i * 0.35 : 0 } : instant}
-            >
-              <span className="text-ink-2">{line.label}</span>
-              <span className="tabular-nums">{i < linesShown ? `${line.value},00 €` : "—"}</span>
-            </motion.li>
-          ))}
-        </ul>
-        <div className="mt-4 flex items-baseline justify-between">
-          <span className="text-[13px] text-mute">Total com IVA</span>
-          <span className="text-[22px] font-medium tracking-[-0.02em]">
-            <Counter value={total} animate={animate} />
+      <div className="absolute inset-0 flex flex-col gap-3 p-4 sm:p-5">
+        {/* The request, as it arrives from the website */}
+        <div className="flex items-start gap-3 rounded-2xl bg-white p-3.5 ring-1 ring-line">
+          <span className="grid size-9 shrink-0 place-items-center rounded-[10px] bg-[#2f6fed] text-white">
+            <Globe className="size-[18px]" />
           </span>
+          <div className="min-w-0 text-[13.5px]">
+            <p className="text-[12px] text-mute">Pedido no site · há 2 min</p>
+            <p className="font-semibold">Rui Almeida · Reparação de esquentador</p>
+            <p className="truncate text-ink-2">“Não acende desde ontem. Lisboa.”</p>
+          </div>
         </div>
-      </motion.div>
 
-      {/* Approval sheet */}
-      <AnimatePresence>
-        {step === 2 && (
-          <motion.div
-            key={`${cycle}-sheet`}
-            className="glass absolute right-4 bottom-4 left-4 flex items-center justify-between gap-3 rounded-[22px] p-3 pl-4 sm:right-auto sm:left-1/2 sm:w-[360px] sm:-translate-x-1/2"
-            initial={animate ? { opacity: 0, y: 20 } : false}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: 12, transition: fade }}
-            transition={t}
-          >
-            <span className="text-[13.5px] text-ink-2">Rever e enviar ao cliente?</span>
-            <motion.span
-              className="rounded-full bg-ink px-4 py-2 text-[13.5px] font-medium text-white"
-              animate={animate ? { scale: [1, 1, 0.94, 1] } : undefined}
-              transition={{ duration: 1.6, times: [0, 0.6, 0.72, 0.85] }}
-            >
-              Aprovar e enviar
-            </motion.span>
-          </motion.div>
-        )}
-      </AnimatePresence>
+        {/* The quote document */}
+        <div className="relative flex flex-1 flex-col overflow-hidden rounded-2xl bg-white p-5 ring-1 ring-line">
+          <div className="flex flex-wrap items-start justify-between gap-2">
+            <div>
+              <p className="text-[12px] text-mute">Orçamento Nº 0412</p>
+              <p className="text-[17px] font-semibold tracking-[-0.01em]">
+                Reparação de esquentador
+              </p>
+            </div>
+            <span key={status?.label} className="animate-feed-in">
+              <Tag tone={status?.tone ?? "neutral"}>
+                {status?.tone === "lime" && <Check className="size-3" strokeWidth={3} />}
+                {status?.label}
+              </Tag>
+            </span>
+          </div>
+          <ul className="mt-4 border-t border-line text-[13.5px]">
+            {LINES.map((l, i) => (
+              <li
+                key={l.label}
+                className="step-in flex justify-between border-b border-line py-2.5"
+                data-on={step >= 1}
+                style={{ transitionDelay: step >= 1 ? `${i * 120}ms` : "0ms" }}
+              >
+                <span className="text-ink-2">{l.label}</span>
+                <span className="font-medium tabular-nums">{l.value}</span>
+              </li>
+            ))}
+          </ul>
+          <At step={step} at={1} className="mt-3 flex items-baseline justify-between">
+            <span className="text-[13px] text-mute">Total com IVA</span>
+            <span className="text-[26px] font-semibold tracking-[-0.02em] tabular-nums">
+              185,00 €
+            </span>
+          </At>
 
-      {/* Accepted */}
-      <AnimatePresence>
-        {step >= 5 && (
-          <motion.div
-            key={`${cycle}-accepted`}
-            className="absolute top-4 right-4 left-4 sm:left-auto sm:w-[310px]"
-            initial={animate ? { opacity: 0, y: -12 } : false}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, transition: fade }}
-            transition={t}
+          <div className="mt-auto">
+            <At step={step} at={2} until={3}>
+              <div className="flex items-center justify-between gap-3 rounded-2xl bg-ink p-3 text-white">
+                <span className="text-[13px]">Rever e enviar ao cliente?</span>
+                <span className="rounded-full bg-lime px-3.5 py-1.5 text-[13px] font-semibold text-ink">
+                  Aprovar
+                </span>
+              </div>
+            </At>
+            <At step={step} at={3} until={5}>
+              <p className="flex items-center gap-2 rounded-2xl bg-sky-soft px-3 py-2.5 text-[13px] text-sky-ink">
+                <Mail className="size-4" />
+                {step >= 4
+                  ? "Sem resposta há 3 dias: seguimento enviado"
+                  : "Enviado por email a Rui Almeida"}
+              </p>
+            </At>
+          </div>
+
+          {/* Accepted stamp */}
+          <div
+            className={cn(
+              "pointer-events-none absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rotate-[-12deg] rounded-2xl border-4 border-ink bg-lime px-6 py-2 text-[28px] font-bold tracking-[0.08em] text-ink transition-[opacity,transform] duration-300",
+              step >= 5 ? "scale-100 opacity-100" : "scale-150 opacity-0",
+            )}
           >
-            <Notification
-              id="accepted"
-              app="requests"
-              title="Orçamento aceite"
-              body="Rui Almeida aceitou · 185,00 €"
-            />
-          </motion.div>
-        )}
-      </AnimatePresence>
+            ACEITE
+          </div>
+        </div>
+      </div>
     </Stage>
   );
 }
 
-export const quotes: PreviewConfig = {
+export const quotes: Example = {
   id: "orcamentos",
   tab: "Orçamentos",
+  app: "site",
   sector: "Oficinas, reparações e serviços técnicos",
-  title: "Do pedido ao orçamento aceite, no mesmo dia",
-  description:
-    "Um pedido chega pelo site. O orçamento é preparado com os seus preços, aprova-o num toque, e o seguimento acontece sozinho.",
+  title: "Do pedido no site ao orçamento aceite, no mesmo dia",
+  before: "Orçamentos feitos à noite, e alguns ficam esquecidos.",
+  after: "Orçamento pronto em minutos com os seus preços, e seguimento automático.",
   steps: [
     "Chega um pedido pelo site",
     "O orçamento é preparado",
     "Aprova num toque",
-    "Enviado ao cliente",
+    "É enviado ao cliente",
     "Seguimento após 3 dias",
     "Orçamento aceite",
   ],
-  before: "Orçamentos feitos à noite, e alguns esquecidos.",
-  after: "Orçamento pronto em minutos, com seguimento automático.",
-  outcomes: [
-    "Orçamentos enviados no próprio dia",
-    "Nenhum pedido esquecido",
-    "Mais orçamentos aceites",
-  ],
-  tools: [
-    { label: "Formulário", at: 0 },
-    { label: "Preçário", at: 1 },
-    { label: "Email", at: 3 },
-    { label: "Assinatura", at: 5 },
-  ],
-  theme: "quotes",
-  Stage: QuotesStage,
+  durations: [1800, 2400, 2000, 1800, 2000, 3600],
+  tools: ["Formulário do site", "Tabela de preços", "Email"],
+  Preview: QuotesPreview,
 };

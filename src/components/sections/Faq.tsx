@@ -1,9 +1,7 @@
-import { ThemeZone } from "@/components/backdrop/ThemeZone";
-import { RevealWords } from "@/components/flow/RevealWords";
-import { SectionLabel } from "@/components/flow/SectionLabel";
+import { Plus } from "lucide-react";
 import { LinkButton } from "@/components/ui/Button";
 import { Container } from "@/components/ui/Container";
-import { Reveal } from "@/components/ui/Reveal";
+import { SectionHead } from "@/components/ui/SectionHead";
 import { contactHref } from "@/lib/site";
 
 const FAQS = [
@@ -35,60 +33,45 @@ const FAQS = [
 
 export function Faq() {
   return (
-    <section id="faq" aria-labelledby="faq-title" className="pb-20 sm:pb-28">
-      <ThemeZone theme="faq">
-        <Container className="grid gap-12 lg:grid-cols-[minmax(0,0.72fr)_minmax(0,1.28fr)] lg:gap-12">
-          <Reveal>
-            <SectionLabel index="04">Perguntas</SectionLabel>
-            <RevealWords
-              id="faq-title"
-              text="Antes de falarmos."
-              className="mt-3 text-[36px] leading-[1.06] font-medium tracking-[-0.032em] sm:text-[52px]"
-            />
-            <p className="mt-4 max-w-[24rem] text-[17px] leading-[1.6] text-ink-2">
-              As dúvidas que nos chegam mais vezes, respondidas sem rodeios.
-            </p>
-            <div className="glass glass-panel mt-8 hidden max-w-[22rem] rounded-[22px] p-5 lg:block">
-              <p className="text-[15px] font-medium">A sua pergunta não está aqui?</p>
-              <p className="mt-1 text-[14px] text-ink-2">Escreva-nos. Respondemos por email.</p>
-              <LinkButton href={contactHref()} size="sm" className="mt-4" arrow>
-                Enviar uma pergunta
-              </LinkButton>
-            </div>
-          </Reveal>
-          <Reveal>
-            <div className="flex flex-col gap-2">
-              {FAQS.map((f, i) => (
-                <details
-                  key={f.q}
-                  name="faq"
-                  open={i === 0}
-                  className="faq-item glass glass-panel group rounded-[22px] transition-[box-shadow,transform] duration-300 ease-out-soft hover:-translate-y-0.5"
-                >
-                  <summary className="flex list-none items-center justify-between gap-6 px-5 py-5 text-[17px] font-medium tracking-[-0.01em] sm:px-6 [&::-webkit-details-marker]:hidden">
-                    {f.q}
-                    <svg
-                      viewBox="0 0 16 16"
-                      className="size-8 shrink-0 rounded-full bg-white/70 p-2 text-ink-2 ring-1 ring-hair transition-[transform,background-color,color] duration-300 ease-out-soft group-hover:text-ink group-open:rotate-45 group-open:bg-ink group-open:text-white motion-reduce:transition-none"
-                      aria-hidden
-                    >
-                      <path
-                        d="M8 3v10M3 8h10"
-                        stroke="currentColor"
-                        strokeWidth="1.5"
-                        strokeLinecap="round"
-                      />
-                    </svg>
-                  </summary>
-                  <p className="max-w-[40rem] px-5 pb-6 text-[16px] leading-[1.65] text-ink-2 sm:px-6">
-                    {f.a}
-                  </p>
-                </details>
-              ))}
-            </div>
-          </Reveal>
-        </Container>
-      </ThemeZone>
+    <section id="faq" aria-labelledby="faq-title" className="py-24 sm:py-32">
+      <Container className="grid gap-12 lg:grid-cols-[minmax(0,0.8fr)_minmax(0,1.2fr)]">
+        <div>
+          <SectionHead kicker="Perguntas" id="faq-title" title="Antes de falarmos.">
+            As dúvidas que nos chegam mais vezes, respondidas sem rodeios.
+          </SectionHead>
+          <div data-reveal className="card mt-8 max-w-[24rem] p-6">
+            <p className="text-[16px] font-semibold">A sua pergunta não está aqui?</p>
+            <p className="mt-1 text-[14.5px] text-ink-2">Escreva-nos. Respondemos por email.</p>
+            <LinkButton
+              href={contactHref("Pergunta")}
+              variant="dark"
+              size="sm"
+              className="mt-4"
+              arrow
+            >
+              Enviar uma pergunta
+            </LinkButton>
+          </div>
+        </div>
+        <div data-reveal className="flex flex-col gap-2.5">
+          {FAQS.map((f, i) => (
+            <details
+              key={f.q}
+              name="faq"
+              open={i === 0}
+              className="faq-item card group transition-shadow duration-200 open:shadow-[0_0_0_2px_var(--color-ink)] hover:shadow-[0_0_0_1px_var(--color-line-2),0_10px_24px_-16px_rgb(14_15_18/0.3)]"
+            >
+              <summary className="flex list-none items-center justify-between gap-6 px-6 py-5 text-[17px] font-semibold tracking-[-0.01em] [&::-webkit-details-marker]:hidden">
+                {f.q}
+                <span className="grid size-8 shrink-0 place-items-center rounded-full bg-paper transition-[transform,background-color] duration-300 group-open:rotate-45 group-open:bg-lime">
+                  <Plus className="size-4" />
+                </span>
+              </summary>
+              <p className="max-w-[40rem] px-6 pb-6 text-[16px] leading-[1.65] text-ink-2">{f.a}</p>
+            </details>
+          ))}
+        </div>
+      </Container>
     </section>
   );
 }

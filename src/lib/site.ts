@@ -17,9 +17,10 @@ export const site = {
 } as const;
 
 export const nav = [
+  { href: "#como-funciona", label: "Como funciona" },
   { href: "#exemplos", label: "Exemplos" },
-  { href: "#servicos", label: "O que automatizamos" },
-  { href: "#processo", label: "Como trabalhamos" },
+  { href: "#servicos", label: "Serviços" },
+  { href: "#processo", label: "Processo" },
   { href: "#faq", label: "Perguntas" },
 ] as const;
 

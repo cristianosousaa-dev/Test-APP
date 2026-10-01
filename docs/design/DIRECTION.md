@@ -1,52 +1,36 @@
-# Design direction — landing (v3: scroll-driven)
+# Design direction — landing (v6: light, clear, fast)
 
-*ECC `frontend-design-direction` + `liquid-glass-design` (principles adapted to the web) + `motion-design` + `make-interfaces-feel-better`.*
+## Why v6
+v2–v5 piled on heavy effects (fixed animated backdrop, backdrop-filter glass on dozens of
+elements, pointer-tracked light, pinned scroll sections, scroll-linked transforms, a
+motion library). The page felt clunky and could crash on modest devices. v6 starts again
+with one rule: **every effect must be cheap**.
 
-## Direction
-- **Purpose:** an owner of a small business sees, in the first viewport, their own day being handled: messages answered, bookings made, invoices paid.
-- **Audience:** non-technical owners (clinics, workshops, real estate, restaurants, shops). They scan for "does this solve my problem?", not for tech.
-- **Tone:** calm, light, precise. Apple-like clarity, not a startup template.
-- **Memorable detail:** liquid-glass notifications arrive over a real-looking week calendar, and the calendar behind them fills in as each booking lands. The glass sits on *content*, not on decorative blobs.
+## Performance rules
+- No animation library. CSS transitions/keyframes on `transform` and `opacity` only.
+- One `backdrop-filter` (the sticky header, only once scrolled).
+- No scroll handlers: IntersectionObserver for reveals, the header state and the scrollspy.
+- Looping illustrations run only while on screen and the tab is visible, and have a Pause
+  button (WCAG 2.2.2). Reduced motion shows final states with no movement.
+- Normal document flow: no pinned/sticky storytelling sections.
 
-## Anti-slop rules (non-negotiable)
-- No gradient text, no purple/indigo→cyan gradients, no glow blobs, no dotted grids, no sparkles icons, no emoji.
-- No eyebrow pills with dots, no icon-in-tinted-square card grids, no bento with a dark hero card.
-- No centered-everything layout: editorial left-aligned grid, centered only where it earns it.
-- No node-graph "workflow" diagrams: previews show what the owner actually sees (chat, agenda, quote, pipeline, invoices).
-- Fonts: no Inter, Geist, DM Sans, Plus Jakarta, Outfit, Space Grotesk, Instrument Serif. **Mona Sans** only (variable width + weight), weights 400–600, never heavier.
-- Copy: concrete nouns and verbs; no "seamless", "supercharge", "24/7 magic", no "Tudo o que precisa de saber".
-- Glass only where it means something: floating navigation, segmented control, notifications/widgets layered over content. Everything else is plain, flat, hairline-separated.
-
-## Tokens
-| Token | Value | Use |
+## Palette (catchy, with meaning)
+| Token | Value | Meaning |
 |---|---|---|
-| `canvas` | `#F4F5F7` | page |
-| `paper` | `#FFFFFF` | content surfaces under glass |
-| `ink` | `#0F1012` | text |
-| `ink-2` | `#41444B` | secondary text |
-| `mute` | `#6B6F78` | tertiary (≥ 4.5:1 on canvas) |
-| `hair` | `rgb(15 16 18 / 0.08)` | hairlines |
-| Pastels (bg / fg) | sage `#E3EFE6/#2F6B47`, sky `#E1ECF8/#285A92`, sand `#F4EADB/#80571F`, rose `#F7E3E5/#93394A`, lilac `#EBE7F7/#54469A` | calendar events, statuses — multi-hue, never one family |
-| `go` | `#1E8E5A` | done / paid |
+| `paper` | `#F5F4EF` | page |
+| `ink` | `#0E0F12` | text, dark surfaces |
+| `lime` | `#D4FF3A` | **automatic / done**: CTAs, ticks, highlights |
+| `violet` | `#6B4EFF` | **trigger**: something happened |
+| `night` | `#0E0F12` → `#22242A` | the live feed, the process section |
 
-## Liquid glass recipe (web)
-Translucent white (55–70%) + `backdrop-filter: blur(20px) saturate(180%)` + inner top highlight + hairline inner ring + specular rim (masked gradient border) + soft two-layer drop shadow. Only on layers that sit over real content. Text on glass stays ≥ 4.5:1.
-
-## Motion
-- Springs, no bounce: `{ type: "spring", duration: 0.6, bounce: 0 }` for movement; 0.2 s fades.
-- One thing moves at a time per preview; loops pause off-screen and honour reduced motion / the pause toggle.
-- Layout animations for things that move between places (pipeline cards, agenda slots).
-
-## v3: scroll as the connective tissue
-- **Backdrop:** fixed layer of soft pastel light fields behind the page. Each section (and each example chapter) sets a mood; moods crossfade (opacity only), the field drifts slowly and turns/rises with scroll. Grain on top so it never bands. Pauses with the pause toggle and reduced motion.
-- **Hero:** words rise out of masks (CSS, before hydration); the calendar leans towards the pointer; on scroll the copy lifts away faster than the stage, handing over to the examples.
-- **Examples:** one pinned stage; each scroll unit advances one step, chapters hand over with a blur crossfade, the backdrop follows. Chapters, steps and connected tools are clickable and scroll to their moment.
-- **Automations:** "Quando → Faz" rule cards per area, pointer-following light, animated flow line.
-- **Process:** a line draws through the four steps with the scroll and lights each one.
-- **Closing:** a dark card opens to the screen edges as it scrolls in; the nav glass turns dark over it.
-- **Interaction:** every clickable element has `cursor: pointer`, hover and press states; primary CTAs are magnetic with a light sweep and a sliding arrow.
-
-## v5: say what each part does, in glass
-- **Liquid glass everywhere it carries content:** stages, rule cards, process cards, FAQ, before/after, closing takeaways. One pointer-tracked specular light (viewport-fixed) moves across every glass surface; `.glass-panel` for large surfaces, `.glass-dark` on the closing card.
-- **Clarity per section:** hero legend (notification = automation working, line = what it updated, green = done); every example shows "Hoje, à mão" vs "Com a automação"; rules play out trigger → signal → done; each process step states what you receive; the closing card lists what you take from the call.
-- **Motion:** rule cards run in sequence, cards lean towards the pointer, process icons spin in as the scroll line reaches them, takeaways tick one by one.
+## Page structure (each section answers one question)
+1. Header — sticky, scrollspy underline in lime, one CTA.
+2. Hero — what we do, in one sentence; a live feed of tasks finishing on their own.
+3. Tools — what it connects to.
+4. Como funciona — trigger → automation → done, in three cards.
+5. Exemplos — four tabbed, step-by-step previews with "Hoje, à mão" vs "Com a automação".
+6. Serviços — what can be automated, by area.
+7. Processo — four steps and what you receive in each.
+8. Perguntas — FAQ.
+9. CTA — lime block, what you take from the free call.
+10. Footer — brand, links, contact.

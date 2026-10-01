@@ -1,7 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { Mona_Sans } from "next/font/google";
 import type { ReactNode } from "react";
-import { MotionPreferenceProvider } from "@/lib/motion-preference";
 import { site } from "@/lib/site";
 import "./globals.css";
 
@@ -25,16 +24,15 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: "#f4f5f7",
+  themeColor: "#f5f4ef",
 };
 
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
-    <html lang="pt-PT" className={mona.variable}>
+    <html lang="pt-PT" className={mona.variable} suppressHydrationWarning>
       <head>
-        <noscript>
-          <style>{".reveal{opacity:1!important;transform:none!important}"}</style>
-        </noscript>
+        {/* Scroll reveals hide content only when JS is available to show it again. */}
+        <script>{"document.documentElement.classList.add('js')"}</script>
       </head>
       <body className="min-h-dvh">
         <a
@@ -43,7 +41,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
         >
           Saltar para o conteúdo
         </a>
-        <MotionPreferenceProvider>{children}</MotionPreferenceProvider>
+        {children}
       </body>
     </html>
   );
