@@ -12,7 +12,8 @@
       "!**/.next",
       "!**/coverage",
       "!**/drizzle/meta",
-      "!.claude"
+      "!.claude",
+      "!docs/design/mockup"
     ]
   },
   "formatter": {
