@@ -73,7 +73,7 @@ export function Stage({ children, className }: { children: ReactNode; className?
     <div
       aria-hidden
       className={cn(
-        "relative h-[540px] overflow-hidden rounded-[28px] bg-white/45 shadow-[inset_0_1px_0_rgb(255_255_255/0.9),0_1px_2px_rgb(15_16_18/0.05),0_40px_90px_-40px_rgb(15_16_18/0.35)] ring-1 ring-white/70",
+        "glass glass-panel relative h-[540px] overflow-hidden rounded-[28px]",
         className,
       )}
     >

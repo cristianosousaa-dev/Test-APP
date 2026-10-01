@@ -159,6 +159,8 @@ export const quotes: PreviewConfig = {
     "Seguimento após 3 dias",
     "Orçamento aceite",
   ],
+  before: "Orçamentos feitos à noite, e alguns esquecidos.",
+  after: "Orçamento pronto em minutos, com seguimento automático.",
   outcomes: [
     "Orçamentos enviados no próprio dia",
     "Nenhum pedido esquecido",

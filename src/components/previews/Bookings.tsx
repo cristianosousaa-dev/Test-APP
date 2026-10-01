@@ -229,6 +229,8 @@ export const bookings: PreviewConfig = {
     "Marca na agenda",
     "Confirma e agenda o lembrete",
   ],
+  before: "Atende chamadas e marca à mão, até ao jantar.",
+  after: "O cliente marca por mensagem e recebe o lembrete sozinho.",
   outcomes: ["Resposta em segundos, mesmo fora de horas", "Menos chamadas", "Menos faltas"],
   tools: [
     { label: "WhatsApp", at: 0 },

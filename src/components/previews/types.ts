@@ -19,6 +19,10 @@ export interface PreviewConfig {
   /** One label per step; the stage receives the current step index. */
   steps: string[];
   outcomes: string[];
+  /** How this task is done today, by hand. */
+  before: string;
+  /** What changes once it is automated. */
+  after: string;
   /** The tools this automation touches, lit from the step where each joins in. */
   tools: { label: string; at: number }[];
   theme: BackdropTheme;

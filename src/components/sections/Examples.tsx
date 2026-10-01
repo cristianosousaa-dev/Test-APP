@@ -263,15 +263,7 @@ function Chapter({
         <div className="min-h-0 overflow-hidden">
           <div className="pb-5 pl-10">
             <p className="text-[13.5px] text-mute">{preview.sector}</p>
-            <p className="mt-1.5 text-[15.5px] leading-[1.55] text-ink-2">{preview.description}</p>
-            <ul className="mt-3 flex flex-wrap gap-x-4 gap-y-1 text-[13.5px] text-ink-2 [@media(max-height:820px)]:hidden">
-              {preview.outcomes.map((o) => (
-                <li key={o} className="flex items-center gap-1.5">
-                  <Check className="size-3 text-go" />
-                  {o}
-                </li>
-              ))}
-            </ul>
+            <BeforeAfter preview={preview} />
             <ol className="mt-4 flex flex-col">
               {preview.steps.map((label, i) => (
                 <StepRow
@@ -649,6 +641,28 @@ function StatusPill({
           </motion.span>
         </AnimatePresence>
       </span>
+    </div>
+  );
+}
+
+/** The point of the example in two lines: how it is done today, and with the automation. */
+function BeforeAfter({ preview }: { preview: PreviewConfig }) {
+  return (
+    <div className="glass mt-3 overflow-hidden rounded-[18px] text-[14px] leading-snug">
+      <p className="flex gap-3 px-4 py-3">
+        <span className="mt-[5px] size-2 shrink-0 rounded-full bg-rose-ink/70" />
+        <span>
+          <span className="block text-[12px] text-mute">Hoje, à mão</span>
+          <span className="text-ink-2">{preview.before}</span>
+        </span>
+      </p>
+      <p className="flex gap-3 border-t border-white/70 px-4 py-3">
+        <span className="mt-[5px] size-2 shrink-0 rounded-full bg-go" />
+        <span>
+          <span className="block text-[12px] text-mute">Com a automação</span>
+          <span className="font-medium text-ink">{preview.after}</span>
+        </span>
+      </p>
     </div>
   );
 }

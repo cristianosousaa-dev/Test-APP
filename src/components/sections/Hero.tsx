@@ -83,6 +83,19 @@ export function Hero() {
           stage={
             <div className="animate-fade-up" style={{ animationDelay: "300ms" }}>
               <HeroStage />
+              <ul className="mt-6 flex flex-wrap justify-center gap-x-5 gap-y-2 text-[13px] text-ink-2">
+                <li className="flex items-center gap-2">
+                  <span className="size-2 rounded-full bg-ink" />
+                  Notificação: uma automação a trabalhar
+                </li>
+                <li className="flex items-center gap-2">
+                  <span className="h-px w-4 bg-ink" />O que ela atualizou
+                </li>
+                <li className="flex items-center gap-2">
+                  <span className="size-2 rounded-full bg-go" />
+                  Feito, sem ninguém tocar
+                </li>
+              </ul>
             </div>
           }
         />

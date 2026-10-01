@@ -9,6 +9,7 @@ import { Manifesto } from "@/components/sections/Manifesto";
 import { Nav } from "@/components/sections/Nav";
 import { Process } from "@/components/sections/Process";
 import { Tools } from "@/components/sections/Tools";
+import { PointerLight } from "@/components/ui/PointerLight";
 
 /*
  * One request travels down the page: a client's message arrives, becomes a booking, the
@@ -18,6 +19,7 @@ export default function Home() {
   return (
     <>
       <Backdrop />
+      <PointerLight />
       <Nav />
       <main id="conteudo">
         <Hero />

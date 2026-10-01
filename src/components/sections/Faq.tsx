@@ -1,8 +1,10 @@
 import { ThemeZone } from "@/components/backdrop/ThemeZone";
 import { RevealWords } from "@/components/flow/RevealWords";
 import { SectionLabel } from "@/components/flow/SectionLabel";
+import { LinkButton } from "@/components/ui/Button";
 import { Container } from "@/components/ui/Container";
 import { Reveal } from "@/components/ui/Reveal";
+import { contactHref } from "@/lib/site";
 
 const FAQS = [
   {
@@ -43,6 +45,16 @@ export function Faq() {
               text="Antes de falarmos."
               className="mt-3 text-[36px] leading-[1.06] font-medium tracking-[-0.032em] sm:text-[52px]"
             />
+            <p className="mt-4 max-w-[24rem] text-[17px] leading-[1.6] text-ink-2">
+              As dúvidas que nos chegam mais vezes, respondidas sem rodeios.
+            </p>
+            <div className="glass glass-panel mt-8 hidden max-w-[22rem] rounded-[22px] p-5 lg:block">
+              <p className="text-[15px] font-medium">A sua pergunta não está aqui?</p>
+              <p className="mt-1 text-[14px] text-ink-2">Escreva-nos. Respondemos por email.</p>
+              <LinkButton href={contactHref()} size="sm" className="mt-4" arrow>
+                Enviar uma pergunta
+              </LinkButton>
+            </div>
           </Reveal>
           <Reveal>
             <div className="flex flex-col gap-2">
@@ -51,7 +63,7 @@ export function Faq() {
                   key={f.q}
                   name="faq"
                   open={i === 0}
-                  className="faq-item group rounded-[22px] bg-white/45 ring-1 ring-white/70 transition-[background-color,box-shadow] duration-300 open:bg-white/75 open:shadow-[0_18px_40px_-24px_rgb(15_16_18/0.3)] hover:bg-white/65"
+                  className="faq-item glass glass-panel group rounded-[22px] transition-[box-shadow,transform] duration-300 ease-out-soft hover:-translate-y-0.5"
                 >
                   <summary className="flex list-none items-center justify-between gap-6 px-5 py-5 text-[17px] font-medium tracking-[-0.01em] sm:px-6 [&::-webkit-details-marker]:hidden">
                     {f.q}

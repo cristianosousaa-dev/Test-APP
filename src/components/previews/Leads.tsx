@@ -150,6 +150,8 @@ export const leads: PreviewConfig = {
     "Visita marcada",
     "Consultor avisado com o resumo",
   ],
+  before: "Contactos do portal ficam horas à espera de resposta.",
+  after: "Resposta em segundos e visita marcada na agenda.",
   outcomes: [
     "Nenhum contacto fica à espera",
     "Funil sempre atualizado",

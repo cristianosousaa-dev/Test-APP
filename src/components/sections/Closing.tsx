@@ -37,11 +37,8 @@ export function Closing() {
             <div className="absolute -right-1/4 -bottom-1/2 size-[64vmax] animate-drift-b rounded-full bg-[radial-gradient(closest-side,rgb(70_170_130/0.28),transparent)] motion-reduce:animate-none" />
             <div className="grain absolute inset-0 opacity-[0.12] mix-blend-overlay" />
           </div>
-          <Container>
-            <motion.div
-              className="max-w-[48rem] py-24 sm:py-36"
-              style={enabled ? { y: textY } : undefined}
-            >
+          <Container className="grid items-center gap-12 py-24 sm:py-32 lg:grid-cols-[minmax(0,1.25fr)_minmax(0,0.75fr)] lg:gap-14">
+            <motion.div className="max-w-[48rem]" style={enabled ? { y: textY } : undefined}>
               <h2
                 id="contacto-title"
                 className="text-[40px] leading-[1.04] font-medium tracking-[-0.035em] sm:text-[68px]"
@@ -71,6 +68,7 @@ export function Closing() {
               </div>
               <p className="mt-5 text-[13.5px] text-white/50">{site.ctaNote}</p>
             </motion.div>
+            <Takeaways enabled={enabled} />
           </Container>
         </motion.div>
       </div>
@@ -108,6 +106,73 @@ export function Closing() {
       </Container>
       <Wordmark />
     </section>
+  );
+}
+
+const TAKEAWAYS = [
+  "As tarefas que mais tempo lhe tiram, por ordem",
+  "Que ferramentas ligamos e como fica o fluxo",
+  "Uma proposta com preço fechado e prazo",
+];
+
+/** What the free call gives you, ticked off one by one as the card comes into view. */
+function Takeaways({ enabled }: { enabled: boolean }) {
+  return (
+    <motion.div
+      className="glass-dark rounded-[28px] p-6 sm:p-7"
+      initial={enabled ? { opacity: 0, y: 30, rotateX: 8 } : false}
+      whileInView={{ opacity: 1, y: 0, rotateX: 0 }}
+      viewport={{ once: true, margin: "0px 0px -20% 0px" }}
+      transition={enabled ? { type: "spring", duration: 0.9, bounce: 0 } : { duration: 0 }}
+      style={{ transformPerspective: 900 }}
+    >
+      <p className="flex items-center gap-2 text-[13px] text-white/60">
+        <span className="relative flex size-2">
+          <span className="absolute inset-0 animate-ping rounded-full bg-[#46c08a]/60 motion-reduce:hidden" />
+          <span className="relative size-2 rounded-full bg-[#46c08a]" />
+        </span>
+        Diagnóstico gratuito · 30 minutos
+      </p>
+      <p className="mt-3 text-[20px] font-medium tracking-[-0.02em]">O que leva desta conversa</p>
+      <motion.ul
+        className="mt-5 flex flex-col gap-3"
+        initial="off"
+        whileInView="on"
+        viewport={{ once: true, margin: "0px 0px -20% 0px" }}
+        transition={{ staggerChildren: enabled ? 0.35 : 0, delayChildren: enabled ? 0.4 : 0 }}
+      >
+        {TAKEAWAYS.map((t) => (
+          <motion.li key={t} className="flex items-start gap-3 text-[15px] text-white/85">
+            <motion.span
+              className="mt-0.5 grid size-5 shrink-0 place-items-center rounded-full bg-white text-ink"
+              variants={{
+                off: enabled ? { scale: 0, rotate: -60 } : {},
+                on: { scale: 1, rotate: 0 },
+              }}
+              transition={
+                enabled ? { type: "spring", duration: 0.5, bounce: 0.45 } : { duration: 0 }
+              }
+            >
+              <svg viewBox="0 0 16 16" className="size-3" fill="none" aria-hidden>
+                <path
+                  d="M3.5 8.5l3 3 6-7"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              </svg>
+            </motion.span>
+            <motion.span
+              variants={{ off: enabled ? { opacity: 0.35 } : {}, on: { opacity: 1 } }}
+              transition={{ duration: 0.4 }}
+            >
+              {t}
+            </motion.span>
+          </motion.li>
+        ))}
+      </motion.ul>
+    </motion.div>
   );
 }
 

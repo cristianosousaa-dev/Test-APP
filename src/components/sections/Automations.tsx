@@ -19,15 +19,18 @@ import {
   Wrench,
 } from "lucide-react";
 import { AnimatePresence, motion } from "motion/react";
-import { type PointerEvent, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import { RevealWords } from "@/components/flow/RevealWords";
 import { SectionLabel } from "@/components/flow/SectionLabel";
 import { Container } from "@/components/ui/Container";
 import { Reveal } from "@/components/ui/Reveal";
+import { TiltCard } from "@/components/ui/Tilt";
+import { Check } from "@/components/visual/Bits";
 import { useBackdropOnView } from "@/lib/backdrop";
 import { cn } from "@/lib/cn";
 import { instant, spring } from "@/lib/motion";
 import { useMotionPreference } from "@/lib/motion-preference";
+import { useLoop } from "@/lib/useLoop";
 
 interface Rule {
   when: string;
@@ -141,6 +144,11 @@ export function Automations() {
   const { enabled } = useMotionPreference();
   const [active, setActive] = useState(0);
   const group = GROUPS[active] ?? GROUPS[0];
+  const panel = useRef<HTMLDivElement>(null);
+  // Three rules × three beats (trigger → flow → done), looping while in view.
+  const { step } = useLoop(panel, RUN);
+  const running = Math.floor(step / 3);
+  const beat = step % 3;
 
   return (
     <section ref={ref} id="servicos" aria-labelledby="servicos-title" className="pb-20 sm:pb-28">
@@ -153,7 +161,8 @@ export function Automations() {
             className="mt-3 text-[36px] leading-[1.06] font-medium tracking-[-0.032em] sm:text-[52px]"
           />
           <p className="mt-4 max-w-[34rem] text-[17px] leading-[1.6] text-ink-2">
-            Cada automação é uma regra simples: quando acontece isto, faz aquilo. Escolha uma área.
+            Cada automação é uma regra: quando acontece algo, faz uma tarefa por si. Veja as regras
+            a correr e escolha uma área.
           </p>
         </div>
 
@@ -199,7 +208,7 @@ export function Automations() {
                     {selected && (
                       <motion.span
                         layoutId="area-thumb"
-                        className="glass absolute inset-0 rounded-[20px]"
+                        className="glass glass-panel absolute inset-0 rounded-[20px]"
                         transition={enabled ? spring : instant}
                       />
                     )}
@@ -222,6 +231,7 @@ export function Automations() {
 
           <Reveal>
             <div
+              ref={panel}
               id="area-panel"
               role="tabpanel"
               aria-labelledby={`area-tab-${active}`}
@@ -241,7 +251,17 @@ export function Automations() {
                       }
                       transition={enabled ? { ...spring, delay: i * 0.06 } : instant}
                     >
-                      <RuleCard rule={r} />
+                      <RuleCard
+                        rule={r}
+                        phase={
+                          !enabled || i < running
+                            ? "done"
+                            : i > running
+                              ? "idle"
+                              : ((["trigger", "flow", "done"] as const)[beat] ?? "done")
+                        }
+                        current={enabled && i === running}
+                      />
                     </motion.li>
                   ))}
                 </motion.ul>
@@ -254,56 +274,119 @@ export function Automations() {
   );
 }
 
-/** "When this → do that" card with a light that follows the pointer. */
-function RuleCard({ rule }: { rule: Rule }) {
-  const ref = useRef<HTMLDivElement>(null);
-  function onMove(e: PointerEvent<HTMLDivElement>) {
-    const el = ref.current;
-    if (!el) return;
-    const r = el.getBoundingClientRect();
-    el.style.setProperty("--mx", `${e.clientX - r.left}px`);
-    el.style.setProperty("--my", `${e.clientY - r.top}px`);
-  }
+type Phase = "idle" | "trigger" | "flow" | "done";
+const RUN = [700, 800, 1300, 700, 800, 1300, 700, 800, 1600];
+
+/**
+ * "When this → do that", played out: the trigger lights up, a signal travels along the wire,
+ * the action completes with a tick. The cards run one after the other.
+ */
+function RuleCard({ rule, phase, current }: { rule: Rule; phase: Phase; current: boolean }) {
   const When = rule.whenIcon;
   const Action = rule.actionIcon;
+  const lit = phase !== "idle";
+  const done = phase === "done";
   return (
-    <div
-      ref={ref}
-      onPointerMove={onMove}
-      className="group relative grid items-center gap-3 overflow-hidden rounded-[24px] bg-white/55 p-4 shadow-[inset_0_1px_0_rgb(255_255_255/0.9),0_1px_2px_rgb(15_16_18/0.04)] ring-1 ring-white/70 transition-[background-color,box-shadow,transform] duration-300 ease-out-soft hover:-translate-y-0.5 hover:bg-white/75 hover:shadow-[inset_0_1px_0_rgb(255_255_255/0.9),0_18px_40px_-20px_rgb(15_16_18/0.3)] sm:grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] sm:gap-4 sm:p-5"
-    >
-      <span
-        aria-hidden
-        className="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-300 group-hover:opacity-100"
-        style={{
-          background:
-            "radial-gradient(320px circle at var(--mx, 50%) var(--my, 50%), rgb(255 255 255 / 0.9), transparent 60%)",
-        }}
-      />
-      <span className="relative flex items-center gap-3">
-        <span className="grid size-10 shrink-0 place-items-center rounded-full bg-canvas text-ink-2 ring-1 ring-hair">
-          <When className="size-[18px]" strokeWidth={1.8} />
-        </span>
-        <span>
-          <span className="block text-[12px] text-mute">Quando</span>
-          <span className="block text-[15px] font-medium tracking-[-0.01em]">{rule.when}</span>
-        </span>
-      </span>
-      <span
-        aria-hidden
-        className="relative hidden h-px w-12 overflow-hidden bg-ink/15 sm:block lg:w-16"
+    <TiltCard max={3}>
+      <div
+        className={cn(
+          "glass glass-panel grid items-center gap-3 rounded-[24px] p-4 transition-[opacity,box-shadow] duration-500 sm:grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] sm:gap-4 sm:p-5",
+          !lit && "opacity-80",
+          current && "ring-1 ring-ink/10",
+        )}
       >
-        <span className="absolute inset-y-0 left-0 w-1/2 animate-flow bg-gradient-to-r from-transparent via-ink/70 to-transparent" />
-      </span>
-      <span className="relative flex items-center gap-3">
-        <span className="grid size-10 shrink-0 place-items-center rounded-full bg-ink text-white">
-          <Action className="size-[18px]" strokeWidth={1.8} />
+        <span className="relative flex items-center gap-3">
+          <span className="relative grid size-11 shrink-0 place-items-center">
+            {phase === "trigger" && (
+              <motion.span
+                className="absolute inset-0 rounded-full bg-sky-ink/25"
+                initial={{ scale: 1, opacity: 0.9 }}
+                animate={{ scale: 1.9, opacity: 0 }}
+                transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
+              />
+            )}
+            <span
+              className={cn(
+                "relative grid size-11 place-items-center rounded-full ring-1 transition-colors duration-300",
+                lit ? "bg-sky text-sky-ink ring-sky-ink/20" : "bg-white/70 text-ink-2 ring-hair",
+              )}
+            >
+              <When className="size-[18px]" strokeWidth={1.8} />
+            </span>
+          </span>
+          <span>
+            <span className="block text-[12px] text-mute">Quando</span>
+            <span className="block text-[15px] font-medium tracking-[-0.01em]">{rule.when}</span>
+          </span>
         </span>
-        <span>
-          <span className="block text-[12px] text-mute">Faz</span>
-          <span className="block text-[15px] font-medium tracking-[-0.01em]">{rule.action}</span>
+
+        <span aria-hidden className="relative hidden h-px w-14 bg-ink/12 sm:block lg:w-20">
+          <span
+            className={cn(
+              "absolute inset-0 origin-left bg-ink transition-transform ease-out-soft",
+              phase === "flow"
+                ? "scale-x-100 duration-700"
+                : done
+                  ? "scale-x-100 duration-0"
+                  : "scale-x-0 duration-300",
+            )}
+          />
+          {phase === "flow" && (
+            <motion.span
+              className="absolute top-1/2 size-2.5 -translate-y-1/2 rounded-full bg-ink shadow-[0_0_0_4px_rgb(15_16_18/0.12)]"
+              initial={{ left: "0%" }}
+              animate={{ left: "100%" }}
+              transition={{ duration: 0.7, ease: [0.45, 0, 0.55, 1] }}
+            />
+          )}
         </span>
-      </span>
-    </div>
+
+        <span className="relative flex items-center gap-3">
+          <span className="relative grid size-11 shrink-0 place-items-center">
+            <span
+              className={cn(
+                "grid size-11 place-items-center rounded-full text-white transition-colors duration-300",
+                done ? "bg-go" : "bg-ink",
+              )}
+            >
+              <Action className="size-[18px]" strokeWidth={1.8} />
+            </span>
+            <AnimatePresence>
+              {done && (
+                <motion.span
+                  key="tick"
+                  className="absolute -top-1 -right-1 grid size-[18px] place-items-center rounded-full bg-white text-go shadow-sm ring-1 ring-go/30"
+                  initial={{ scale: 0 }}
+                  animate={{ scale: 1 }}
+                  exit={{ scale: 0 }}
+                  transition={{ type: "spring", duration: 0.45, bounce: 0.45 }}
+                >
+                  <Check className="size-2.5" />
+                </motion.span>
+              )}
+            </AnimatePresence>
+          </span>
+          <span>
+            <span className="flex items-center gap-1.5 text-[12px] text-mute">
+              Faz
+              <AnimatePresence>
+                {done && current && (
+                  <motion.span
+                    key="now"
+                    className="text-go"
+                    initial={{ opacity: 0, x: -4 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    exit={{ opacity: 0 }}
+                  >
+                    · feito agora
+                  </motion.span>
+                )}
+              </AnimatePresence>
+            </span>
+            <span className="block text-[15px] font-medium tracking-[-0.01em]">{rule.action}</span>
+          </span>
+        </span>
+      </div>
+    </TiltCard>
   );
 }

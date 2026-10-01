@@ -45,3 +45,8 @@ Translucent white (55–70%) + `backdrop-filter: blur(20px) saturate(180%)` + in
 - **Process:** a line draws through the four steps with the scroll and lights each one.
 - **Closing:** a dark card opens to the screen edges as it scrolls in; the nav glass turns dark over it.
 - **Interaction:** every clickable element has `cursor: pointer`, hover and press states; primary CTAs are magnetic with a light sweep and a sliding arrow.
+
+## v5: say what each part does, in glass
+- **Liquid glass everywhere it carries content:** stages, rule cards, process cards, FAQ, before/after, closing takeaways. One pointer-tracked specular light (viewport-fixed) moves across every glass surface; `.glass-panel` for large surfaces, `.glass-dark` on the closing card.
+- **Clarity per section:** hero legend (notification = automation working, line = what it updated, green = done); every example shows "Hoje, à mão" vs "Com a automação"; rules play out trigger → signal → done; each process step states what you receive; the closing card lists what you take from the call.
+- **Motion:** rule cards run in sequence, cards lean towards the pointer, process icons spin in as the scroll line reaches them, takeaways tick one by one.

@@ -130,6 +130,8 @@ export const payments: PreviewConfig = {
     "Pagamento recebido",
     "Registado na contabilidade",
   ],
+  before: "Telefona aos clientes para cobrar faturas em atraso.",
+  after: "Lembrete educado e pagamento registado sem tocar em nada.",
   outcomes: [
     "Menos dinheiro parado",
     "Ninguém tem de fazer telefonemas incómodos",
