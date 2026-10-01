@@ -1,7 +1,7 @@
 import { Check, FileText, Globe } from "lucide-react";
 import { BrandIcon } from "@/components/brand/BrandIcon";
 import { cn } from "@/lib/cn";
-import { At, Stage, Tag } from "./parts";
+import { At, Done, IconCell, Panel, Stage, Tag } from "./parts";
 import type { Example, PreviewProps } from "./types";
 
 const LINES = [
@@ -13,9 +13,9 @@ const LINES = [
 const STATUS: { tone: "neutral" | "wait" | "sky" | "done"; label: string }[] = [
   { tone: "neutral", label: "A preparar" },
   { tone: "neutral", label: "Rascunho pronto" },
-  { tone: "wait", label: "Aguarda a sua aprovação" },
-  { tone: "sky", label: "Enviado ao cliente" },
-  { tone: "sky", label: "Lembrete enviado" },
+  { tone: "wait", label: "Aguarda aprovação" },
+  { tone: "sky", label: "Enviado" },
+  { tone: "sky", label: "Seguimento enviado" },
   { tone: "done", label: "Aceite" },
 ];
 
@@ -23,84 +23,92 @@ function QuotesPreview({ step }: PreviewProps) {
   const status = STATUS[step] ?? STATUS[0];
   return (
     <Stage>
-      <div className="absolute inset-0 flex flex-col gap-3 p-4 sm:p-5">
-        {/* The request, as it arrives from the website */}
-        <div className="flex items-start gap-3 rounded-2xl bg-white p-3.5 ring-1 ring-line">
-          <span className="grid size-9 shrink-0 place-items-center rounded-[10px] bg-[#2f6fed] text-white">
-            <Globe className="size-[18px]" />
-          </span>
-          <div className="min-w-0 text-[13.5px]">
-            <p className="text-[12px] text-mute">Pedido no site · há 2 min</p>
-            <p className="font-semibold">Rui Almeida · Reparação de esquentador</p>
-            <p className="truncate text-ink-2">“Não acende desde ontem. Lisboa.”</p>
-          </div>
-        </div>
+      <div className="absolute inset-0 flex flex-col gap-3 p-3 sm:p-4">
+        <Panel
+          icon={
+            <IconCell tone="accent">
+              <Globe className="size-3.5" />
+            </IconCell>
+          }
+          title="Pedido recebido · site"
+          meta="há 2 min"
+          bodyClassName="px-3.5 py-3 text-[13.5px]"
+        >
+          <p className="font-medium">Rui Almeida · Reparação de esquentador</p>
+          <p className="truncate text-ink-2">“Não acende desde ontem. Lisboa.”</p>
+        </Panel>
 
-        {/* The quote document */}
-        <div className="relative flex flex-1 flex-col overflow-hidden rounded-2xl bg-white p-5 ring-1 ring-line">
-          <div className="flex flex-wrap items-start justify-between gap-2">
-            <div>
-              <p className="text-[12px] text-mute">Orçamento Nº 0412</p>
-              <p className="text-[17px] font-semibold tracking-[-0.01em]">
-                Reparação de esquentador
-              </p>
-            </div>
-            <span key={status?.label} className="animate-feed-in">
+        <Panel
+          className="flex-1"
+          icon={
+            <IconCell tone="ink">
+              <FileText className="size-3.5" />
+            </IconCell>
+          }
+          title="Orçamento Nº 0412"
+          meta={
+            <span key={status?.label} className="inline-block animate-feed-in">
               <Tag tone={status?.tone ?? "neutral"}>
                 {status?.tone === "done" && <Check className="size-3" strokeWidth={3} />}
                 {status?.label}
               </Tag>
             </span>
-          </div>
-          <ul className="mt-4 border-t border-line text-[13.5px]">
+          }
+          bodyClassName="flex flex-col overflow-hidden p-4"
+        >
+          <p className="text-[17px] tracking-[-0.01em]">Reparação de esquentador</p>
+          <ul className="mt-3 text-[13.5px]">
             {LINES.map((l, i) => (
               <li
                 key={l.label}
-                className="step-in flex justify-between border-b border-line py-2.5"
+                className="step-in flex justify-between border-b border-hair py-2.5"
                 data-on={step >= 1}
                 style={{ transitionDelay: step >= 1 ? `${i * 120}ms` : "0ms" }}
               >
                 <span className="text-ink-2">{l.label}</span>
-                <span className="font-medium tabular-nums">{l.value}</span>
+                <span className="font-mono text-[12.5px]">{l.value}</span>
               </li>
             ))}
           </ul>
           <At step={step} at={1} className="mt-3 flex items-baseline justify-between">
-            <span className="text-[13px] text-mute">Total com IVA</span>
-            <span className="text-[26px] font-semibold tracking-[-0.02em] tabular-nums">
-              185,00 €
-            </span>
+            <span className="label text-[10px] text-fg-3">Total com IVA</span>
+            <span className="text-[26px] tracking-[-0.03em] tabular-nums">185,00 €</span>
           </At>
 
-          <div className="mt-auto">
-            <At step={step} at={2} until={3}>
-              <div className="flex items-center justify-between gap-3 rounded-2xl bg-ink p-3 text-white">
-                <span className="text-[13px]">Rever e enviar ao cliente?</span>
-                <span className="rounded-full bg-mint px-3.5 py-1.5 text-[13px] font-semibold text-night">
+          <div className="relative mt-auto h-12">
+            <At step={step} at={2} until={3} className="absolute inset-x-0 bottom-0">
+              <div className="flex items-stretch gap-[2px]">
+                <span className="flex flex-1 items-center bg-fg px-3.5 text-[13px] text-white">
+                  Rever e enviar ao cliente?
+                </span>
+                <span className="label grid place-items-center bg-accent px-4 py-3 text-[10px] text-white">
                   Aprovar
                 </span>
               </div>
             </At>
-            <At step={step} at={3} until={5}>
-              <p className="flex items-center gap-2 rounded-2xl bg-sky-soft px-3 py-2.5 text-[13px] text-sky-ink">
+            <At step={step} at={3} until={5} className="absolute inset-x-0 bottom-0">
+              <p className="flex items-center gap-2.5 bg-accent-soft px-3.5 py-3 text-[13px] text-ink shadow-[inset_2px_0_0_var(--color-accent)]">
                 <BrandIcon brand="gmail" className="size-4" />
                 {step >= 4
                   ? "Sem resposta há 3 dias: seguimento enviado"
                   : "Enviado por email a Rui Almeida"}
               </p>
             </At>
+            <At step={step} at={5} className="absolute inset-x-0 bottom-0">
+              <Done>Orçamento aceite · trabalho agendado</Done>
+            </At>
           </div>
 
           {/* Accepted stamp */}
           <div
             className={cn(
-              "pointer-events-none absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rotate-[-12deg] rounded-2xl border-4 border-brand bg-white/90 px-6 py-2 text-[28px] font-bold tracking-[0.08em] text-brand transition-[opacity,transform] duration-300",
+              "label pointer-events-none absolute top-[52%] left-[42%] -translate-x-1/2 -translate-y-1/2 rotate-[-8deg] border-[3px] border-accent bg-white/90 px-6 py-2 text-[24px] tracking-[0.14em] text-accent transition-[opacity,transform] duration-300",
               step >= 5 ? "scale-100 opacity-100" : "scale-150 opacity-0",
             )}
           >
-            ACEITE
+            Aceite
           </div>
-        </div>
+        </Panel>
       </div>
     </Stage>
   );

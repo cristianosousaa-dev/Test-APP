@@ -1,7 +1,7 @@
-import { Check, Wallet } from "lucide-react";
+import { Check, Receipt, Wallet } from "lucide-react";
 import { BrandIcon } from "@/components/brand/BrandIcon";
 import { cn } from "@/lib/cn";
-import { At, Stage, Tag } from "./parts";
+import { At, Done, IconCell, Panel, Stage, Tag } from "./parts";
 import type { Example, PreviewProps } from "./types";
 
 const ROWS = [
@@ -21,10 +21,18 @@ function PaymentsPreview({ step }: PreviewProps) {
 
   return (
     <Stage>
-      <div className="absolute inset-0 flex flex-col gap-3 p-4 sm:p-5">
-        <div className="rounded-2xl bg-white p-5 ring-1 ring-line">
-          <p className="text-[12px] font-semibold text-mute uppercase">Recebido em outubro</p>
-          <div className="relative mt-1 h-10 text-[34px] leading-10 font-semibold tracking-[-0.03em] tabular-nums">
+      <div className="absolute inset-0 flex flex-col gap-3 p-3 sm:p-4">
+        <Panel
+          icon={
+            <IconCell tone="accent">
+              <Wallet className="size-3.5" />
+            </IconCell>
+          }
+          title="Recebido em outubro"
+          meta="Tesouraria"
+          bodyClassName="px-4 py-3"
+        >
+          <div className="relative h-10 text-[32px] leading-10 tracking-[-0.03em] tabular-nums">
             <span
               className={cn(
                 "absolute inset-0 transition-[opacity,transform] duration-500",
@@ -40,71 +48,80 @@ function PaymentsPreview({ step }: PreviewProps) {
               )}
             >
               4 740,00 €{" "}
-              <span className="align-middle text-[14px] font-semibold text-brand">+420 €</span>
+              <span className="label bg-accent px-1.5 py-0.5 align-middle text-[10px] text-white">
+                +420 €
+              </span>
             </span>
           </div>
-        </div>
+        </Panel>
 
-        <ul className="overflow-hidden rounded-2xl bg-white ring-1 ring-line">
-          {ROWS.map((r) => {
-            const isFocus = !r.paid;
-            return (
-              <li
-                key={r.doc}
-                className={cn(
-                  "flex items-center gap-3 border-b border-line px-4 py-3 text-[13.5px] transition-colors duration-500 last:border-b-0",
-                  isFocus && (paid ? "bg-brand-soft" : "bg-rose-soft/60"),
-                )}
-              >
-                <span className="min-w-0 flex-1">
-                  <span className="block truncate font-semibold">{r.who}</span>
-                  <span className="text-mute">{r.doc}</span>
-                </span>
-                <span className="hidden tabular-nums sm:block">{r.value}</span>
-                <span className="w-[150px] text-right">
-                  {isFocus && focus ? (
-                    <span key={focus.label} className="inline-block animate-feed-in">
-                      <Tag tone={focus.tone}>
-                        {focus.tone === "done" && <Check className="size-3" strokeWidth={3} />}
-                        {focus.label}
-                      </Tag>
-                    </span>
-                  ) : (
-                    <Tag tone="done">
-                      <Check className="size-3" strokeWidth={3} />
-                      Paga
-                    </Tag>
+        <Panel
+          icon={
+            <IconCell tone="ink">
+              <Receipt className="size-3.5" />
+            </IconCell>
+          }
+          title="Faturas · Moloni"
+          meta="3 documentos"
+        >
+          <ul>
+            {ROWS.map((r) => {
+              const isFocus = !r.paid;
+              return (
+                <li
+                  key={r.doc}
+                  className={cn(
+                    "flex items-center gap-3 border-b border-hair px-3.5 py-3 text-[13.5px] transition-colors duration-500 last:border-b-0",
+                    isFocus && (paid ? "bg-accent-soft/60" : "bg-rose-soft/60"),
                   )}
-                </span>
-              </li>
-            );
-          })}
-        </ul>
+                >
+                  <span className="min-w-0 flex-1">
+                    <span className="block truncate font-medium">{r.who}</span>
+                    <span className="font-mono text-[11px] text-fg-3">{r.doc}</span>
+                  </span>
+                  <span className="hidden font-mono text-[12.5px] sm:block">{r.value}</span>
+                  <span className="w-[140px] text-right">
+                    {isFocus && focus ? (
+                      <span key={focus.label} className="inline-block animate-feed-in">
+                        <Tag tone={focus.tone}>
+                          {focus.tone === "done" && <Check className="size-3" strokeWidth={3} />}
+                          {focus.label}
+                        </Tag>
+                      </span>
+                    ) : (
+                      <Tag tone="neutral">
+                        <Check className="size-3" strokeWidth={3} />
+                        Paga
+                      </Tag>
+                    )}
+                  </span>
+                </li>
+              );
+            })}
+          </ul>
+        </Panel>
 
-        <div className="relative mt-auto min-h-[92px]">
+        <div className="relative mt-auto min-h-[104px]">
           <At step={step} at={1} until={3} className="absolute inset-0">
-            <div className="flex h-full gap-3 rounded-2xl bg-white p-4 ring-1 ring-line">
-              <span className="grid size-9 shrink-0 place-items-center rounded-[10px] bg-white ring-1 ring-line">
-                <BrandIcon brand="gmail" className="size-5" />
-              </span>
-              <div className="min-w-0 text-[13px]">
-                <p className="text-mute">Para: Oficina Lopes</p>
-                <p className="font-semibold">Fatura FT 1182 · lembrete amigável</p>
-                <p className="truncate text-ink-2">
-                  Olá! Ainda não recebemos o pagamento. Pode pagar por MB WAY.
-                </p>
-              </div>
-            </div>
-          </At>
-          <At step={step} at={3} className="absolute inset-0">
-            <div className="flex h-full items-center gap-3 rounded-2xl bg-ink p-4 text-white">
-              <span className="grid size-9 place-items-center rounded-full bg-mint text-night">
-                <Check className="size-4" strokeWidth={3} />
-              </span>
-              <p className="text-[13.5px]">
-                Pagamento conciliado e lançado na contabilidade, sem intervenção manual.
+            <Panel
+              className="h-full"
+              icon={
+                <IconCell>
+                  <BrandIcon brand="gmail" className="size-4" />
+                </IconCell>
+              }
+              title="Para: Oficina Lopes"
+              meta="automático"
+              bodyClassName="px-3.5 py-2.5 text-[13px]"
+            >
+              <p className="font-medium">Fatura FT 1182 · lembrete de pagamento</p>
+              <p className="truncate text-ink-2">
+                Ainda não recebemos o pagamento. Pode pagar por MB WAY ou referência.
               </p>
-            </div>
+            </Panel>
+          </At>
+          <At step={step} at={3} className="absolute inset-x-0 bottom-0">
+            <Done>Pagamento conciliado e lançado na contabilidade, sem intervenção manual.</Done>
           </At>
         </div>
       </div>

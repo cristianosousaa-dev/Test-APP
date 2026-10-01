@@ -116,7 +116,7 @@ export function Examples() {
 function ExamplePanel({ example }: { example: Example }) {
   const ref = useRef<HTMLDivElement>(null);
   const [paused, setPaused] = useState(false);
-  const { step, reduced } = useStepper(ref, example.durations, paused);
+  const { step, reduced, running } = useStepper(ref, example.durations, paused);
   const { Preview } = example;
 
   return (
@@ -186,22 +186,52 @@ function ExamplePanel({ example }: { example: Example }) {
         </div>
       </div>
 
-      <div className="panel-navy flex flex-col p-3 sm:p-4">
-        <span aria-hidden className="marker top-0 left-0" />
-        <div className="flex items-center justify-between px-1 pt-1 pb-3">
-          <span className="label text-[10.5px] text-white/60">Pré-visualização</span>
-          <span className="font-mono text-[10px] tracking-wider text-white/45 uppercase">
+      <div className="tile flex flex-col p-3 sm:p-4">
+        <div className="flex items-center justify-between gap-4 px-1 pt-1 pb-3">
+          <span className="label flex items-center gap-2 text-[10.5px] text-fg-2">
+            <span className="size-1.5 bg-accent" />
+            Pré-visualização · {example.tab}
+          </span>
+          <span className="hidden font-mono text-[10px] tracking-wider text-fg-3 uppercase sm:inline">
             Exemplo ilustrativo · nomes e valores fictícios
           </span>
         </div>
-        <div className="overflow-hidden rounded-md">
-          <Preview step={step} />
+        <Preview step={step} />
+        {/* Step timeline: one segment per step, the current one fills over its duration. */}
+        <div className="mt-3 flex items-stretch gap-[2px]">
+          <ol aria-hidden className="flex flex-1 gap-[2px]">
+            {example.steps.map((s, i) => (
+              <li key={s} className="relative h-11 flex-1 overflow-hidden bg-white/50">
+                <span
+                  key={i === step ? `${i}-now` : `${i}-${i < step ? "done" : "next"}`}
+                  className={cn(
+                    "absolute inset-0 origin-left bg-accent",
+                    i < step || reduced ? "scale-x-100" : "scale-x-0",
+                  )}
+                  style={
+                    i === step && !reduced
+                      ? {
+                          animation: `seg-fill ${example.durations[i] ?? 2000}ms linear both`,
+                          animationPlayState: running ? "running" : "paused",
+                        }
+                      : undefined
+                  }
+                />
+                <span
+                  className={cn(
+                    "absolute inset-0 grid place-items-center font-mono text-[10.5px] transition-colors duration-300",
+                    i < step || reduced ? "text-white" : "text-fg-2",
+                  )}
+                >
+                  0{i + 1}
+                </span>
+              </li>
+            ))}
+          </ol>
+          {!reduced && (
+            <PauseButton paused={paused} onToggle={() => setPaused((p) => !p)} tone="light" />
+          )}
         </div>
-        {!reduced && (
-          <div className="mt-3 flex justify-end">
-            <PauseButton paused={paused} onToggle={() => setPaused((p) => !p)} tone="dark" />
-          </div>
-        )}
       </div>
     </div>
   );

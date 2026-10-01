@@ -1,8 +1,7 @@
-import { Check, Video } from "lucide-react";
 import type { ReactNode } from "react";
 import { BrandIcon } from "@/components/brand/BrandIcon";
 import { cn } from "@/lib/cn";
-import { At, Stage } from "./parts";
+import { At, Done, IconCell, Panel, Stage } from "./parts";
 import type { Example, PreviewProps } from "./types";
 
 function Bubble({
@@ -18,127 +17,127 @@ function Bubble({
     <div className={cn("flex", side === "out" ? "justify-end" : "justify-start")}>
       <div
         className={cn(
-          "max-w-[85%] rounded-2xl px-3.5 py-2 text-[14px] leading-snug shadow-[0_1px_1px_rgb(14_15_18/0.08)]",
-          side === "out" ? "rounded-br-md bg-[#dcf8c6]" : "rounded-bl-md bg-white",
+          "max-w-[86%] px-3.5 py-2.5 text-[14px] leading-snug",
+          side === "out"
+            ? "bg-accent-soft shadow-[inset_2px_0_0_var(--color-accent)]"
+            : "bg-white shadow-[0_0_0_1px_var(--color-hair-2)]",
         )}
       >
+        {side === "out" && (
+          <span className="label mb-1 block text-[9px] text-accent">Orchestr · automático</span>
+        )}
         {children}
-        <span className="mt-0.5 block text-right text-[11px] text-ink/50">{meta}</span>
+        <span className="mt-1 block text-right font-mono text-[10px] text-fg-3">{meta}</span>
       </div>
     </div>
   );
 }
 
+const SLOTS = [
+  { time: "14:30", who: "Revisão · Miguel Teles", taken: true },
+  { time: "15:30", who: "Livre", taken: false },
+  { time: "17:00", who: "Livre", taken: false },
+];
+
 function BookingsPreview({ step }: PreviewProps) {
   const booked = step >= 4;
   return (
     <Stage>
-      <div className="absolute inset-0 grid sm:grid-cols-[minmax(0,1fr)_230px]">
-        {/* WhatsApp-style chat */}
-        <div className="flex min-h-0 flex-col bg-[#efeae2]">
-          <div className="flex h-14 shrink-0 items-center gap-3 bg-[#1f7a5a] px-4 text-white">
-            <span className="relative grid size-8 place-items-center rounded-full bg-white/20 text-[12px] font-semibold">
-              MC
-              <span className="absolute -right-1 -bottom-1 grid size-4 place-items-center rounded-full bg-white">
-                <BrandIcon brand="whatsapp" className="size-3" />
+      <div className="absolute inset-0 grid gap-3 p-3 sm:grid-cols-[minmax(0,1fr)_220px] sm:p-4">
+        <Panel
+          icon={
+            <IconCell>
+              <BrandIcon brand="whatsapp" className="size-4" />
+            </IconCell>
+          }
+          title="WhatsApp · Marta Costa"
+          meta="21:47"
+          bodyClassName="flex flex-col justify-end gap-2 bg-paper-2 p-3"
+        >
+          <At collapse step={step} at={0}>
+            <Bubble side="in" meta="21:47">
+              Olá! Têm vaga para uma limpeza na sexta à tarde?
+            </Bubble>
+          </At>
+          <At collapse step={step} at={1} until={2}>
+            <div className="flex justify-end">
+              <span className="flex items-center gap-1.5 bg-accent-soft px-3.5 py-3">
+                {[0, 1, 2].map((i) => (
+                  <span
+                    key={i}
+                    className="size-1.5 animate-pulse bg-accent"
+                    style={{ animationDelay: `${i * 150}ms` }}
+                  />
+                ))}
+                <span className="label ml-1 text-[9px] text-accent">A consultar agenda</span>
               </span>
-            </span>
-            <span className="leading-tight">
-              <span className="block text-[14px] font-semibold">Marta Costa</span>
-              <span className="block text-[11.5px] text-white/70">online</span>
-            </span>
-            <Video className="ml-auto size-4 text-white/70" />
-          </div>
-          <div className="flex flex-1 flex-col justify-end p-4 [&>*]:mt-2">
-            <At collapse step={step} at={0}>
-              <Bubble side="in" meta="21:47">
-                Olá! Têm vaga para uma limpeza na sexta à tarde?
-              </Bubble>
-            </At>
-            <At collapse step={step} at={1} until={2}>
-              <div className="flex justify-end">
-                <span className="flex gap-1 rounded-2xl rounded-br-md bg-[#dcf8c6] px-3.5 py-3">
-                  {[0, 1, 2].map((i) => (
-                    <span
-                      key={i}
-                      className="size-1.5 animate-pulse rounded-full bg-ink/40"
-                      style={{ animationDelay: `${i * 150}ms` }}
-                    />
-                  ))}
-                </span>
-              </div>
-            </At>
-            <At collapse step={step} at={2}>
-              <Bubble side="out" meta="21:47 · automático">
-                Olá Marta! Temos sexta às 15:30 ou às 17:00. Qual prefere?
-              </Bubble>
-            </At>
-            <At collapse step={step} at={3}>
-              <Bubble side="in" meta="21:48">
-                15:30, por favor!
-              </Bubble>
-            </At>
-            <At collapse step={step} at={4}>
-              <Bubble side="out" meta="21:48 · automático">
-                Ficou marcado: sexta, 15:30. Enviamos um lembrete na véspera.
-              </Bubble>
-            </At>
-            {/* Small screens: the result as a toast. */}
-            <At collapse step={step} at={4} className="sm:hidden">
-              <div className="flex items-center gap-2 rounded-2xl bg-ink px-3 py-2.5 text-[13px] text-white">
-                <span className="grid size-5 place-items-center rounded-full bg-mint text-night">
-                  <Check className="size-3" strokeWidth={3} />
-                </span>
-                Marcação criada na agenda · Sex 15:30
-              </div>
-            </At>
-          </div>
-        </div>
+            </div>
+          </At>
+          <At collapse step={step} at={2}>
+            <Bubble side="out" meta="21:47">
+              Olá Marta! Temos sexta às 15:30 ou às 17:00. Qual prefere?
+            </Bubble>
+          </At>
+          <At collapse step={step} at={3}>
+            <Bubble side="in" meta="21:48">
+              15:30, por favor!
+            </Bubble>
+          </At>
+          <At collapse step={step} at={4}>
+            <Bubble side="out" meta="21:48">
+              Ficou marcado: sexta, 15:30. Enviamos um lembrete na véspera.
+            </Bubble>
+          </At>
+          <At collapse step={step} at={4} className="sm:hidden">
+            <Done>Marcação registada na agenda · Sex 15:30</Done>
+          </At>
+        </Panel>
 
-        {/* Agenda side panel */}
-        <div className="hidden flex-col border-l border-line bg-white p-4 sm:flex">
-          <p className="flex items-center gap-1.5 text-[12px] font-semibold text-mute uppercase">
-            <BrandIcon brand="googleCalendar" className="size-4" />
-            Google Calendar
-          </p>
-          <p className="text-[16px] font-semibold tracking-[-0.01em]">Sexta, 2 out</p>
-          <ul className="mt-4 flex flex-col gap-2 text-[13px]">
-            <li className="rounded-xl bg-sky-soft px-3 py-2.5">
-              <span className="font-semibold text-sky-ink">14:30</span>
-              <span className="block text-ink-2">Revisão · Miguel Teles</span>
-            </li>
-            <li
-              className={cn(
-                "rounded-xl px-3 py-2.5 transition-[background-color,box-shadow] duration-500",
-                booked
-                  ? "bg-brand-soft shadow-[0_0_0_2px_var(--color-brand),0_0_0_6px_rgb(31_111_74/0.12)]"
-                  : "bg-paper ring-1 ring-line",
-              )}
-            >
-              <span className="flex items-center justify-between font-semibold">
-                15:30
-                {booked && (
-                  <span className="animate-pop rounded-full bg-brand px-2 py-0.5 text-[10.5px] text-white">
-                    NOVO
+        <Panel
+          className="hidden sm:flex"
+          icon={
+            <IconCell>
+              <BrandIcon brand="googleCalendar" className="size-4" />
+            </IconCell>
+          }
+          title="Agenda"
+          meta="Sex, 2 out"
+          bodyClassName="flex flex-col p-3"
+        >
+          <ul className="flex flex-col gap-[2px] text-[13px]">
+            {SLOTS.map((s) => {
+              const isNew = s.time === "15:30" && booked;
+              return (
+                <li
+                  key={s.time}
+                  className={cn(
+                    "grid grid-cols-[44px_minmax(0,1fr)] items-center px-2.5 py-3 transition-[background-color,box-shadow] duration-500",
+                    s.taken
+                      ? "bg-paper-2"
+                      : isNew
+                        ? "bg-accent-soft shadow-[inset_2px_0_0_var(--color-accent)]"
+                        : "shadow-[inset_0_0_0_1px_var(--color-hair)]",
+                  )}
+                >
+                  <span className="font-mono text-[11px] text-fg-2">{s.time}</span>
+                  <span className="flex items-center justify-between gap-2">
+                    <span className={cn("truncate", s.taken || isNew ? "text-ink" : "text-fg-3")}>
+                      {isNew ? "Limpeza · Marta Costa" : s.who}
+                    </span>
+                    {isNew && (
+                      <span className="label animate-pop bg-fg px-1.5 py-0.5 text-[9px] text-white">
+                        Novo
+                      </span>
+                    )}
                   </span>
-                )}
-              </span>
-              <span className={cn("block", booked ? "text-ink" : "text-mute")}>
-                {booked ? "Limpeza · Marta Costa" : "Livre"}
-              </span>
-            </li>
-            <li className="rounded-xl bg-paper px-3 py-2.5 ring-1 ring-line">
-              <span className="font-semibold">17:00</span>
-              <span className="block text-mute">Livre</span>
-            </li>
+                </li>
+              );
+            })}
           </ul>
           <At step={step} at={4} className="mt-auto">
-            <p className="flex items-center gap-2 rounded-xl bg-ink px-3 py-2.5 text-[12.5px] text-white">
-              <Check className="size-3.5 text-mint" strokeWidth={3} />
-              Lembrete agendado para quinta
-            </p>
+            <Done>Lembrete programado para quinta, 10:00</Done>
           </At>
-        </div>
+        </Panel>
       </div>
     </Stage>
   );

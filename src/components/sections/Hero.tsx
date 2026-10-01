@@ -1,4 +1,5 @@
 import { HeroBoard } from "@/components/sections/HeroBoard";
+import { HeroParticles } from "@/components/sections/HeroParticles";
 import { LinkButton } from "@/components/ui/Button";
 import { Container } from "@/components/ui/Container";
 import { IsoArt, type IsoKind } from "@/components/ui/IsoArt";
@@ -25,8 +26,9 @@ const PILLARS: { title: string; text: string; art: IsoKind }[] = [
 
 export function Hero() {
   return (
-    <section id="top" data-loop className="relative pt-10 pb-20 sm:pt-16 lg:pb-28">
+    <section id="top" data-loop className="relative isolate pt-10 pb-20 sm:pt-16 lg:pb-28">
       <Container className="relative">
+        <HeroParticles />
         {/* Construction grid: the top rule and the two gutters between columns. */}
         <div aria-hidden className="rule-x load-draw-x absolute inset-x-5 top-0 sm:inset-x-7" />
         <span aria-hidden className="marker load-pop -top-[3px] left-[17px] sm:left-[25px]" />

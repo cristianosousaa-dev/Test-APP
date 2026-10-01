@@ -587,6 +587,14 @@
     transform: scaleX(0);
   }
 }
+@keyframes seg-fill {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
 @keyframes fill-y {
   from {
     transform: scaleY(0);
@@ -706,6 +714,42 @@
   }
 }
 
+/* Hero data packets: travel along the grid, fading in and out. */
+@keyframes packet-x {
+  0% {
+    transform: translateX(0);
+    opacity: 0;
+  }
+  15%,
+  80% {
+    opacity: 0.85;
+  }
+  100% {
+    transform: translateX(var(--dist));
+    opacity: 0;
+  }
+}
+@keyframes packet-y {
+  0% {
+    transform: translateY(0);
+    opacity: 0;
+  }
+  15%,
+  80% {
+    opacity: 0.85;
+  }
+  100% {
+    transform: translateY(var(--dist));
+    opacity: 0;
+  }
+}
+.packet {
+  animation: var(--anim);
+}
+[data-loop]:not(.is-playing) .packet {
+  animation-play-state: paused;
+}
+
 /* Continuous loops only run while their section is on screen. */
 [data-loop]:not(.is-playing)
 :is(.animate-marquee, .animate-travel, .animate-bob, .animate-orbit, .animate-blink) {
@@ -798,6 +842,9 @@
   }
   .group:hover .iso :is(path, ellipse, line) {
     animation: none;
+  }
+  .packet {
+    display: none;
   }
   .seq > *,
   .step-in {
