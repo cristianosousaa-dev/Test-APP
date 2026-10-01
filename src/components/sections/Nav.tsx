@@ -1,19 +1,62 @@
 "use client";
 
-import { Menu, X } from "lucide-react";
+import { Menu, Pause, Play, X } from "lucide-react";
 import { AnimatePresence, motion, useMotionValueEvent, useScroll } from "motion/react";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Button } from "@/components/ui/Button";
 import { Logo } from "@/components/ui/Logo";
 import { cn } from "@/lib/cn";
 import { duration, ease } from "@/lib/motion";
+import { useMotionPreference } from "@/lib/motion-preference";
 import { contactHref, nav, site } from "@/lib/site";
+
+function MotionToggle({ className }: { className?: string }) {
+  const { paused, reduced, togglePaused } = useMotionPreference();
+  if (reduced) return null; // OS setting already stops motion.
+  const label = paused ? "Retomar animações" : "Pausar animações";
+  return (
+    <button
+      type="button"
+      onClick={togglePaused}
+      aria-pressed={paused}
+      aria-label={label}
+      title={label}
+      className={cn(
+        "grid size-10 place-items-center rounded-full text-ink-2 transition-colors duration-200 hover:bg-line hover:text-ink",
+        className,
+      )}
+    >
+      {paused ? <Play className="size-4" aria-hidden /> : <Pause className="size-4" aria-hidden />}
+    </button>
+  );
+}
 
 export function Nav() {
   const { scrollY } = useScroll();
+  const { reduced } = useMotionPreference();
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
+  const toggleRef = useRef<HTMLButtonElement>(null);
   useMotionValueEvent(scrollY, "change", (y) => setScrolled(y > 12));
+
+  // Escape closes the menu and returns focus; growing to desktop closes it too.
+  useEffect(() => {
+    if (!open) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        setOpen(false);
+        toggleRef.current?.focus();
+      }
+    };
+    const desktop = window.matchMedia("(min-width: 768px)");
+    const onResize = () => desktop.matches && setOpen(false);
+    document.addEventListener("keydown", onKey);
+    desktop.addEventListener("change", onResize);
+    return () => {
+      document.removeEventListener("keydown", onKey);
+      desktop.removeEventListener("change", onResize);
+    };
+  }, [open]);
 
   return (
     <header
@@ -39,21 +82,26 @@ export function Nav() {
             </a>
           ))}
         </nav>
-        <div className="ml-auto hidden md:block">
+        <div className="ml-auto hidden items-center gap-2 md:flex">
+          <MotionToggle />
           <Button href={contactHref()} className="h-9 px-4 text-[13.5px]">
             Falar connosco
           </Button>
         </div>
-        <button
-          type="button"
-          className="ml-auto grid size-10 place-items-center rounded-full text-ink md:hidden"
-          aria-expanded={open}
-          aria-controls="mobile-menu"
-          aria-label={open ? "Fechar menu" : "Abrir menu"}
-          onClick={() => setOpen((v) => !v)}
-        >
-          {open ? <X className="size-5" aria-hidden /> : <Menu className="size-5" aria-hidden />}
-        </button>
+        <div className="ml-auto flex items-center gap-1 md:hidden">
+          <MotionToggle />
+          <button
+            ref={toggleRef}
+            type="button"
+            className="grid size-10 place-items-center rounded-full text-ink"
+            aria-expanded={open}
+            aria-controls="mobile-menu"
+            aria-label={open ? "Fechar menu" : "Abrir menu"}
+            onClick={() => setOpen((v) => !v)}
+          >
+            {open ? <X className="size-5" aria-hidden /> : <Menu className="size-5" aria-hidden />}
+          </button>
+        </div>
       </div>
       <AnimatePresence>
         {open && (
@@ -63,7 +111,7 @@ export function Nav() {
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: "auto" }}
             exit={{ opacity: 0, height: 0 }}
-            transition={{ duration: duration.base, ease }}
+            transition={reduced ? { duration: 0 } : { duration: duration.base, ease }}
             className="overflow-hidden md:hidden"
           >
             <div className="flex flex-col gap-1 px-5 pt-2 pb-6">

@@ -1,12 +1,6 @@
-"use client";
-
 import { Plus } from "lucide-react";
-import { AnimatePresence, motion, useReducedMotion } from "motion/react";
-import { useId, useState } from "react";
 import { Reveal } from "@/components/ui/Reveal";
 import { SectionHeader } from "@/components/ui/SectionHeader";
-import { cn } from "@/lib/cn";
-import { duration, ease } from "@/lib/motion";
 
 const faqs = [
   {
@@ -35,11 +29,11 @@ const faqs = [
   },
 ];
 
+/**
+ * Native <details> accordion: accessible, works without JS, and the answers are in the HTML
+ * (findable with Ctrl+F). `name` makes it exclusive; the open/close animation is CSS-only.
+ */
 export function Faq() {
-  const [open, setOpen] = useState<number | null>(0);
-  const reduced = useReducedMotion();
-  const baseId = useId();
-
   return (
     <section id="faq" className="border-t border-line bg-surface py-24 sm:py-32">
       <div className="mx-auto grid max-w-6xl gap-12 px-5 sm:px-8 lg:grid-cols-[1fr_1.5fr]">
@@ -50,52 +44,20 @@ export function Faq() {
           description="Não encontrou a sua pergunta? Fale connosco, respondemos com todo o gosto."
         />
         <Reveal>
-          <ul className="divide-y divide-line border-y border-line">
-            {faqs.map((f, i) => {
-              const isOpen = open === i;
-              const panelId = `${baseId}-panel-${i}`;
-              const buttonId = `${baseId}-button-${i}`;
-              return (
-                <li key={f.q}>
-                  <h3>
-                    <button
-                      id={buttonId}
-                      type="button"
-                      aria-expanded={isOpen}
-                      aria-controls={panelId}
-                      onClick={() => setOpen(isOpen ? null : i)}
-                      className="flex w-full items-center justify-between gap-6 py-5 text-left text-[16.5px] font-medium tracking-[-0.01em] text-ink"
-                    >
-                      {f.q}
-                      <Plus
-                        aria-hidden
-                        className={cn(
-                          "size-5 shrink-0 text-muted transition-transform duration-300 ease-premium",
-                          isOpen && "rotate-45 text-ink",
-                        )}
-                      />
-                    </button>
-                  </h3>
-                  <AnimatePresence initial={false}>
-                    {isOpen && (
-                      <motion.div
-                        id={panelId}
-                        role="region"
-                        aria-labelledby={buttonId}
-                        initial={reduced ? false : { height: 0, opacity: 0 }}
-                        animate={{ height: "auto", opacity: 1 }}
-                        exit={reduced ? undefined : { height: 0, opacity: 0 }}
-                        transition={{ duration: duration.base, ease }}
-                        className="overflow-hidden"
-                      >
-                        <p className="pb-6 pr-10 text-[15px] leading-relaxed text-muted">{f.a}</p>
-                      </motion.div>
-                    )}
-                  </AnimatePresence>
-                </li>
-              );
-            })}
-          </ul>
+          <div className="divide-y divide-line border-y border-line">
+            {faqs.map((f, i) => (
+              <details key={f.q} name="faq" open={i === 0} className="faq-item group">
+                <summary className="flex cursor-pointer list-none items-center justify-between gap-6 py-5 text-left text-[16.5px] font-medium tracking-[-0.01em] text-ink [&::-webkit-details-marker]:hidden">
+                  <h3>{f.q}</h3>
+                  <Plus
+                    aria-hidden
+                    className="size-5 shrink-0 text-muted transition-transform duration-300 ease-premium group-open:rotate-45 group-open:text-ink motion-reduce:transition-none"
+                  />
+                </summary>
+                <p className="pr-10 pb-6 text-[15px] leading-relaxed text-muted">{f.a}</p>
+              </details>
+            ))}
+          </div>
         </Reveal>
       </div>
     </section>

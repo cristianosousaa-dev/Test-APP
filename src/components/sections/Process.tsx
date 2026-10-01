@@ -1,9 +1,10 @@
 "use client";
 
-import { motion, useReducedMotion, useScroll, useSpring } from "motion/react";
+import { motion, useScroll, useSpring } from "motion/react";
 import { useRef } from "react";
 import { Reveal } from "@/components/ui/Reveal";
 import { SectionHeader } from "@/components/ui/SectionHeader";
+import { useMotionPreference } from "@/lib/motion-preference";
 
 const steps = [
   {
@@ -26,7 +27,7 @@ const steps = [
 
 export function Process() {
   const ref = useRef<HTMLDivElement>(null);
-  const reduced = useReducedMotion();
+  const { reduced } = useMotionPreference();
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start 80%", "end 55%"] });
   const progress = useSpring(scrollYProgress, { stiffness: 120, damping: 30, mass: 0.4 });
 

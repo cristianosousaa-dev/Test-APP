@@ -1,7 +1,7 @@
 "use client";
 
 import { Check } from "lucide-react";
-import { AnimatePresence, motion, useReducedMotion } from "motion/react";
+import { AnimatePresence, motion } from "motion/react";
 import { type KeyboardEvent, useRef, useState } from "react";
 import { AutomationDemo } from "@/components/demos/AutomationDemo";
 import { demos } from "@/components/demos/data";
@@ -9,18 +9,26 @@ import { Reveal } from "@/components/ui/Reveal";
 import { SectionHeader } from "@/components/ui/SectionHeader";
 import { cn } from "@/lib/cn";
 import { duration, ease } from "@/lib/motion";
+import { useMotionPreference } from "@/lib/motion-preference";
 
 export function Examples() {
   const [activeId, setActiveId] = useState(demos[0]?.id ?? "");
-  const reduced = useReducedMotion();
+  const { reduced } = useMotionPreference();
   const tabRefs = useRef<(HTMLButtonElement | null)[]>([]);
   const active = demos.find((d) => d.id === activeId) ?? demos[0];
 
   function onKeyDown(e: KeyboardEvent<HTMLDivElement>) {
-    if (e.key !== "ArrowRight" && e.key !== "ArrowLeft") return;
-    e.preventDefault();
     const i = demos.findIndex((d) => d.id === activeId);
-    const next = (i + (e.key === "ArrowRight" ? 1 : demos.length - 1)) % demos.length;
+    const last = demos.length - 1;
+    const targets: Record<string, number> = {
+      ArrowRight: i === last ? 0 : i + 1,
+      ArrowLeft: i === 0 ? last : i - 1,
+      Home: 0,
+      End: last,
+    };
+    const next = targets[e.key];
+    if (next === undefined) return;
+    e.preventDefault();
     const demo = demos[next];
     if (demo) {
       setActiveId(demo.id);
@@ -44,7 +52,7 @@ export function Examples() {
             role="tablist"
             aria-label="Setores"
             onKeyDown={onKeyDown}
-            className="-mx-5 flex gap-2 overflow-x-auto px-5 pb-2 sm:mx-0 sm:flex-wrap sm:justify-center sm:px-0"
+            className="-mx-5 flex gap-2 overflow-x-auto px-5 pt-1.5 pb-2 sm:mx-0 sm:flex-wrap sm:justify-center sm:px-1.5"
           >
             {demos.map((d, i) => {
               const selected = d.id === activeId;
@@ -91,6 +99,8 @@ export function Examples() {
             role="tabpanel"
             id={`panel-${active.id}`}
             aria-labelledby={`tab-${active.id}`}
+            // biome-ignore lint/a11y/noNoninteractiveTabindex: APG tabs pattern, the panel has no focusable content so it must be focusable itself.
+            tabIndex={0}
             className="rounded-[28px] border border-line bg-page p-4 sm:p-6 lg:p-8"
           >
             <AnimatePresence mode="wait" initial={false}>

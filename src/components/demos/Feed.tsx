@@ -17,9 +17,10 @@ interface FeedProps {
   demo: Demo;
   step: number;
   animate: boolean;
+  running: boolean;
 }
 
-export function Feed({ demo, step, animate }: FeedProps) {
+export function Feed({ demo, step, animate, running }: FeedProps) {
   const items = demo.steps
     .slice(0, step + 1)
     .flatMap((stepItems, s) => stepItems.map((item, i) => ({ item, key: `${s}-${i}`, order: i })));
@@ -34,7 +35,7 @@ export function Feed({ demo, step, animate }: FeedProps) {
         <span className="text-[13px] font-medium text-ink">{demo.channel.label}</span>
         <span className="ml-auto flex items-center gap-1.5 text-[11.5px] text-muted">
           <span className="relative flex size-1.5">
-            {animate && (
+            {running && (
               <span className="absolute inline-flex size-full animate-ping rounded-full bg-ok opacity-60" />
             )}
             <span className="relative inline-flex size-1.5 rounded-full bg-ok" />
@@ -43,10 +44,7 @@ export function Feed({ demo, step, animate }: FeedProps) {
         </span>
       </div>
 
-      <div
-        className="relative flex min-h-[340px] flex-1 flex-col justify-end gap-2.5 overflow-hidden bg-[#f7f7f9] px-4 py-4"
-        aria-live="polite"
-      >
+      <div className="relative flex min-h-[340px] flex-1 flex-col justify-end gap-2.5 overflow-hidden bg-[#f7f7f9] px-4 py-4">
         <div className="bg-dots pointer-events-none absolute inset-0 opacity-40" aria-hidden />
         <AnimatePresence initial={false} mode="popLayout">
           {items.map(({ item, key, order }) => (
@@ -64,9 +62,14 @@ export function Feed({ demo, step, animate }: FeedProps) {
           ))}
         </AnimatePresence>
         {items.length === 0 && (
-          <p className="relative self-center pb-24 text-[12.5px] text-faint">
+          <motion.p
+            initial={animate ? { opacity: 0 } : false}
+            animate={{ opacity: 1 }}
+            transition={{ duration: duration.base, delay: animate ? 0.3 : 0 }}
+            className="relative self-center pb-24 text-[12.5px] text-faint"
+          >
             À espera do próximo evento…
-          </p>
+          </motion.p>
         )}
       </div>
     </div>
@@ -78,7 +81,7 @@ function FeedRow({ item }: { item: FeedItem }) {
     return (
       <div className="flex justify-start">
         <div className="max-w-[85%] rounded-2xl rounded-bl-md border border-line bg-surface px-3.5 py-2 shadow-[0_1px_2px_rgb(10_10_11/0.04)]">
-          <p className="text-[11px] font-medium text-accent-2">{item.who}</p>
+          <p className="text-[11px] font-medium text-accent">{item.who}</p>
           <p className="text-[13.5px] leading-snug text-ink">{item.text}</p>
           <p className="mt-0.5 text-right text-[10.5px] text-faint tabular-nums">{item.time}</p>
         </div>
@@ -89,12 +92,12 @@ function FeedRow({ item }: { item: FeedItem }) {
     return (
       <div className="flex justify-end">
         <div className="max-w-[85%] rounded-2xl rounded-br-md bg-accent px-3.5 py-2 text-white shadow-[0_6px_16px_-8px_rgb(91_91_240/0.8)]">
-          <p className="flex items-center gap-1 text-[10.5px] font-medium text-white/70">
+          <p className="flex items-center gap-1 text-[10.5px] font-medium text-white/90">
             <Bot className="size-3" aria-hidden />
             Automático
           </p>
           <p className="text-[13.5px] leading-snug">{item.text}</p>
-          <p className="mt-0.5 text-right text-[10.5px] text-white/60 tabular-nums">{item.time}</p>
+          <p className="mt-0.5 text-right text-[10.5px] text-white/85 tabular-nums">{item.time}</p>
         </div>
       </div>
     );

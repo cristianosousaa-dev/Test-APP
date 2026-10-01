@@ -2,7 +2,7 @@
 
 import { Check, Sparkles } from "lucide-react";
 import { motion } from "motion/react";
-import { useId } from "react";
+import { useEffect, useId, useRef } from "react";
 import { cn } from "@/lib/cn";
 import { duration, ease } from "@/lib/motion";
 import type { FlowNode } from "./data";
@@ -36,10 +36,13 @@ interface FlowCanvasProps {
   nodes: FlowNode[];
   step: number;
   cycle: number;
+  /** Motion allowed (no reduced motion, not paused). */
   animate: boolean;
+  /** Motion allowed and the demo is visible: ambient loops may play. */
+  running: boolean;
 }
 
-export function FlowCanvas({ nodes, step, cycle, animate }: FlowCanvasProps) {
+export function FlowCanvas({ nodes, step, cycle, animate, running }: FlowCanvasProps) {
   const gradientId = useId();
   const points = layout(nodes.length);
   const edges = points.slice(1).map((p, i) => {
@@ -78,28 +81,10 @@ export function FlowCanvas({ nodes, step, cycle, animate }: FlowCanvasProps) {
                 className={cn(
                   "transition-opacity duration-500",
                   lit ? "opacity-100" : "opacity-0",
-                  lit && animate && "animate-dash",
+                  lit && running && "animate-dash",
                 )}
               />
-              {animate && step === e.to && (
-                <circle key={`${cycle}-${e.to}`} r={1.5} fill="var(--color-accent)">
-                  <animateMotion
-                    dur="0.75s"
-                    fill="freeze"
-                    path={e.d}
-                    calcMode="spline"
-                    keySplines="0.22 1 0.36 1"
-                    keyTimes="0;1"
-                  />
-                  <animate
-                    attributeName="opacity"
-                    values="0;1;1;0"
-                    keyTimes="0;0.15;0.8;1"
-                    dur="0.75s"
-                    fill="freeze"
-                  />
-                </circle>
-              )}
+              {running && step === e.to && <Pulse key={`${cycle}-${e.to}`} path={e.d} />}
             </g>
           );
         })}
@@ -113,7 +98,13 @@ export function FlowCanvas({ nodes, step, cycle, animate }: FlowCanvasProps) {
             className="absolute -translate-x-1/2 -translate-y-1/2"
             style={{ left: `${(p.x / W) * 100}%`, top: `${(p.y / H) * 100}%` }}
           >
-            <NodeCard node={node} index={i} state={nodeState(i, step)} animate={animate} />
+            <NodeCard
+              node={node}
+              index={i}
+              state={nodeState(i, step)}
+              animate={animate}
+              running={running}
+            />
           </div>
         );
       })}
@@ -126,11 +117,13 @@ function NodeCard({
   index,
   state,
   animate,
+  running,
 }: {
   node: FlowNode;
   index: number;
   state: NodeState;
   animate: boolean;
+  running: boolean;
 }) {
   const Icon = node.icon;
   const active = state === "active";
@@ -141,7 +134,7 @@ function NodeCard({
       animate={{ scale: active ? 1.045 : 1, y: active ? -2 : 0 }}
       transition={{ duration: duration.base, ease }}
     >
-      {active && animate && (
+      {active && running && (
         <span
           className="animate-breathe absolute -inset-2 rounded-[18px] bg-accent/10"
           aria-hidden
@@ -178,7 +171,7 @@ function NodeCard({
           >
             {node.label}
           </span>
-          <span className="flex items-center gap-1 truncate text-[11px] text-muted">
+          <span className="flex items-center gap-1 text-[11px] leading-tight text-muted">
             {node.ai && <Sparkles className="size-3 text-accent-2" aria-hidden />}
             {node.sub}
           </span>
@@ -195,5 +188,41 @@ function NodeCard({
         )}
       </div>
     </motion.div>
+  );
+}
+
+/**
+ * One-shot travelling dot. SMIL elements inserted after load resolve `begin="0s"` against the
+ * document timeline (already past), so they start with begin="indefinite" and are triggered here.
+ */
+function Pulse({ path }: { path: string }) {
+  const motionRef = useRef<SVGAnimateMotionElement>(null);
+  const fadeRef = useRef<SVGAnimateElement>(null);
+  useEffect(() => {
+    motionRef.current?.beginElement();
+    fadeRef.current?.beginElement();
+  }, []);
+  return (
+    <circle r={1.5} fill="var(--color-accent)" opacity={0}>
+      <animateMotion
+        ref={motionRef}
+        begin="indefinite"
+        dur="0.75s"
+        fill="freeze"
+        path={path}
+        calcMode="spline"
+        keySplines="0.22 1 0.36 1"
+        keyTimes="0;1"
+      />
+      <animate
+        ref={fadeRef}
+        begin="indefinite"
+        attributeName="opacity"
+        values="0;1;1;0"
+        keyTimes="0;0.15;0.8;1"
+        dur="0.75s"
+        fill="freeze"
+      />
+    </circle>
   );
 }

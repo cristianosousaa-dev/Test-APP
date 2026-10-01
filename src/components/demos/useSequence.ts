@@ -1,7 +1,6 @@
-"use client";
-
-import { useInView, useReducedMotion } from "motion/react";
+import { useInView } from "motion/react";
 import { type RefObject, useEffect, useState } from "react";
+import { useMotionPreference } from "@/lib/motion-preference";
 
 interface SequenceOptions {
   stepMs?: number;
@@ -11,15 +10,16 @@ interface SequenceOptions {
 
 /**
  * Drives a looping demo: -1 (empty) → 0 … length-1 (one step at a time) → hold → restart.
- * Pauses while off-screen or when the tab is hidden. With reduced motion, shows the final state.
- * Returns the active step and a cycle counter (useful as a React key to restart effects).
+ * Pauses while off-screen, when the tab is hidden, or when motion is disabled
+ * (OS reduced motion or the "Pausar animações" toggle), in which case it shows the final state.
+ * `running` tells children whether ambient CSS/SMIL loops may play.
  */
 export function useSequence(
   ref: RefObject<Element | null>,
   length: number,
   { stepMs = 1800, holdMs = 2800, startMs = 500 }: SequenceOptions = {},
 ) {
-  const reduced = useReducedMotion();
+  const { enabled } = useMotionPreference();
   const inView = useInView(ref, { amount: 0.35 });
   const [step, setStep] = useState(-1);
   const [cycle, setCycle] = useState(0);
@@ -27,11 +27,12 @@ export function useSequence(
 
   useEffect(() => {
     const onChange = () => setPageVisible(document.visibilityState === "visible");
+    onChange();
     document.addEventListener("visibilitychange", onChange);
     return () => document.removeEventListener("visibilitychange", onChange);
   }, []);
 
-  const running = !reduced && inView && pageVisible;
+  const running = enabled && inView && pageVisible;
 
   useEffect(() => {
     if (!running) return;
@@ -48,5 +49,5 @@ export function useSequence(
     return () => window.clearTimeout(id);
   }, [running, step, length, stepMs, holdMs, startMs]);
 
-  return { step: reduced ? length - 1 : step, cycle, animate: !reduced };
+  return { step: enabled ? step : length - 1, cycle, animate: enabled, running };
 }

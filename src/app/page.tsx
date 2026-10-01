@@ -14,7 +14,7 @@ export default function Home() {
   return (
     <>
       <Nav />
-      <main>
+      <main id="conteudo">
         <Hero />
         <Integrations />
         <BeforeAfter />

@@ -7,7 +7,8 @@ export const easeInOut = [0.4, 0, 0.2, 1] as const;
 
 export const duration = { quick: 0.2, base: 0.45, slow: 0.7 } as const;
 
+/** Compositor-only (opacity + transform) so entrances stay cheap. */
 export const entrance = {
-  hidden: { opacity: 0, y: 16, filter: "blur(6px)" },
-  visible: { opacity: 1, y: 0, filter: "blur(0px)" },
+  hidden: { opacity: 0, y: 16 },
+  visible: { opacity: 1, y: 0 },
 } as const;

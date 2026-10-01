@@ -13,10 +13,11 @@ import {
   Sparkles,
   Users,
 } from "lucide-react";
-import { AnimatePresence, motion, useInView, useReducedMotion } from "motion/react";
+import { AnimatePresence, motion, useInView } from "motion/react";
 import { useEffect, useId, useRef, useState } from "react";
 import { LogoMark } from "@/components/ui/Logo";
 import { duration, ease } from "@/lib/motion";
+import { useMotionPreference } from "@/lib/motion-preference";
 import { site } from "@/lib/site";
 
 const W = 160;
@@ -56,10 +57,12 @@ const outPath = (y: number) => `M 80 50 C 110 50, 108 ${y}, 140 ${y}`;
 
 export function HeroFlow() {
   const ref = useRef<HTMLDivElement>(null);
-  const reduced = useReducedMotion();
+  const { enabled } = useMotionPreference();
   const inView = useInView(ref, { amount: 0.2 });
   const gradientId = useId();
-  const animate = !reduced;
+  const animate = enabled;
+  /** Ambient loops only run while the canvas is visible. */
+  const running = enabled && inView;
   const [toastIndex, setToastIndex] = useState(0);
 
   useEffect(() => {
@@ -73,7 +76,9 @@ export function HeroFlow() {
   return (
     <div
       ref={ref}
-      className="relative aspect-[16/10] w-full overflow-hidden rounded-[28px] border border-line bg-surface/80 shadow-float backdrop-blur"
+      role="img"
+      aria-label="Ilustração: mensagens de WhatsApp, email, site e loja online passam pelas suas automações e chegam à agenda, ao CRM, à faturação e à equipa."
+      className="relative aspect-[16/10] w-full overflow-hidden rounded-[28px] border border-line bg-surface shadow-float"
     >
       <div className="bg-dots absolute inset-0" aria-hidden />
       <div
@@ -98,7 +103,7 @@ export function HeroFlow() {
             key={`in-${y}`}
             d={inPath(y)}
             begin={i * 0.7}
-            animate={animate}
+            animate={running}
             gradient={gradientId}
           />
         ))}
@@ -107,7 +112,7 @@ export function HeroFlow() {
             key={`out-${y}`}
             d={outPath(y)}
             begin={1.4 + i * 0.7}
-            animate={animate}
+            animate={running}
             gradient={gradientId}
           />
         ))}
@@ -126,7 +131,7 @@ export function HeroFlow() {
         style={{ left: "50%", top: "50%" }}
       >
         <div className="relative">
-          {animate && (
+          {running && (
             <span
               className="animate-breathe absolute -inset-4 rounded-[26px] bg-accent/12"
               aria-hidden
@@ -169,7 +174,7 @@ export function HeroFlow() {
                       : undefined
                   }
                   transition={{ duration: duration.base, ease }}
-                  className="flex items-center gap-3 rounded-xl border border-line bg-surface/95 px-3 py-2 text-left shadow-card backdrop-blur"
+                  className="flex items-center gap-3 rounded-xl border border-line bg-surface/95 px-3 py-2 text-left shadow-card"
                 >
                   <span className="grid size-7 shrink-0 place-items-center rounded-lg bg-ok-soft text-ok">
                     <t.icon className="size-3.5" aria-hidden />
