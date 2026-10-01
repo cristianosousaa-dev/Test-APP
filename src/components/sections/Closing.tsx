@@ -1,6 +1,6 @@
 "use client";
 
-import { motion, useScroll, useTransform } from "motion/react";
+import { type MotionValue, motion, useScroll, useTransform } from "motion/react";
 import { useRef } from "react";
 import { LinkButton } from "@/components/ui/Button";
 import { Container } from "@/components/ui/Container";
@@ -24,7 +24,7 @@ export function Closing() {
   const whatsapp = whatsappHref();
 
   return (
-    <section id="contacto" aria-labelledby="contacto-title" className="pb-10">
+    <section id="contacto" aria-labelledby="contacto-title">
       <div ref={ref} className="px-3 sm:px-4">
         <motion.div
           data-nav-dark
@@ -106,6 +106,50 @@ export function Closing() {
           </div>
         </footer>
       </Container>
+      <Wordmark />
     </section>
+  );
+}
+
+/** The name, huge and faint, each letter rising into place as the page ends. */
+function Wordmark() {
+  const ref = useRef<HTMLDivElement>(null);
+  const { enabled } = useMotionPreference();
+  const { scrollYProgress } = useScroll({ target: ref, offset: ["start end", "end end"] });
+  const letters = [...site.name];
+  return (
+    <div ref={ref} aria-hidden className="mt-10 overflow-hidden px-3 select-none sm:px-4">
+      <div className="flex justify-center pb-[1.5vw] text-[29vw] leading-[0.86] font-semibold tracking-[-0.07em] text-ink/[0.07]">
+        {letters.map((l, i) => (
+          <Letter
+            // biome-ignore lint/suspicious/noArrayIndexKey: letters can repeat; order is fixed.
+            key={i}
+            letter={l}
+            progress={scrollYProgress}
+            range={[i * 0.08, 0.6 + i * 0.08]}
+            enabled={enabled}
+          />
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function Letter({
+  letter,
+  progress,
+  range,
+  enabled,
+}: {
+  letter: string;
+  progress: MotionValue<number>;
+  range: [number, number];
+  enabled: boolean;
+}) {
+  const y = useTransform(progress, range, ["70%", "0%"]);
+  return (
+    <motion.span className="inline-block" style={enabled ? { y } : undefined}>
+      {letter}
+    </motion.span>
   );
 }

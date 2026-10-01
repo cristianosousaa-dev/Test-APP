@@ -1,6 +1,6 @@
 import { site } from "@/lib/site";
 
-export function Logo() {
+export function Logo({ markOnly = false }: { markOnly?: boolean }) {
   return (
     <span className="inline-flex items-center gap-2.5">
       <svg viewBox="0 0 32 32" className="logo-mark size-7" aria-hidden>
@@ -15,7 +15,9 @@ export function Logo() {
           fill="none"
         />
       </svg>
-      <span className="text-[17px] font-semibold tracking-[-0.02em] text-ink">{site.name}</span>
+      {!markOnly && (
+        <span className="text-[17px] font-semibold tracking-[-0.02em] text-ink">{site.name}</span>
+      )}
     </span>
   );
 }

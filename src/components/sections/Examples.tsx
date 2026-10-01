@@ -11,16 +11,18 @@ import {
   useTransform,
 } from "motion/react";
 import { type ReactNode, useEffect, useLayoutEffect, useRef, useState } from "react";
+import { RevealWords } from "@/components/flow/RevealWords";
+import { SectionLabel } from "@/components/flow/SectionLabel";
 import { bookings } from "@/components/previews/Bookings";
 import { leads } from "@/components/previews/Leads";
 import { payments } from "@/components/previews/Payments";
 import { quotes } from "@/components/previews/Quotes";
 import type { PreviewConfig } from "@/components/previews/types";
 import { Container } from "@/components/ui/Container";
-import { Reveal } from "@/components/ui/Reveal";
 import { Check } from "@/components/visual/Bits";
 import { setBackdropTheme } from "@/lib/backdrop";
 import { cn } from "@/lib/cn";
+import { setIslandDetail } from "@/lib/island";
 import { instant, spring } from "@/lib/motion";
 import { useMotionPreference } from "@/lib/motion-preference";
 
@@ -84,6 +86,12 @@ export function Examples() {
     if (centred) setBackdropTheme(preview.theme);
   }, [centred, preview.theme]);
 
+  // Tell the header island what the walkthrough is doing right now.
+  useEffect(() => {
+    setIslandDetail(centred ? `${preview.tab} · ${pos.step + 1}/${preview.steps.length}` : null);
+  }, [centred, preview, pos.step]);
+  useEffect(() => () => setIslandDetail(null), []);
+
   function goTo(chapter: number, step = 0) {
     const el = track.current;
     if (!el) return;
@@ -96,21 +104,20 @@ export function Examples() {
   const { Stage } = preview;
 
   return (
-    <section id="exemplos" aria-labelledby="exemplos-title" className="pt-24 sm:pt-32">
+    <section id="exemplos" aria-labelledby="exemplos-title" className="pt-0">
       <Container>
-        <Reveal className="max-w-[44rem]">
-          <p className="text-[14px] text-ink-2">Exemplos</p>
-          <h2
+        <div className="max-w-[44rem]">
+          <SectionLabel index="01">Exemplos</SectionLabel>
+          <RevealWords
             id="exemplos-title"
+            text="Veja como fica no seu dia a dia."
             className="mt-3 text-[36px] leading-[1.06] font-medium tracking-[-0.032em] sm:text-[52px]"
-          >
-            Veja como fica no seu dia a dia.
-          </h2>
+          />
           <p className="mt-4 max-w-[36rem] text-[17px] leading-[1.6] text-ink-2">
             Faça scroll e acompanhe quatro automações, passo a passo. Os nomes e valores são
             ilustrativos; os fluxos são reais.
           </p>
-        </Reveal>
+        </div>
       </Container>
 
       <div
@@ -147,39 +154,43 @@ export function Examples() {
               ))}
             </ol>
 
-            <div className="mt-4 flex min-h-0 flex-1 flex-col lg:mt-0 lg:h-[min(596px,calc(100svh-120px))] lg:flex-none">
+            <div className="mt-4 flex min-h-0 flex-1 flex-col sm:mt-8 lg:mt-6 lg:h-[min(616px,calc(100svh-110px))] lg:flex-none">
               <p className="sr-only">
                 {`${preview.tab}, passo ${pos.step + 1} de ${preview.steps.length}: ${preview.steps[pos.step]}`}
               </p>
               <FitHeight natural={540}>
-                <AnimatePresence mode="wait" initial={false}>
-                  <motion.div
-                    key={preview.id}
-                    initial={
-                      enabled ? { opacity: 0, y: 24, scale: 0.97, filter: "blur(8px)" } : false
-                    }
-                    animate={{ opacity: 1, y: 0, scale: 1, filter: "blur(0px)" }}
-                    exit={
-                      enabled
-                        ? {
-                            opacity: 0,
-                            y: -16,
-                            scale: 0.98,
-                            filter: "blur(6px)",
-                            transition: { duration: 0.22 },
-                          }
-                        : undefined
-                    }
-                    transition={enabled ? spring : instant}
-                  >
-                    <Stage
-                      step={pos.step}
-                      cycle={0}
-                      animate={enabled}
-                      running={enabled && visible}
-                    />
-                  </motion.div>
-                </AnimatePresence>
+                <div className="relative">
+                  <AnimatePresence mode="wait" initial={false}>
+                    <motion.div
+                      key={preview.id}
+                      initial={
+                        enabled ? { opacity: 0, y: 24, scale: 0.97, filter: "blur(8px)" } : false
+                      }
+                      animate={{ opacity: 1, y: 0, scale: 1, filter: "blur(0px)" }}
+                      exit={
+                        enabled
+                          ? {
+                              opacity: 0,
+                              y: -16,
+                              scale: 0.98,
+                              filter: "blur(6px)",
+                              transition: { duration: 0.22 },
+                            }
+                          : undefined
+                      }
+                      transition={enabled ? spring : instant}
+                    >
+                      <Stage
+                        step={pos.step}
+                        cycle={0}
+                        animate={enabled}
+                        running={enabled && visible}
+                      />
+                    </motion.div>
+                  </AnimatePresence>
+                  {enabled && <Sweep key={`${preview.id}-${pos.step}`} />}
+                  <StatusPill preview={preview} step={pos.step} reduced={reduced} />
+                </div>
               </FitHeight>
               <ToolChain preview={preview} step={pos.step} onPick={(s) => goTo(pos.chapter, s)} />
             </div>
@@ -463,7 +474,7 @@ function ToolChain({
   onPick: (step: number) => void;
 }) {
   return (
-    <div className="mt-4 hidden flex-wrap items-center gap-2 sm:flex">
+    <div className="mt-5 hidden flex-wrap items-center gap-2 sm:flex">
       <span className="mr-1 text-[12.5px] text-mute">Ligado a</span>
       {preview.tools.map((t, i) => {
         const on = step >= t.at;
@@ -527,6 +538,107 @@ function FitHeight({ natural, children }: { natural: number; children: ReactNode
       >
         {children}
       </motion.div>
+    </div>
+  );
+}
+
+/** A band of light that crosses the stage each time the automation takes a step. */
+function Sweep() {
+  return (
+    <span
+      aria-hidden
+      className="pointer-events-none absolute inset-0 overflow-hidden rounded-[28px]"
+    >
+      <motion.span
+        className="absolute inset-y-0 -left-1/3 w-1/3 bg-[linear-gradient(100deg,transparent,rgb(255_255_255/0.55),transparent)]"
+        initial={{ x: "0%", opacity: 0 }}
+        animate={{ x: "420%", opacity: [0, 1, 0] }}
+        transition={{ duration: 1.1, ease: [0.4, 0, 0.2, 1] }}
+      />
+    </span>
+  );
+}
+
+/** Live status of the run, riding on the stage's top edge. */
+function StatusPill({
+  preview,
+  step,
+  reduced,
+}: {
+  preview: PreviewConfig;
+  step: number;
+  reduced: boolean;
+}) {
+  const done = step === preview.steps.length - 1;
+  const t = reduced ? instant : spring;
+  return (
+    <div
+      aria-hidden
+      className="glass absolute -top-5 left-1/2 hidden h-10 -translate-x-1/2 items-center gap-2.5 rounded-full pr-4 pl-2 text-[13px] whitespace-nowrap sm:flex"
+    >
+      <span className="relative grid size-6 place-items-center">
+        <AnimatePresence initial={false} mode="popLayout">
+          {done ? (
+            <motion.span
+              key="done"
+              className="grid size-6 place-items-center rounded-full bg-go text-white"
+              initial={reduced ? false : { scale: 0, rotate: -45 }}
+              animate={{ scale: 1, rotate: 0 }}
+              exit={reduced ? undefined : { scale: 0 }}
+              transition={reduced ? instant : { type: "spring", duration: 0.5, bounce: 0.4 }}
+            >
+              <Check className="size-3.5" />
+            </motion.span>
+          ) : (
+            <motion.svg
+              key="run"
+              viewBox="0 0 24 24"
+              className="size-6"
+              initial={reduced ? false : { scale: 0 }}
+              animate={{ scale: 1, rotate: reduced ? 0 : 360 }}
+              exit={reduced ? undefined : { scale: 0 }}
+              transition={{
+                scale: t,
+                rotate: { duration: 1.1, repeat: Number.POSITIVE_INFINITY, ease: "linear" },
+              }}
+            >
+              <circle
+                cx="12"
+                cy="12"
+                r="9"
+                fill="none"
+                stroke="rgb(15 16 18 / 0.12)"
+                strokeWidth="2.5"
+              />
+              <path
+                d="M12 3a9 9 0 0 1 9 9"
+                fill="none"
+                stroke="#0f1012"
+                strokeWidth="2.5"
+                strokeLinecap="round"
+              />
+            </motion.svg>
+          )}
+        </AnimatePresence>
+      </span>
+      <span className="font-medium text-ink">{done ? "Concluído" : "A executar"}</span>
+      <span className="text-mute tabular-nums">
+        {step + 1}/{preview.steps.length}
+      </span>
+      <span className="relative block h-[1.3em] min-w-0 overflow-hidden text-ink-2">
+        <AnimatePresence initial={false} mode="popLayout">
+          <motion.span
+            key={`${preview.id}-${step}`}
+            className="block"
+            initial={reduced ? false : { y: "110%", opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            exit={reduced ? undefined : { y: "-110%", opacity: 0 }}
+            transition={t}
+          >
+            {preview.steps[step]}
+          </motion.span>
+        </AnimatePresence>
+      </span>
     </div>
   );
 }

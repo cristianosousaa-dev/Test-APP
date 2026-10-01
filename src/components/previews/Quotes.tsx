@@ -51,8 +51,8 @@ function QuotesStage({ step, cycle, animate }: StageProps) {
         animate={{ y: step >= 1 ? -84 : 0 }}
         transition={t}
       >
-        <div className="flex items-start justify-between gap-4">
-          <div>
+        <div className="flex flex-col-reverse items-start gap-2 sm:flex-row sm:justify-between sm:gap-4">
+          <div className="min-w-0">
             <p className="text-[12px] text-mute">Orçamento Nº 0412</p>
             <p className="mt-0.5 text-[16px] font-semibold tracking-[-0.01em]">
               Reparação de esquentador

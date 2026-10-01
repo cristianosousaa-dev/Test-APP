@@ -2,8 +2,9 @@
 
 import { type MotionValue, motion, motionValue, useScroll, useTransform } from "motion/react";
 import { useRef } from "react";
+import { RevealWords } from "@/components/flow/RevealWords";
+import { SectionLabel } from "@/components/flow/SectionLabel";
 import { Container } from "@/components/ui/Container";
-import { Reveal } from "@/components/ui/Reveal";
 import { useBackdropOnView } from "@/lib/backdrop";
 import { useMotionPreference } from "@/lib/motion-preference";
 
@@ -39,17 +40,16 @@ export function Process() {
   const progress = enabled ? scrollYProgress : FULL;
 
   return (
-    <section ref={ref} id="processo" aria-labelledby="processo-title" className="py-24 sm:py-36">
+    <section ref={ref} id="processo" aria-labelledby="processo-title" className="pb-20 sm:pb-28">
       <Container>
-        <Reveal className="max-w-[44rem]">
-          <p className="text-[14px] text-ink-2">Como trabalhamos</p>
-          <h2
+        <div className="max-w-[44rem]">
+          <SectionLabel index="03">Como trabalhamos</SectionLabel>
+          <RevealWords
             id="processo-title"
+            text="Simples para si, do primeiro dia ao último."
             className="mt-3 text-[36px] leading-[1.06] font-medium tracking-[-0.032em] sm:text-[52px]"
-          >
-            Simples para si, do primeiro dia ao último.
-          </h2>
-        </Reveal>
+          />
+        </div>
 
         <ol
           ref={list}

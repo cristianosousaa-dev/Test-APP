@@ -20,6 +20,8 @@ import {
 } from "lucide-react";
 import { AnimatePresence, motion } from "motion/react";
 import { type PointerEvent, useRef, useState } from "react";
+import { RevealWords } from "@/components/flow/RevealWords";
+import { SectionLabel } from "@/components/flow/SectionLabel";
 import { Container } from "@/components/ui/Container";
 import { Reveal } from "@/components/ui/Reveal";
 import { useBackdropOnView } from "@/lib/backdrop";
@@ -141,20 +143,19 @@ export function Automations() {
   const group = GROUPS[active] ?? GROUPS[0];
 
   return (
-    <section ref={ref} id="servicos" aria-labelledby="servicos-title" className="py-24 sm:py-36">
+    <section ref={ref} id="servicos" aria-labelledby="servicos-title" className="pb-20 sm:pb-28">
       <Container>
-        <Reveal className="max-w-[44rem]">
-          <p className="text-[14px] text-ink-2">O que automatizamos</p>
-          <h2
+        <div className="max-w-[44rem]">
+          <SectionLabel index="02">O que automatizamos</SectionLabel>
+          <RevealWords
             id="servicos-title"
+            text="Começamos pelo que lhe tira mais tempo."
             className="mt-3 text-[36px] leading-[1.06] font-medium tracking-[-0.032em] sm:text-[52px]"
-          >
-            Começamos pelo que lhe tira mais tempo.
-          </h2>
+          />
           <p className="mt-4 max-w-[34rem] text-[17px] leading-[1.6] text-ink-2">
             Cada automação é uma regra simples: quando acontece isto, faz aquilo. Escolha uma área.
           </p>
-        </Reveal>
+        </div>
 
         <div className="mt-12 grid grid-cols-1 gap-6 lg:grid-cols-[minmax(0,0.7fr)_minmax(0,1.3fr)] lg:gap-10">
           <Reveal>

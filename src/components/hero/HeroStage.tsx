@@ -1,7 +1,8 @@
 "use client";
 
 import { AnimatePresence, motion } from "motion/react";
-import { useRef } from "react";
+import { type RefObject, useEffect, useRef, useState } from "react";
+import { Check } from "@/components/visual/Bits";
 import { Notification, type NotificationData } from "@/components/visual/Notification";
 import { cn } from "@/lib/cn";
 import { fade, instant, spring } from "@/lib/motion";
@@ -98,10 +99,14 @@ export function HeroStage() {
   });
 
   const transition = animate ? spring : instant;
+  // What the automation touches lands a beat after the notification, when the wire arrives.
+  const landed = useDelayed(cycle * n + step, animate ? 700 : 0);
+  const landedStep = ((landed % n) + n) % n;
+  const landedCycle = Math.floor(landed / n);
 
   // Live tally for the day: every notification that has landed so far bumps a counter.
   // The day "resets" every few loops so the numbers stay believable.
-  const arrived = (cycle % 3) * n + step + 1;
+  const arrived = (landedCycle % 3) * n + landedStep + 1;
   const tally = { messages: 11, calendar: 3, invoices: 1 } as Record<string, number>;
   for (let k = 0; k < arrived; k++) {
     const app = FEED[k % n]?.app;
@@ -110,7 +115,7 @@ export function HeroStage() {
   }
 
   return (
-    <div ref={ref} className="relative">
+    <div ref={ref} className="relative animate-float">
       <p className="sr-only">
         Ilustração: uma agenda semanal enquanto chegam notificações de automações, como mensagens
         respondidas, marcações confirmadas e faturas pagas.
@@ -178,7 +183,15 @@ export function HeroStage() {
           ))}
 
           <AnimatePresence>
-            {NEW_EVENTS.filter((e) => step >= e.at).map((e) => (
+            {NEW_EVENTS.map((e) => (
+              <div
+                key={`slot-${e.at}`}
+                data-slot={e.at}
+                className={cn("pointer-events-none mx-1 my-px", COL[e.day])}
+                style={{ gridRow: `${rowOf(e.start)} / span ${e.hours * 2}` }}
+              />
+            ))}
+            {NEW_EVENTS.filter((e) => landedStep >= e.at && landedCycle === cycle).map((e) => (
               <motion.div
                 key={`${cycle}-${e.day}-${e.start}`}
                 className={cn("relative z-[1] mx-1 my-px", COL[e.day])}
@@ -215,6 +228,8 @@ export function HeroStage() {
                 item && (
                   <motion.div
                     key={item.id}
+                    data-note={item.id}
+                    className="relative"
                     layout={animate ? "position" : false}
                     initial={animate ? { opacity: 0, y: 16, scale: 0.97 } : false}
                     animate={{ opacity: 1, y: 0, scale: 1 }}
@@ -224,6 +239,7 @@ export function HeroStage() {
                     transition={transition}
                   >
                     <Notification {...item} />
+                    {animate && item.id === String(cycle * n + step) && <Processing />}
                   </motion.div>
                 ),
             )}
@@ -243,20 +259,163 @@ export function HeroStage() {
           </span>
           Hoje
         </span>
-        <Tally value={tally.messages ?? 0} label="mensagens" animate={animate} />
-        <Tally value={tally.calendar ?? 0} label="marcações" animate={animate} />
+        <Tally value={tally.messages ?? 0} label="mensagens" kind="messages" animate={animate} />
+        <Tally value={tally.calendar ?? 0} label="marcações" kind="calendar" animate={animate} />
         <span className="hidden sm:contents">
-          <Tally value={tally.invoices ?? 0} label="pagamentos" animate={animate} />
+          <Tally value={tally.invoices ?? 0} label="pagamentos" kind="invoices" animate={animate} />
         </span>
       </div>
+
+      {animate && <Wire root={ref} noteId={String(cycle * n + step)} step={step} />}
     </div>
   );
 }
 
-/** A number that rolls up when it changes, like a mechanical counter. */
-function Tally({ value, label, animate }: { value: number; label: string; animate: boolean }) {
+/** Keeps the previous value for `ms` after it changes. */
+function useDelayed<T>(value: T, ms: number): T {
+  const [shown, setShown] = useState(value);
+  useEffect(() => {
+    if (ms === 0) {
+      setShown(value);
+      return;
+    }
+    const id = window.setTimeout(() => setShown(value), ms);
+    return () => window.clearTimeout(id);
+  }, [value, ms]);
+  return ms === 0 ? value : shown;
+}
+
+/** Thin bar that runs along a fresh notification, then a tick: the automation did its job. */
+function Processing() {
   return (
-    <span className="flex items-baseline gap-1">
+    <>
+      <motion.span
+        className="absolute right-4 bottom-2 left-[62px] h-[2px] origin-left rounded-full bg-ink/60"
+        initial={{ scaleX: 0, opacity: 1 }}
+        animate={{ scaleX: 1, opacity: 0 }}
+        transition={{
+          scaleX: { duration: 0.6, ease: [0.4, 0, 0.2, 1] },
+          opacity: { delay: 0.7, duration: 0.3 },
+        }}
+      />
+      <motion.span
+        className="absolute top-2 left-[36px] grid size-[18px] place-items-center rounded-full bg-go text-white ring-2 ring-white"
+        initial={{ scale: 0 }}
+        animate={{ scale: 1 }}
+        transition={{ type: "spring", duration: 0.5, bounce: 0.45, delay: 0.6 }}
+      >
+        <Check className="size-2.5" />
+      </motion.span>
+    </>
+  );
+}
+
+/**
+ * Draws a wire from the newest notification to the thing the automation changed: the new
+ * booking in the calendar, or the counter in the "Hoje" tally.
+ */
+function Wire({
+  root,
+  noteId,
+  step,
+}: {
+  root: RefObject<HTMLDivElement | null>;
+  noteId: string;
+  step: number;
+}) {
+  const [geo, setGeo] = useState<{ d: string; x: number; y: number; w: number; h: number } | null>(
+    null,
+  );
+
+  useEffect(() => {
+    setGeo(null);
+    const id = window.setTimeout(() => {
+      const el = root.current;
+      if (!el) return;
+      const note = el.querySelector(`[data-note="${noteId}"]`);
+      const app = FEED[step]?.app;
+      const target =
+        app === "calendar"
+          ? el.querySelector(`[data-slot="${step}"]`)
+          : el.querySelector(`[data-tally="${app === "invoices" ? "invoices" : "messages"}"]`);
+      if (!note || !target || (target as HTMLElement).offsetParent === null) return;
+      const box = el.getBoundingClientRect();
+      const a = note.getBoundingClientRect();
+      const b = target.getBoundingClientRect();
+      const x1 = a.left - box.left + a.width * 0.72;
+      const y1 = a.top - box.top + 6;
+      const toTally = app !== "calendar";
+      const x2 = b.left - box.left + (toTally ? b.width / 2 : 4);
+      const y2 = b.top - box.top + (toTally ? b.height + 2 : b.height / 2);
+      const midY = (y1 + y2) / 2;
+      const d = toTally
+        ? `M ${x1} ${y1} C ${x1} ${midY}, ${x2} ${midY}, ${x2} ${y2}`
+        : `M ${x1} ${y1} C ${x1} ${y2}, ${x2 - 60} ${y2}, ${x2} ${y2}`;
+      setGeo({ d, x: x2, y: y2, w: box.width, h: box.height });
+    }, 260);
+    return () => window.clearTimeout(id);
+  }, [root, noteId, step]);
+
+  if (!geo) return null;
+  return (
+    <svg
+      aria-hidden
+      className="pointer-events-none absolute inset-0 z-10 overflow-visible"
+      width={geo.w}
+      height={geo.h}
+      fill="none"
+    >
+      <motion.path
+        key={geo.d}
+        d={geo.d}
+        stroke="#0f1012"
+        strokeWidth={1.5}
+        strokeLinecap="round"
+        initial={{ pathLength: 0, opacity: 0.9 }}
+        animate={{ pathLength: [0, 1, 1], opacity: [0.9, 0.9, 0] }}
+        transition={{ duration: 1.7, times: [0, 0.3, 1], ease: "easeOut" }}
+      />
+      <motion.circle
+        key={`${geo.d}-ring`}
+        cx={geo.x}
+        cy={geo.y}
+        r={6}
+        fill="none"
+        stroke="#1e8e5a"
+        strokeWidth={1.5}
+        style={{ transformOrigin: `${geo.x}px ${geo.y}px` }}
+        initial={{ scale: 0, opacity: 0 }}
+        animate={{ scale: [0, 1, 2.6], opacity: [0, 1, 0] }}
+        transition={{ duration: 1.1, delay: 0.42, times: [0, 0.2, 1] }}
+      />
+      <motion.circle
+        key={`${geo.d}-dot`}
+        cx={geo.x}
+        cy={geo.y}
+        r={3}
+        fill="#1e8e5a"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: [0, 1, 1, 0] }}
+        transition={{ duration: 1.5, delay: 0.42, times: [0, 0.1, 0.7, 1] }}
+      />
+    </svg>
+  );
+}
+
+/** A number that rolls up when it changes, like a mechanical counter. */
+function Tally({
+  value,
+  label,
+  kind,
+  animate,
+}: {
+  value: number;
+  label: string;
+  kind: string;
+  animate: boolean;
+}) {
+  return (
+    <span data-tally={kind} className="flex items-baseline gap-1">
       <span className="relative inline-grid h-[1.25em] overflow-hidden font-semibold text-ink tabular-nums">
         <AnimatePresence initial={false} mode="popLayout">
           <motion.span

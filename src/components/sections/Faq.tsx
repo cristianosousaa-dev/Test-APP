@@ -1,4 +1,6 @@
 import { ThemeZone } from "@/components/backdrop/ThemeZone";
+import { RevealWords } from "@/components/flow/RevealWords";
+import { SectionLabel } from "@/components/flow/SectionLabel";
 import { Container } from "@/components/ui/Container";
 import { Reveal } from "@/components/ui/Reveal";
 
@@ -31,17 +33,16 @@ const FAQS = [
 
 export function Faq() {
   return (
-    <section id="faq" aria-labelledby="faq-title" className="py-24 sm:py-36">
+    <section id="faq" aria-labelledby="faq-title" className="pb-20 sm:pb-28">
       <ThemeZone theme="faq">
         <Container className="grid gap-12 lg:grid-cols-[minmax(0,0.72fr)_minmax(0,1.28fr)] lg:gap-12">
           <Reveal>
-            <p className="text-[14px] text-ink-2">Perguntas</p>
-            <h2
+            <SectionLabel index="04">Perguntas</SectionLabel>
+            <RevealWords
               id="faq-title"
+              text="Antes de falarmos."
               className="mt-3 text-[36px] leading-[1.06] font-medium tracking-[-0.032em] sm:text-[52px]"
-            >
-              Antes de falarmos.
-            </h2>
+            />
           </Reveal>
           <Reveal>
             <div className="flex flex-col gap-2">
