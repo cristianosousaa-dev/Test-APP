@@ -1,22 +1,26 @@
-import { Check } from "lucide-react";
-import { type Brand, BrandIcon } from "@/components/brand/BrandIcon";
 import { OrchestrMark } from "@/components/brand/OrchestrLogo";
 import { LinkButton } from "@/components/ui/Button";
 import { Container } from "@/components/ui/Container";
 import { delay } from "@/lib/delay";
 import { contactHref, site, whatsappHref } from "@/lib/site";
 
-const TAKEAWAYS = [
+const INCLUDES = [
   "Levantamento dos processos com maior impacto",
   "Sistemas a integrar e desenho do fluxo",
   "Proposta com preço fixo e prazo definido",
 ];
 
-const FLOATERS: { brand: Brand; className: string; dur: string }[] = [
-  { brand: "googleCalendar", className: "-top-7 -left-6", dur: "6.5s" },
-  { brand: "whatsapp", className: "-top-8 right-8", dur: "6s" },
-  { brand: "gmail", className: "-right-5 -bottom-7", dur: "7s" },
-];
+/* A rising line across the panel, drawn by the scroll. Decorative. */
+const LINE = (() => {
+  const pts: string[] = [];
+  for (let i = 0; i <= 48; i++) {
+    const t = i / 48;
+    pts.push(
+      `${(t * 100).toFixed(2)} ${(92 - (t * t * 0.55 + t * 0.35) * 80 + Math.sin(i) * 0.8).toFixed(2)}`,
+    );
+  }
+  return `M${pts.join("L")}`;
+})();
 
 export function Cta() {
   const whatsapp = whatsappHref();
@@ -25,92 +29,91 @@ export function Cta() {
       id="contacto"
       data-loop
       aria-labelledby="contacto-title"
-      className="px-3 pt-8 pb-3 sm:px-4 sm:pb-4"
+      className="relative overflow-x-clip pt-8 pb-3 sm:pb-4"
     >
-      <div className="relative isolate mx-auto max-w-[1400px] overflow-hidden rounded-[36px] bg-base-2 shadow-[inset_0_0_0_1px_var(--color-hair)]">
-        {/* Atmosphere: static light, a fine grid, and the symbol turning slowly. */}
-        <div
-          aria-hidden
-          className="pointer-events-none absolute -top-48 -left-40 -z-10 size-[640px] rounded-full bg-[radial-gradient(closest-side,rgb(61_224_160/0.22),transparent)]"
-        />
-        <div
-          aria-hidden
-          className="pointer-events-none absolute -right-48 -bottom-56 -z-10 size-[620px] rounded-full bg-[radial-gradient(closest-side,rgb(110_123_255/0.2),transparent)]"
-        />
-        <div aria-hidden className="grid-lines pointer-events-none absolute inset-0 -z-10" />
-        <div
-          aria-hidden
-          className="pointer-events-none absolute top-1/2 left-[72%] -z-10 hidden -translate-1/2 opacity-[0.05] lg:block"
-        >
-          <OrchestrMark className="size-[640px] animate-orbit" id="orx-cta-orbit" />
-        </div>
-
-        <Container className="relative grid items-center gap-12 py-20 sm:py-28 lg:grid-cols-[minmax(0,1.15fr)_minmax(0,0.85fr)] lg:gap-16">
-          <div data-reveal>
-            <p className="kicker flex items-center gap-3">
-              <span className="size-1.5 rounded-full bg-accent shadow-[0_0_10px_var(--color-accent)]" />
-              Próximo passo
-            </p>
-            <h2 id="contacto-title" className="display ink-sheen mt-5 text-[clamp(38px,6vw,68px)]">
-              Comece por um diagnóstico gratuito.
-            </h2>
-            <p className="mt-6 max-w-[34rem] text-[18px] leading-[1.6] text-fg-2">
-              Em 30 minutos analisamos os seus processos, identificamos as oportunidades de
-              automação e indicamos por onde começar.
-            </p>
-            <div className="mt-9 flex flex-wrap items-center gap-3">
-              <LinkButton href={contactHref()} variant="accent" size="lg" arrow>
-                {site.cta}
-              </LinkButton>
-              {whatsapp ? (
-                <LinkButton href={whatsapp} variant="glass" size="lg">
-                  Falar no WhatsApp
-                </LinkButton>
-              ) : (
-                <LinkButton href="#exemplos" variant="glass" size="lg">
-                  Ver casos de uso
-                </LinkButton>
-              )}
+      <Container>
+        <div data-reveal="scale" className="panel-navy">
+          {/* Construction grid on navy. */}
+          <div aria-hidden className="pointer-events-none absolute inset-0 -z-10">
+            <div className="rule-x rule-light absolute inset-x-0 top-[22%]" />
+            <div className="rule-x rule-light absolute inset-x-0 top-[78%]" />
+            <div className="rule-y rule-light absolute inset-y-0 left-[58%] hidden lg:block" />
+            <svg
+              aria-hidden
+              viewBox="0 0 100 100"
+              preserveAspectRatio="none"
+              className="line-draw-scroll absolute inset-x-0 bottom-0 h-[70%] w-full"
+            >
+              <path
+                d={LINE}
+                fill="none"
+                stroke="rgb(255 255 255 / 0.55)"
+                strokeWidth="1.2"
+                vectorEffect="non-scaling-stroke"
+              />
+            </svg>
+            <div className="absolute top-1/2 right-[-6%] hidden -translate-y-1/2 opacity-[0.07] lg:block">
+              <OrchestrMark className="size-[560px] animate-orbit" id="orx-cta-orbit" />
             </div>
-            <p className="mt-5 font-mono text-[11.5px] tracking-[0.04em] text-fg-3">
-              {site.ctaNote}
-            </p>
           </div>
+          <span aria-hidden className="marker top-0 left-0" />
 
-          <div data-reveal style={delay(120)} className="relative">
-            {FLOATERS.map((f) => (
-              <span
-                key={f.brand}
-                aria-hidden
-                className={`absolute z-10 hidden sm:block ${f.className}`}
-              >
-                <span
-                  className="grid size-14 animate-bob place-items-center rounded-2xl bg-white shadow-[0_20px_40px_-18px_rgb(0_0_0/0.8)]"
-                  style={{ animationDuration: f.dur }}
-                >
-                  <BrandIcon brand={f.brand} className="size-7" />
-                </span>
-              </span>
-            ))}
-            <div className="glass rounded-[28px] p-7 sm:p-8">
-              <p className="kicker !text-accent">Diagnóstico gratuito</p>
-              <p className="mt-3 text-[22px] font-semibold tracking-[-0.02em] [font-stretch:106%]">
-                O que inclui
+          <div className="grid grid-cols-1 gap-12 px-6 py-16 sm:px-10 sm:py-24 lg:grid-cols-[minmax(0,58fr)_minmax(0,42fr)] lg:gap-0 lg:px-14">
+            <div className="lg:pr-14">
+              <p className="flex items-center gap-3">
+                <span className="badge badge-light">09</span>
+                <span className="label text-white/70">Próximo passo</span>
               </p>
-              <ul className="seq mt-6 flex flex-col gap-4">
-                {TAKEAWAYS.map((t) => (
-                  <li key={t} className="flex items-start gap-3 text-[15.5px] text-fg-2">
-                    <span className="mt-0.5 grid size-5 shrink-0 place-items-center rounded-full bg-accent text-accent-ink">
-                      <Check className="size-3" strokeWidth={3} />
-                    </span>
+              <h2
+                id="contacto-title"
+                data-reveal="mask"
+                className="display mt-8 text-[clamp(40px,5.4vw,76px)] text-white"
+              >
+                Comece por um diagnóstico gratuito.
+              </h2>
+              <p className="mt-6 max-w-[32rem] text-[17px] leading-[1.6] text-white/75">
+                Em 30 minutos analisamos os seus processos, identificamos as oportunidades de
+                automação e indicamos por onde começar.
+              </p>
+              <div className="mt-10 flex flex-col gap-[2px] sm:flex-row sm:flex-wrap">
+                <LinkButton href={contactHref()} variant="light" size="lg">
+                  {site.cta}
+                </LinkButton>
+                {whatsapp ? (
+                  <LinkButton href={whatsapp} variant="glass" size="lg">
+                    Falar no WhatsApp
+                  </LinkButton>
+                ) : (
+                  <LinkButton href="#exemplos" variant="glass" size="lg">
+                    Ver casos de uso
+                  </LinkButton>
+                )}
+              </div>
+              <p className="mt-5 font-mono text-[11px] tracking-[0.04em] text-white/55">
+                {site.ctaNote}
+              </p>
+            </div>
+
+            <div className="lg:pl-14">
+              <p className="label text-white/60">O que inclui</p>
+              <ul className="mt-6 flex flex-col">
+                {INCLUDES.map((t, i) => (
+                  <li
+                    key={t}
+                    data-reveal="right"
+                    style={{ ...delay(i * 120), ["--i" as string]: i }}
+                    className="relative flex items-start gap-4 py-5 text-[16px] text-white/85"
+                  >
+                    <span aria-hidden className="rule-x rule-light absolute inset-x-0 top-0" />
+                    <span className="badge badge-light mt-0.5 shrink-0">0{i + 1}</span>
                     {t}
                   </li>
                 ))}
               </ul>
             </div>
           </div>
-        </Container>
-      </div>
+        </div>
+      </Container>
     </section>
   );
 }

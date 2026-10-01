@@ -4,7 +4,7 @@ import { Container } from "@/components/ui/Container";
 import { SectionHead } from "@/components/ui/SectionHead";
 import { site } from "@/lib/site";
 
-/* What the service commits to (see Process and FAQ). Compared with doing it yourself, not with named competitors. */
+/* What the service commits to (see Methodology and FAQ). Compared with doing it in-house. */
 const ROWS = [
   {
     topic: "Implementação",
@@ -28,77 +28,66 @@ const ROWS = [
   },
 ];
 
+/* The Orchestr column brightens row by row: navy at the top, lit from below. */
+const SHADES = ["#061024", "#0a1c40", "#10295a", "#1b3f80", "#2a5aa6"];
+const GRID = "grid grid-cols-2 lg:grid-cols-[minmax(0,0.7fr)_minmax(0,1fr)_minmax(0,1fr)]";
+
 export function Difference() {
   return (
-    <section aria-labelledby="diferenca-title" className="relative py-24 sm:py-32">
-      <div
-        aria-hidden
-        className="pointer-events-none absolute inset-x-0 top-1/3 -z-10 mx-auto h-[420px] max-w-[900px] rounded-full bg-[radial-gradient(closest-side,rgb(110_123_255/0.10),transparent)]"
-      />
+    <section aria-labelledby="diferenca-title" className="relative py-20 sm:py-28">
       <Container>
         <SectionHead
           index="06"
           kicker="Diferenciação"
           id="diferenca-title"
-          align="center"
-          className="mx-auto"
           title="Não vendemos software. Entregamos processos a funcionar."
         >
-          Não lhe vendemos um software para configurar. Tratamos das automações por si, à medida do
-          seu negócio.
+          Assumimos a análise, a implementação e a manutenção das automações, à medida da operação
+          da sua empresa.
         </SectionHead>
 
-        <div className="mx-auto mt-14 grid max-w-[980px] gap-4 md:grid-cols-2">
-          <div data-reveal className="surface p-6 sm:p-8">
-            <p className="kicker !text-fg-3">Equipa interna</p>
-            <dl className="mt-6 flex flex-col">
-              {ROWS.map((r) => (
-                <div
-                  key={r.topic}
-                  className="border-t border-hair py-4 first:border-t-0 first:pt-0"
-                >
-                  <dt className="font-mono text-[11px] tracking-[0.06em] text-fg-3 uppercase">
-                    {r.topic}
-                  </dt>
-                  <dd className="mt-1.5 flex items-start gap-2.5 text-[15.5px] text-fg-2">
-                    <Minus className="mt-1 size-4 shrink-0 text-fg-3" />
-                    {r.diy}
-                  </dd>
-                </div>
-              ))}
-            </dl>
-          </div>
-
-          <div data-reveal style={{ ["--i" as string]: 1 }}>
-            <div
-              data-spot
-              className="surface h-full p-6 shadow-[inset_0_0_0_1px_rgb(61_224_160/0.3),inset_0_1px_0_rgb(255_255_255/0.08),0_30px_80px_-40px_rgb(61_224_160/0.35)] sm:p-8"
+        <div className="mt-14">
+          <div className={GRID}>
+            <div className="hidden lg:block" />
+            <p className="label flex items-end px-4 pb-4 text-[11px] text-fg-3 sm:px-6">
+              Equipa interna
+            </p>
+            <p
+              className="label relative flex items-center gap-2.5 px-4 pt-6 pb-4 text-[11px] text-white sm:px-6"
+              style={{ background: SHADES[0] }}
             >
-              <span className="spot-glow" />
-              <p className="kicker flex items-center gap-2.5 !text-fg">
-                <OrchestrMark className="size-5" id="orx-diff" />
-                Com a {site.name}
-              </p>
-              <dl className="mt-6 flex flex-col">
-                {ROWS.map((r) => (
-                  <div
-                    key={r.topic}
-                    className="border-t border-hair py-4 first:border-t-0 first:pt-0"
-                  >
-                    <dt className="font-mono text-[11px] tracking-[0.06em] text-fg-3 uppercase">
-                      {r.topic}
-                    </dt>
-                    <dd className="mt-1.5 flex items-start gap-2.5 text-[15.5px] font-medium text-fg">
-                      <span className="mt-[3px] grid size-[17px] shrink-0 place-items-center rounded-full bg-accent text-accent-ink">
-                        <Check className="size-[11px]" strokeWidth={3} />
-                      </span>
-                      {r.us}
-                    </dd>
-                  </div>
-                ))}
-              </dl>
-            </div>
+              <span aria-hidden className="marker top-0 left-0" />
+              <OrchestrMark className="size-5" id="orx-diff" />
+              Com a {site.name}
+            </p>
           </div>
+          {ROWS.map((r, i) => (
+            <div key={r.topic} data-reveal style={{ ["--i" as string]: i }} className={GRID}>
+              <p className="label relative col-span-2 flex items-center py-3 text-[11px] text-fg-2 lg:col-span-1 lg:py-6">
+                <span aria-hidden className="rule-x absolute inset-x-0 top-0" />
+                <span className="mr-3 font-mono text-fg-3">0{i + 1}</span>
+                {r.topic}
+              </p>
+              <p className="relative flex items-start gap-2.5 px-4 py-5 text-[15px] text-fg-2 sm:px-6 lg:py-6">
+                <span aria-hidden className="rule-x absolute inset-x-0 top-0" />
+                <Minus className="mt-0.5 size-4 shrink-0 text-fg-3" />
+                {r.diy}
+              </p>
+              <p
+                className="relative flex items-start gap-2.5 px-4 py-5 text-[15px] text-white sm:px-6 lg:py-6"
+                style={{ background: SHADES[i + 1] }}
+              >
+                <span aria-hidden className="rule-x rule-light absolute inset-x-0 top-0" />
+                <span
+                  data-pop
+                  className="mt-[3px] grid size-[17px] shrink-0 place-items-center bg-accent text-white"
+                >
+                  <Check className="size-[11px]" strokeWidth={3} />
+                </span>
+                {r.us}
+              </p>
+            </div>
+          ))}
         </div>
       </Container>
     </section>

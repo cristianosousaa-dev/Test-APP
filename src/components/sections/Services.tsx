@@ -1,20 +1,20 @@
-import { Check, FileCog, Handshake, type LucideIcon, Receipt, Users } from "lucide-react";
 import { type Brand, BrandIcon, brandLabel } from "@/components/brand/BrandIcon";
 import { Container } from "@/components/ui/Container";
+import { IsoArt, type IsoKind } from "@/components/ui/IsoArt";
 import { SectionHead } from "@/components/ui/SectionHead";
 import { contactHref } from "@/lib/site";
 
 const AREAS: {
   title: string;
   blurb: string;
-  icon: LucideIcon;
+  art: IsoKind;
   items: string[];
   tools: Brand[];
 }[] = [
   {
     title: "Clientes",
     blurb: "Atendimento e agenda",
-    icon: Users,
+    art: "chat",
     items: [
       "Resposta a pedidos por WhatsApp e email",
       "Marcações e lembretes",
@@ -25,7 +25,7 @@ const AREAS: {
   {
     title: "Vendas",
     blurb: "Contactos e propostas",
-    icon: Handshake,
+    art: "doc",
     items: [
       "Resposta imediata a contactos",
       "Orçamentos com os seus preços",
@@ -36,14 +36,14 @@ const AREAS: {
   {
     title: "Faturação",
     blurb: "Faturas e cobranças",
-    icon: Receipt,
+    art: "coins",
     items: ["Emissão e envio de faturas", "Lembretes de pagamento", "Conciliação de recebimentos"],
     tools: ["stripe", "excel", "gmail"],
   },
   {
     title: "Operações",
     blurb: "Documentos e relatórios",
-    icon: FileCog,
+    art: "chart",
     items: [
       "Leitura de faturas de fornecedores",
       "Stock e encomendas",
@@ -55,71 +55,91 @@ const AREAS: {
 
 export function Services() {
   return (
-    <section id="servicos" aria-labelledby="servicos-title" className="relative py-24 sm:py-32">
+    <section id="servicos" aria-labelledby="servicos-title" className="relative py-20 sm:py-28">
       <Container>
-        <div className="flex flex-col justify-between gap-8 lg:flex-row lg:items-end">
-          <SectionHead index="04" kicker="Serviços" id="servicos-title" title="Áreas de automação.">
-            Os processos mais solicitados, organizados por área. Cada solução é desenhada à medida
-            da operação da sua empresa.
-          </SectionHead>
-          <a
-            data-reveal
-            href={contactHref("Outro processo a automatizar")}
-            className="group inline-flex shrink-0 items-center gap-2 text-[15px] font-medium text-fg-2 transition-colors hover:text-fg"
-          >
-            Outro processo? Fale connosco
-            <span className="grid size-7 place-items-center rounded-full bg-white/[0.06] text-accent shadow-[inset_0_0_0_1px_var(--color-hair-2)] transition-transform duration-300 ease-out-soft group-hover:translate-x-1">
+        <SectionHead index="04" kicker="Serviços" id="servicos-title" title="Áreas de automação.">
+          Os processos mais solicitados, organizados por área. Cada solução é desenhada à medida da
+          operação da sua empresa.
+        </SectionHead>
+
+        <ul className="relative mt-14 grid sm:grid-cols-2 lg:grid-cols-4">
+          {AREAS.map((a, i) => (
+            <li
+              key={a.title}
+              data-reveal
+              style={{ ["--i" as string]: i }}
+              className="group relative flex flex-col px-5 pt-6 pb-7 transition-colors duration-500 hover:bg-tile-2 sm:px-6"
+            >
+              <span aria-hidden className="rule-x absolute inset-x-0 top-0" />
+              {i % 2 === 1 && (
+                <span
+                  aria-hidden
+                  className="rule-y absolute top-0 bottom-0 left-0 hidden sm:block"
+                />
+              )}
+              {i === 2 && (
+                <span
+                  aria-hidden
+                  className="rule-y absolute top-0 bottom-0 left-0 hidden lg:block"
+                />
+              )}
+              {/* Signal bar fills across the top of the hovered column. */}
+              <span
+                aria-hidden
+                className="absolute inset-x-0 top-0 h-[2px] origin-left scale-x-0 bg-accent transition-transform duration-500 ease-out-soft group-hover:scale-x-100"
+              />
+              <div className="flex items-center justify-between">
+                <span className="font-mono text-[11px] text-fg-3">0{i + 1}</span>
+                <span className="flex gap-[2px]">
+                  {a.tools.map((t) => (
+                    <span
+                      key={t}
+                      title={brandLabel(t)}
+                      className="grid size-7 place-items-center bg-white"
+                    >
+                      <BrandIcon brand={t} className="size-4" />
+                      <span className="sr-only">{brandLabel(t)}</span>
+                    </span>
+                  ))}
+                </span>
+              </div>
+              <IsoArt
+                kind={a.art}
+                className="mx-auto my-8 h-[120px] w-full max-w-[200px] transition-transform duration-700 ease-out-soft group-hover:scale-[1.04]"
+              />
+              <h3 className="text-[24px] tracking-[-0.025em]">{a.title}</h3>
+              <p className="label mt-1 text-[10.5px] text-fg-3">{a.blurb}</p>
+              <ul className="mt-5 flex flex-col text-[14.5px] text-fg-2">
+                {a.items.map((it) => (
+                  <li key={it} className="flex items-start gap-3 border-t border-hair py-2.5">
+                    <span className="mt-[9px] size-1.5 shrink-0 bg-fg transition-colors duration-300 group-hover:bg-accent" />
+                    {it}
+                  </li>
+                ))}
+              </ul>
+            </li>
+          ))}
+        </ul>
+        <div aria-hidden className="rule-x" />
+
+        <a
+          data-reveal
+          href={contactHref("Outro processo a automatizar")}
+          className="group/link mt-8 flex items-center justify-between gap-6 bg-tile px-5 py-5 transition-colors duration-300 hover:bg-fg hover:text-white sm:px-6"
+        >
+          <span className="text-[17px] tracking-[-0.01em]">
+            Outro processo?{" "}
+            <span className="text-fg-3 transition-colors group-hover/link:text-white/60">
+              Fale connosco.
+            </span>
+          </span>
+          <span className="label flex items-center gap-2 text-[11px]">
+            Contactar
+            <span className="transition-transform duration-300 ease-out-soft group-hover/link:translate-x-1">
               →
             </span>
-          </a>
-        </div>
-
-        <ul className="mt-14 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-          {AREAS.map((a, i) => {
-            const Icon = a.icon;
-            return (
-              <li key={a.title} data-reveal style={{ ["--i" as string]: i }}>
-                <div data-spot className="surface group flex h-full flex-col p-6">
-                  <span className="spot-glow" />
-                  <div className="flex items-start justify-between">
-                    <span className="grid size-11 place-items-center rounded-xl bg-accent/10 text-accent ring-1 ring-accent/25 transition-transform duration-300 ease-out-soft group-hover:-rotate-6 group-hover:scale-105">
-                      <Icon className="size-5" />
-                    </span>
-                    <span className="flex -space-x-1.5">
-                      {a.tools.map((t, j) => (
-                        <span
-                          key={t}
-                          title={brandLabel(t)}
-                          className="grid size-8 place-items-center rounded-full bg-white shadow-[0_0_0_2px_var(--color-base-2)] transition-transform duration-300 ease-out-soft group-hover:-translate-y-1"
-                          style={{ transitionDelay: `${j * 50}ms` }}
-                        >
-                          <BrandIcon brand={t} className="size-4" />
-                          <span className="sr-only">{brandLabel(t)}</span>
-                        </span>
-                      ))}
-                    </span>
-                  </div>
-                  <h3 className="mt-6 text-[21px] font-semibold tracking-[-0.02em] [font-stretch:106%]">
-                    {a.title}
-                  </h3>
-                  <p className="font-mono text-[11px] tracking-[0.06em] text-fg-3 uppercase">
-                    {a.blurb}
-                  </p>
-                  <ul className="mt-5 flex flex-col gap-2.5 border-t border-hair pt-5 text-[14.5px] text-fg-2">
-                    {a.items.map((it) => (
-                      <li key={it} className="flex items-start gap-2.5">
-                        <span className="mt-[3px] grid size-[17px] shrink-0 place-items-center rounded-full bg-accent/15 text-accent">
-                          <Check className="size-[11px]" strokeWidth={3} />
-                        </span>
-                        {it}
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              </li>
-            );
-          })}
-        </ul>
+          </span>
+        </a>
       </Container>
     </section>
   );

@@ -64,84 +64,86 @@ export function Header() {
   return (
     <>
       <div ref={sentinel} aria-hidden className="absolute top-0 h-6 w-full" />
-      <header className="sticky top-0 z-50 px-3 pt-3">
+      <header
+        className={cn(
+          "sticky top-0 z-50 transition-[background-color,backdrop-filter] duration-500 ease-out-soft",
+          (solid || open) && "glass",
+        )}
+      >
+        <Container className="flex h-16 items-center gap-6">
+          <a
+            href="#top"
+            aria-label={`${site.name}, início`}
+            className="mr-auto shrink-0 transition-opacity duration-200 hover:opacity-70"
+          >
+            <OrchestrLogo tone="on-light" className="h-[24px]" id="orx-header" />
+          </a>
+          <nav aria-label="Principal" className="hidden items-stretch gap-[2px] lg:flex">
+            {nav.map((n) => (
+              <a
+                key={n.href}
+                href={n.href}
+                aria-current={active === n.href ? "location" : undefined}
+                className={cn(
+                  "label grid h-9 place-items-center px-4 text-[11px] transition-colors duration-300",
+                  active === n.href
+                    ? "bg-fg text-white"
+                    : "bg-chip text-fg hover:bg-[rgb(120_142_170/0.5)]",
+                )}
+              >
+                {n.label}
+              </a>
+            ))}
+          </nav>
+          <LinkButton href={contactHref()} size="sm" className="hidden sm:inline-flex">
+            Agendar diagnóstico
+          </LinkButton>
+          <button
+            ref={toggle}
+            type="button"
+            aria-expanded={open}
+            aria-controls="menu"
+            aria-label="Menu"
+            onClick={() => setOpen((v) => !v)}
+            className="label flex h-9 items-center gap-2 bg-chip px-3 text-[11px] text-fg transition-colors hover:bg-fg hover:text-white lg:hidden"
+          >
+            <svg viewBox="0 0 16 16" className="size-3.5" aria-hidden>
+              <path
+                d={open ? "M3.5 3.5l9 9M12.5 3.5l-9 9" : "M2 5.5h12M2 10.5h12"}
+                stroke="currentColor"
+                strokeWidth="1.5"
+              />
+            </svg>
+            {open ? "Fechar" : "Menu"}
+          </button>
+        </Container>
         <div
+          aria-hidden
           className={cn(
-            "mx-auto max-w-[1180px] rounded-[20px] transition-[background-color,box-shadow,backdrop-filter] duration-500 ease-out-soft",
-            solid || open
-              ? "bg-[rgb(12_15_18/0.62)] shadow-[inset_0_0_0_1px_rgb(255_255_255/0.08),inset_0_1px_0_rgb(255_255_255/0.08),0_20px_40px_-24px_rgb(0_0_0/0.8)] backdrop-blur-xl backdrop-saturate-150"
-              : "bg-transparent",
+            "rule-x transition-opacity duration-500",
+            solid ? "opacity-100" : "opacity-0",
           )}
-        >
-          <Container className="flex h-[60px] items-center gap-6 px-4 sm:px-5">
-            <a
-              href="#top"
-              aria-label={`${site.name}, início`}
-              className="mr-auto shrink-0 transition-opacity duration-200 hover:opacity-80"
-            >
-              <OrchestrLogo className="h-[26px]" id="orx-header" />
-            </a>
-            <nav aria-label="Principal" className="hidden items-center gap-1 lg:flex">
-              {nav.map((n) => (
-                <a
-                  key={n.href}
-                  href={n.href}
-                  aria-current={active === n.href ? "location" : undefined}
-                  className={cn(
-                    "relative rounded-full px-3.5 py-1.5 text-[14px] transition-colors duration-200",
-                    active === n.href ? "text-fg" : "text-fg-2 hover:text-fg",
-                  )}
-                >
-                  {active === n.href && (
-                    <span
-                      aria-hidden
-                      className="absolute inset-0 rounded-full bg-white/[0.07] shadow-[inset_0_0_0_1px_rgb(255_255_255/0.08)]"
-                    />
-                  )}
-                  <span className="relative">{n.label}</span>
-                </a>
-              ))}
-            </nav>
-            <LinkButton href={contactHref()} size="sm" className="hidden sm:inline-flex" arrow>
-              Agendar diagnóstico
-            </LinkButton>
-            <button
-              ref={toggle}
-              type="button"
-              aria-expanded={open}
-              aria-controls="menu"
-              aria-label="Menu"
-              onClick={() => setOpen((v) => !v)}
-              className="grid size-10 place-items-center rounded-full text-fg shadow-[inset_0_0_0_1px_var(--color-hair-2)] transition-colors hover:bg-white/5 lg:hidden"
-            >
-              <svg viewBox="0 0 16 16" className="size-4" aria-hidden>
-                <path
-                  d={open ? "M3.5 3.5l9 9M12.5 3.5l-9 9" : "M2.5 5.5h11M2.5 10.5h11"}
-                  stroke="currentColor"
-                  strokeWidth="1.6"
-                  strokeLinecap="round"
-                />
-              </svg>
-            </button>
-          </Container>
+        />
 
-          <div id="menu" hidden={!open} className="border-t border-hair lg:hidden">
-            <nav aria-label="Menu" className="flex flex-col gap-1 p-3">
-              {nav.map((n) => (
+        <div id="menu" hidden={!open} className="lg:hidden">
+          <Container>
+            <nav aria-label="Menu" className="flex flex-col gap-[2px] py-4">
+              {nav.map((n, i) => (
                 <a
                   key={n.href}
                   href={n.href}
                   onClick={() => setOpen(false)}
-                  className="rounded-xl px-3 py-3 text-[17px] text-fg transition-colors hover:bg-white/5"
+                  className="flex items-center justify-between bg-tile px-4 py-4 text-[17px] text-fg transition-colors hover:bg-fg hover:text-white"
                 >
                   {n.label}
+                  <span className="font-mono text-[11px] text-fg-3">0{i + 1}</span>
                 </a>
               ))}
-              <LinkButton href={contactHref()} className="mt-2" arrow>
+              <LinkButton href={contactHref()} size="lg" className="mt-3 w-full">
                 {site.cta}
               </LinkButton>
             </nav>
-          </div>
+          </Container>
         </div>
       </header>
     </>

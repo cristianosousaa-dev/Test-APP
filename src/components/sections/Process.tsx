@@ -1,5 +1,9 @@
+"use client";
+
+import { useEffect, useRef, useState } from "react";
 import { Container } from "@/components/ui/Container";
 import { SectionHead } from "@/components/ui/SectionHead";
+import { cn } from "@/lib/cn";
 
 const STEPS = [
   {
@@ -24,9 +28,32 @@ const STEPS = [
   },
 ];
 
+/**
+ * Scroll-told methodology: on desktop the index stays pinned on the left while the phases
+ * pass on the right; the phase crossing the middle of the screen becomes active (one
+ * IntersectionObserver, no scroll handler). The rail fills with the scroll.
+ */
 export function Process() {
+  const list = useRef<HTMLOListElement>(null);
+  const [active, setActive] = useState(0);
+
+  useEffect(() => {
+    const items = list.current?.querySelectorAll<HTMLElement>("[data-step]");
+    if (!items) return;
+    const io = new IntersectionObserver(
+      (entries) => {
+        for (const e of entries) {
+          if (e.isIntersecting) setActive(Number((e.target as HTMLElement).dataset.step));
+        }
+      },
+      { rootMargin: "-45% 0px -50% 0px" },
+    );
+    for (const el of items) io.observe(el);
+    return () => io.disconnect();
+  }, []);
+
   return (
-    <section id="processo" aria-labelledby="processo-title" className="relative py-24 sm:py-32">
+    <section id="processo" aria-labelledby="processo-title" className="relative py-20 sm:py-28">
       <Container>
         <SectionHead
           index="07"
@@ -37,40 +64,69 @@ export function Process() {
           Quatro fases, com entregáveis definidos em cada etapa.
         </SectionHead>
 
-        <div className="relative mt-16">
-          {/* Rail that fills as the steps scroll through (desktop: horizontal, mobile: vertical). */}
-          <div
-            aria-hidden
-            className="absolute top-[27px] right-[12%] left-[12%] hidden h-px bg-hair-2 lg:block"
-          >
-            <span className="process-fill absolute inset-0 origin-left bg-gradient-to-r from-accent to-indigo" />
-          </div>
-          <div aria-hidden className="absolute top-2 bottom-2 left-[27px] w-px bg-hair-2 lg:hidden">
-            <span className="process-fill-y absolute inset-0 origin-top bg-gradient-to-b from-accent to-indigo" />
+        <div className="mt-14 grid grid-cols-1 gap-10 [timeline-scope:--process] lg:grid-cols-[minmax(0,1fr)_minmax(0,2fr)] lg:gap-8">
+          {/* Pinned index (desktop) */}
+          <div aria-hidden className="hidden lg:block">
+            <div className="sticky top-28 flex gap-5">
+              <div className="relative w-[2px] bg-hair">
+                <span className="process-fill absolute inset-0 origin-top bg-accent" />
+              </div>
+              <ol className="flex flex-col gap-1">
+                {STEPS.map((s, i) => (
+                  <li
+                    key={s.title}
+                    className={cn(
+                      "flex items-center gap-3 py-2 text-[15px] transition-colors duration-500",
+                      active === i ? "text-fg" : "text-fg-3",
+                    )}
+                  >
+                    <span
+                      className={cn(
+                        "grid size-6 place-items-center font-mono text-[10.5px] transition-colors duration-500",
+                        active === i
+                          ? "bg-fg text-white"
+                          : i < active
+                            ? "bg-accent text-white"
+                            : "shadow-[inset_0_0_0_1px_var(--color-hair-2)]",
+                      )}
+                    >
+                      0{i + 1}
+                    </span>
+                    {s.title}
+                  </li>
+                ))}
+              </ol>
+            </div>
           </div>
 
-          <ol className="relative grid gap-5 lg:grid-cols-4 lg:gap-4">
+          <ol ref={list} className="flex flex-col gap-[2px] [view-timeline:--process]">
             {STEPS.map((s, i) => (
               <li
                 key={s.title}
-                data-reveal
-                style={{ ["--i" as string]: i }}
-                className="grid grid-cols-[56px_minmax(0,1fr)] gap-4 lg:flex lg:flex-col lg:items-center lg:gap-0"
+                data-step={i}
+                className={cn(
+                  "relative grid gap-6 p-6 transition-[background-color,opacity] duration-700 sm:grid-cols-[120px_minmax(0,1fr)] sm:p-8 lg:min-h-[260px]",
+                  active === i ? "bg-tile-2" : "bg-tile lg:opacity-70",
+                )}
               >
-                <span className="relative z-10 grid size-14 place-items-center rounded-full bg-base font-mono text-[15px] font-medium text-accent shadow-[inset_0_0_0_1px_rgb(61_224_160/0.35),0_0_0_6px_var(--color-base)]">
+                <span
+                  aria-hidden
+                  className={cn(
+                    "absolute top-0 left-0 h-full w-[2px] origin-top bg-accent transition-transform duration-700 ease-out-soft",
+                    active === i ? "scale-y-100" : "scale-y-0",
+                  )}
+                />
+                <span className="text-[56px] leading-none tracking-[-0.05em] text-fg-3 tabular-nums sm:text-[72px]">
                   0{i + 1}
                 </span>
-                <div data-spot className="surface group flex h-full flex-col p-6 lg:mt-6 lg:w-full">
-                  <span className="spot-glow" />
-                  <h3 className="text-[19px] font-semibold tracking-[-0.02em] [font-stretch:106%]">
-                    {s.title}
-                  </h3>
-                  <p className="mt-2 text-[15px] leading-[1.6] text-fg-2">{s.text}</p>
-                  <p className="mt-auto border-t border-hair pt-4 text-[14px]">
-                    <span className="block font-mono text-[10.5px] tracking-[0.08em] text-fg-3 uppercase">
+                <div className="flex flex-col">
+                  <h3 className="text-[26px] tracking-[-0.025em]">{s.title}</h3>
+                  <p className="mt-2 max-w-[34rem] text-[16px] leading-[1.6] text-fg-2">{s.text}</p>
+                  <p className="mt-auto flex flex-wrap items-center gap-3 pt-6">
+                    <span className="label bg-fg px-2.5 py-1.5 text-[10px] text-white">
                       Entregável
                     </span>
-                    <span className="mt-1 block font-medium text-fg">{s.gets}</span>
+                    <span className="text-[15px]">{s.gets}</span>
                   </p>
                 </div>
               </li>

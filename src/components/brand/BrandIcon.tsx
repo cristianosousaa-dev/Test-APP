@@ -59,18 +59,18 @@ export function ToolChip({ tool, className }: { tool: string; className?: string
   return (
     <span
       className={cn(
-        "inline-flex h-9 items-center gap-2 rounded-full bg-white/[0.05] pr-3.5 pl-1.5 text-[13.5px] font-medium text-fg shadow-[inset_0_0_0_1px_var(--color-hair-2)]",
+        "inline-flex h-8 items-center gap-2 bg-white/60 pr-3 pl-1 text-[13px] text-fg",
         className,
       )}
     >
       {brand ? (
-        <span className="grid size-6 place-items-center rounded-full bg-white">
+        <span className="grid size-6 place-items-center bg-white">
           <BrandIcon brand={brand} className="size-[15px]" />
         </span>
       ) : (
         <span
           aria-hidden
-          className="grid size-6 place-items-center rounded-full bg-white/10 font-mono text-[9.5px] text-fg-2"
+          className="grid size-6 place-items-center bg-fg font-mono text-[9px] text-white"
         >
           {label.slice(0, 2).toUpperCase()}
         </span>

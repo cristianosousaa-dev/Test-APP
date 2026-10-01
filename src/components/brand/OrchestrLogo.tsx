@@ -22,9 +22,9 @@ function Gradient({ id }: { id: string }) {
   return (
     <defs>
       <linearGradient id={id} x1="4" y1="6" x2="30" y2="26" gradientUnits="userSpaceOnUse">
-        <stop offset="0" stopColor="#B6F7DD" />
-        <stop offset="0.55" stopColor="#3DE0A0" />
-        <stop offset="1" stopColor="#7C8BFF" />
+        <stop offset="0" stopColor="#FFFFFF" />
+        <stop offset="0.55" stopColor="#C9D8F2" />
+        <stop offset="1" stopColor="#7C9CFF" />
       </linearGradient>
     </defs>
   );
@@ -46,7 +46,7 @@ export function OrchestrMark({
   return (
     <svg viewBox="0 0 32 32" className={cn("size-8 shrink-0", className)} aria-hidden>
       {dark && <Gradient id={id} />}
-      <SymbolShapes stroke={dark ? `url(#${id})` : "#07090B"} dot={dark ? "#3DE0A0" : "#13935F"} />
+      <SymbolShapes stroke={dark ? `url(#${id})` : "#0A0C10"} dot={dark ? "#5C86FF" : "#2B5BFF"} />
     </svg>
   );
 }
@@ -74,10 +74,10 @@ export function OrchestrLogo({
       aria-label={title}
     >
       {dark && <Gradient id={id} />}
-      <SymbolShapes stroke={dark ? `url(#${id})` : "#07090B"} dot={dark ? "#3DE0A0" : "#13935F"} />
+      <SymbolShapes stroke={dark ? `url(#${id})` : "#0A0C10"} dot={dark ? "#5C86FF" : "#2B5BFF"} />
       <path
         transform={`translate(${WORDMARK.x} ${WORDMARK.baseline})`}
-        fill={dark ? "#F2F5F4" : "#07090B"}
+        fill={dark ? "#FFFFFF" : "#0A0C10"}
         d={WORDMARK.d}
       />
     </svg>

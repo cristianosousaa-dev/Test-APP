@@ -34,60 +34,62 @@ const FAQS = [
 
 export function Faq() {
   return (
-    <section id="faq" aria-labelledby="faq-title" className="relative py-24 sm:py-32">
-      <Container className="grid gap-12 lg:grid-cols-[minmax(0,0.8fr)_minmax(0,1.2fr)] lg:gap-16">
-        <div className="lg:sticky lg:top-28 lg:self-start">
-          <SectionHead
-            index="08"
-            kicker="Perguntas frequentes"
-            id="faq-title"
-            title="Esclarecimentos antes de avançar."
-          >
-            Respostas às questões mais frequentes sobre o nosso serviço.
-          </SectionHead>
-          <div data-reveal className="surface mt-9 max-w-[24rem] p-6">
-            <span className="mb-4 flex -space-x-2">
-              {(["whatsapp", "gmail", "outlook"] as const).map((b) => (
-                <span
-                  key={b}
-                  className="grid size-9 place-items-center rounded-full bg-white shadow-[0_0_0_2px_var(--color-base-2)]"
-                >
-                  <BrandIcon brand={b} className="size-[18px]" />
-                </span>
-              ))}
-            </span>
-            <p className="text-[16px] font-semibold">Tem outra questão?</p>
-            <p className="mt-1 text-[14.5px] text-fg-2">
-              Envie-nos a sua questão. Respondemos por email.
-            </p>
-            <LinkButton
-              href={contactHref("Questão")}
-              variant="glass"
-              size="sm"
-              className="mt-5"
-              arrow
-            >
-              Enviar questão
-            </LinkButton>
+    <section
+      id="faq"
+      aria-labelledby="faq-title"
+      className="relative overflow-x-clip py-20 sm:py-28"
+    >
+      <Container>
+        <SectionHead
+          index="08"
+          kicker="Perguntas frequentes"
+          id="faq-title"
+          title="Esclarecimentos antes de avançar."
+        >
+          Respostas às questões mais frequentes sobre o nosso serviço.
+        </SectionHead>
+
+        <div className="mt-14 grid grid-cols-1 gap-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,2fr)] lg:gap-8">
+          <div className="lg:sticky lg:top-28 lg:self-start">
+            <div data-reveal="left" data-frame className="tile p-6">
+              <span className="flex gap-[2px]">
+                {(["whatsapp", "gmail", "outlook"] as const).map((b) => (
+                  <span key={b} className="grid size-9 place-items-center bg-white">
+                    <BrandIcon brand={b} className="size-[18px]" />
+                  </span>
+                ))}
+              </span>
+              <p className="mt-5 text-[19px] tracking-[-0.015em]">Tem outra questão?</p>
+              <p className="mt-1 text-[14.5px] text-fg-2">
+                Envie-nos a sua questão. Respondemos por email.
+              </p>
+              <LinkButton href={contactHref("Questão")} variant="mist" size="sm" className="mt-5">
+                Enviar questão
+              </LinkButton>
+            </div>
           </div>
-        </div>
-        <div data-reveal className="flex flex-col gap-2.5">
-          {FAQS.map((f, i) => (
-            <details
-              key={f.q}
-              name="faq"
-              open={i === 0}
-              className="faq-item surface group transition-[box-shadow,background-color] duration-300 open:bg-white/[0.045] open:shadow-[inset_0_0_0_1px_rgb(61_224_160/0.35)] hover:bg-white/[0.04]"
-            >
-              <summary className="flex list-none items-center justify-between gap-6 rounded-[24px] px-6 py-5 text-[17px] font-medium tracking-[-0.01em] [&::-webkit-details-marker]:hidden">
-                {f.q}
-                <span className="grid size-8 shrink-0 place-items-center rounded-full bg-white/[0.06] text-fg-2 shadow-[inset_0_0_0_1px_var(--color-hair-2)] transition-[transform,background-color,color] duration-300 ease-out-soft group-open:rotate-45 group-open:bg-accent group-open:text-accent-ink group-hover:text-fg">
-                  <Plus className="size-4" />
-                </span>
-              </summary>
-              <p className="max-w-[40rem] px-6 pb-6 text-[16px] leading-[1.65] text-fg-2">{f.a}</p>
-            </details>
-          ))}
+
+          <div data-reveal className="flex flex-col">
+            {FAQS.map((f, i) => (
+              <details key={f.q} name="faq" open={i === 0} className="faq-item group relative">
+                <span aria-hidden className="rule-x absolute inset-x-0 top-0" />
+                <summary className="flex list-none items-center gap-5 py-6 text-[19px] tracking-[-0.015em] transition-colors duration-300 hover:text-accent [&::-webkit-details-marker]:hidden">
+                  <span className="font-mono text-[11px] text-fg-3">0{i + 1}</span>
+                  <span className="flex-1">{f.q}</span>
+                  <span className="grid size-9 shrink-0 place-items-center bg-chip text-fg transition-[background-color,color] duration-500 group-open:bg-fg group-open:text-white">
+                    <Plus
+                      className="size-4 transition-transform duration-500 ease-out-soft group-open:rotate-45"
+                      strokeWidth={1.6}
+                    />
+                  </span>
+                </summary>
+                <p className="max-w-[44rem] pb-7 pl-[46px] text-[16px] leading-[1.65] text-fg-2">
+                  {f.a}
+                </p>
+              </details>
+            ))}
+            <div aria-hidden className="rule-x" />
+          </div>
         </div>
       </Container>
     </section>

@@ -32,8 +32,8 @@ Three arcs around a centre point: the sections of an orchestra around the conduc
 tools around the business. The three gaps suggest motion (a cycle that runs by itself).
 - Grid: 32 × 32. Arcs: radius 11, centred at (16,16), spanning [-78°, 6°], [42°, 126°] and
   [162°, 246°], stroke 3.4 with round caps. Centre dot: radius 3.4.
-- Colour on dark: gradient `#B6F7DD → #3DE0A0 → #7C8BFF` (mint to indigo), dot `#3DE0A0`.
-- Colour on light: ink `#07090B`, dot `#13935F`.
+- Colour on dark (navy): gradient `#FFFFFF → #C9D8F2 → #7C9CFF`, dot `#5C86FF`.
+- Colour on light (primary use): ink `#0A0C10`, dot signal blue `#2B5BFF`.
 - Legible at 16 px (favicon) because it uses only three thick strokes and a dot.
 
 ### Wordmark
@@ -48,12 +48,12 @@ the centre dot × 2. Minimum size: 20 px high (lockup), 16 px (symbol alone).
 ### Files (`public/brand/`)
 | File | Use |
 |---|---|
-| `orchestr-logo-on-dark.svg` | primary lockup, dark backgrounds |
-| `orchestr-logo-on-light.svg` | lockup, light backgrounds |
+| `orchestr-logo-on-light.svg` | primary lockup, light backgrounds |
+| `orchestr-logo-on-dark.svg` | lockup, navy/dark backgrounds |
 | `orchestr-symbol.svg` | symbol only, gradient (dark backgrounds) |
 | `orchestr-symbol-mono-dark.svg` | single colour, for dark backgrounds |
 | `orchestr-symbol-mono-light.svg` | single colour, for light backgrounds |
-| `orchestr-app-icon.svg` | app icon / avatar (dark tile) |
+| `orchestr-app-icon.svg` | app icon / avatar (navy tile `#06122A`) |
 | `src/app/icon.svg` | favicon |
 
 In React: `OrchestrLogo` and `OrchestrMark` (`src/components/brand/OrchestrLogo.tsx`). Each
@@ -67,18 +67,24 @@ npx -y -p fontkit@2 node scripts/build-brand-logo.mjs path/to/MonaSans.ttf
 
 ### Don'ts
 - Don't recolour the gradient, rotate the symbol or change the gap between the arcs.
-- Don't put the gradient symbol on light backgrounds: use the mono or light version.
+- Don't put the gradient symbol on light backgrounds: use the ink version.
 - Don't add effects (shadow, glow, outline) to the logo.
 
-## Graphic language
-- **Dark, quiet base** with **one luminous accent** (signal mint). Indigo appears only as
-  atmosphere (gradients and light), never as a second action colour.
-- **Liquid glass where something sits on top of something else** (header, product window,
-  floating cards, contact card). Flat cards use `surface`, which has no blur.
-- **The product as an illustration**: light app windows (WhatsApp, calendar, invoices)
-  inside the dark page, so the "with automation" result is the brightest thing on screen.
-- **Mono labels** (Martian Mono, uppercase, wide tracking) for kickers, metadata and state.
-- **Official tool logos** (open libraries, see `docs/design/DIRECTION.md`). Portuguese tools
-  without an open logo are shown by name.
+## Graphic language ("Blueprint")
+- **Atmospheric light page**: mist blue at the top settling into warm paper. No dark mode.
+- **A visible construction grid**: dotted rules between columns and sections, drawn in as
+  the page scrolls, with small signal-blue squares marking corners.
+- **Square everything**: tiles, buttons, badges and tabs have no radius. Only the product
+  mockups (app UIs) keep their own small radii.
+- **One signal colour**: blue `#2B5BFF` for action and state. Ink black for primary
+  buttons and index badges.
+- **Navy data panels** (the hero board, the comparison column, the closing panel), lit from
+  below, carry the "product" and the most important moments.
+- **Isometric line art** (dashed strokes with one solid blue part) as the illustration
+  language. It is generated in code (`IsoArt`).
+- **Type**: Mona Sans at regular weight for large headlines (tight tracking), uppercase
+  semibold labels for interface, Martian Mono for numbers and metadata.
+- **Official tool logos** on white squares. Portuguese tools without an open logo are
+  shown by name.
 
 The complete design system is in [`DESIGN-SYSTEM.md`](./DESIGN-SYSTEM.md).

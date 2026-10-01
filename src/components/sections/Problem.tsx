@@ -26,74 +26,102 @@ const PAINS = [
 ];
 
 /* What piles up when nobody automates it: a visual, not a statistic. */
-const PILE = [
+const ROW_A = [
   "Têm vaga amanhã?",
   "Pode enviar o orçamento?",
-  "Qual é o preço?",
+  "Qual é o preço da revisão?",
   "Fatura FT 1182 em atraso",
   "Posso mudar para as 17h?",
   "Já recebeu o pagamento?",
 ];
+const ROW_B = [
+  "Pedido de orçamento · site",
+  "Fatura de fornecedor por lançar",
+  "Confirmar marcação de sexta",
+  "Lembrete de pagamento",
+  "Novo contacto do portal",
+  "Responder a avaliação",
+];
+
+function Chip({ text }: { text: string }) {
+  return (
+    <li className="tile flex shrink-0 items-center gap-3 px-4 py-3 text-[14.5px] text-fg-2">
+      <span className="size-1.5 bg-amber" />
+      {text}
+      <span className="label ml-3 text-[9.5px] text-fg-3">Pendente</span>
+    </li>
+  );
+}
 
 export function Problem() {
   return (
-    <section aria-labelledby="problema-title" className="relative overflow-x-clip py-24 sm:py-32">
-      <Container className="grid items-center gap-14 lg:grid-cols-[minmax(0,1fr)_minmax(0,0.9fr)] lg:gap-20">
-        <div>
-          <SectionHead
-            index="01"
-            kicker="O desafio"
-            id="problema-title"
-            title="Tarefas administrativas consomem o tempo da sua equipa."
-          >
-            Pedidos repetidos, marcações, orçamentos e cobranças ocupam diariamente horas que
-            deveriam ser dedicadas aos clientes e ao crescimento do negócio.
-          </SectionHead>
-          <ul className="mt-10 grid gap-3 sm:grid-cols-2">
-            {PAINS.map((p, i) => {
-              const Icon = p.icon;
-              return (
-                <li key={p.title} data-reveal style={{ ["--i" as string]: i }}>
-                  <div className="surface h-full p-5">
-                    <Icon className="size-5 text-fg-3" strokeWidth={1.8} />
-                    <h3 className="mt-4 text-[16px] font-semibold tracking-[-0.01em]">{p.title}</h3>
-                    <p className="mt-1.5 text-[14.5px] leading-[1.6] text-fg-2">{p.text}</p>
-                  </div>
-                </li>
-              );
-            })}
-          </ul>
-        </div>
+    <section aria-labelledby="problema-title" className="relative overflow-x-clip py-20 sm:py-28">
+      <Container>
+        <SectionHead
+          index="01"
+          kicker="O desafio"
+          id="problema-title"
+          title="Tarefas administrativas consomem o tempo da sua equipa."
+        >
+          Pedidos repetidos, marcações, orçamentos e cobranças ocupam diariamente horas que deveriam
+          ser dedicadas aos clientes e ao crescimento do negócio.
+        </SectionHead>
 
-        {/* The pile: unanswered requests stacking up, drifting slightly with the scroll. */}
-        <div aria-hidden className="relative mx-auto h-[420px] w-full max-w-[440px]">
-          <div className="absolute inset-8 rounded-full bg-[radial-gradient(closest-side,rgb(242_179_61/0.12),transparent)]" />
-          {PILE.map((t, i) => (
-            <div
-              key={t}
-              data-parallax
-              className="absolute inset-x-0 flex justify-center"
-              style={{
-                top: `${4 + i * 15.5}%`,
-                ["--depth" as string]: `${10 + i * 5}px`,
-              }}
-            >
-              <div
-                className="surface flex w-[min(300px,88%)] items-center gap-3 rounded-[16px] px-4 py-3 text-[14px]"
-                style={{
-                  transform: `translateX(${(i % 2 ? 1 : -1) * (8 + i * 2)}px) rotate(${(i % 2 ? 1 : -1) * (1 + i * 0.3)}deg)`,
-                }}
+        <ul className="mt-14 grid sm:grid-cols-2 lg:grid-cols-4">
+          {PAINS.map((p, i) => {
+            const Icon = p.icon;
+            return (
+              <li
+                key={p.title}
+                data-reveal
+                style={{ ["--i" as string]: i }}
+                className="group relative py-6 sm:px-6 sm:first:pl-0 lg:py-2"
               >
-                <span className="size-2 shrink-0 rounded-full bg-amber" />
-                <span className="truncate text-fg-2">{t}</span>
-                <span className="ml-auto shrink-0 font-mono text-[10px] whitespace-nowrap text-fg-3">
-                  pendente
-                </span>
-              </div>
-            </div>
-          ))}
-        </div>
+                {i > 0 && (
+                  <span
+                    aria-hidden
+                    className="rule-y absolute top-0 bottom-0 left-0 hidden sm:block"
+                  />
+                )}
+                <span aria-hidden className="rule-x absolute inset-x-0 top-0 sm:hidden" />
+                <div className="flex items-center justify-between">
+                  <span className="font-mono text-[11px] text-fg-3">0{i + 1}</span>
+                  <Icon
+                    className="size-5 text-fg-3 transition-[color,transform] duration-500 ease-out-soft group-hover:-rotate-6 group-hover:text-accent"
+                    strokeWidth={1.4}
+                  />
+                </div>
+                <h3 className="mt-10 text-[19px] tracking-[-0.015em]">{p.title}</h3>
+                <p className="mt-2 text-[14.5px] leading-[1.6] text-fg-2">{p.text}</p>
+              </li>
+            );
+          })}
+        </ul>
       </Container>
+
+      {/* The backlog: two rows drifting in opposite directions while the section scrolls. */}
+      <div aria-hidden className="mt-16 flex flex-col gap-[2px]">
+        <ul
+          data-drift
+          style={{ ["--from" as string]: "4%", ["--to" as string]: "-22%" }}
+          className="flex w-max gap-[2px]"
+        >
+          {[...ROW_A, ...ROW_A].map((t, i) => (
+            // biome-ignore lint/suspicious/noArrayIndexKey: duplicated decorative row.
+            <Chip key={i} text={t} />
+          ))}
+        </ul>
+        <ul
+          data-drift
+          style={{ ["--from" as string]: "-26%", ["--to" as string]: "0%" }}
+          className="flex w-max gap-[2px]"
+        >
+          {[...ROW_B, ...ROW_B].map((t, i) => (
+            // biome-ignore lint/suspicious/noArrayIndexKey: duplicated decorative row.
+            <Chip key={i} text={t} />
+          ))}
+        </ul>
+      </div>
     </section>
   );
 }

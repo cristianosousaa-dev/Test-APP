@@ -4,7 +4,7 @@ import type { ReactNode } from "react";
 import { site } from "@/lib/site";
 import "./globals.css";
 
-/* Mona Sans: one variable family. Expanded width for display, normal width for reading. */
+/* Mona Sans: one variable family. Light display weights, regular for reading, semibold labels. */
 const mona = Mona_Sans({
   subsets: ["latin", "latin-ext"],
   axes: ["wdth"],
@@ -33,8 +33,8 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: "#07090b",
-  colorScheme: "dark",
+  themeColor: "#c3d3e6",
+  colorScheme: "light",
 };
 
 export default function RootLayout({ children }: { children: ReactNode }) {
@@ -47,7 +47,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
       <body className="min-h-dvh">
         <a
           href="#conteudo"
-          className="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-[60] focus:rounded-full focus:bg-accent focus:px-4 focus:py-2 focus:text-[14px] focus:text-accent-ink"
+          className="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-[60] focus:bg-accent focus:px-4 focus:py-2 focus:text-[14px] focus:text-white"
         >
           Saltar para o conteúdo
         </a>

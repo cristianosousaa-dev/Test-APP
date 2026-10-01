@@ -45,7 +45,7 @@ const SYMBOL = {
 const symbol = (stroke, dot) =>
   `<g fill="none" stroke="${stroke}" stroke-width="${SYMBOL.stroke}" stroke-linecap="round">${SYMBOL.arcs.map((d) => `<path d="${d}"/>`).join("")}</g><circle cx="${SYMBOL.dot.cx}" cy="${SYMBOL.dot.cy}" r="${SYMBOL.dot.r}" fill="${dot}"/>`;
 
-const GRAD = `<defs><linearGradient id="or-g" x1="4" y1="6" x2="30" y2="26" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#B6F7DD"/><stop offset="0.55" stop-color="#3DE0A0"/><stop offset="1" stop-color="#7C8BFF"/></linearGradient></defs>`;
+const GRAD = `<defs><linearGradient id="or-g" x1="4" y1="6" x2="30" y2="26" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#FFFFFF"/><stop offset="0.55" stop-color="#C9D8F2"/><stop offset="1" stop-color="#7C9CFF"/></linearGradient></defs>`;
 
 /* Lockup geometry: symbol 32 high; wordmark baseline aligned so its x-height centres on the bar. */
 const baseline = 16 + xHeight / 2;
@@ -57,25 +57,25 @@ const lockup = (symStroke, symDot, wordFill, defs = "") =>
   `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${lockW} 32" role="img" aria-label="Orchestr">${defs}${symbol(symStroke, symDot)}<path transform="translate(${wordX.toFixed(2)} ${baseline.toFixed(2)})" fill="${wordFill}" d="${wordD}"/></svg>\n`;
 
 const tile = (size = 32) =>
-  `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="${size}" height="${size}" role="img" aria-label="Orchestr">${GRAD}<rect width="32" height="32" rx="8.5" fill="#0B0F0E"/><rect x="0.5" y="0.5" width="31" height="31" rx="8" fill="none" stroke="#FFFFFF" stroke-opacity="0.12"/><g transform="translate(3.2 3.2) scale(0.8)">${symbol("url(#or-g)", "#3DE0A0")}</g></svg>\n`;
+  `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="${size}" height="${size}" role="img" aria-label="Orchestr">${GRAD}<rect width="32" height="32" rx="8.5" fill="#06122A"/><rect x="0.5" y="0.5" width="31" height="31" rx="8" fill="none" stroke="#FFFFFF" stroke-opacity="0.12"/><g transform="translate(3.2 3.2) scale(0.8)">${symbol("url(#or-g)", "#5C86FF")}</g></svg>\n`;
 
 const out = new URL("public/brand", root).pathname;
 mkdirSync(out, { recursive: true });
 writeFileSync(
   `${out}/orchestr-symbol.svg`,
-  `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" role="img" aria-label="Orchestr">${GRAD}${symbol("url(#or-g)", "#3DE0A0")}</svg>\n`,
+  `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" role="img" aria-label="Orchestr">${GRAD}${symbol("url(#or-g)", "#5C86FF")}</svg>\n`,
 );
 writeFileSync(
   `${out}/orchestr-symbol-mono-dark.svg`,
-  `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" role="img" aria-label="Orchestr">${symbol("#07090B", "#07090B")}</svg>\n`,
+  `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" role="img" aria-label="Orchestr">${symbol("#0A0C10", "#0A0C10")}</svg>\n`,
 );
 writeFileSync(
   `${out}/orchestr-symbol-mono-light.svg`,
   `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" role="img" aria-label="Orchestr">${symbol("#FFFFFF", "#FFFFFF")}</svg>\n`,
 );
 writeFileSync(`${out}/orchestr-app-icon.svg`, tile(512));
-writeFileSync(`${out}/orchestr-logo-on-dark.svg`, lockup("url(#or-g)", "#3DE0A0", "#F2F5F4", GRAD));
-writeFileSync(`${out}/orchestr-logo-on-light.svg`, lockup("#07090B", "#13935F", "#07090B"));
+writeFileSync(`${out}/orchestr-logo-on-dark.svg`, lockup("url(#or-g)", "#5C86FF", "#FFFFFF", GRAD));
+writeFileSync(`${out}/orchestr-logo-on-light.svg`, lockup("#0A0C10", "#2B5BFF", "#0A0C10"));
 writeFileSync(new URL("src/app/icon.svg", root), tile(32));
 
 /* Path data for the site component (renders identically without depending on the font). */

@@ -25,7 +25,8 @@ export function PageEffects() {
     const loops = new IntersectionObserver((entries) => {
       for (const e of entries) e.target.classList.toggle("is-playing", e.isIntersecting);
     });
-    for (const el of document.querySelectorAll("[data-reveal]")) reveal.observe(el);
+    for (const el of document.querySelectorAll("[data-reveal], [data-pop], [data-draw]"))
+      reveal.observe(el);
     for (const el of document.querySelectorAll("[data-loop]")) loops.observe(el);
 
     let frame = 0;

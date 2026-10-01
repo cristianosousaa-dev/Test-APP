@@ -2,24 +2,42 @@ import type { ReactNode } from "react";
 import { cn } from "@/lib/cn";
 
 const sizes = {
-  sm: "h-9 px-4 text-[14px]",
-  md: "h-11 px-5 text-[15px]",
-  lg: "h-13 px-7 text-[16px]",
+  sm: "h-9 text-[11px]",
+  md: "h-11 text-[11.5px]",
+  lg: "h-13 text-[12px]",
 } as const;
+const arrowSizes = { sm: "w-9", md: "w-11", lg: "w-13" } as const;
 
-/** Link styled as a button. Variants map to the .btn-* classes in globals.css. */
+function Arrow() {
+  return (
+    <svg viewBox="0 0 16 16" fill="none" aria-hidden className="size-4">
+      <path
+        d="M2.5 8h10.5M9 4l4 4-4 4"
+        stroke="currentColor"
+        strokeWidth="1.4"
+        strokeLinecap="square"
+      />
+    </svg>
+  );
+}
+
+/**
+ * Link styled as a square tile button: a label cell and a separate arrow cell.
+ * Hover: the label fills from the left and the arrow is swapped. Variants map to .btn-* in
+ * globals.css.
+ */
 export function LinkButton({
   href,
   children,
-  variant = "accent",
+  variant = "ink",
   size = "md",
   className,
-  arrow = false,
+  arrow = true,
   ariaLabel,
 }: {
   href: string;
   children: ReactNode;
-  variant?: "accent" | "glass" | "light";
+  variant?: "ink" | "mist" | "glass" | "light";
   size?: keyof typeof sizes;
   className?: string;
   arrow?: boolean;
@@ -32,24 +50,14 @@ export function LinkButton({
       href={href}
       aria-label={ariaLabel}
       {...(external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
-      className={cn("btn group", `btn-${variant}`, sizes[size], className)}
+      className={cn("btn label", `btn-${variant}`, sizes[size], className)}
     >
-      {children}
+      <span className="btn-label flex-1">{children}</span>
       {arrow && (
-        <svg
-          viewBox="0 0 16 16"
-          fill="none"
-          aria-hidden
-          className="size-4 transition-transform duration-300 ease-out-soft group-hover:translate-x-0.5"
-        >
-          <path
-            d="M3 8h9.5M8.5 4l4 4-4 4"
-            stroke="currentColor"
-            strokeWidth="1.7"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          />
-        </svg>
+        <span className={cn("btn-arrow", arrowSizes[size])}>
+          <Arrow />
+          <Arrow />
+        </span>
       )}
     </a>
   );

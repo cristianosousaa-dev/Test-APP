@@ -20,7 +20,7 @@ export function Proof() {
         <ul className="mt-10 grid gap-4 md:grid-cols-3">
           {TESTIMONIALS.map((t, i) => (
             <li key={t.name} data-reveal style={{ ["--i" as string]: i }}>
-              <figure className="surface h-full p-7">
+              <figure className="tile h-full p-7">
                 <blockquote className="text-[17px] leading-[1.6] text-fg">“{t.quote}”</blockquote>
                 <figcaption className="mt-6 text-[14px] text-fg-2">
                   <span className="block font-medium text-fg">{t.name}</span>

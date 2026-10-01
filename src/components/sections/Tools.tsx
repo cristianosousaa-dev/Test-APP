@@ -27,34 +27,39 @@ export function Tools() {
     ...LOCAL.map((l) => ({ key: l, brand: null as Brand | null, label: l })),
   ];
   return (
-    <section data-loop aria-labelledby="tools-title" className="relative py-14">
+    <section data-loop aria-labelledby="tools-title" className="relative overflow-x-clip pb-20">
       <Container>
-        <p id="tools-title" data-reveal className="kicker text-center !text-fg-3">
-          Integra-se com os sistemas que a sua empresa já utiliza
-        </p>
-        <div className="group relative mt-8 overflow-hidden [mask-image:linear-gradient(90deg,transparent,#000_12%,#000_88%,transparent)]">
-          <ul className="flex w-max animate-marquee items-center group-hover:[animation-play-state:paused] motion-reduce:w-auto motion-reduce:flex-wrap motion-reduce:justify-center motion-reduce:gap-y-4">
-            {[0, 1].map((copy) =>
-              items.map((it) => (
-                <li
-                  key={`${copy}-${it.key}`}
-                  aria-hidden={copy === 1 || undefined}
-                  className="mr-10 flex shrink-0 items-center gap-3 text-[16px] font-medium tracking-[-0.01em] text-fg-2 opacity-70 grayscale transition-[filter,opacity,color] duration-300 hover:text-fg hover:opacity-100 hover:grayscale-0 motion-reduce:[&[aria-hidden]]:hidden"
-                >
-                  {it.brand ? (
-                    <span className="grid size-8 place-items-center rounded-[9px] bg-white">
-                      <BrandIcon brand={it.brand} className="size-[18px]" />
-                    </span>
-                  ) : (
-                    <span className="grid size-8 place-items-center rounded-[9px] bg-white/[0.06] font-mono text-[10px] text-fg-2 shadow-[inset_0_0_0_1px_var(--color-hair-2)]">
-                      {it.label.slice(0, 2).toUpperCase()}
-                    </span>
-                  )}
-                  {it.label}
-                </li>
-              )),
-            )}
-          </ul>
+        <div className="grid grid-cols-1 items-center gap-6 lg:grid-cols-[minmax(0,1fr)_minmax(0,2fr)] lg:gap-8">
+          <p id="tools-title" data-reveal="left" className="label max-w-[18rem] text-fg-2">
+            Integra-se com os sistemas que a sua empresa já utiliza
+          </p>
+          <div className="group relative overflow-hidden [mask-image:linear-gradient(90deg,transparent,#000_8%,#000_92%,transparent)]">
+            <div aria-hidden className="rule-x absolute inset-x-0 top-0" />
+            <div aria-hidden className="rule-x absolute inset-x-0 bottom-0" />
+            <ul className="flex w-max animate-marquee items-stretch group-hover:[animation-play-state:paused] motion-reduce:w-auto motion-reduce:flex-wrap">
+              {[0, 1].map((copy) =>
+                items.map((it) => (
+                  <li
+                    key={`${copy}-${it.key}`}
+                    aria-hidden={copy === 1 || undefined}
+                    className="relative flex h-16 shrink-0 items-center gap-3 px-6 text-[14.5px] text-fg-2 grayscale transition-[filter,color,background-color] duration-300 hover:bg-tile-2 hover:text-fg hover:grayscale-0 motion-reduce:[&[aria-hidden]]:hidden"
+                  >
+                    <span aria-hidden className="rule-y absolute top-3 right-0 bottom-3" />
+                    {it.brand ? (
+                      <span className="grid size-8 place-items-center bg-white">
+                        <BrandIcon brand={it.brand} className="size-[18px]" />
+                      </span>
+                    ) : (
+                      <span className="grid size-8 place-items-center bg-fg font-mono text-[9.5px] text-white">
+                        {it.label.slice(0, 2).toUpperCase()}
+                      </span>
+                    )}
+                    {it.label}
+                  </li>
+                )),
+              )}
+            </ul>
+          </div>
         </div>
       </Container>
     </section>

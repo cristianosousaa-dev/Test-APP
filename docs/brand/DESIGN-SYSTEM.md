@@ -1,161 +1,151 @@
-# Orchestr design system
+# Orchestr design system — "Blueprint"
 
-Source of truth: `src/app/globals.css` (`@theme` tokens + `@layer components`). This
-document explains the rules. If the two disagree, the CSS is right and this file must be
-updated.
+Source of truth: `src/app/globals.css` (`@theme` tokens, `@layer components`, motion
+catalogue). This file explains the rules. If the two disagree, the CSS is right and this
+file must be updated.
+
+Visual reference: editorial institutional sites (a light misty background, a visible
+dotted grid, square tiles, navy data panels, isometric line art).
 
 ## 1. Principles
-1. **One accent, used for action.** Mint marks what you can do (CTA) and what is done
-   (ticks). Anything else is neutral.
-2. **Depth only where there is something behind.** Glass for layers, flat surfaces for cards.
-3. **Every effect must be cheap.** Animate `transform` and `opacity` only, use no scroll
-   handlers, run no loops off-screen, and respect `prefers-reduced-motion`.
-4. **Show, don't claim.** Illustrations show the work happening. They don't use invented
-   metrics, clients or testimonials.
+1. **Structure is visible.** A dotted construction grid frames the page. Sections open on
+   a rule with an index badge.
+2. **Square, quiet, precise.** No radii on the interface, few colours, light headline
+   weight, uppercase labels.
+3. **One signal colour.** Blue marks action and state. Ink black carries the primary
+   button and the badges.
+4. **Data panels are navy.** The product and the key moments sit on deep navy, lit from
+   below.
+5. **Every effect is cheap.** Motion uses `transform`, `opacity` and `clip-path` only. It is
+   scroll-driven where supported, uses no scroll handlers, pauses loops off-screen and
+   respects reduced motion.
+6. **Show, don't claim.** Illustrations are labelled illustrative. There are no invented
+   clients, metrics or testimonials.
 
 ## 2. Colour
-### Page (dark)
 | Token | Value | Use |
 |---|---|---|
-| `base` | `#07090B` | page background |
-| `base-2` | `#0B0E11` | contact section, rings that cut through images |
-| `raised` | `#11151A` | solid raised surfaces |
-| `fg` | `#F2F5F4` | primary text |
-| `fg-2` | `#AAB2AF` | secondary text, body copy (contrast ≈ 9:1 on base) |
-| `fg-3` | `#7D8582` | metadata, labels (≈ 5:1, AA) |
-| `hair` / `hair-2` | white 8% / 14% | borders, dividers |
+| `mist` → `mist-2` → `paper-2` | `#C3D3E6` → `#DBE3EC` → `#F2F1EC` | page atmosphere (body gradient, static) |
+| `fg` | `#0A0C10` | text, primary button, badges |
+| `fg-2` | `#3A414B` | body copy |
+| `fg-3` | `#5A636F` | metadata, secondary headline line (≥ 4.5:1 on paper) |
+| `rule` | ink 22% | dotted rules |
+| `hair` / `hair-2` | ink 10% / 18% | solid hairlines |
+| `tile` / `tile-2` | white 34% / 55% | tiles, hover state |
+| `chip` | `rgb(150 170 195 / .38)` | nav tiles, secondary buttons |
+| `accent` | `#2B5BFF` | signal: arrow cells, markers, active state, focus ring |
+| `accent-2` | `#1D47E0` | accent hover |
+| `navy` → `navy-2` → `navy-3` → `sky` | `#040A17` → `#0B2049` → `#2A5AA6` → `#A9C3E6` | data panels (`.panel-navy`) |
+| `amber` | `#E8A33A` | "pending" only |
 
-### Brand
-| Token | Value | Use |
-|---|---|---|
-| `accent` | `#3DE0A0` | CTAs, ticks, active state, focus ring |
-| `accent-2` | `#72ECBD` | accent hover |
-| `accent-ink` | `#03140D` | text on accent (≈ 12:1) |
-| `indigo` | `#6E7BFF` | atmosphere only (gradients, glows, the end of the logo gradient) |
-
-### Product illustrations (light app UI inside the dark page)
-`paper #F6F6F3`, `card #FFF`, `ink #101314`, `ink-2`, `mute`, `line`, `brand #13935F`,
-`brand-soft`, `amber` (trigger / waiting), `sky`, `rose` (before / problem). These colours
-only appear inside mockups.
-
-### Gradients
-- **Brand gradient:** `#B6F7DD → #3DE0A0 → #7C8BFF`. Used for the logo and the second line
-  of the hero headline. Nowhere else.
-- **Ink sheen** (`.ink-sheen`): white → 62% white, vertical, on large headings.
-- **Atmosphere:** radial glows of accent (≤ 22%) and indigo (≤ 20%) at section corners.
-  They are static.
+Mockup tokens (`paper`, `ink`, `brand`, `mint` …) apply only inside product illustrations.
 
 ## 3. Typography
-- **Mona Sans** (variable, `wdth` axis), via `next/font`. Display weights use
-  `font-stretch: 110–112%`. The wide cut gives the brand its voice without a second family.
-- **Martian Mono** 400/500 for kickers, labels, metadata and step numbers.
+- **Mona Sans** (variable): display and body. **Martian Mono**: numbers, kickers, metadata.
 
 | Role | Class / size | Weight | Tracking | Line height |
 |---|---|---|---|---|
-| Hero | `.display` `clamp(44px, 8.4vw, 96px)` | 600, stretch 112% | −0.04em | 1.02 |
-| Section title | `.h2` `clamp(34px, 4.6vw, 56px)` | 600, stretch 110% | −0.035em | 1.06 |
-| Closing title | `.display` `clamp(38px, 6vw, 68px)` | 600 | −0.04em | 1.02 |
-| Card title | 19–22px | 600, stretch 106% | −0.02em | snug |
-| Lead | 17.5–18px | 400 | — | 1.6–1.65 |
-| Body | 15–16px | 400 | — | 1.6 |
-| Small | 13.5–14.5px | 400–500 | — | 1.5 |
-| Kicker | `.kicker` 11.5px mono uppercase | 500 | 0.1em | — |
+| Hero | `.display` `clamp(42px, 4.5vw, 68px)` | 400 | −0.045em | 0.98 |
+| Section title | `.h2` `clamp(36px, 5vw, 64px)` | 400 | −0.04em | 1.02 |
+| Closing title | `.display` `clamp(40px, 5.4vw, 76px)` | 400 | −0.045em | 0.98 |
+| Card title | 17–26px | 400 | −0.01 to −0.03em | snug |
+| Body | 15–17px | 400 | — | 1.6 |
+| Label | `.label` 10.5–12px uppercase | 600 | 0.09em | — |
+| Kicker / meta | `.kicker` 10.5–11px mono uppercase | 500 | 0.08em | — |
+| Badge | `.badge` 10.5px mono on ink (or white on navy) | 500 | — | 22px tall |
 
-Headings use `text-wrap: balance`, and paragraphs use `pretty`. Changing numbers use
-`tabular-nums`.
+## 4. Grid, space, breakpoints
+- **Frame**: `Container`, max 1360px, gutters 20 / 28px.
+- **Editorial split**: section heads use `[1fr | 2fr]`, with the label on the left and the
+  title on the right. The hero uses three equal columns, with dotted vertical rules in the
+  gutters.
+- **Section rhythm**: 80px on mobile and 112px from `sm` up. The gap between tiles is
+  28px (`gap-7`), and between joined tiles 2px.
+- **Breakpoints**: `sm` 640 · `md` 768 · `lg` 1024 · `xl` 1280.
+- **Mobile is recomposed**:
+  - the columns stack;
+  - the vertical rules give way to horizontal ones;
+  - the hero buttons go full width;
+  - the methodology loses its pinned index;
+  - a sticky glass CTA bar appears after the hero.
 
-## 4. Space, grid, breakpoints
-- **Base unit 4px.** The common steps are 8, 12, 16, 20, 24, 32, 40, 56, 64 and 96.
-- **Section rhythm:** `py-24` (96px) on mobile, `sm:py-32` (128px) and up.
-- **Container:** `max-w-[1200px]`, gutters 20px (mobile) and 32px (≥ 640px).
-- **Grids:** 1 column on mobile, then 2 (`sm`/`md`), then 3–4 (`lg`). Card gap is 16px.
-- **Breakpoints** (Tailwind defaults): `sm` 640, `md` 768, `lg` 1024, `xl` 1280.
-- **Mobile is recomposed, not shrunk.** Floating cards are hidden. The process becomes a
-  vertical timeline, CTAs go full width, the header becomes a menu, and a sticky CTA bar
-  appears after the hero.
+## 5. Shape and depth
+- **Radius: 0** for tiles, buttons, badges, tabs and panels. Mockups keep 4–8px internally.
+- **No drop shadows** on the interface. Depth comes from translucency (tiles over the
+  atmosphere) and from navy panels. The only shadow is on the mobile CTA bar.
+- **Glass**: only the header (after scrolling) and the mobile CTA bar (`.glass`: 72% mist,
+  blur 16px). There is a fallback without `backdrop-filter`.
 
-## 5. Radius
-`xs 8` · `sm 12` · `md 16` · `lg 24` (cards) · `xl 32` (product window, preview frame) ·
-36 (closing section) · pill (buttons, chips, tabs). For nested rounded shapes, the outer
-radius = the inner radius + the padding.
+## 6. Components and states
+### Buttons (`LinkButton`)
+A label cell plus a separate square arrow cell, joined by 2px.
 
-## 6. Surfaces, glass, shadows
-| Class | What | Where |
-|---|---|---|
-| `.surface` | white 5% → 2% gradient, 1px inner hairline, top highlight, soft drop shadow, **no blur** | all cards |
-| `.glass` | white 9% → 3.5%, `backdrop-filter: blur(22px) saturate(160%)`, brighter hairline, specular top edge | header, hero window, floating cards, preview frame, contact card |
+| Variant | Label | Arrow cell | Hover |
+|---|---|---|---|
+| `ink` (primary) | ink, white text | blue | the label fills from the left (darker); the arrow leaves right and a new one enters from the left; the arrow cell darkens |
+| `mist` (secondary) | chip | chip | the label fills; the arrow cell turns ink |
+| `light` (on navy) | white, navy text | blue | the label fills with soft blue |
+| `glass` (on navy) | white 16% | white 16% | the label fills; the arrow cell turns white |
 
-- Both have a **specular edge**: a 1px highlight along the top that fades at the corners.
-- Shadows are soft and dark (`0 24px 48px -32px rgb(0 0 0 / .8)`). A coloured glow is used
-  only on the accent button and the "Com a Orchestr" card.
-- Budget: **no more than ~10 elements with `backdrop-filter`** on the page. There is a
-  fallback when `backdrop-filter` is unsupported.
+- Active: 1px press.
+- Focus: 2px blue outline.
+- Sizes: `sm` 36px, `md` 44px, `lg` 52px.
+- Shortened labels pass `ariaLabel`.
 
-## 7. Components and states
-### Buttons (`LinkButton`, `.btn-*`)
-| Variant | Rest | Hover | Active | Focus |
-|---|---|---|---|---|
-| `accent` | mint, dark text, mint glow | lighter mint, larger glow, lifts 1px, light sweep | scale .98 | 2px mint outline, offset 3 |
-| `glass` | white 6%, hairline | white 10%, brighter hairline, lift, sweep | scale .98 | same |
-| `light` | white, dark text | mint-tinted white | scale .98 | same |
+### Tiles (`.tile` + `data-frame`)
+On hover, blue corner brackets close in from outside, the tile brightens to `tile-2`, and
+its isometric drawing "marches" (the dashes move) and lifts.
 
-Sizes: `sm` 36px, `md` 44px, `lg` 52px. Shortened labels pass `ariaLabel`. Every action on
-this page is a link (mailto/anchor), so no loading state is needed. If a form is added,
-`.btn` gets `[aria-busy]` with a spinner that replaces the arrow.
+### Navigation
+- The header is transparent over the hero. Once scrolled, it becomes a glass band with a
+  dotted bottom rule.
+- Desktop nav uses segmented chip tiles; the active section is an ink tile (scrollspy).
+  The CTA is an ink + blue button.
+- Mobile has a "Menu" tile, which opens numbered tile rows.
 
-### Cards
-- `data-spot`: on hover the card lifts 4px, a mint border light follows the pointer, and a
-  faint inner glow appears. Never put `data-reveal` on the same element (the reveal
-  animation would pin the transform). Wrap it instead.
-- Icon tiles: 44px, `accent/10` background, `accent/25` ring. On hover they tilt −6° or
-  scale 1.05.
-
-### Tabs (examples)
-A segmented control with a sliding glass thumb. It follows the ARIA tabs pattern
-(Arrow/Home/End keys). The active tab is `fg`, and the others are `fg-2`.
+### Tabs (use cases)
+Segmented tiles, with an ink tile sliding under the active one. They follow the ARIA tabs
+pattern (Arrow/Home/End keys).
 
 ### FAQ
-Native `<details name="faq">` (exclusive), with smooth height where
-`::details-content` is supported. The open item gets a mint hairline, and the plus icon
-rotates into a mint ×.
+Rows on dotted rules. The "+" sits on a chip tile that turns ink when open, and the icon
+rotates to "×". Native `<details name>`, with smooth height.
 
-### Header
-Floating island (max 1180px, radius 20). It is transparent at the top and becomes glass
-after the first scroll (sentinel + IntersectionObserver). The scrollspy shows a pill on the
-active link. The CTA is always visible.
+### Data panels (`.panel-navy`)
+- A marker in the top-left corner.
+- Labels at white 55–70%, values in regular weight, and dotted light rules
+  (`.rule-light`).
 
-## 8. Motion
-| Token | Value |
-|---|---|
-| `ease-out-soft` | `cubic-bezier(.22, 1, .36, 1)` (signature curve: entrances, hovers) |
-| `ease-in-out-soft` | `cubic-bezier(.65, 0, .35, 1)` (travelling signals) |
-| Durations | 200ms (press), 300–400ms (hover), 450–600ms (state), 900ms (reveal) |
+### Isometric art (`IsoArt`)
+Kinds: `chat`, `nodes`, `chart`, `calendar`, `doc`, `coins`, `clock` and `shield`. They are
+built from boxes, planes, cylinders and lines in a 30° projection, with dashed strokes and
+one solid blue part. Server-rendered SVG with no assets.
 
-| Pattern | How |
-|---|---|
-| Above-the-fold entrance | `data-rise`: CSS keyframe that fades and rises 18px with a 6px blur, staggered via `--d` |
-| Scroll reveal | `data-reveal`: scroll-driven (`animation-timeline: view()`) where supported, with an IntersectionObserver fallback. Stagger via `--i` |
-| Parallax | `data-parallax` + `--depth`: decorative layers drift on scroll (scroll-driven only) |
-| Hero window | `data-zoom`: tilts from 10° to flat as it enters |
-| Process rail | `.process-fill(-y)`: the line fills as the steps scroll past |
-| Sequences | `.seq`: children appear one after another once revealed |
-| Loops | `animate-bob`, `animate-travel`, `animate-marquee`, `animate-orbit`: paused off-screen (`data-loop`) |
-| Previews | `useStepper`: steps advance only while visible and the tab is active. They have a Pause button and jump to the final state under reduced motion |
+## 7. Motion catalogue
+| Pattern | Attribute / class | Behaviour |
+|---|---|---|
+| Fade-up | `data-reveal` | rises 28–32px and fades in |
+| Side entries | `data-reveal="left" \| "right"` | slides 40–48px from a side (sections clip on x) |
+| Settle | `data-reveal="scale"` | from 92–94% |
+| Heading wipe | `data-reveal="mask"` / `data-rise="mask"` | wipes up from a hard edge |
+| Rules drawing | `data-draw="x" \| "y"`, `.load-draw-x/y` | dotted rules draw themselves |
+| Markers | `data-pop`, `.load-pop` | blue squares and checks pop in, rotating |
+| Drift rows | `data-drift` + `--from/--to` | rows slide sideways with the scroll (the "pending" backlog) |
+| Chart lines | `.line-draw` (on load), `.line-draw-scroll` | clip wipe from left to right |
+| Methodology | IntersectionObserver + `.process-fill` | pinned index, active phase, rail filling |
+| Travel signal | `animate-travel` | a blue square runs along the rule between steps |
+| Live board | `useStepper` | the counter ticks and the latest execution changes; pausable |
+| Loops | `animate-marquee`, `animate-orbit`, `animate-blink` | paused off-screen (`data-loop`) |
 
-Under `prefers-reduced-motion: reduce`, all of the above are disabled. Content is shown in
-its final state and hover lifts are removed.
+- Easing: `ease-out-soft` `cubic-bezier(.22,1,.36,1)` for entrances and hovers, and
+  `ease-in-out-soft` for travelling signals and chart lines.
+- Durations: 200ms press, 300–500ms hover, 600–900ms reveal, 1.2–2.4s drawing.
+- Reduced motion: everything is shown in its final state, loops and wipes are disabled, and
+  hover transitions are removed.
 
-## 9. Imagery and icons
-- UI icons: **lucide-react**, 1.8–2px stroke, 16–20px.
-- Tool logos: official marks (see `docs/design/DIRECTION.md`), shown on white tiles or
-  circles so their colours stay true on dark.
-- Illustrations are labelled *Ilustração* / *Exemplo ilustrativo · nomes e valores
-  fictícios*.
-
-## 10. Accessibility checklist
-- Text contrast ≥ 4.5:1 (body) and ≥ 3:1 (large). The focus ring is visible on every
-  interactive element.
-- Hit areas are ≥ 40px. Every clickable element shows `cursor: pointer`.
-- Skip link, landmarks, one `h1`, ordered `h2`s with `aria-labelledby` on sections.
-- Decorative layers are `aria-hidden`. Logos have accessible names where they carry meaning.
-- Motion can be paused, and it respects the reduced-motion setting.
+## 8. Accessibility checklist
+- Body text contrast ≥ 4.5:1 on paper and on navy. The focus ring is visible everywhere.
+- Hit areas ≥ 36px (buttons 44–52px). Every clickable element has `cursor: pointer`.
+- Skip link, landmarks, one `h1`, and ordered `h2`s with `aria-labelledby`.
+- Decorative SVGs and grid lines are `aria-hidden`. Illustrations have text alternatives.
+- Looping illustrations can be paused (WCAG 2.2.2).
