@@ -26,17 +26,17 @@ export function HowItWorks() {
           kicker="A solução"
           id="como-funciona-title"
           align="center"
-          title="Quando algo acontece, a Orchestr trata do resto."
+          title="Cada evento desencadeia o processo certo, automaticamente."
         >
-          Cada automação liga as ferramentas que já usa. Acontece algo, a automação faz o trabalho e
-          deixa tudo registado. Sem ninguém ter de mexer.
+          Cada automação integra os sistemas que já utiliza. Quando ocorre um evento, o processo é
+          executado de ponta a ponta e fica registado, sem intervenção manual.
         </SectionHead>
 
         <div className="mt-16 grid gap-3 lg:grid-cols-[minmax(0,1fr)_64px_minmax(0,1fr)_64px_minmax(0,1fr)] lg:gap-0">
           <StepCard
             i={0}
-            label="Acontece algo"
-            title="Um cliente pede uma vaga"
+            label="Evento"
+            title="Pedido de marcação recebido"
             icon={<MessageCircle className="size-[18px]" />}
             tone="indigo"
           >
@@ -50,7 +50,7 @@ export function HowItWorks() {
               </div>
               <div className="flex items-center gap-2 px-1 pt-1 text-[12.5px] text-ink-2">
                 <span className="size-1.5 rounded-full bg-amber" />
-                Fora de horas. Ninguém disponível para responder.
+                Recebido fora do horário de atendimento.
               </div>
             </div>
           </StepCard>
@@ -59,23 +59,25 @@ export function HowItWorks() {
 
           <StepCard
             i={1}
-            label="A Orchestr trata"
-            title="Lê, consulta a agenda e responde"
+            label="Processamento"
+            title="Interpretação, consulta da agenda e resposta"
             icon={<Workflow className="size-[18px]" />}
             tone="white"
           >
             <ul className="seq flex flex-col gap-2 text-[14px] text-ink">
-              {["Percebe o pedido", "Vê os horários livres", "Responde ao cliente"].map((t) => (
-                <li
-                  key={t}
-                  className="flex items-center gap-2.5 rounded-xl bg-white px-3 py-2 shadow-[0_1px_2px_rgb(0_0_0/0.06)]"
-                >
-                  <span className="grid size-5 place-items-center rounded-full bg-ink text-mint">
-                    <Check className="size-3" strokeWidth={3} />
-                  </span>
-                  {t}
-                </li>
-              ))}
+              {["Interpreta o pedido", "Verifica a disponibilidade", "Responde ao cliente"].map(
+                (t) => (
+                  <li
+                    key={t}
+                    className="flex items-center gap-2.5 rounded-xl bg-white px-3 py-2 shadow-[0_1px_2px_rgb(0_0_0/0.06)]"
+                  >
+                    <span className="grid size-5 place-items-center rounded-full bg-ink text-mint">
+                      <Check className="size-3" strokeWidth={3} />
+                    </span>
+                    {t}
+                  </li>
+                ),
+              )}
             </ul>
           </StepCard>
 
@@ -83,8 +85,8 @@ export function HowItWorks() {
 
           <StepCard
             i={2}
-            label="Fica feito"
-            title="Marcação criada, lembrete agendado"
+            label="Resultado"
+            title="Marcação registada e lembrete programado"
             icon={<CalendarCheck className="size-[18px]" />}
             tone="accent"
           >

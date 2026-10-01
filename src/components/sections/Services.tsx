@@ -16,7 +16,7 @@ const AREAS: {
     blurb: "Atendimento e agenda",
     icon: Users,
     items: [
-      "Respostas no WhatsApp e email",
+      "Resposta a pedidos por WhatsApp e email",
       "Marcações e lembretes",
       "Pedidos de avaliação no Google",
     ],
@@ -29,7 +29,7 @@ const AREAS: {
     items: [
       "Resposta imediata a contactos",
       "Orçamentos com os seus preços",
-      "Seguimento automático",
+      "Seguimento automático de propostas",
     ],
     tools: ["gmail", "hubspot", "outlook"],
   },
@@ -44,7 +44,11 @@ const AREAS: {
     title: "Operações",
     blurb: "Documentos e relatórios",
     icon: FileCog,
-    items: ["Leitura de faturas de fornecedores", "Stock e encomendas", "Resumo semanal por email"],
+    items: [
+      "Leitura de faturas de fornecedores",
+      "Stock e encomendas",
+      "Relatório semanal por email",
+    ],
     tools: ["googleDrive", "googleSheets", "openai"],
   },
 ];
@@ -54,21 +58,16 @@ export function Services() {
     <section id="servicos" aria-labelledby="servicos-title" className="relative py-24 sm:py-32">
       <Container>
         <div className="flex flex-col justify-between gap-8 lg:flex-row lg:items-end">
-          <SectionHead
-            index="04"
-            kicker="Serviços"
-            id="servicos-title"
-            title="O que podemos automatizar."
-          >
-            Os pedidos mais comuns, organizados por área. Cada automação é feita à medida do seu
-            negócio.
+          <SectionHead index="04" kicker="Serviços" id="servicos-title" title="Áreas de automação.">
+            Os processos mais solicitados, organizados por área. Cada solução é desenhada à medida
+            da operação da sua empresa.
           </SectionHead>
           <a
             data-reveal
-            href={contactHref("Tenho outra tarefa para automatizar")}
+            href={contactHref("Outro processo a automatizar")}
             className="group inline-flex shrink-0 items-center gap-2 text-[15px] font-medium text-fg-2 transition-colors hover:text-fg"
           >
-            Não vê o seu caso? Pergunte-nos
+            Outro processo? Fale connosco
             <span className="grid size-7 place-items-center rounded-full bg-white/[0.06] text-accent shadow-[inset_0_0_0_1px_var(--color-hair-2)] transition-transform duration-300 ease-out-soft group-hover:translate-x-1">
               →
             </span>

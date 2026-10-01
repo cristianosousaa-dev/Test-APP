@@ -103,7 +103,7 @@ export function Header() {
               ))}
             </nav>
             <LinkButton href={contactHref()} size="sm" className="hidden sm:inline-flex" arrow>
-              Marcar diagnóstico
+              Agendar diagnóstico
             </LinkButton>
             <button
               ref={toggle}

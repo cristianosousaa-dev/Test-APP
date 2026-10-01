@@ -13,7 +13,7 @@ const EVENTS: { source: Source; from: string; title: string; detail: string }[] 
     source: { brand: "whatsapp" },
     from: "WhatsApp",
     title: "Pedido de marcação",
-    detail: "Respondido e marcado: sexta, 15:30",
+    detail: "Respondido e agendado: sexta, 15:30",
   },
   {
     source: { icon: Receipt, tint: "bg-accent text-accent-ink" },
@@ -37,13 +37,13 @@ const EVENTS: { source: Source; from: string; title: string; detail: string }[] 
     source: { brand: "outlook" },
     from: "Outlook",
     title: "Fatura de fornecedor recebida",
-    detail: "Dados lidos e lançados",
+    detail: "Dados extraídos e lançados",
   },
   {
     source: { icon: Wallet, tint: "bg-indigo" },
     from: "Cobranças",
     title: "Fatura vencida há 5 dias",
-    detail: "Lembrete enviado com referência MB",
+    detail: "Lembrete enviado com referência Multibanco",
   },
   {
     source: { brand: "google" },
@@ -91,7 +91,7 @@ export function HeroFeed() {
   return (
     <div ref={ref} className="relative">
       <p className="sr-only">
-        Ilustração: uma lista de tarefas concluídas por automações ao longo do dia, como marcações,
+        Ilustração: lista de tarefas concluídas automaticamente ao longo do dia, como marcações,
         faturas pagas e orçamentos enviados.
       </p>
       <div aria-hidden className="relative">
@@ -102,13 +102,13 @@ export function HeroFeed() {
                 <span className="absolute inset-0 animate-ping rounded-full bg-mint/70 motion-reduce:hidden" />
                 <span className="relative size-2 rounded-full bg-mint" />
               </span>
-              Hoje no seu negócio
+              Atividade de hoje
             </p>
             <p className="mt-1.5 text-[20px] font-semibold tracking-[-0.02em] [font-stretch:108%]">
               <span key={done} className="inline-block animate-feed-in text-mint tabular-nums">
                 {done}
               </span>{" "}
-              tarefas feitas sozinhas
+              tarefas concluídas automaticamente
             </p>
           </div>
           <span className="hidden rounded-full bg-accent/10 px-2.5 py-1 font-mono text-[10.5px] tracking-wider text-accent uppercase ring-1 ring-accent/25 sm:inline">

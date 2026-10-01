@@ -19,9 +19,12 @@ final "a" makes it feel like a product and gives a short, distinctive wordmark.
 - **Main benefit:** repetitive work happens on its own, inside the tools the business
   already uses.
 - **Next action:** book a free 30-minute diagnosis.
-- **Tagline:** *O seu negócio, em piloto automático.*
-- **Voice:** PT-PT, formal ("o seu negócio"), short sentences, concrete examples. No jargon,
-  no invented numbers, no superlatives.
+- **Tagline:** *Automação de processos para PME.* Hero: *Automatize o repetitivo. Foque-se no negócio.*
+- **Voice:** PT-PT, professional and institutional. Address the reader formally ("a sua
+  empresa"). Use business vocabulary (processos, implementação, integração, entregável) and
+  short, declarative sentences. No colloquialisms, exclamation marks, invented numbers or
+  superlatives. Customer messages inside illustrations may stay informal, because they
+  represent real customers.
 
 ## Logo
 ### Symbol

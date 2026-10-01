@@ -3,24 +3,24 @@ import { SectionHead } from "@/components/ui/SectionHead";
 
 const STEPS = [
   {
-    title: "Conversa de 30 minutos",
-    text: "Explica-nos como trabalha. Mostramos o que faz sentido automatizar primeiro.",
-    gets: "Lista das tarefas a automatizar",
+    title: "Diagnóstico",
+    text: "Analisamos os seus processos e identificamos as automações com maior impacto.",
+    gets: "Mapa de processos prioritários",
   },
   {
-    title: "Proposta com preço fechado",
-    text: "Sabe o que vai pagar e quando fica pronto, antes de começarmos.",
-    gets: "Preço, prazo e o que fica incluído",
+    title: "Proposta",
+    text: "Âmbito, prazo e preço fixo definidos por escrito, antes de iniciar.",
+    gets: "Proposta com âmbito, prazo e preço",
   },
   {
-    title: "Construção e testes",
-    text: "Ligamos às ferramentas que já usa e testamos com casos reais do seu negócio.",
-    gets: "A automação a funcionar",
+    title: "Implementação e testes",
+    text: "Integramos os sistemas existentes e validamos com casos reais da sua operação.",
+    gets: "Automação em produção",
   },
   {
     title: "Acompanhamento",
-    text: "Ficamos atentos e ajustamos quando o seu negócio muda.",
-    gets: "Suporte quando precisar",
+    text: "Monitorizamos o funcionamento e ajustamos à medida que o negócio evolui.",
+    gets: "Suporte e melhoria contínua",
   },
 ];
 
@@ -30,11 +30,11 @@ export function Process() {
       <Container>
         <SectionHead
           index="07"
-          kicker="Processo"
+          kicker="Metodologia"
           id="processo-title"
-          title="Do primeiro contacto à automação a funcionar."
+          title="Do diagnóstico à automação em produção."
         >
-          Quatro passos, sem surpresas. Em cada um sabe exatamente o que recebe.
+          Quatro fases, com entregáveis definidos em cada etapa.
         </SectionHead>
 
         <div className="relative mt-16">
@@ -68,7 +68,7 @@ export function Process() {
                   <p className="mt-2 text-[15px] leading-[1.6] text-fg-2">{s.text}</p>
                   <p className="mt-auto border-t border-hair pt-4 text-[14px]">
                     <span className="block font-mono text-[10.5px] tracking-[0.08em] text-fg-3 uppercase">
-                      Recebe
+                      Entregável
                     </span>
                     <span className="mt-1 block font-medium text-fg">{s.gets}</span>
                   </p>

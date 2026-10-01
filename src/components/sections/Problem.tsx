@@ -5,23 +5,23 @@ import { SectionHead } from "@/components/ui/SectionHead";
 const PAINS = [
   {
     icon: MessageSquareMore,
-    title: "As mesmas perguntas, todos os dias",
-    text: "Horários, preços, disponibilidade. Respostas que alguém tem de escrever, outra vez.",
+    title: "Pedidos repetitivos",
+    text: "Horários, preços e disponibilidade respondidos manualmente, uma e outra vez.",
   },
   {
     icon: CalendarClock,
-    title: "Marcações feitas à mão",
-    text: "Chamadas, mensagens e trocas de horário que interrompem o trabalho que importa.",
+    title: "Agendamento manual",
+    text: "Chamadas, mensagens e reagendamentos que interrompem o trabalho produtivo.",
   },
   {
     icon: FileClock,
-    title: "Orçamentos que ficam para depois",
-    text: "Pedidos que chegam a meio do dia e só têm resposta à noite. Ou nunca.",
+    title: "Orçamentos com atraso",
+    text: "Pedidos recebidos durante o dia que só obtêm resposta horas depois, ou nunca.",
   },
   {
     icon: Wallet,
-    title: "Faturas por cobrar",
-    text: "Lembretes, telefonemas incómodos e contas que não batem certo no fim do mês.",
+    title: "Cobranças pendentes",
+    text: "Faturas vencidas acompanhadas por telefone e reconciliações difíceis no fecho do mês.",
   },
 ];
 
@@ -42,12 +42,12 @@ export function Problem() {
         <div>
           <SectionHead
             index="01"
-            kicker="O problema"
+            kicker="O desafio"
             id="problema-title"
-            title="O seu dia está cheio de trabalho que não precisava de si."
+            title="Tarefas administrativas consomem o tempo da sua equipa."
           >
-            Pequenas tarefas repetidas, todos os dias. Sozinhas parecem pouco. Juntas, roubam as
-            horas que devia dedicar aos clientes e ao negócio.
+            Pedidos repetidos, marcações, orçamentos e cobranças ocupam diariamente horas que
+            deveriam ser dedicadas aos clientes e ao crescimento do negócio.
           </SectionHead>
           <ul className="mt-10 grid gap-3 sm:grid-cols-2">
             {PAINS.map((p, i) => {
@@ -87,7 +87,7 @@ export function Problem() {
                 <span className="size-2 shrink-0 rounded-full bg-amber" />
                 <span className="truncate text-fg-2">{t}</span>
                 <span className="ml-auto shrink-0 font-mono text-[10px] whitespace-nowrap text-fg-3">
-                  por fazer
+                  pendente
                 </span>
               </div>
             </div>

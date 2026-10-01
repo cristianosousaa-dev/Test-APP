@@ -44,14 +44,14 @@ export function Hero() {
             <span className="absolute size-2 animate-ping rounded-full bg-accent/50 motion-reduce:hidden" />
             <span className="size-2 rounded-full bg-accent" />
           </span>
-          Automações à medida para PME em Portugal
+          Automação de processos para PME
         </p>
 
-        <h1 data-rise style={delay(80)} className="display mt-7 text-[clamp(44px,8.4vw,96px)]">
-          <span className="ink-sheen">O seu negócio,</span>
+        <h1 data-rise style={delay(80)} className="display mt-7 text-[clamp(40px,7.6vw,88px)]">
+          <span className="ink-sheen">Automatize o repetitivo.</span>
           <br />
           <span className="bg-[linear-gradient(100deg,#b6f7dd,#3de0a0_45%,#8fa0ff)] bg-clip-text text-transparent">
-            em piloto automático.
+            Foque-se no negócio.
           </span>
         </h1>
 
@@ -60,8 +60,8 @@ export function Hero() {
           style={delay(160)}
           className="mt-7 max-w-[40rem] text-[17px] leading-[1.65] text-fg-2 sm:text-[19px]"
         >
-          A {site.name} cria automações à medida para pequenas e médias empresas: respostas a
-          clientes, marcações, orçamentos, faturas e cobranças, ligadas às ferramentas que já usa.
+          A {site.name} desenha, implementa e mantém automações à medida para pequenas e médias
+          empresas, do atendimento à faturação e cobranças, integradas nos sistemas que já utiliza.
         </p>
 
         <div
@@ -73,11 +73,11 @@ export function Hero() {
             {site.cta}
           </LinkButton>
           <LinkButton href="#como-funciona" variant="glass" size="lg">
-            Ver como funciona
+            Como funciona
           </LinkButton>
         </div>
         <p data-rise style={delay(320)} className="kicker mt-6 !text-[10.5px] !text-fg-3">
-          30 minutos · Preço fechado · Sem mudar de software
+          Diagnóstico de 30 minutos · Preço fixo · Sem substituir sistemas
         </p>
       </Container>
 
@@ -94,7 +94,7 @@ export function Hero() {
                   <span className="size-2.5 rounded-full bg-white/15" />
                 </span>
                 <span className="mx-auto font-mono text-[11px] tracking-wide text-fg-3">
-                  orchestr · o seu negócio hoje
+                  orchestr · painel de operações
                 </span>
                 <span className="hidden font-mono text-[10.5px] tracking-wider text-fg-3 uppercase sm:inline">
                   Ilustração
@@ -140,7 +140,7 @@ function RunningList() {
         <span className="grid size-5 place-items-center rounded-full bg-accent/15 text-accent">
           <Check className="size-3" strokeWidth={3} />
         </span>
-        Tudo a correr. Nada para fazer.
+        Todos os fluxos operacionais. Sem pendentes.
       </p>
     </div>
   );
@@ -195,7 +195,9 @@ function FloatingCards() {
           </span>
           <span>
             <span className="block text-[13.5px] font-medium">Sex 15:30 · Limpeza</span>
-            <span className="block font-mono text-[10.5px] text-fg-3">Marcado sozinho</span>
+            <span className="block font-mono text-[10.5px] text-fg-3">
+              Agendado automaticamente
+            </span>
           </span>
         </div>
       </div>

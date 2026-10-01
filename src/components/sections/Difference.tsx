@@ -7,24 +7,24 @@ import { site } from "@/lib/site";
 /* What the service commits to (see Process and FAQ). Compared with doing it yourself, not with named competitors. */
 const ROWS = [
   {
-    topic: "Quem configura",
-    diy: "Você, ao fim do dia, entre tutoriais",
-    us: "Nós, de ponta a ponta",
+    topic: "Implementação",
+    diy: "A cargo da equipa, em paralelo com o trabalho diário",
+    us: "Assegurada pela Orchestr, de ponta a ponta",
   },
   {
-    topic: "Ferramentas",
-    diy: "Mais uma plataforma para aprender",
-    us: "As que o seu negócio já usa",
+    topic: "Sistemas",
+    diy: "Novas plataformas para aprender e gerir",
+    us: "Integração com os sistemas existentes",
   },
   {
     topic: "Custo",
-    diy: "Horas e subscrições difíceis de prever",
-    us: "Proposta com preço fechado, antes de começar",
+    diy: "Horas internas e subscrições difíceis de prever",
+    us: "Preço fixo, aprovado antes do início",
   },
   {
-    topic: "Quando algo muda",
-    diy: "Volta a configurar tudo",
-    us: "Ajustamos nós, com acompanhamento",
+    topic: "Evolução",
+    diy: "Reconfiguração sempre que o negócio muda",
+    us: "Ajustes contínuos com acompanhamento dedicado",
   },
 ];
 
@@ -38,11 +38,11 @@ export function Difference() {
       <Container>
         <SectionHead
           index="06"
-          kicker="A diferença"
+          kicker="Diferenciação"
           id="diferenca-title"
           align="center"
           className="mx-auto"
-          title={<>Não é mais uma ferramenta. É o trabalho feito.</>}
+          title="Não vendemos software. Entregamos processos a funcionar."
         >
           Não lhe vendemos um software para configurar. Tratamos das automações por si, à medida do
           seu negócio.
@@ -50,7 +50,7 @@ export function Difference() {
 
         <div className="mx-auto mt-14 grid max-w-[980px] gap-4 md:grid-cols-2">
           <div data-reveal className="surface p-6 sm:p-8">
-            <p className="kicker !text-fg-3">Fazer sozinho</p>
+            <p className="kicker !text-fg-3">Equipa interna</p>
             <dl className="mt-6 flex flex-col">
               {ROWS.map((r) => (
                 <div

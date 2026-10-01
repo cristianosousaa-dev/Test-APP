@@ -7,9 +7,9 @@ import { delay } from "@/lib/delay";
 import { contactHref, site, whatsappHref } from "@/lib/site";
 
 const TAKEAWAYS = [
-  "As tarefas que mais tempo lhe tiram, por ordem",
-  "Que ferramentas ligamos e como fica o fluxo",
-  "Uma proposta com preço fechado e prazo",
+  "Levantamento dos processos com maior impacto",
+  "Sistemas a integrar e desenho do fluxo",
+  "Proposta com preço fixo e prazo definido",
 ];
 
 const FLOATERS: { brand: Brand; className: string; dur: string }[] = [
@@ -52,11 +52,11 @@ export function Cta() {
               Próximo passo
             </p>
             <h2 id="contacto-title" className="display ink-sheen mt-5 text-[clamp(38px,6vw,68px)]">
-              Que tarefa gostava de nunca mais fazer?
+              Comece por um diagnóstico gratuito.
             </h2>
             <p className="mt-6 max-w-[34rem] text-[18px] leading-[1.6] text-fg-2">
-              Diga-nos qual é. Numa conversa de 30 minutos mostramos como a automatizar e por onde
-              faz sentido começar.
+              Em 30 minutos analisamos os seus processos, identificamos as oportunidades de
+              automação e indicamos por onde começar.
             </p>
             <div className="mt-9 flex flex-wrap items-center gap-3">
               <LinkButton href={contactHref()} variant="accent" size="lg" arrow>
@@ -68,7 +68,7 @@ export function Cta() {
                 </LinkButton>
               ) : (
                 <LinkButton href="#exemplos" variant="glass" size="lg">
-                  Rever os exemplos
+                  Ver casos de uso
                 </LinkButton>
               )}
             </div>
@@ -95,7 +95,7 @@ export function Cta() {
             <div className="glass rounded-[28px] p-7 sm:p-8">
               <p className="kicker !text-accent">Diagnóstico gratuito</p>
               <p className="mt-3 text-[22px] font-semibold tracking-[-0.02em] [font-stretch:106%]">
-                O que leva desta conversa
+                O que inclui
               </p>
               <ul className="seq mt-6 flex flex-col gap-4">
                 {TAKEAWAYS.map((t) => (

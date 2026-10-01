@@ -102,7 +102,7 @@ function PaymentsPreview({ step }: PreviewProps) {
                 <Check className="size-4" strokeWidth={3} />
               </span>
               <p className="text-[13.5px]">
-                Pagamento conciliado e lançado na contabilidade. Ninguém teve de telefonar.
+                Pagamento conciliado e lançado na contabilidade, sem intervenção manual.
               </p>
             </div>
           </At>
@@ -116,15 +116,15 @@ export const payments: Example = {
   id: "cobrancas",
   tab: "Cobranças",
   mark: Wallet,
-  sector: "Qualquer negócio que emite faturas",
-  title: "Faturas em atraso cobradas com educação e a tempo",
-  before: "Telefona aos clientes para lembrar faturas em atraso.",
-  after: "Lembrete simpático com o link de pagamento; quando paga, fica lançado.",
+  sector: "Qualquer empresa que emite faturas",
+  title: "Cobrança de faturas vencidas, com rigor e no prazo",
+  before: "Faturas em atraso acompanhadas manualmente, por telefone.",
+  after: "Lembrete com referência de pagamento e lançamento automático após a receção.",
   steps: [
-    "Fatura vencida detetada",
+    "Fatura vencida identificada",
     "Lembrete enviado ao cliente",
     "Pagamento recebido",
-    "Lançado na contabilidade",
+    "Registo na contabilidade",
   ],
   durations: [2200, 2800, 2400, 3600],
   tools: ["Moloni", "gmail", "MB WAY", "excel"],

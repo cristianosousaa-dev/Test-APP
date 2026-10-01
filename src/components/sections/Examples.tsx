@@ -61,12 +61,12 @@ export function Examples() {
       <Container>
         <SectionHead
           index="05"
-          kicker="Veja a funcionar"
+          kicker="Casos de uso"
           id="exemplos-title"
-          title="Quatro automações, passo a passo."
+          title="Quatro processos, do início ao fim."
         >
-          Escolha um exemplo. Cada um mostra como é hoje, como fica com a Orchestr e o que acontece
-          em cada passo.
+          Selecione um caso para ver o processo atual, o processo automatizado e cada etapa da
+          execução.
         </SectionHead>
 
         <div
@@ -143,14 +143,14 @@ function ExamplePanel({ example }: { example: Example }) {
           <p className="rounded-2xl bg-white/[0.03] px-4 py-3 shadow-[inset_0_0_0_1px_var(--color-hair)]">
             <span className="mb-1 flex items-center gap-2 font-mono text-[10.5px] tracking-wider text-[#ff8a8a] uppercase">
               <span className="size-1.5 rounded-full bg-[#ff8a8a]" />
-              Hoje, à mão
+              Processo atual
             </span>
             <span className="text-fg-2">{example.before}</span>
           </p>
           <p className="rounded-2xl bg-accent/[0.07] px-4 py-3 shadow-[inset_0_0_0_1px_rgb(61_224_160/0.22)]">
             <span className="mb-1 flex items-center gap-2 font-mono text-[10.5px] tracking-wider text-accent uppercase">
               <span className="size-1.5 rounded-full bg-accent" />
-              Com a automação
+              Processo automatizado
             </span>
             <span className="font-medium text-fg">{example.after}</span>
           </p>
@@ -186,7 +186,7 @@ function ExamplePanel({ example }: { example: Example }) {
 
         <div className="mt-auto flex flex-wrap items-center gap-2 pt-6">
           <span className="font-mono text-[10.5px] tracking-wider text-fg-3 uppercase">
-            Ligado a
+            Integrações
           </span>
           {example.tools.map((t) => (
             <ToolChip key={t} tool={t} />

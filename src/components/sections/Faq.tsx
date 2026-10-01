@@ -7,28 +7,28 @@ import { contactHref } from "@/lib/site";
 
 const FAQS = [
   {
-    q: "Que tipo de negócios podem automatizar?",
-    a: "Clínicas, oficinas, imobiliárias, restaurantes, lojas online, escritórios e serviços. Se uma tarefa se repete e segue regras, provavelmente pode ser automatizada.",
+    q: "Que tipo de empresas podem beneficiar?",
+    a: "Clínicas, oficinas, imobiliárias, restauração, comércio online, escritórios e prestadores de serviços. Qualquer processo repetitivo e baseado em regras é normalmente passível de automação.",
   },
   {
-    q: "Tenho de mudar de software?",
-    a: "Não. Ligamos as automações ao que já usa: WhatsApp, email, agenda, faturação, CRM ou folhas de cálculo. A sua equipa continua a trabalhar como está habituada.",
+    q: "É necessário mudar de software?",
+    a: "Não. As automações são integradas nos sistemas que já utiliza: WhatsApp, email, agenda, faturação, CRM ou folhas de cálculo. A equipa mantém a sua forma de trabalhar.",
   },
   {
-    q: "Quanto custa?",
-    a: "Depende do que for automatizado. Depois da conversa inicial recebe uma proposta com preço fechado, para saber exatamente o que paga antes de começarmos.",
+    q: "Qual é o investimento?",
+    a: "Depende do âmbito. Após o diagnóstico inicial, recebe uma proposta com preço fixo, para conhecer o investimento exato antes de iniciarmos.",
   },
   {
-    q: "Quanto tempo demora?",
-    a: "Depende da complexidade. O prazo fica escrito na proposta, antes de começarmos.",
+    q: "Qual é o prazo de implementação?",
+    a: "Varia consoante a complexidade. O prazo é definido por escrito na proposta, antes do início do projeto.",
   },
   {
-    q: "Usam inteligência artificial?",
-    a: "Quando ajuda: perceber mensagens, ler documentos ou redigir respostas. Para o resto usamos regras simples e previsíveis. As decisões importantes podem ficar sempre sujeitas à sua aprovação.",
+    q: "Utilizam inteligência artificial?",
+    a: "Sempre que acrescenta valor: interpretação de mensagens, leitura de documentos ou redação de respostas. Nos restantes casos, utilizamos regras determinísticas e previsíveis. As decisões críticas podem ficar sempre sujeitas à sua aprovação.",
   },
   {
-    q: "Os meus dados ficam seguros?",
-    a: "Usamos apenas os acessos necessários a cada automação, seguimos as boas práticas do RGPD e documentamos o que cada automação faz e a que dados acede.",
+    q: "Como é garantida a segurança dos dados?",
+    a: "Cada automação utiliza apenas os acessos estritamente necessários. Seguimos as boas práticas do RGPD e documentamos o que cada automação faz e a que dados acede.",
   },
 ];
 
@@ -37,8 +37,13 @@ export function Faq() {
     <section id="faq" aria-labelledby="faq-title" className="relative py-24 sm:py-32">
       <Container className="grid gap-12 lg:grid-cols-[minmax(0,0.8fr)_minmax(0,1.2fr)] lg:gap-16">
         <div className="lg:sticky lg:top-28 lg:self-start">
-          <SectionHead index="08" kicker="Perguntas" id="faq-title" title="Antes de falarmos.">
-            As dúvidas que nos chegam mais vezes, respondidas sem rodeios.
+          <SectionHead
+            index="08"
+            kicker="Perguntas frequentes"
+            id="faq-title"
+            title="Esclarecimentos antes de avançar."
+          >
+            Respostas às questões mais frequentes sobre o nosso serviço.
           </SectionHead>
           <div data-reveal className="surface mt-9 max-w-[24rem] p-6">
             <span className="mb-4 flex -space-x-2">
@@ -51,16 +56,18 @@ export function Faq() {
                 </span>
               ))}
             </span>
-            <p className="text-[16px] font-semibold">A sua pergunta não está aqui?</p>
-            <p className="mt-1 text-[14.5px] text-fg-2">Escreva-nos. Respondemos por email.</p>
+            <p className="text-[16px] font-semibold">Tem outra questão?</p>
+            <p className="mt-1 text-[14.5px] text-fg-2">
+              Envie-nos a sua questão. Respondemos por email.
+            </p>
             <LinkButton
-              href={contactHref("Pergunta")}
+              href={contactHref("Questão")}
               variant="glass"
               size="sm"
               className="mt-5"
               arrow
             >
-              Enviar uma pergunta
+              Enviar questão
             </LinkButton>
           </div>
         </div>

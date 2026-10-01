@@ -22,7 +22,7 @@ const mono = Martian_Mono({
 
 export const metadata: Metadata = {
   metadataBase: new URL(site.url),
-  title: `${site.name} — Automações à medida para o seu negócio`,
+  title: `${site.name} — Automação de processos para PME`,
   description: site.description,
   openGraph: {
     title: `${site.name} — ${site.tagline}`,

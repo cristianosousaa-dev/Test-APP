@@ -49,7 +49,7 @@ export function MobileCta() {
           ariaLabel={site.cta}
           className="shrink-0"
         >
-          Marcar
+          Agendar
         </LinkButton>
       </div>
     </div>

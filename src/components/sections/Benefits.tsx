@@ -7,29 +7,29 @@ import { SectionHead } from "@/components/ui/SectionHead";
 const BENEFITS = [
   {
     icon: Clock,
-    title: "Responde em segundos, a qualquer hora",
-    text: "Clientes atendidos à noite, ao fim de semana e enquanto está ocupado.",
+    title: "Resposta imediata, 24 horas por dia",
+    text: "Clientes atendidos fora do horário, ao fim de semana e em períodos de maior volume.",
     span: "lg:col-span-2",
     visual: "clock",
   },
   {
     icon: BellOff,
-    title: "Nada fica esquecido",
-    text: "Seguimentos, lembretes e cobranças acontecem sempre, no momento certo.",
+    title: "Nenhum processo fica pendente",
+    text: "Seguimentos, lembretes e cobranças executados no momento certo, de forma consistente.",
     span: "",
     visual: "queue",
   },
   {
     icon: Plug,
-    title: "Funciona com o que já usa",
-    text: "WhatsApp, email, agenda, faturação. A equipa não muda a forma de trabalhar.",
+    title: "Integração com os sistemas atuais",
+    text: "WhatsApp, email, agenda e faturação, sem migrações nem mudanças na rotina da equipa.",
     span: "",
     visual: "tools",
   },
   {
     icon: ShieldCheck,
-    title: "As decisões continuam suas",
-    text: "O que é importante pode ficar sempre à espera da sua aprovação, num toque.",
+    title: "Controlo total sobre as decisões",
+    text: "As operações críticas podem exigir sempre a sua aprovação antes de serem executadas.",
     span: "lg:col-span-2",
     visual: "approve",
   },
@@ -43,9 +43,10 @@ export function Benefits() {
           index="03"
           kicker="Benefícios"
           id="beneficios-title"
-          title="Mais tempo para o negócio. Menos tempo a gerir tarefas."
+          title="Mais capacidade, sem aumentar a equipa."
         >
-          O que muda no dia a dia quando o trabalho repetitivo deixa de depender de si.
+          O impacto no dia a dia quando os processos repetitivos deixam de depender de intervenção
+          manual.
         </SectionHead>
         <ul className="mt-14 grid grid-cols-1 gap-4 lg:grid-cols-3">
           {BENEFITS.map((b, i) => {

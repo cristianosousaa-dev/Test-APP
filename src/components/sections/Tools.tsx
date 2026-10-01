@@ -30,7 +30,7 @@ export function Tools() {
     <section data-loop aria-labelledby="tools-title" className="relative py-14">
       <Container>
         <p id="tools-title" data-reveal className="kicker text-center !text-fg-3">
-          Liga-se às ferramentas que o seu negócio já usa
+          Integra-se com os sistemas que a sua empresa já utiliza
         </p>
         <div className="group relative mt-8 overflow-hidden [mask-image:linear-gradient(90deg,transparent,#000_12%,#000_88%,transparent)]">
           <ul className="flex w-max animate-marquee items-center group-hover:[animation-play-state:paused] motion-reduce:w-auto motion-reduce:flex-wrap motion-reduce:justify-center motion-reduce:gap-y-4">

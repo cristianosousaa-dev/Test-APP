@@ -24,8 +24,8 @@ export function Footer() {
               <OrchestrLogo className="h-[28px]" id="orx-footer" />
             </a>
             <p className="mt-5 text-[15px] leading-[1.65] text-fg-2">
-              Automações à medida para pequenas e médias empresas. Ligamos as ferramentas que já usa
-              para que o trabalho repetitivo aconteça sozinho.
+              Automação de processos à medida para pequenas e médias empresas, integrada nos
+              sistemas que já utiliza.
             </p>
             <ul className="mt-6 flex flex-wrap gap-2" aria-label="Algumas integrações">
               {INTEGRATIONS.map((b) => (
@@ -41,7 +41,7 @@ export function Footer() {
             </ul>
           </div>
           <nav aria-label="Rodapé">
-            <p className="kicker !text-fg-3">Página</p>
+            <p className="kicker !text-fg-3">Navegação</p>
             <ul className="mt-5 flex flex-col gap-3 text-[15px]">
               {nav.map((n) => (
                 <li key={n.href}>
