@@ -159,11 +159,17 @@ export const quotes: PreviewConfig = {
     "Seguimento após 3 dias",
     "Orçamento aceite",
   ],
-  durations: [2000, 2800, 2200, 1900, 2200, 3600],
   outcomes: [
     "Orçamentos enviados no próprio dia",
     "Nenhum pedido esquecido",
     "Mais orçamentos aceites",
   ],
+  tools: [
+    { label: "Formulário", at: 0 },
+    { label: "Preçário", at: 1 },
+    { label: "Email", at: 3 },
+    { label: "Assinatura", at: 5 },
+  ],
+  theme: "quotes",
   Stage: QuotesStage,
 };

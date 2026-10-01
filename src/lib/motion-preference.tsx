@@ -5,6 +5,7 @@ import {
   type ReactNode,
   useCallback,
   useContext,
+  useEffect,
   useMemo,
   useSyncExternalStore,
 } from "react";
@@ -48,14 +49,18 @@ const MotionPreferenceContext = createContext<MotionPreference>({
 /* The user's pause choice lives in localStorage; this tiny store lets React read it
    during render (server snapshot `false`) and keeps tabs in sync via the storage event. */
 const pauseListeners = new Set<() => void>();
+/** In-memory copy, so the toggle still works when storage is blocked. */
+let memoryPaused: boolean | null = null;
 
 function readPaused(): boolean {
+  if (memoryPaused !== null) return memoryPaused;
   try {
-    return window.localStorage.getItem(STORAGE_KEY) === "1";
+    memoryPaused = window.localStorage.getItem(STORAGE_KEY) === "1";
   } catch {
     // Storage can be unavailable (private mode, blocked site data): keep the default.
-    return false;
+    memoryPaused = false;
   }
+  return memoryPaused;
 }
 
 function subscribePaused(callback: () => void) {
@@ -68,6 +73,7 @@ function subscribePaused(callback: () => void) {
 }
 
 function writePaused(next: boolean) {
+  memoryPaused = next;
   try {
     window.localStorage.setItem(STORAGE_KEY, next ? "1" : "0");
   } catch {
@@ -80,6 +86,11 @@ export function MotionPreferenceProvider({ children }: { children: ReactNode }) 
   const reduced = usePrefersReducedMotion();
   const paused = useSyncExternalStore(subscribePaused, readPaused, () => false);
   const enabled = !reduced && !paused;
+
+  // CSS-only loops (marquee, flow lines) read this attribute.
+  useEffect(() => {
+    document.documentElement.toggleAttribute("data-paused", paused);
+  }, [paused]);
 
   const togglePaused = useCallback(() => writePaused(!readPaused()), []);
 

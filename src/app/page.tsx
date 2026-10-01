@@ -1,3 +1,4 @@
+import { Backdrop } from "@/components/backdrop/Backdrop";
 import { Automations } from "@/components/sections/Automations";
 import { Closing } from "@/components/sections/Closing";
 import { Examples } from "@/components/sections/Examples";
@@ -10,6 +11,7 @@ import { Tools } from "@/components/sections/Tools";
 export default function Home() {
   return (
     <>
+      <Backdrop />
       <Nav />
       <main id="conteudo">
         <Hero />

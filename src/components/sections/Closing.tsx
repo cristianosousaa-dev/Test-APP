@@ -1,53 +1,108 @@
+"use client";
+
+import { motion, useScroll, useTransform } from "motion/react";
+import { useRef } from "react";
 import { LinkButton } from "@/components/ui/Button";
 import { Container } from "@/components/ui/Container";
 import { Logo } from "@/components/ui/Logo";
-import { Reveal } from "@/components/ui/Reveal";
+import { Magnetic } from "@/components/ui/Magnetic";
+import { useMotionPreference } from "@/lib/motion-preference";
 import { contactHref, nav, site, whatsappHref } from "@/lib/site";
 
+/** Dark card that widens to the screen edges as it scrolls in: the page's last move. */
 export function Closing() {
+  const ref = useRef<HTMLDivElement>(null);
+  const { enabled } = useMotionPreference();
+  const { scrollYProgress } = useScroll({ target: ref, offset: ["start end", "start 25%"] });
+  // Clip instead of resizing: no layout work per frame.
+  const clip = useTransform(
+    scrollYProgress,
+    [0, 1],
+    ["inset(0% 5% 0% 5% round 48px)", "inset(0% 0% 0% 0% round 32px)"],
+  );
+  const textY = useTransform(scrollYProgress, [0, 1], [60, 0]);
   const whatsapp = whatsappHref();
-  return (
-    <section id="contacto" className="pb-12">
-      <Container>
-        <Reveal className="rounded-[32px] bg-paper px-6 py-16 ring-1 ring-hair sm:px-14 sm:py-20">
-          <div className="max-w-[44rem]">
-            <h2 className="text-[34px] leading-[1.08] font-medium tracking-[-0.03em] sm:text-[52px]">
-              Que tarefa gostava de nunca mais fazer?
-            </h2>
-            <p className="mt-5 max-w-[34rem] text-[17px] leading-[1.6] text-ink-2">
-              Diga-nos qual é. Numa conversa de 30 minutos mostramos-lhe como a automatizar e por
-              onde faz sentido começar.
-            </p>
-            <div className="mt-9 flex flex-wrap items-center gap-3">
-              <LinkButton href={contactHref()}>{site.cta}</LinkButton>
-              {whatsapp && (
-                <LinkButton href={whatsapp} variant="glass">
-                  Falar no WhatsApp
-                </LinkButton>
-              )}
-            </div>
-            <p className="mt-5 text-[13.5px] text-mute">{site.ctaNote}</p>
-          </div>
-        </Reveal>
 
-        <footer className="mt-16 flex flex-col gap-8 border-t border-hair pt-8 text-[14px] sm:flex-row sm:items-start sm:justify-between">
-          <div className="max-w-[18rem]">
-            <Logo />
-            <p className="mt-3 text-mute">Automações à medida para pequenas e médias empresas.</p>
+  return (
+    <section id="contacto" aria-labelledby="contacto-title" className="pb-10">
+      <div ref={ref} className="px-3 sm:px-4">
+        <motion.div
+          data-nav-dark
+          className="relative isolate overflow-hidden bg-ink text-white"
+          style={enabled ? { clipPath: clip } : { borderRadius: 32 }}
+        >
+          {/* Slow coloured light inside the dark card. */}
+          <div aria-hidden className="absolute inset-0 -z-10">
+            <div className="absolute -top-1/3 left-[8%] size-[70vmax] max-w-none animate-drift-a rounded-full bg-[radial-gradient(closest-side,rgb(96_120_220/0.38),transparent)] motion-reduce:animate-none" />
+            <div className="absolute -right-1/4 -bottom-1/2 size-[64vmax] animate-drift-b rounded-full bg-[radial-gradient(closest-side,rgb(70_170_130/0.28),transparent)] motion-reduce:animate-none" />
+            <div className="grain absolute inset-0 opacity-[0.12] mix-blend-overlay" />
           </div>
-          <nav aria-label="Rodapé" className="flex flex-col gap-2.5">
+          <Container>
+            <motion.div
+              className="max-w-[48rem] py-24 sm:py-36"
+              style={enabled ? { y: textY } : undefined}
+            >
+              <h2
+                id="contacto-title"
+                className="text-[40px] leading-[1.04] font-medium tracking-[-0.035em] sm:text-[68px]"
+              >
+                Que tarefa gostava de nunca mais fazer?
+              </h2>
+              <p className="mt-6 max-w-[34rem] text-[17px] leading-[1.6] text-white/70 sm:text-[18px]">
+                Diga-nos qual é. Numa conversa de 30 minutos mostramos-lhe como a automatizar e por
+                onde faz sentido começar.
+              </p>
+              <div className="mt-10 flex flex-wrap items-center gap-3">
+                <Magnetic>
+                  <LinkButton href={contactHref()} variant="light" size="lg" arrow>
+                    {site.cta}
+                  </LinkButton>
+                </Magnetic>
+                {whatsapp && (
+                  <LinkButton
+                    href={whatsapp}
+                    variant="text"
+                    className="h-14 px-4 text-white hover:text-white/70"
+                    arrow
+                  >
+                    Falar no WhatsApp
+                  </LinkButton>
+                )}
+              </div>
+              <p className="mt-5 text-[13.5px] text-white/50">{site.ctaNote}</p>
+            </motion.div>
+          </Container>
+        </motion.div>
+      </div>
+
+      <Container>
+        <footer className="mt-14 flex flex-col gap-8 text-[14px] sm:flex-row sm:items-start sm:justify-between">
+          <div className="max-w-[18rem]">
+            <a href="#top" className="inline-block transition-opacity hover:opacity-70">
+              <Logo />
+            </a>
+            <p className="mt-3 text-ink-2">Automações à medida para pequenas e médias empresas.</p>
+          </div>
+          <nav aria-label="Rodapé" className="flex flex-col gap-1">
             {nav.map((item) => (
-              <a key={item.href} href={item.href} className="text-ink-2 hover:text-ink">
+              <a
+                key={item.href}
+                href={item.href}
+                className="-mx-2 rounded-full px-2 py-1 text-ink-2 transition-colors hover:bg-white/60 hover:text-ink"
+              >
                 {item.label}
               </a>
             ))}
           </nav>
-          <div className="flex flex-col gap-2.5">
-            <a href={`mailto:${site.email}`} className="text-ink-2 hover:text-ink">
+          <div className="flex flex-col gap-1">
+            <a
+              href={`mailto:${site.email}`}
+              className="-mx-2 rounded-full px-2 py-1 text-ink-2 transition-colors hover:bg-white/60 hover:text-ink"
+            >
               {site.email}
             </a>
-            <span className="text-mute">Portugal</span>
-            <span className="text-mute">© 2026 {site.name}</span>
+            <span className="py-1 text-ink-2">Portugal</span>
+            <span className="py-1 text-mute">© 2026 {site.name}</span>
           </div>
         </footer>
       </Container>

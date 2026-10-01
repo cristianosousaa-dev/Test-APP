@@ -1,4 +1,5 @@
 import type { ComponentType } from "react";
+import type { BackdropTheme } from "@/lib/backdrop";
 
 export interface StageProps {
   step: number;
@@ -17,7 +18,9 @@ export interface PreviewConfig {
   description: string;
   /** One label per step; the stage receives the current step index. */
   steps: string[];
-  durations: number[];
   outcomes: string[];
+  /** The tools this automation touches, lit from the step where each joins in. */
+  tools: { label: string; at: number }[];
+  theme: BackdropTheme;
   Stage: ComponentType<StageProps>;
 }

@@ -150,11 +150,17 @@ export const leads: PreviewConfig = {
     "Visita marcada",
     "Consultor avisado com o resumo",
   ],
-  durations: [1600, 2200, 2600, 2600, 3800],
   outcomes: [
     "Nenhum contacto fica à espera",
     "Funil sempre atualizado",
     "Consultores focados em quem quer comprar",
   ],
+  tools: [
+    { label: "Portal imobiliário", at: 0 },
+    { label: "WhatsApp", at: 1 },
+    { label: "CRM", at: 2 },
+    { label: "Agenda", at: 3 },
+  ],
+  theme: "leads",
   Stage: LeadsStage,
 };

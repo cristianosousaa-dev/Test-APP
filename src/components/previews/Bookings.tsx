@@ -229,7 +229,12 @@ export const bookings: PreviewConfig = {
     "Marca na agenda",
     "Confirma e agenda o lembrete",
   ],
-  durations: [1800, 1500, 2600, 2000, 3800],
   outcomes: ["Resposta em segundos, mesmo fora de horas", "Menos chamadas", "Menos faltas"],
+  tools: [
+    { label: "WhatsApp", at: 0 },
+    { label: "Google Calendar", at: 1 },
+    { label: "Lembrete por SMS", at: 4 },
+  ],
+  theme: "bookings",
   Stage: BookingsStage,
 };

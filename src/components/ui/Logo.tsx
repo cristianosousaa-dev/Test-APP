@@ -3,7 +3,7 @@ import { site } from "@/lib/site";
 export function Logo() {
   return (
     <span className="inline-flex items-center gap-2.5">
-      <svg viewBox="0 0 32 32" className="size-7" aria-hidden>
+      <svg viewBox="0 0 32 32" className="logo-mark size-7" aria-hidden>
         <rect width="32" height="32" rx="9" fill="#0F1012" />
         <circle cx="11" cy="11.5" r="3" fill="#fff" />
         <circle cx="21" cy="20.5" r="3" fill="#fff" />

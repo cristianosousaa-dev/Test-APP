@@ -24,6 +24,55 @@
   --color-go: #1e8e5a;
 
   --ease-out-soft: cubic-bezier(0.22, 1, 0.36, 1);
+
+  --animate-drift-a: drift-a 26s ease-in-out infinite alternate;
+  --animate-drift-b: drift-b 32s ease-in-out infinite alternate;
+  --animate-drift-c: drift-c 38s ease-in-out infinite alternate;
+  --animate-marquee: marquee 48s linear infinite;
+  --animate-rise: rise 0.9s cubic-bezier(0.22, 1, 0.36, 1) both;
+  --animate-fade-up: fade-up 0.9s cubic-bezier(0.22, 1, 0.36, 1) both;
+  --animate-flow: flow 1.6s cubic-bezier(0.45, 0, 0.55, 1) infinite;
+
+  @keyframes drift-a {
+    to {
+      transform: translate(8vmax, 6vmax) scale(1.12);
+    }
+  }
+  @keyframes drift-b {
+    to {
+      transform: translate(-9vmax, 5vmax) scale(0.9);
+    }
+  }
+  @keyframes drift-c {
+    to {
+      transform: translate(5vmax, -8vmax) scale(1.08);
+    }
+  }
+  @keyframes marquee {
+    to {
+      transform: translateX(-50%);
+    }
+  }
+  @keyframes rise {
+    from {
+      transform: translateY(105%);
+    }
+  }
+  @keyframes fade-up {
+    from {
+      opacity: 0;
+      transform: translateY(14px);
+      filter: blur(6px);
+    }
+  }
+  @keyframes flow {
+    from {
+      transform: translateX(-100%);
+    }
+    to {
+      transform: translateX(260%);
+    }
+  }
 }
 
 @layer base {
@@ -48,6 +97,20 @@
   p,
   li {
     text-wrap: pretty;
+  }
+  /* Everything that can be clicked says so. */
+  a[href],
+  button:not(:disabled),
+  summary,
+  label[for],
+  select,
+  [role="button"],
+  [role="tab"],
+  [role="link"] {
+    cursor: pointer;
+  }
+  :disabled {
+    cursor: not-allowed;
   }
   ::selection {
     background: var(--color-sky);
@@ -123,6 +186,78 @@
   }
 }
 
+/* Navigation glass while it floats over a dark surface. */
+.glass.is-dark {
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / 0.14),
+    inset 0 0 0 1px rgb(255 255 255 / 0.06),
+    0 10px 30px -10px rgb(0 0 0 / 0.5);
+}
+.glass.is-dark::before {
+  opacity: 0.25;
+}
+.glass.is-dark::after {
+  opacity: 0.1;
+}
+.glass.is-dark :is(.text-ink, .text-ink-2) {
+  color: rgb(255 255 255 / 0.78);
+}
+.glass.is-dark :is(.text-ink, .text-ink-2):hover,
+.glass.is-dark [aria-current] {
+  color: #fff;
+}
+.glass.is-dark .nav-pill {
+  background: rgb(255 255 255 / 0.12);
+}
+.glass.is-dark .nav-progress {
+  background: rgb(255 255 255 / 0.45);
+}
+.glass.is-dark .logo-mark rect {
+  fill: #fff;
+}
+.glass.is-dark .logo-mark :is(circle, path) {
+  fill: var(--color-ink);
+  stroke: var(--color-ink);
+}
+.glass.is-dark .logo-mark path {
+  fill: none;
+}
+.glass.is-dark a.bg-ink {
+  background: #fff;
+  color: var(--color-ink);
+}
+
+/* Film grain over the backdrop so the light fields never band. */
+.grain {
+  opacity: 0.045;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.5 0 0 0 0 0.5 0 0 0 0 0.5 0 0 0 0.9 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* Light sweep across the solid button on hover. */
+.btn-shine {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+}
+.btn-shine::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: linear-gradient(
+    105deg,
+    transparent 30%,
+    rgb(255 255 255 / 0.22) 45%,
+    rgb(255 255 255 / 0.05) 55%,
+    transparent 70%
+  );
+  transform: translateX(-120%);
+  transition: transform 0.8s var(--ease-out-soft);
+}
+.btn-shine:hover::after {
+  transform: translateX(120%);
+}
+
 /* Native FAQ accordion with smooth height where supported. */
 :root {
   interpolate-size: allow-keywords;
@@ -145,4 +280,17 @@
   .faq-item::details-content {
     transition: none;
   }
+  .animate-rise.animate-rise,
+  .animate-fade-up.animate-fade-up,
+  .animate-marquee.animate-marquee,
+  .animate-flow.animate-flow {
+    animation: none;
+  }
+}
+html[data-paused] .animate-marquee,
+html[data-paused] .animate-flow,
+html[data-paused] .animate-drift-a,
+html[data-paused] .animate-drift-b,
+html[data-paused] .animate-drift-c {
+  animation-play-state: paused;
 }

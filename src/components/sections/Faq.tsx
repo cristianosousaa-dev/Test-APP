@@ -1,3 +1,4 @@
+import { ThemeZone } from "@/components/backdrop/ThemeZone";
 import { Container } from "@/components/ui/Container";
 import { Reveal } from "@/components/ui/Reveal";
 
@@ -30,44 +31,51 @@ const FAQS = [
 
 export function Faq() {
   return (
-    <section id="faq" className="py-24 sm:py-32">
-      <Container className="grid gap-12 lg:grid-cols-[minmax(0,0.72fr)_minmax(0,1.28fr)] lg:gap-12">
-        <Reveal>
-          <p className="text-[14px] text-mute">Perguntas</p>
-          <h2 className="mt-3 text-[34px] leading-[1.1] font-medium tracking-[-0.028em] sm:text-[44px]">
-            Antes de falarmos.
-          </h2>
-        </Reveal>
-        <Reveal>
-          <div className="border-t border-hair">
-            {FAQS.map((f, i) => (
-              <details
-                key={f.q}
-                name="faq"
-                open={i === 0}
-                className="faq-item group border-b border-hair"
-              >
-                <summary className="flex cursor-pointer list-none items-center justify-between gap-6 py-5 text-[17px] font-medium tracking-[-0.01em] [&::-webkit-details-marker]:hidden">
-                  {f.q}
-                  <svg
-                    viewBox="0 0 16 16"
-                    className="size-4 shrink-0 text-mute transition-transform duration-300 ease-out-soft group-open:rotate-45 motion-reduce:transition-none"
-                    aria-hidden
-                  >
-                    <path
-                      d="M8 3v10M3 8h10"
-                      stroke="currentColor"
-                      strokeWidth="1.5"
-                      strokeLinecap="round"
-                    />
-                  </svg>
-                </summary>
-                <p className="max-w-[40rem] pb-6 text-[16px] leading-[1.65] text-ink-2">{f.a}</p>
-              </details>
-            ))}
-          </div>
-        </Reveal>
-      </Container>
+    <section id="faq" aria-labelledby="faq-title" className="py-24 sm:py-36">
+      <ThemeZone theme="faq">
+        <Container className="grid gap-12 lg:grid-cols-[minmax(0,0.72fr)_minmax(0,1.28fr)] lg:gap-12">
+          <Reveal>
+            <p className="text-[14px] text-ink-2">Perguntas</p>
+            <h2
+              id="faq-title"
+              className="mt-3 text-[36px] leading-[1.06] font-medium tracking-[-0.032em] sm:text-[52px]"
+            >
+              Antes de falarmos.
+            </h2>
+          </Reveal>
+          <Reveal>
+            <div className="flex flex-col gap-2">
+              {FAQS.map((f, i) => (
+                <details
+                  key={f.q}
+                  name="faq"
+                  open={i === 0}
+                  className="faq-item group rounded-[22px] bg-white/45 ring-1 ring-white/70 transition-[background-color,box-shadow] duration-300 open:bg-white/75 open:shadow-[0_18px_40px_-24px_rgb(15_16_18/0.3)] hover:bg-white/65"
+                >
+                  <summary className="flex list-none items-center justify-between gap-6 px-5 py-5 text-[17px] font-medium tracking-[-0.01em] sm:px-6 [&::-webkit-details-marker]:hidden">
+                    {f.q}
+                    <svg
+                      viewBox="0 0 16 16"
+                      className="size-8 shrink-0 rounded-full bg-white/70 p-2 text-ink-2 ring-1 ring-hair transition-[transform,background-color,color] duration-300 ease-out-soft group-hover:text-ink group-open:rotate-45 group-open:bg-ink group-open:text-white motion-reduce:transition-none"
+                      aria-hidden
+                    >
+                      <path
+                        d="M8 3v10M3 8h10"
+                        stroke="currentColor"
+                        strokeWidth="1.5"
+                        strokeLinecap="round"
+                      />
+                    </svg>
+                  </summary>
+                  <p className="max-w-[40rem] px-5 pb-6 text-[16px] leading-[1.65] text-ink-2 sm:px-6">
+                    {f.a}
+                  </p>
+                </details>
+              ))}
+            </div>
+          </Reveal>
+        </Container>
+      </ThemeZone>
     </section>
   );
 }

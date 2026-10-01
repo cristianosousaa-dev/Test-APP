@@ -40,7 +40,9 @@ function PaymentsStage({ step, cycle, animate }: StageProps) {
             </p>
             <p className="text-[12.5px] text-mute">recebidos este mês</p>
           </div>
-          <Pill tone="neutral">Cobrança automática ativa</Pill>
+          <span className="hidden sm:block">
+            <Pill tone="neutral">Cobrança automática ativa</Pill>
+          </span>
         </div>
         <ul className="flex-1">
           {ROWS.map((r) => {
@@ -128,11 +130,17 @@ export const payments: PreviewConfig = {
     "Pagamento recebido",
     "Registado na contabilidade",
   ],
-  durations: [2200, 3000, 2400, 3600],
   outcomes: [
     "Menos dinheiro parado",
     "Ninguém tem de fazer telefonemas incómodos",
     "Contas sempre em dia",
   ],
+  tools: [
+    { label: "Moloni", at: 0 },
+    { label: "Email", at: 1 },
+    { label: "MB WAY", at: 2 },
+    { label: "Contabilidade", at: 3 },
+  ],
+  theme: "payments",
   Stage: PaymentsStage,
 };

@@ -99,6 +99,16 @@ export function HeroStage() {
 
   const transition = animate ? spring : instant;
 
+  // Live tally for the day: every notification that has landed so far bumps a counter.
+  // The day "resets" every few loops so the numbers stay believable.
+  const arrived = (cycle % 3) * n + step + 1;
+  const tally = { messages: 11, calendar: 3, invoices: 1 } as Record<string, number>;
+  for (let k = 0; k < arrived; k++) {
+    const app = FEED[k % n]?.app;
+    const bucket = app === "requests" ? "messages" : app;
+    if (bucket && bucket in tally) tally[bucket] = (tally[bucket] ?? 0) + 1;
+  }
+
   return (
     <div ref={ref} className="relative">
       <p className="sr-only">
@@ -107,16 +117,11 @@ export function HeroStage() {
       </p>
       <div
         aria-hidden
-        className="relative overflow-hidden rounded-[28px] bg-paper shadow-[0_1px_2px_rgb(15_16_18/0.05),0_30px_70px_-30px_rgb(15_16_18/0.28)] ring-1 ring-hair"
+        className="relative overflow-hidden rounded-[28px] bg-paper/90 shadow-[0_1px_2px_rgb(15_16_18/0.05),0_40px_90px_-40px_rgb(15_16_18/0.35)] ring-1 ring-white/70"
       >
         {/* Calendar toolbar */}
-        <div className="flex h-[52px] items-center justify-between border-b border-hair px-5">
+        <div className="flex h-[52px] items-center gap-1 border-b border-hair px-5">
           <span className="text-[14px] font-semibold tracking-[-0.01em]">Outubro 2026</span>
-          <span className="flex items-center gap-1 text-[12.5px] text-ink-2">
-            <Chevron dir="left" />
-            <span className="rounded-full bg-canvas px-3 py-1 font-medium">Hoje</span>
-            <Chevron dir="right" />
-          </span>
         </div>
 
         {/* Week grid */}
@@ -225,7 +230,49 @@ export function HeroStage() {
           </AnimatePresence>
         </div>
       </div>
+
+      {/* Floating tally, half over the card edge. */}
+      <div
+        aria-hidden
+        className="absolute -top-5 right-4 flex h-11 items-center gap-3.5 rounded-full bg-white/90 pr-4 pl-3 text-[12.5px] text-ink-2 shadow-[inset_0_1px_0_rgb(255_255_255),0_1px_2px_rgb(15_16_18/0.06),0_12px_30px_-12px_rgb(15_16_18/0.3)] ring-1 ring-white sm:right-6"
+      >
+        <span className="flex items-center gap-1.5 font-medium text-ink">
+          <span className="relative flex size-2">
+            <span className="absolute inset-0 animate-ping rounded-full bg-go/50 motion-reduce:hidden" />
+            <span className="relative size-2 rounded-full bg-go" />
+          </span>
+          Hoje
+        </span>
+        <Tally value={tally.messages ?? 0} label="mensagens" animate={animate} />
+        <Tally value={tally.calendar ?? 0} label="marcações" animate={animate} />
+        <span className="hidden sm:contents">
+          <Tally value={tally.invoices ?? 0} label="pagamentos" animate={animate} />
+        </span>
+      </div>
     </div>
+  );
+}
+
+/** A number that rolls up when it changes, like a mechanical counter. */
+function Tally({ value, label, animate }: { value: number; label: string; animate: boolean }) {
+  return (
+    <span className="flex items-baseline gap-1">
+      <span className="relative inline-grid h-[1.25em] overflow-hidden font-semibold text-ink tabular-nums">
+        <AnimatePresence initial={false} mode="popLayout">
+          <motion.span
+            key={value}
+            className="col-start-1 row-start-1"
+            initial={animate ? { y: "100%", opacity: 0 } : false}
+            animate={{ y: 0, opacity: 1 }}
+            exit={animate ? { y: "-100%", opacity: 0 } : undefined}
+            transition={animate ? spring : instant}
+          >
+            {value}
+          </motion.span>
+        </AnimatePresence>
+      </span>
+      {label}
+    </span>
   );
 }
 
@@ -252,20 +299,5 @@ function EventCard({ event, highlight = false }: { event: CalEvent; highlight?: 
       <p className="truncate text-[11px] leading-tight font-semibold">{event.title}</p>
       <p className="truncate text-[10.5px] leading-tight opacity-80">{event.who}</p>
     </div>
-  );
-}
-
-function Chevron({ dir }: { dir: "left" | "right" }) {
-  return (
-    <svg viewBox="0 0 16 16" className="size-7 p-2 text-ink-2" aria-hidden>
-      <path
-        d={dir === "left" ? "M10 3.5L5.5 8l4.5 4.5" : "M6 3.5L10.5 8 6 12.5"}
-        stroke="currentColor"
-        strokeWidth="1.6"
-        fill="none"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-    </svg>
   );
 }

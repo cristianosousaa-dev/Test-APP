@@ -1,4 +1,4 @@
-# Design direction — landing (v2, redone from zero)
+# Design direction — landing (v3: scroll-driven)
 
 *ECC `frontend-design-direction` + `liquid-glass-design` (principles adapted to the web) + `motion-design` + `make-interfaces-feel-better`.*
 
@@ -36,3 +36,12 @@ Translucent white (55–70%) + `backdrop-filter: blur(20px) saturate(180%)` + in
 - Springs, no bounce: `{ type: "spring", duration: 0.6, bounce: 0 }` for movement; 0.2 s fades.
 - One thing moves at a time per preview; loops pause off-screen and honour reduced motion / the pause toggle.
 - Layout animations for things that move between places (pipeline cards, agenda slots).
+
+## v3: scroll as the connective tissue
+- **Backdrop:** fixed layer of soft pastel light fields behind the page. Each section (and each example chapter) sets a mood; moods crossfade (opacity only), the field drifts slowly and turns/rises with scroll. Grain on top so it never bands. Pauses with the pause toggle and reduced motion.
+- **Hero:** words rise out of masks (CSS, before hydration); the calendar leans towards the pointer; on scroll the copy lifts away faster than the stage, handing over to the examples.
+- **Examples:** one pinned stage; each scroll unit advances one step, chapters hand over with a blur crossfade, the backdrop follows. Chapters, steps and connected tools are clickable and scroll to their moment.
+- **Automations:** "Quando → Faz" rule cards per area, pointer-following light, animated flow line.
+- **Process:** a line draws through the four steps with the scroll and lights each one.
+- **Closing:** a dark card opens to the screen edges as it scrolls in; the nav glass turns dark over it.
+- **Interaction:** every clickable element has `cursor: pointer`, hover and press states; primary CTAs are magnetic with a light sweep and a sliding arrow.
