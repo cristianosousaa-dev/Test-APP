@@ -57,8 +57,9 @@ describe("corrections", () => {
 
   it("merge_into does not change the computed state (handled by the pipeline)", () => {
     const m = correction<Correction>({ field: "merge_into", value: "stream-2", createdAt: t(30) });
-    const without = infer(awaiting(), [], config, now);
-    const withMerge = infer(awaiting(), [m], config, now);
+    const signals = awaiting();
+    const without = infer(signals, [], config, now);
+    const withMerge = infer(signals, [m], config, now);
     expect(withMerge).toEqual(without);
   });
 });
