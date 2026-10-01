@@ -5,9 +5,7 @@ import {
   type ReactNode,
   useCallback,
   useContext,
-  useEffect,
   useMemo,
-  useState,
   useSyncExternalStore,
 } from "react";
 
@@ -47,36 +45,43 @@ const MotionPreferenceContext = createContext<MotionPreference>({
   togglePaused: () => {},
 });
 
+/* The user's pause choice lives in localStorage; this tiny store lets React read it
+   during render (server snapshot `false`) and keeps tabs in sync via the storage event. */
+const pauseListeners = new Set<() => void>();
+
+function readPaused(): boolean {
+  try {
+    return window.localStorage.getItem(STORAGE_KEY) === "1";
+  } catch {
+    // Storage can be unavailable (private mode, blocked site data): keep the default.
+    return false;
+  }
+}
+
+function subscribePaused(callback: () => void) {
+  pauseListeners.add(callback);
+  window.addEventListener("storage", callback);
+  return () => {
+    pauseListeners.delete(callback);
+    window.removeEventListener("storage", callback);
+  };
+}
+
+function writePaused(next: boolean) {
+  try {
+    window.localStorage.setItem(STORAGE_KEY, next ? "1" : "0");
+  } catch {
+    // Ignore storage failures; the toggle still works until the next read.
+  }
+  for (const listener of pauseListeners) listener();
+}
+
 export function MotionPreferenceProvider({ children }: { children: ReactNode }) {
   const reduced = usePrefersReducedMotion();
-  const [paused, setPaused] = useState(false);
-
-  // Read the saved choice after mount so the first render matches the server HTML.
-  useEffect(() => {
-    try {
-      if (window.localStorage.getItem(STORAGE_KEY) === "1") setPaused(true);
-    } catch {
-      // Storage can be unavailable (private mode, blocked site data): keep the default.
-    }
-  }, []);
-
+  const paused = useSyncExternalStore(subscribePaused, readPaused, () => false);
   const enabled = !reduced && !paused;
 
-  useEffect(() => {
-    document.documentElement.dataset.motion = enabled ? "on" : "off";
-  }, [enabled]);
-
-  const togglePaused = useCallback(() => {
-    setPaused((p) => {
-      const next = !p;
-      try {
-        window.localStorage.setItem(STORAGE_KEY, next ? "1" : "0");
-      } catch {
-        // Ignore storage failures; the toggle still works for this visit.
-      }
-      return next;
-    });
-  }, []);
+  const togglePaused = useCallback(() => writePaused(!readPaused()), []);
 
   const value = useMemo(
     () => ({ enabled, paused, reduced, togglePaused }),

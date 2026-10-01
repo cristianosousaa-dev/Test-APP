@@ -1,7 +1,7 @@
 "use client";
 
 import { animate as animateValue, useMotionValue, useMotionValueEvent } from "motion/react";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 
 const euro = new Intl.NumberFormat("pt-PT", { style: "currency", currency: "EUR" });
 
@@ -17,13 +17,17 @@ export function Counter({
 }) {
   const mv = useMotionValue(value);
   const ref = useRef<HTMLSpanElement>(null);
+  // React only ever renders the first value; later values are written by the motion value,
+  // so a new `value` never flashes before the glide starts.
+  const [initialText] = useState(() => format(value));
 
   useMotionValueEvent(mv, "change", (v) => {
     if (ref.current) ref.current.textContent = format(v);
   });
 
   useEffect(() => {
-    if (!animate) {
+    // Glide only upwards; a loop restart resets instantly instead of counting money back down.
+    if (!animate || value < mv.get()) {
       mv.set(value);
       return;
     }
@@ -33,7 +37,7 @@ export function Counter({
 
   return (
     <span ref={ref} className="tabular-nums">
-      {format(value)}
+      {initialText}
     </span>
   );
 }

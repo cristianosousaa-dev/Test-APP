@@ -57,7 +57,7 @@ export function Examples() {
           </p>
         </Reveal>
 
-        <Reveal className="mt-10 -mx-6 overflow-x-auto px-6 pb-1 sm:mx-0 sm:px-0">
+        <Reveal layoutScroll className="mt-10 -mx-6 overflow-x-auto px-6 pb-1 sm:mx-0 sm:px-0">
           <div
             role="tablist"
             aria-label="Exemplos de automações"
@@ -106,7 +106,9 @@ export function Examples() {
           tabIndex={0}
           className="mt-8 rounded-[28px]"
         >
-          <AnimatePresence mode="wait" initial={false}>
+          {/* No initial={false} here: it would propagate to every motion element mounted
+              later inside the first panel and skip their entrances (e.g. the step bar). */}
+          <AnimatePresence mode="wait">
             <motion.div
               key={active.id}
               initial={reduced ? false : { opacity: 0, y: 8 }}
@@ -176,10 +178,10 @@ function PreviewPanel({ preview }: { preview: PreviewConfig }) {
                 {state === "current" && (
                   <div className="mt-2.5 ml-8 h-[2px] overflow-hidden rounded-full bg-hair">
                     <motion.div
-                      key={`${cycle}-${step}`}
+                      key={`${cycle}-${step}-${running}`}
                       className="h-full bg-ink"
-                      initial={{ width: running ? "0%" : "100%" }}
-                      animate={{ width: "100%" }}
+                      initial={{ width: animate ? "0%" : "100%" }}
+                      animate={{ width: running || !animate ? "100%" : "0%" }}
                       transition={
                         running
                           ? { duration: (preview.durations[step] ?? 2000) / 1000, ease: "linear" }

@@ -11,14 +11,14 @@ import { contactHref, nav, site } from "@/lib/site";
 function MotionToggle() {
   const { paused, reduced, togglePaused } = useMotionPreference();
   if (reduced) return null;
-  const label = paused ? "Retomar animações" : "Pausar animações";
+  // Fixed name; aria-pressed carries the state. The tooltip names the next action.
   return (
     <button
       type="button"
       onClick={togglePaused}
       aria-pressed={paused}
-      aria-label={label}
-      title={label}
+      aria-label="Pausar animações"
+      title={paused ? "Retomar animações" : "Pausar animações"}
       className="grid size-10 place-items-center rounded-full text-ink-2 transition-colors duration-200 hover:bg-white/70 hover:text-ink"
     >
       <svg viewBox="0 0 16 16" className="size-3.5" aria-hidden>
@@ -87,7 +87,7 @@ export function Nav() {
           className="grid size-10 place-items-center rounded-full text-ink md:hidden"
           aria-expanded={open}
           aria-controls="mobile-menu"
-          aria-label={open ? "Fechar menu" : "Abrir menu"}
+          aria-label="Menu"
           onClick={() => setOpen((v) => !v)}
         >
           <svg viewBox="0 0 16 16" className="size-4" aria-hidden>
