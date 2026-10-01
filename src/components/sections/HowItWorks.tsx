@@ -1,12 +1,12 @@
-import { ArrowDown, Calendar, Check, MessageCircle, Zap } from "lucide-react";
+import { ArrowDown, CalendarCheck, Check, MessageCircle, Workflow } from "lucide-react";
 import type { ReactNode } from "react";
 import { BrandIcon } from "@/components/brand/BrandIcon";
 import { Container } from "@/components/ui/Container";
 import { SectionHead } from "@/components/ui/SectionHead";
 
 /**
- * The idea in one picture: something happens → the automation handles it → it is done.
- * Each card plays a short sequence when it is revealed; a dot travels between them.
+ * The solution in one picture: something happens → Orchestr handles it → it is done.
+ * Each card plays a short sequence when revealed; a signal travels between them.
  */
 export function HowItWorks() {
   return (
@@ -14,33 +14,43 @@ export function HowItWorks() {
       id="como-funciona"
       data-loop
       aria-labelledby="como-funciona-title"
-      className="py-24 sm:py-32"
+      className="relative py-24 sm:py-32"
     >
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-x-0 top-0 -z-10 h-[520px] bg-[radial-gradient(50%_60%_at_50%_0%,rgb(61_224_160/0.08),transparent)]"
+      />
       <Container>
         <SectionHead
-          kicker="Como funciona"
+          index="02"
+          kicker="A solução"
           id="como-funciona-title"
-          title="Uma automação tem três partes. Nós ligamo-las."
+          align="center"
+          title="Quando algo acontece, a Orchestr trata do resto."
         >
-          Quando acontece alguma coisa no seu negócio, a automação trata do resto e deixa tudo
-          registado. Sem ninguém ter de mexer.
+          Cada automação liga as ferramentas que já usa. Acontece algo, a automação faz o trabalho e
+          deixa tudo registado. Sem ninguém ter de mexer.
         </SectionHead>
 
-        <div className="mt-14 grid gap-3 lg:grid-cols-[minmax(0,1fr)_56px_minmax(0,1fr)_56px_minmax(0,1fr)] lg:gap-0">
+        <div className="mt-16 grid gap-3 lg:grid-cols-[minmax(0,1fr)_64px_minmax(0,1fr)_64px_minmax(0,1fr)] lg:gap-0">
           <StepCard
             i={0}
             label="Acontece algo"
-            title="Um cliente envia uma mensagem"
-            badge="bg-amber text-ink"
-            icon={<MessageCircle className="size-5" />}
+            title="Um cliente pede uma vaga"
+            icon={<MessageCircle className="size-[18px]" />}
+            tone="indigo"
           >
             <div className="seq flex flex-col gap-2">
-              <div className="flex items-center gap-2 text-[12.5px] text-mute">
+              <div className="flex items-center gap-2 font-mono text-[10.5px] text-mute">
                 <BrandIcon brand="whatsapp" className="size-4" />
-                WhatsApp · 21:47
+                WHATSAPP · 21:47
               </div>
-              <div className="rounded-2xl rounded-bl-md bg-amber-soft px-4 py-3 text-[14px] text-ink">
+              <div className="rounded-2xl rounded-bl-md bg-white px-4 py-3 text-[14px] text-ink shadow-[0_1px_2px_rgb(0_0_0/0.06)]">
                 Olá! Têm vaga na sexta à tarde?
+              </div>
+              <div className="flex items-center gap-2 px-1 pt-1 text-[12.5px] text-ink-2">
+                <span className="size-1.5 rounded-full bg-amber" />
+                Fora de horas. Ninguém disponível para responder.
               </div>
             </div>
           </StepCard>
@@ -49,14 +59,17 @@ export function HowItWorks() {
 
           <StepCard
             i={1}
-            label="A automação trata"
+            label="A Orchestr trata"
             title="Lê, consulta a agenda e responde"
-            badge="bg-ink text-mint"
-            icon={<Zap className="size-5" />}
+            icon={<Workflow className="size-[18px]" />}
+            tone="white"
           >
-            <ul className="seq flex flex-col gap-2 text-[14px]">
+            <ul className="seq flex flex-col gap-2 text-[14px] text-ink">
               {["Percebe o pedido", "Vê os horários livres", "Responde ao cliente"].map((t) => (
-                <li key={t} className="flex items-center gap-2.5">
+                <li
+                  key={t}
+                  className="flex items-center gap-2.5 rounded-xl bg-white px-3 py-2 shadow-[0_1px_2px_rgb(0_0_0/0.06)]"
+                >
                   <span className="grid size-5 place-items-center rounded-full bg-ink text-mint">
                     <Check className="size-3" strokeWidth={3} />
                   </span>
@@ -71,20 +84,18 @@ export function HowItWorks() {
           <StepCard
             i={2}
             label="Fica feito"
-            title="Marcação criada e lembrete agendado"
-            badge="bg-brand text-white"
-            icon={<Calendar className="size-5" />}
+            title="Marcação criada, lembrete agendado"
+            icon={<CalendarCheck className="size-[18px]" />}
+            tone="accent"
           >
             <div className="seq flex flex-col gap-2">
-              <div className="flex items-center gap-2 text-[12.5px] text-mute">
+              <div className="flex items-center gap-2 font-mono text-[10.5px] text-mute">
                 <BrandIcon brand="googleCalendar" className="size-4" />
-                Google Calendar
+                GOOGLE CALENDAR
               </div>
-              <div className="flex items-center gap-3 rounded-2xl bg-brand-soft px-4 py-3 text-[14px] ring-1 ring-brand/15">
+              <div className="flex items-center gap-3 rounded-2xl bg-white px-4 py-3 text-[14px] text-ink shadow-[0_0_0_2px_var(--color-brand)]">
                 <span className="text-center leading-none">
-                  <span className="block text-[10px] font-semibold text-brand-ink uppercase">
-                    Sex
-                  </span>
+                  <span className="block font-mono text-[9.5px] text-brand-ink">SEX</span>
                   <span className="block text-[20px] font-semibold">2</span>
                 </span>
                 <span>
@@ -106,49 +117,55 @@ function StepCard({
   i,
   label,
   title,
-  badge,
   icon,
+  tone,
   children,
 }: {
   i: number;
   label: string;
   title: string;
-  badge: string;
   icon: ReactNode;
+  tone: "indigo" | "white" | "accent";
   children: ReactNode;
 }) {
+  const badge = {
+    indigo: "bg-indigo/15 text-indigo ring-indigo/30",
+    white: "bg-white/10 text-fg ring-white/15",
+    accent: "bg-accent/15 text-accent ring-accent/30",
+  }[tone];
   return (
     // Reveal and hover live on separate elements: a reveal animation would pin the transform.
-    <div data-reveal style={{ ["--i" as string]: i, ["--d" as string]: `${i * 120}ms` }}>
-      <div data-spot className="card group flex h-full flex-col p-6">
+    <div data-reveal style={{ ["--i" as string]: i }}>
+      <div data-spot className="surface group flex h-full flex-col p-6">
+        <span className="spot-glow" />
         <div className="flex items-center gap-3">
           <span
-            className={`grid size-12 place-items-center rounded-2xl transition-transform duration-300 group-hover:-rotate-6 group-hover:scale-105 ${badge}`}
+            className={`grid size-10 place-items-center rounded-xl ring-1 transition-transform duration-300 group-hover:-rotate-6 ${badge}`}
           >
             {icon}
           </span>
-          <span className="text-[13px] font-semibold text-mute uppercase">
-            {i + 1} · {label}
+          <span className="kicker !text-[10.5px]">
+            0{i + 1} · {label}
           </span>
         </div>
-        <h3 className="mt-5 text-[20px] leading-snug font-semibold tracking-[-0.02em]">{title}</h3>
-        <div className="mt-5">{children}</div>
+        <h3 className="mt-5 text-[19px] leading-snug font-semibold tracking-[-0.02em]">{title}</h3>
+        <div className="mt-5 rounded-2xl bg-paper p-3">{children}</div>
       </div>
     </div>
   );
 }
 
-/** Between two steps: an arrow on small screens, a wire with a travelling dot on large. */
+/** Between two steps: an arrow on small screens, a wire with a travelling signal on large. */
 function Wire({ d }: { d: number }) {
   return (
-    <span aria-hidden className="grid place-items-center text-ink/40 lg:block lg:pt-[51px]">
+    <span aria-hidden className="grid place-items-center text-fg-3 lg:block lg:pt-[44px]">
       <ArrowDown className="size-5 lg:hidden" />
       <span
-        className="relative hidden h-[2px] w-full bg-ink/12 lg:block"
-        style={{ ["--travel" as string]: "46px" }}
+        className="relative mx-2 hidden h-px bg-gradient-to-r from-white/5 via-white/25 to-white/5 lg:block"
+        style={{ ["--travel" as string]: "40px" }}
       >
         <span
-          className="absolute -top-[4px] left-0 size-2.5 animate-travel rounded-full bg-brand shadow-[0_0_0_4px_rgb(31_111_74/0.18)]"
+          className="absolute -top-[3px] left-0 size-[7px] animate-travel rounded-full bg-accent shadow-[0_0_12px_2px_rgb(61_224_160/0.6)]"
           style={{ animationDelay: `${d}s` }}
         />
       </span>

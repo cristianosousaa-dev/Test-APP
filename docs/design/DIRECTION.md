@@ -1,4 +1,4 @@
-# Design direction — landing (v7: polished, official logos, light motion)
+# Design direction — landing (history v6–v7; v8 identity: see docs/brand/)
 
 ## Why v6
 v2–v5 piled on heavy effects (fixed animated backdrop, backdrop-filter glass on dozens of

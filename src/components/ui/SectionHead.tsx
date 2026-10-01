@@ -1,48 +1,43 @@
 import type { ReactNode } from "react";
 import { cn } from "@/lib/cn";
 
-/** Kicker + title + one line of plain explanation. Every section opens with one. */
+/** Section opener: mono kicker with index, display title, one line of plain explanation. */
 export function SectionHead({
+  index,
   kicker,
   title,
   children,
   id,
-  tone = "light",
+  align = "left",
   className,
 }: {
+  index: string;
   kicker: string;
   title: ReactNode;
   children?: ReactNode;
   id: string;
-  tone?: "light" | "dark";
+  align?: "left" | "center";
   className?: string;
 }) {
   return (
-    <div data-reveal className={cn("max-w-[46rem]", className)}>
-      <p
-        className={cn(
-          "inline-flex items-center gap-2 text-[13.5px] font-semibold tracking-wide uppercase",
-          tone === "light" ? "text-ink-2" : "text-white/70",
-        )}
-      >
-        <span className={cn("size-2.5 rounded-[3px]", tone === "light" ? "bg-brand" : "bg-mint")} />
+    <div
+      data-reveal
+      className={cn(
+        "max-w-[46rem]",
+        align === "center" && "mx-auto flex flex-col items-center text-center",
+        className,
+      )}
+    >
+      <p className="kicker flex items-center gap-3">
+        <span className="text-accent">{index}</span>
+        <span className="h-px w-6 bg-hair-2" />
         {kicker}
       </p>
-      <h2
-        id={id}
-        className="mt-4 text-[34px] leading-[1.05] font-semibold tracking-[-0.035em] sm:text-[48px]"
-      >
+      <h2 id={id} className="h2 ink-sheen mt-5">
         {title}
       </h2>
       {children && (
-        <p
-          className={cn(
-            "mt-4 max-w-[38rem] text-[17.5px] leading-[1.6]",
-            tone === "light" ? "text-ink-2" : "text-white/70",
-          )}
-        >
-          {children}
-        </p>
+        <p className="mt-5 max-w-[38rem] text-[17.5px] leading-[1.65] text-fg-2">{children}</p>
       )}
     </div>
   );

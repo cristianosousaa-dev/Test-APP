@@ -53,11 +53,20 @@ export function Examples() {
   if (!active) return null;
 
   return (
-    <section id="exemplos" aria-labelledby="exemplos-title" className="bg-white py-24 sm:py-32">
+    <section id="exemplos" aria-labelledby="exemplos-title" className="relative py-24 sm:py-32">
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-x-0 top-24 -z-10 h-[700px] bg-[radial-gradient(45%_50%_at_70%_50%,rgb(110_123_255/0.09),transparent)]"
+      />
       <Container>
-        <SectionHead kicker="Exemplos" id="exemplos-title" title="Veja automações a trabalhar.">
-          Escolha um exemplo. Cada um mostra como é hoje, como fica com a automação e o que acontece
-          passo a passo.
+        <SectionHead
+          index="05"
+          kicker="Veja a funcionar"
+          id="exemplos-title"
+          title="Quatro automações, passo a passo."
+        >
+          Escolha um exemplo. Cada um mostra como é hoje, como fica com a Orchestr e o que acontece
+          em cada passo.
         </SectionHead>
 
         <div
@@ -65,12 +74,12 @@ export function Examples() {
           aria-label="Exemplos de automações"
           onKeyDown={onKeyDown}
           data-reveal
-          className="relative -mx-5 mt-10 flex gap-2 overflow-x-auto px-5 pb-1 [scrollbar-width:none] sm:mx-0 sm:px-0"
+          className="relative -mx-5 mt-12 flex w-auto gap-1.5 overflow-x-auto px-5 pb-1 [scrollbar-width:none] sm:mx-0 sm:inline-flex sm:rounded-full sm:bg-white/[0.04] sm:p-1.5 sm:shadow-[inset_0_0_0_1px_var(--color-hair)]"
         >
           {thumb && (
             <span
               aria-hidden
-              className="absolute top-0 left-0 h-12 rounded-full bg-ink transition-[transform,width] duration-500 ease-out-soft motion-reduce:transition-none"
+              className="absolute top-0 left-0 h-12 rounded-full bg-white/[0.1] shadow-[inset_0_0_0_1px_rgb(255_255_255/0.14),inset_0_1px_0_rgb(255_255_255/0.12)] transition-[transform,width] duration-500 ease-out-soft motion-reduce:transition-none sm:top-1.5"
               style={{ width: thumb.w, transform: `translateX(${thumb.x}px)` }}
             />
           )}
@@ -90,11 +99,9 @@ export function Examples() {
                 tabIndex={selected ? 0 : -1}
                 onClick={() => setActiveId(ex.id)}
                 className={cn(
-                  "relative flex h-12 shrink-0 items-center gap-2.5 rounded-full pr-5 pl-1.5 text-[15px] font-medium transition-[background-color,color,box-shadow] duration-300",
-                  selected
-                    ? "text-white"
-                    : "bg-paper text-ink-2 ring-1 ring-line hover:bg-white hover:text-ink hover:ring-line-2",
-                  selected && !thumb && "bg-ink",
+                  "relative flex h-12 shrink-0 items-center gap-2.5 rounded-full pr-5 pl-1.5 text-[15px] font-medium transition-[background-color,color] duration-300",
+                  selected ? "text-fg" : "text-fg-2 hover:text-fg",
+                  selected && !thumb && "bg-white/10",
                 )}
               >
                 <Mark mark={ex.mark} />
@@ -124,28 +131,28 @@ function ExamplePanel({ example }: { example: Example }) {
       aria-labelledby={`tab-${example.id}`}
       // biome-ignore lint/a11y/noNoninteractiveTabindex: APG tabs; the panel itself takes focus.
       tabIndex={0}
-      className="mt-6 grid animate-feed-in gap-6 rounded-[32px] lg:grid-cols-[minmax(0,0.85fr)_minmax(0,1.15fr)] lg:gap-8"
+      className="mt-6 grid animate-feed-in gap-4 rounded-[32px] lg:grid-cols-[minmax(0,0.85fr)_minmax(0,1.15fr)] lg:gap-6"
     >
-      <div className="flex flex-col rounded-[28px] bg-paper p-6 sm:p-7">
-        <p className="text-[13.5px] text-mute">{example.sector}</p>
-        <h3 className="mt-1.5 text-[24px] leading-tight font-semibold tracking-[-0.025em]">
+      <div className="surface flex flex-col p-6 sm:p-7">
+        <p className="kicker !text-[10.5px] !text-fg-3">{example.sector}</p>
+        <h3 className="mt-2.5 text-[23px] leading-tight font-semibold tracking-[-0.025em] [font-stretch:106%]">
           {example.title}
         </h3>
 
         <div className="mt-5 grid gap-2 text-[14.5px] leading-snug">
-          <p className="rounded-2xl bg-white px-4 py-3 ring-1 ring-line">
-            <span className="mb-0.5 flex items-center gap-2 text-[12px] font-semibold text-rose-ink uppercase">
-              <span className="size-2 rounded-full bg-rose-ink" />
+          <p className="rounded-2xl bg-white/[0.03] px-4 py-3 shadow-[inset_0_0_0_1px_var(--color-hair)]">
+            <span className="mb-1 flex items-center gap-2 font-mono text-[10.5px] tracking-wider text-[#ff8a8a] uppercase">
+              <span className="size-1.5 rounded-full bg-[#ff8a8a]" />
               Hoje, à mão
             </span>
-            <span className="text-ink-2">{example.before}</span>
+            <span className="text-fg-2">{example.before}</span>
           </p>
-          <p className="rounded-2xl bg-brand-soft px-4 py-3 ring-1 ring-brand/15">
-            <span className="mb-0.5 flex items-center gap-2 text-[12px] font-semibold text-brand-ink uppercase">
-              <span className="size-2 rounded-full bg-brand" />
+          <p className="rounded-2xl bg-accent/[0.07] px-4 py-3 shadow-[inset_0_0_0_1px_rgb(61_224_160/0.22)]">
+            <span className="mb-1 flex items-center gap-2 font-mono text-[10.5px] tracking-wider text-accent uppercase">
+              <span className="size-1.5 rounded-full bg-accent" />
               Com a automação
             </span>
-            <span className="font-medium text-ink">{example.after}</span>
+            <span className="font-medium text-fg">{example.after}</span>
           </p>
         </div>
 
@@ -158,27 +165,29 @@ function ExamplePanel({ example }: { example: Example }) {
                 aria-current={state === "now" ? "step" : undefined}
                 className={cn(
                   "flex items-center gap-3 rounded-xl px-2 py-1.5 text-[14.5px] transition-colors duration-300",
-                  state === "now" && "bg-white shadow-[0_0_0_1px_var(--color-line)]",
+                  state === "now" && "bg-white/[0.06] shadow-[inset_0_0_0_1px_var(--color-hair)]",
                 )}
               >
                 <span
                   className={cn(
                     "grid size-6 shrink-0 place-items-center rounded-full text-[11.5px] font-semibold transition-colors duration-300",
-                    state === "done" && "bg-brand text-white",
-                    state === "now" && "bg-amber text-ink",
-                    state === "next" && "text-mute ring-1 ring-line-2",
+                    state === "done" && "bg-accent text-accent-ink",
+                    state === "now" && "bg-white text-base",
+                    state === "next" && "text-fg-3 ring-1 ring-hair-2",
                   )}
                 >
                   {state === "done" ? <Check className="size-3.5" strokeWidth={3} /> : i + 1}
                 </span>
-                <span className={state === "next" ? "text-mute" : "text-ink"}>{s}</span>
+                <span className={state === "next" ? "text-fg-3" : "text-fg"}>{s}</span>
               </li>
             );
           })}
         </ol>
 
         <div className="mt-auto flex flex-wrap items-center gap-2 pt-6">
-          <span className="text-[12.5px] text-mute">Ligado a</span>
+          <span className="font-mono text-[10.5px] tracking-wider text-fg-3 uppercase">
+            Ligado a
+          </span>
           {example.tools.map((t) => (
             <ToolChip key={t} tool={t} />
           ))}
@@ -186,10 +195,14 @@ function ExamplePanel({ example }: { example: Example }) {
       </div>
 
       <div>
-        <Preview step={step} />
-        <div className="mt-3 flex items-center justify-between text-[12.5px] text-mute">
+        <div className="glass rounded-[32px] p-2">
+          <Preview step={step} />
+        </div>
+        <div className="mt-3 flex items-center justify-between font-mono text-[10.5px] tracking-wide text-fg-3 uppercase">
           <span>Exemplo ilustrativo · nomes e valores fictícios</span>
-          {!reduced && <PauseButton paused={paused} onToggle={() => setPaused((p) => !p)} />}
+          {!reduced && (
+            <PauseButton paused={paused} onToggle={() => setPaused((p) => !p)} tone="dark" />
+          )}
         </div>
       </div>
     </div>
@@ -207,7 +220,7 @@ function Mark({ mark }: { mark: Example["mark"] }) {
   }
   const Icon = mark;
   return (
-    <span className="grid size-9 place-items-center rounded-full bg-brand-soft text-brand">
+    <span className="grid size-9 place-items-center rounded-full bg-accent/15 text-accent">
       <Icon className="size-[18px]" />
     </span>
   );

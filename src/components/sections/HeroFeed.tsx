@@ -16,7 +16,7 @@ const EVENTS: { source: Source; from: string; title: string; detail: string }[] 
     detail: "Respondido e marcado: sexta, 15:30",
   },
   {
-    source: { icon: Receipt, tint: "bg-brand" },
+    source: { icon: Receipt, tint: "bg-accent text-accent-ink" },
     from: "Faturação",
     title: "Fatura FT 1187 paga",
     detail: "185,00 € registados na contabilidade",
@@ -40,7 +40,7 @@ const EVENTS: { source: Source; from: string; title: string; detail: string }[] 
     detail: "Dados lidos e lançados",
   },
   {
-    source: { icon: Wallet, tint: "bg-amber" },
+    source: { icon: Wallet, tint: "bg-indigo" },
     from: "Cobranças",
     title: "Fatura vencida há 5 dias",
     detail: "Lembrete enviado com referência MB",
@@ -59,7 +59,7 @@ const VISIBLE = 4;
 function SourceIcon({ source }: { source: Source }) {
   if ("brand" in source) {
     return (
-      <span className="grid size-10 shrink-0 place-items-center rounded-[12px] bg-white">
+      <span className="grid size-10 shrink-0 place-items-center rounded-[12px] bg-white shadow-[0_4px_12px_-4px_rgb(0_0_0/0.6)]">
         <BrandIcon brand={source.brand} className="size-[22px]" />
       </span>
     );
@@ -94,30 +94,25 @@ export function HeroFeed() {
         Ilustração: uma lista de tarefas concluídas por automações ao longo do dia, como marcações,
         faturas pagas e orçamentos enviados.
       </p>
-      <div
-        aria-hidden
-        className="relative overflow-hidden rounded-[28px] bg-night p-5 text-white shadow-[0_50px_90px_-45px_rgb(15_21_19/0.75)] ring-1 ring-night-line sm:p-6"
-      >
-        <div className="pointer-events-none absolute -top-28 -right-24 size-80 rounded-full bg-[radial-gradient(closest-side,rgb(142_221_176/0.18),transparent)]" />
-
+      <div aria-hidden className="relative">
         <div className="relative flex items-center justify-between gap-4">
           <div>
-            <p className="flex items-center gap-2 text-[13px] text-white/60">
+            <p className="kicker flex items-center gap-2 !text-[10.5px]">
               <span className="relative flex size-2">
                 <span className="absolute inset-0 animate-ping rounded-full bg-mint/70 motion-reduce:hidden" />
                 <span className="relative size-2 rounded-full bg-mint" />
               </span>
               Hoje no seu negócio
             </p>
-            <p className="mt-1 text-[22px] font-semibold tracking-[-0.02em]">
+            <p className="mt-1.5 text-[20px] font-semibold tracking-[-0.02em] [font-stretch:108%]">
               <span key={done} className="inline-block animate-feed-in text-mint tabular-nums">
                 {done}
               </span>{" "}
               tarefas feitas sozinhas
             </p>
           </div>
-          <span className="hidden rounded-full bg-white/8 px-3 py-1 text-[12.5px] font-medium text-white/80 ring-1 ring-white/10 sm:inline">
-            Em tempo real
+          <span className="hidden rounded-full bg-accent/10 px-2.5 py-1 font-mono text-[10.5px] tracking-wider text-accent uppercase ring-1 ring-accent/25 sm:inline">
+            Ao vivo
           </span>
         </div>
 
@@ -136,7 +131,7 @@ export function HeroFeed() {
               >
                 <div
                   className={`flex h-[66px] items-center gap-3 rounded-2xl px-3 ring-1 ${
-                    i === 0 ? "bg-night-3 ring-mint/25" : "bg-night-2 ring-transparent"
+                    i === 0 ? "bg-white/[0.07] ring-accent/25" : "bg-white/[0.03] ring-white/[0.05]"
                   } ${i === 0 && !reduced ? "animate-feed-in" : ""}`}
                 >
                   <SourceIcon source={e.source} />
@@ -162,10 +157,11 @@ export function HeroFeed() {
           })}
         </ul>
       </div>
-      <div className="mt-3 flex items-center justify-between text-[12.5px] text-mute">
-        <span>Exemplo ilustrativo</span>
-        {!reduced && <PauseButton paused={paused} onToggle={() => setPaused((p) => !p)} />}
-      </div>
+      {!reduced && (
+        <div className="mt-3 flex justify-end">
+          <PauseButton paused={paused} onToggle={() => setPaused((p) => !p)} tone="dark" />
+        </div>
+      )}
     </div>
   );
 }

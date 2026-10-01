@@ -3,8 +3,9 @@
  * Placeholders to replace before launch are marked with TODO.
  */
 export const site = {
-  // TODO: final brand name.
-  name: "Fluxo",
+  // Brand name (see docs/brand/BRAND.md). Run a trademark search (INPI/EUIPO) before launch.
+  name: "Orchestr",
+  tagline: "O seu negócio, em piloto automático.",
   description:
     "Automações à medida para negócios: atendimento no WhatsApp, marcações, orçamentos, faturação, cobranças e documentos — ligadas às ferramentas que já usa.",
   url: "https://example.com", // TODO: production domain.

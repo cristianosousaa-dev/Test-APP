@@ -34,30 +34,30 @@ const FAQS = [
 
 export function Faq() {
   return (
-    <section id="faq" aria-labelledby="faq-title" className="py-24 sm:py-32">
-      <Container className="grid gap-12 lg:grid-cols-[minmax(0,0.8fr)_minmax(0,1.2fr)]">
-        <div>
-          <SectionHead kicker="Perguntas" id="faq-title" title="Antes de falarmos.">
+    <section id="faq" aria-labelledby="faq-title" className="relative py-24 sm:py-32">
+      <Container className="grid gap-12 lg:grid-cols-[minmax(0,0.8fr)_minmax(0,1.2fr)] lg:gap-16">
+        <div className="lg:sticky lg:top-28 lg:self-start">
+          <SectionHead index="08" kicker="Perguntas" id="faq-title" title="Antes de falarmos.">
             As dúvidas que nos chegam mais vezes, respondidas sem rodeios.
           </SectionHead>
-          <div data-reveal className="card mt-8 max-w-[24rem] p-6">
+          <div data-reveal className="surface mt-9 max-w-[24rem] p-6">
             <span className="mb-4 flex -space-x-2">
               {(["whatsapp", "gmail", "outlook"] as const).map((b) => (
                 <span
                   key={b}
-                  className="grid size-9 place-items-center rounded-full bg-white shadow-[0_0_0_2px_#fff,0_0_0_3px_rgb(17_19_21/0.08)]"
+                  className="grid size-9 place-items-center rounded-full bg-white shadow-[0_0_0_2px_var(--color-base-2)]"
                 >
                   <BrandIcon brand={b} className="size-[18px]" />
                 </span>
               ))}
             </span>
             <p className="text-[16px] font-semibold">A sua pergunta não está aqui?</p>
-            <p className="mt-1 text-[14.5px] text-ink-2">Escreva-nos. Respondemos por email.</p>
+            <p className="mt-1 text-[14.5px] text-fg-2">Escreva-nos. Respondemos por email.</p>
             <LinkButton
               href={contactHref("Pergunta")}
-              variant="dark"
+              variant="glass"
               size="sm"
-              className="mt-4"
+              className="mt-5"
               arrow
             >
               Enviar uma pergunta
@@ -70,15 +70,15 @@ export function Faq() {
               key={f.q}
               name="faq"
               open={i === 0}
-              className="faq-item card group transition-shadow duration-200 open:shadow-[0_0_0_2px_var(--color-brand)] hover:shadow-[0_0_0_1px_var(--color-line-2),0_10px_24px_-16px_rgb(17_19_21/0.3)]"
+              className="faq-item surface group transition-[box-shadow,background-color] duration-300 open:bg-white/[0.045] open:shadow-[inset_0_0_0_1px_rgb(61_224_160/0.35)] hover:bg-white/[0.04]"
             >
-              <summary className="flex list-none items-center justify-between gap-6 px-6 py-5 text-[17px] font-semibold tracking-[-0.01em] [&::-webkit-details-marker]:hidden">
+              <summary className="flex list-none items-center justify-between gap-6 rounded-[24px] px-6 py-5 text-[17px] font-medium tracking-[-0.01em] [&::-webkit-details-marker]:hidden">
                 {f.q}
-                <span className="grid size-8 shrink-0 place-items-center rounded-full bg-paper transition-[transform,background-color] duration-300 group-open:rotate-45 group-open:bg-brand group-open:text-white group-hover:bg-brand-soft">
+                <span className="grid size-8 shrink-0 place-items-center rounded-full bg-white/[0.06] text-fg-2 shadow-[inset_0_0_0_1px_var(--color-hair-2)] transition-[transform,background-color,color] duration-300 ease-out-soft group-open:rotate-45 group-open:bg-accent group-open:text-accent-ink group-hover:text-fg">
                   <Plus className="size-4" />
                 </span>
               </summary>
-              <p className="max-w-[40rem] px-6 pb-6 text-[16px] leading-[1.65] text-ink-2">{f.a}</p>
+              <p className="max-w-[40rem] px-6 pb-6 text-[16px] leading-[1.65] text-fg-2">{f.a}</p>
             </details>
           ))}
         </div>
