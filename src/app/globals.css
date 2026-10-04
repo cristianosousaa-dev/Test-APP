@@ -824,98 +824,12 @@
     radial-gradient(50% 40% at 85% 0%, rgb(43 91 255 / 0.18), transparent 70%), #06122a;
 }
 
-/* Light hero: a static blue gradient, white at the headline, deepening towards the demo. */
+/* Light hero: a static blue gradient, white at the headline, deepening towards the preview. */
 .hero-light-bg {
   background:
     radial-gradient(70% 90% at 82% 30%, rgb(43 91 255 / 0.2), transparent 70%),
     radial-gradient(60% 70% at 10% 100%, rgb(124 156 255 / 0.18), transparent 70%),
     linear-gradient(180deg, #ffffff 0%, #eef3ff 60%, #e2eafd 100%);
-}
-
-/* Hero demo: each scenario enters softly, is told in stages, and fades out before the next. */
-.demo-body {
-  animation: demo-in 0.7s var(--ease-out-soft) backwards;
-  transition:
-    opacity 0.6s var(--ease-out-soft),
-    transform 0.6s var(--ease-out-soft);
-}
-.demo-out {
-  opacity: 0;
-  transform: translateY(-6px);
-}
-@keyframes demo-in {
-  from {
-    opacity: 0;
-    transform: translateY(8px);
-  }
-}
-.demo-node {
-  color: rgb(255 255 255 / 0.5);
-  box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.25);
-  transition:
-    background-color 0.5s var(--ease-out-soft),
-    color 0.5s,
-    box-shadow 0.5s;
-}
-.demo-node.is-lit {
-  background: var(--color-accent);
-  color: #fff;
-  box-shadow: none;
-}
-.demo-rail {
-  transform: scaleY(0);
-  transition: transform 0.9s var(--ease-in-out-soft);
-}
-.demo-rail.is-lit {
-  transform: scaleY(1);
-}
-.demo-action {
-  opacity: 0.4;
-  transition: opacity 0.45s var(--ease-out-soft);
-}
-.demo-action[data-state="now"],
-.demo-action[data-state="done"] {
-  opacity: 1;
-}
-.demo-tick {
-  box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.3);
-  transition:
-    background-color 0.35s var(--ease-out-soft),
-    box-shadow 0.35s;
-}
-.demo-action[data-state="done"] .demo-tick {
-  background: var(--color-accent);
-  box-shadow: none;
-}
-.demo-action[data-state="done"] .demo-tick svg {
-  animation: demo-tick 0.35s var(--ease-out-soft) backwards;
-}
-@keyframes demo-tick {
-  from {
-    opacity: 0;
-    transform: scale(0.6);
-  }
-}
-.demo-spin {
-  border: 1.5px solid rgb(255 255 255 / 0.25);
-  border-top-color: #fff;
-  animation: demo-spin 0.9s linear infinite;
-}
-@keyframes demo-spin {
-  to {
-    transform: rotate(360deg);
-  }
-}
-.demo-result {
-  opacity: 0;
-  transform: translateY(8px);
-  transition:
-    opacity 0.6s var(--ease-out-soft),
-    transform 0.6s var(--ease-out-soft);
-}
-.demo-result[data-on="true"] {
-  opacity: 1;
-  transform: none;
 }
 
 /* Floating header: a hairline frame once solid; reading progress along its bottom edge. */
@@ -1047,21 +961,329 @@
     0 40px 90px -40px rgb(43 91 255 / 0.65);
 }
 
-/* Use-case previews: fade out at the end of a run and back in as it restarts. */
-.preview-wrap {
-  transition:
-    opacity 0.7s var(--ease-out-soft) 0.3s,
-    filter 0.7s var(--ease-out-soft) 0.3s,
-    transform 0.7s var(--ease-out-soft) 0.3s;
+/* =========================================================================================
+   Workflow canvas (Examples): an automation editor drawn in stage units. --u is one stage
+   unit (the stage is 1040 wide), so every size scales with the frame, no JS measuring.
+   ========================================================================================= */
+/* The dotted editor floor spans the whole window; the stage sits centred on it at a capped
+   width, so wide screens get a compact canvas instead of oversized nodes. */
+.flow-scroll {
+  overflow-x: auto;
+  scrollbar-width: none;
+  background-color: #f6f7f9;
+  background-image: radial-gradient(circle at center, rgb(10 22 40 / 0.14) 1px, transparent 1.3px);
+  background-size: 20px 20px;
 }
-.preview-wrap.is-fading {
-  opacity: 0;
-  filter: blur(4px);
-  transform: scale(0.985);
+.flow-frame {
+  container-type: inline-size;
+  min-width: 720px;
+  max-width: 920px;
+  margin-inline: auto;
+}
+/* Hero: the stage is drawn for a narrow frame and always fits, no sideways scroll. */
+.flow-frame.is-fit {
+  min-width: 0;
+  max-width: none;
+}
+@media (max-width: 639px) {
+  .flow-frame.is-fit {
+    min-width: 520px;
+  }
+}
+.flow-stage {
+  --u: calc(100cqw / var(--stage-w, 1040));
+  --flow-ok: #1f9d68;
+  position: relative;
+  aspect-ratio: var(--stage-w, 1040) / var(--stage-h, 440);
+}
+.flow-ico {
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+}
+.flow-ico :where(svg) {
+  width: 100%;
+  height: 100%;
+}
+.flow-node {
+  position: absolute;
+  display: grid;
+  place-items: center;
+  background: #fff;
+  border: calc(var(--u) * 1.5) solid #d3d8e0;
+  border-radius: calc(var(--u) * 14);
+  box-shadow:
+    0 calc(var(--u) * 1) calc(var(--u) * 2) rgb(10 22 40 / 0.05),
+    0 calc(var(--u) * 10) calc(var(--u) * 20) calc(var(--u) * -12) rgb(10 22 40 / 0.3);
   transition:
-    opacity 0.55s var(--ease-out-soft),
-    filter 0.55s var(--ease-out-soft),
-    transform 0.55s var(--ease-out-soft);
+    border-color 0.35s var(--ease-out-soft),
+    box-shadow 0.35s var(--ease-out-soft);
+}
+.flow-node[data-kind="trigger"] {
+  border-radius: calc(var(--u) * 42) calc(var(--u) * 14) calc(var(--u) * 14) calc(var(--u) * 42);
+}
+.flow-node[data-state="running"] {
+  border-color: var(--color-accent);
+  box-shadow:
+    0 0 0 calc(var(--u) * 5) rgb(43 91 255 / 0.13),
+    0 calc(var(--u) * 10) calc(var(--u) * 22) calc(var(--u) * -10) rgb(43 91 255 / 0.45);
+}
+.flow-node[data-state="done"] {
+  border-color: var(--flow-ok);
+}
+.flow-app {
+  display: block;
+  font-size: calc(var(--u) * 13);
+  font-weight: 600;
+  line-height: 1.25;
+  letter-spacing: -0.01em;
+  color: var(--color-fg);
+  white-space: nowrap;
+}
+.flow-title {
+  display: block;
+  font-size: calc(var(--u) * 12);
+  line-height: 1.3;
+  color: var(--color-fg-3);
+}
+.flow-label {
+  position: absolute;
+  text-align: center;
+}
+.flow-port {
+  position: absolute;
+  top: calc(50% - var(--u) * 5);
+  width: calc(var(--u) * 10);
+  height: calc(var(--u) * 10);
+  border-radius: 50%;
+  background: #fff;
+  border: calc(var(--u) * 1.5) solid #b9c0ca;
+}
+.flow-port-label {
+  position: absolute;
+  font-family: var(--font-mono);
+  font-size: calc(var(--u) * 9.5);
+  color: var(--color-fg-3);
+}
+.flow-bolt {
+  position: absolute;
+  left: calc(var(--u) * -24);
+  top: calc(50% - var(--u) * 8);
+  width: calc(var(--u) * 14);
+  height: calc(var(--u) * 16);
+  color: #f0883a;
+}
+.flow-bolt :where(svg) {
+  width: 100%;
+  height: 100%;
+}
+.flow-check,
+.flow-spin {
+  position: absolute;
+  top: calc(var(--u) * -10);
+  right: calc(var(--u) * -10);
+  width: calc(var(--u) * 21);
+  height: calc(var(--u) * 21);
+  border-radius: 50%;
+}
+.flow-check {
+  display: grid;
+  place-items: center;
+  background: var(--flow-ok);
+  color: #fff;
+  box-shadow: 0 0 0 calc(var(--u) * 2.5) #fff;
+  opacity: 0;
+  transform: scale(0.5);
+  transition:
+    opacity 0.3s var(--ease-out-soft),
+    transform 0.45s var(--ease-out-soft);
+}
+.flow-check :where(svg) {
+  width: 60%;
+  height: 60%;
+}
+.flow-node[data-state="done"] .flow-check {
+  opacity: 1;
+  transform: none;
+}
+.flow-spin {
+  background: #fff;
+  border: calc(var(--u) * 2.5) solid rgb(43 91 255 / 0.18);
+  border-top-color: var(--color-accent);
+  animation: flow-spin 0.7s linear infinite;
+}
+@keyframes flow-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+.flow-sub {
+  position: absolute;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: #fff;
+  border: calc(var(--u) * 1.5) solid #d3d8e0;
+  box-shadow: 0 calc(var(--u) * 6) calc(var(--u) * 14) calc(var(--u) * -8) rgb(10 22 40 / 0.25);
+  transition: border-color 0.35s var(--ease-out-soft);
+}
+.flow-sub[data-state="running"] {
+  border-color: var(--color-accent);
+}
+.flow-sub[data-state="done"] {
+  border-color: var(--flow-ok);
+}
+.flow-edge {
+  fill: none;
+  stroke: #c3c9d2;
+  stroke-width: 2;
+}
+.flow-edge-done {
+  fill: none;
+  stroke: var(--flow-ok);
+  stroke-width: 2.5;
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  transition: stroke-dashoffset 0.6s var(--ease-out-soft);
+}
+.flow-edge-done[data-on] {
+  stroke-dashoffset: 0;
+}
+/* A short lit segment that travels the edge once, into the node that is about to run. */
+.flow-packet {
+  fill: none;
+  stroke: var(--color-accent);
+  stroke-width: 5;
+  stroke-linecap: round;
+  stroke-dasharray: 0.08 1.2;
+  stroke-dashoffset: 0.08;
+  animation: flow-packet 0.8s var(--ease-in-out-soft) forwards;
+}
+@keyframes flow-packet {
+  to {
+    stroke-dashoffset: -1;
+  }
+}
+.flow-sub-line {
+  stroke: #c3c9d2;
+  stroke-width: 1.6;
+  stroke-dasharray: 4 4;
+  transition: stroke 0.35s var(--ease-out-soft);
+}
+.flow-sub-line[data-state="running"] {
+  stroke: var(--color-accent);
+  animation: flow-dash 0.6s linear infinite;
+}
+.flow-sub-line[data-state="done"] {
+  stroke: var(--flow-ok);
+}
+@keyframes flow-dash {
+  to {
+    stroke-dashoffset: -8;
+  }
+}
+.flow-items {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  padding: calc(var(--u) * 2) calc(var(--u) * 7);
+  border-radius: calc(var(--u) * 10);
+  background: #fff;
+  border: calc(var(--u) * 1) solid rgb(31 157 104 / 0.35);
+  font-family: var(--font-mono);
+  font-size: calc(var(--u) * 9.5);
+  color: var(--flow-ok);
+  white-space: nowrap;
+  opacity: 0;
+  transition: opacity 0.4s var(--ease-out-soft) 0.3s;
+}
+.flow-items[data-on] {
+  opacity: 1;
+}
+/* Output of a step: what it read, decided or sent. */
+.flow-bubble {
+  position: absolute;
+  padding: calc(var(--u) * 8) calc(var(--u) * 11) calc(var(--u) * 9);
+  border-radius: calc(var(--u) * 10);
+  background: #fff;
+  font-size: calc(var(--u) * 12);
+  line-height: 1.4;
+  color: var(--color-fg);
+  text-wrap: pretty;
+  box-shadow:
+    0 0 0 calc(var(--u) * 1) rgb(10 22 40 / 0.08),
+    0 calc(var(--u) * 12) calc(var(--u) * 26) calc(var(--u) * -12) rgb(10 22 40 / 0.35);
+  opacity: 0;
+  transform: translateY(calc(var(--u) * 6));
+  transition:
+    opacity 0.45s var(--ease-out-soft),
+    transform 0.45s var(--ease-out-soft);
+}
+.flow-bubble.is-below {
+  transform: translateY(calc(var(--u) * -6));
+}
+.flow-bubble[data-on] {
+  opacity: 1;
+  transform: none;
+}
+.flow-bubble-head {
+  display: flex;
+  align-items: center;
+  gap: calc(var(--u) * 5);
+  margin-bottom: calc(var(--u) * 3);
+  font-family: var(--font-mono);
+  font-size: calc(var(--u) * 8.5);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--flow-ok);
+}
+.flow-bubble-head::before {
+  content: "";
+  width: calc(var(--u) * 5);
+  height: calc(var(--u) * 5);
+  border-radius: 50%;
+  background: currentColor;
+}
+.flow-zoom {
+  position: absolute;
+  left: 12px;
+  bottom: 12px;
+  display: flex;
+  gap: 4px;
+}
+/* Unlayered CSS beats utility classes, so the phone rule lives here, not in markup. */
+@media (max-width: 639px) {
+  .flow-zoom {
+    display: none;
+  }
+}
+.flow-zoom span {
+  display: grid;
+  place-items: center;
+  width: 26px;
+  height: 26px;
+  border-radius: 6px;
+  background: #fff;
+  border: 1px solid #d3d8e0;
+  font-size: 13px;
+  color: var(--color-fg-3);
+}
+/* Editor "active" switch in the window header. */
+.flow-toggle {
+  position: relative;
+  width: 30px;
+  height: 17px;
+  border-radius: 999px;
+  background: #1f9d68;
+}
+.flow-toggle::after {
+  content: "";
+  position: absolute;
+  top: 2px;
+  right: 2px;
+  width: 13px;
+  height: 13px;
+  border-radius: 50%;
+  background: #fff;
 }
 
 /* Task form: a square field on the grid with one blue focus edge. */
@@ -1072,6 +1294,7 @@
     background-color 0.3s,
     box-shadow 0.3s;
 }
+
 .task-field-light {
   background: rgb(255 255 255 / 0.6);
   box-shadow: inset 0 0 0 1px var(--color-hair-2);
@@ -1177,8 +1400,14 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .header-progress,
-  .demo-spin {
+  .flow-packet {
+    display: none;
+  }
+  .flow-spin,
+  .flow-sub-line {
+    animation: none;
+  }
+  .header-progress {
     animation: none;
   }
   header,
@@ -1227,18 +1456,6 @@
   }
   .task-chip {
     transition: none;
-  }
-  .demo-body,
-  .demo-node,
-  .demo-rail,
-  .demo-action,
-  .demo-tick,
-  .demo-result {
-    animation: none;
-    transition: none;
-  }
-  .demo-tick svg {
-    animation: none;
   }
   .seq > *,
   .step-in {

@@ -185,7 +185,7 @@ export function Header() {
               aria-controls="menu"
               onClick={() => setOpen((v) => !v)}
               className={cn(
-                "label flex h-9 items-center gap-2 px-3 text-[11px] transition-colors hover:bg-fg hover:text-white lg:hidden",
+                "label flex h-11 items-center gap-2 px-4 text-[11px] transition-colors hover:bg-fg hover:text-white sm:h-9 sm:px-3 lg:hidden",
                 "bg-chip text-fg",
               )}
             >

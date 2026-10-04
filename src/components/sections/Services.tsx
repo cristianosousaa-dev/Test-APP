@@ -108,7 +108,11 @@ const AREAS: { title: string; icon: LucideIcon; items: string[]; tools: Brand[] 
 
 export function Services() {
   return (
-    <section id="servicos" aria-labelledby="servicos-title" className="relative py-28 sm:py-40">
+    <section
+      id="servicos"
+      aria-labelledby="servicos-title"
+      className="relative py-20 sm:py-32 lg:py-40"
+    >
       <Container>
         <SectionHead
           index="03"
@@ -125,14 +129,22 @@ export function Services() {
           empresa trabalha, e nada o impede de nos pedir algo que não esteja nesta lista.
         </SectionHead>
 
-        <ul className="relative mt-14 grid grid-cols-1 gap-[2px] sm:grid-cols-2 lg:grid-cols-4">
+        <p className="label mt-12 flex items-center gap-2 text-[11px] text-fg-3 sm:hidden">
+          Deslize para ver as oito áreas <span aria-hidden>→</span>
+        </p>
+        <ul className="relative mt-4 -mx-5 flex snap-x snap-mandatory scroll-px-5 gap-[2px] overflow-x-auto px-5 [scrollbar-width:none] sm:mx-0 sm:mt-14 sm:grid sm:grid-cols-2 sm:overflow-visible sm:px-0 lg:grid-cols-4">
           {AREAS.map((a, i) => {
             const Icon = a.icon;
             return (
-              <li key={a.title} data-reveal style={{ ["--i" as string]: i % 4 }} className="flex">
+              <li
+                key={a.title}
+                data-reveal
+                style={{ ["--i" as string]: i % 4 }}
+                className="flex w-[84%] shrink-0 snap-start sm:w-auto"
+              >
                 <div
                   data-spot
-                  className="tile spot group relative flex w-full flex-col overflow-hidden p-6"
+                  className="tile spot group relative flex w-full flex-col overflow-hidden p-5 sm:p-6"
                 >
                   {/* Signal bar fills across the top of the hovered card. */}
                   <span
@@ -147,7 +159,7 @@ export function Services() {
                       {String(i + 1).padStart(2, "0")}
                     </span>
                   </div>
-                  <h3 className="mt-6 font-display text-[21px] leading-snug tracking-[-0.02em]">
+                  <h3 className="mt-5 font-display text-[20px] leading-snug tracking-[-0.02em] sm:mt-6 sm:text-[21px]">
                     {a.title}
                   </h3>
                   <ul className="mt-4 flex flex-col text-[14px] leading-[1.5] text-fg-2">

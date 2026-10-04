@@ -12,7 +12,7 @@ const TESTIMONIALS: Testimonial[] = [];
 export function Proof() {
   if (TESTIMONIALS.length === 0) return null;
   return (
-    <section aria-labelledby="prova-title" className="py-28 sm:py-40">
+    <section aria-labelledby="prova-title" className="py-20 sm:py-32 lg:py-40">
       <Container>
         <h2 id="prova-title" className="kicker text-center">
           O que dizem os clientes

@@ -1,30 +1,29 @@
 "use client";
 
-import { Check } from "lucide-react";
-import { type KeyboardEvent, useLayoutEffect, useMemo, useRef, useState } from "react";
-import { BrandIcon, ToolChip } from "@/components/brand/BrandIcon";
-import { bookings } from "@/components/previews/Bookings";
-import { leads } from "@/components/previews/Leads";
-import { payments } from "@/components/previews/Payments";
-import { quotes } from "@/components/previews/Quotes";
-import type { Example } from "@/components/previews/types";
+import { type KeyboardEvent, useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
+import { BrandIcon } from "@/components/brand/BrandIcon";
+import { FLOWS, RUN_MS } from "@/components/flows/data";
+import { FlowCanvas, STAGE } from "@/components/flows/FlowCanvas";
+import type { Flow } from "@/components/flows/types";
 import { Container } from "@/components/ui/Container";
 import { PauseButton } from "@/components/ui/PauseButton";
 import { SectionHead } from "@/components/ui/SectionHead";
 import { cn } from "@/lib/cn";
 import { useStepper } from "@/lib/useStepper";
 
-const EXAMPLES: Example[] = [bookings, quotes, leads, payments];
+/* After the last node: hold the finished run, then a short reset before it starts again. */
+const HOLD_MS = 2800;
+const RESET_MS = 900;
 
 export function Examples() {
-  const [activeId, setActiveId] = useState(EXAMPLES[0]?.id ?? "");
+  const [activeId, setActiveId] = useState(FLOWS[0]?.id ?? "");
   const tabs = useRef<(HTMLButtonElement | null)[]>([]);
-  const active = EXAMPLES.find((e) => e.id === activeId) ?? EXAMPLES[0];
+  const active = FLOWS.find((f) => f.id === activeId) ?? FLOWS[0];
   const [thumb, setThumb] = useState<{ x: number; w: number } | null>(null);
 
   // Slide one ink tile under the active tab (transform + width, measured once per change).
   useLayoutEffect(() => {
-    const i = EXAMPLES.findIndex((e) => e.id === activeId);
+    const i = FLOWS.findIndex((f) => f.id === activeId);
     const el = tabs.current[i];
     if (!el) return;
     const measure = () => setThumb({ x: el.offsetLeft, w: el.offsetWidth });
@@ -34,8 +33,8 @@ export function Examples() {
   }, [activeId]);
 
   function onKeyDown(e: KeyboardEvent<HTMLDivElement>) {
-    const i = EXAMPLES.findIndex((x) => x.id === activeId);
-    const last = EXAMPLES.length - 1;
+    const i = FLOWS.findIndex((f) => f.id === activeId);
+    const last = FLOWS.length - 1;
     const next = {
       ArrowRight: i === last ? 0 : i + 1,
       ArrowLeft: i === 0 ? last : i - 1,
@@ -44,16 +43,20 @@ export function Examples() {
     }[e.key];
     if (next === undefined) return;
     e.preventDefault();
-    const ex = EXAMPLES[next];
-    if (!ex) return;
-    setActiveId(ex.id);
+    const f = FLOWS[next];
+    if (!f) return;
+    setActiveId(f.id);
     tabs.current[next]?.focus();
   }
 
   if (!active) return null;
 
   return (
-    <section id="exemplos" aria-labelledby="exemplos-title" className="relative py-28 sm:py-40">
+    <section
+      id="exemplos"
+      aria-labelledby="exemplos-title"
+      className="relative py-20 sm:py-32 lg:py-40"
+    >
       <Container>
         <SectionHead
           index="04"
@@ -61,12 +64,12 @@ export function Examples() {
           id="exemplos-title"
           title={
             <>
-              Veja quatro automações <span className="text-accent">a funcionar.</span>
+              Seis automações, <span className="text-accent">a correr à sua frente.</span>
             </>
           }
         >
-          Escolha um exemplo para comparar a forma como o processo é feito hoje com a versão
-          automatizada, passo a passo.
+          Cada exemplo mostra o fluxo tal como funciona: o que o dispara, o que acontece em cada
+          passo e o resultado. As ferramentas são as que as empresas já utilizam.
         </SectionHead>
 
         <div
@@ -74,7 +77,7 @@ export function Examples() {
           aria-label="Exemplos de automações"
           onKeyDown={onKeyDown}
           data-reveal
-          className="relative -mx-5 mt-14 flex w-auto gap-[2px] overflow-x-auto px-5 [scrollbar-width:none] sm:mx-0 sm:inline-flex sm:px-0"
+          className="relative -mx-5 mt-10 sm:mt-14 flex w-auto gap-[2px] overflow-x-auto px-5 [scrollbar-width:none] sm:mx-0 sm:px-0"
         >
           {thumb && (
             <span
@@ -83,188 +86,180 @@ export function Examples() {
               style={{ width: thumb.w, transform: `translateX(${thumb.x}px)` }}
             />
           )}
-          {EXAMPLES.map((ex, i) => {
-            const selected = ex.id === activeId;
+          {FLOWS.map((f, i) => {
+            const selected = f.id === activeId;
             return (
               <button
-                key={ex.id}
+                key={f.id}
                 ref={(el) => {
                   tabs.current[i] = el;
                 }}
                 type="button"
                 role="tab"
-                id={`tab-${ex.id}`}
+                id={`tab-${f.id}`}
                 aria-selected={selected}
-                aria-controls={`panel-${ex.id}`}
+                aria-controls={`panel-${f.id}`}
                 tabIndex={selected ? 0 : -1}
-                onClick={() => setActiveId(ex.id)}
+                onClick={() => setActiveId(f.id)}
                 className={cn(
                   "label relative flex h-12 shrink-0 items-center gap-2.5 pr-5 pl-1.5 text-[11.5px] transition-[background-color,color] duration-300",
                   selected ? "text-white" : "bg-chip text-fg hover:bg-[rgb(120_142_170/0.5)]",
                   selected && !thumb && "bg-fg",
                 )}
               >
-                <Mark mark={ex.mark} />
-                {ex.tab}
+                <span className="grid size-9 place-items-center bg-white">
+                  <BrandIcon brand={f.mark} className="size-5" />
+                </span>
+                {f.tab}
               </button>
             );
           })}
         </div>
 
         <div className="tilt-in">
-          <ExamplePanel key={active.id} example={active} />
+          <FlowPanel key={active.id} flow={active} />
         </div>
       </Container>
     </section>
   );
 }
 
-function ExamplePanel({ example }: { example: Example }) {
+function FlowPanel({ flow }: { flow: Flow }) {
   const ref = useRef<HTMLDivElement>(null);
+  const scroller = useRef<HTMLDivElement>(null);
   const [paused, setPaused] = useState(false);
-  // One extra phase at the end of each run: the preview fades out before it starts again.
-  const durations = useMemo(() => [...example.durations, 900], [example]);
-  const { step, reduced, running } = useStepper(ref, durations, paused);
-  const fading = !reduced && step === example.steps.length;
-  const { Preview } = example;
+  const kinds = useMemo(() => new Map(flow.nodes.map((n) => [n.id, n])), [flow]);
+  const durations = useMemo(
+    () => [...flow.order.map((id) => RUN_MS[kinds.get(id)?.kind ?? "action"]), HOLD_MS, RESET_MS],
+    [flow, kinds],
+  );
+  const { step, reduced } = useStepper(ref, durations, paused);
+  const total = flow.order.length;
+  // Reduced motion rests on the finished run; the reset phase clears the canvas (step -1).
+  const canvasStep = reduced ? total : step > total ? -1 : step;
+  const runningNode =
+    canvasStep >= 0 && canvasStep < total ? kinds.get(flow.order[canvasStep] ?? "") : undefined;
+
+  const stageW = (flow.stage ?? STAGE)[0];
+
+  // On narrow screens the canvas scrolls sideways: keep the node that is running in view.
+  useEffect(() => {
+    const el = scroller.current;
+    if (!el || !runningNode || el.scrollWidth <= el.clientWidth) return;
+    const x = (runningNode.x / stageW) * el.scrollWidth - el.clientWidth / 2;
+    el.scrollTo({ left: Math.max(0, x), behavior: "smooth" });
+  }, [runningNode, stageW]);
 
   return (
     <div
       ref={ref}
       role="tabpanel"
-      id={`panel-${example.id}`}
-      aria-labelledby={`tab-${example.id}`}
+      id={`panel-${flow.id}`}
+      aria-labelledby={`tab-${flow.id}`}
       // biome-ignore lint/a11y/noNoninteractiveTabindex: APG tabs; the panel itself takes focus.
       tabIndex={0}
-      className="mt-[2px] grid animate-feed-in gap-[2px] lg:grid-cols-[minmax(0,0.85fr)_minmax(0,1.15fr)]"
+      className="mt-[2px] grid animate-feed-in gap-[2px]"
     >
-      <div className="tile flex flex-col p-6 sm:p-7">
-        <p className="label text-[10.5px] text-fg-3">{example.sector}</p>
-        <h3 className="mt-3 text-[26px] leading-[1.15] tracking-[-0.03em]">{example.title}</h3>
-
-        <div className="mt-6 grid gap-[2px] text-[14.5px] leading-snug">
-          <p className="bg-white/40 px-4 py-3">
-            <span className="label mb-1.5 flex items-center gap-2 text-[10px] text-rose-ink">
-              <span className="size-1.5 bg-rose-ink" />
-              Processo atual
-            </span>
-            <span className="text-fg-2">{example.before}</span>
-          </p>
-          <p className="bg-white/80 px-4 py-3 shadow-[inset_2px_0_0_var(--color-accent)]">
-            <span className="label mb-1.5 flex items-center gap-2 text-[10px] text-accent">
-              <span className="size-1.5 bg-accent" />
-              Processo automatizado
-            </span>
-            <span className="text-fg">{example.after}</span>
-          </p>
-        </div>
-
-        <ol className="mt-6 flex flex-col gap-1" aria-label="Passos">
-          {example.steps.map((s, i) => {
-            const state = i < step ? "done" : i === step ? "now" : "next";
-            return (
-              <li
-                key={s}
-                aria-current={state === "now" ? "step" : undefined}
-                className={cn(
-                  "flex items-center gap-3 px-2 py-1.5 text-[14.5px] transition-colors duration-300",
-                  state === "now" && "bg-white/70",
-                )}
-              >
-                <span
-                  className={cn(
-                    "grid size-6 shrink-0 place-items-center font-mono text-[10.5px] transition-colors duration-300",
-                    state === "done" && "bg-accent text-white",
-                    state === "now" && "bg-fg text-white",
-                    state === "next" && "text-fg-3 shadow-[inset_0_0_0_1px_var(--color-hair-2)]",
-                  )}
-                >
-                  {state === "done" ? <Check className="size-3.5" strokeWidth={3} /> : i + 1}
-                </span>
-                <span className={state === "next" ? "text-fg-3" : "text-fg"}>{s}</span>
-              </li>
-            );
-          })}
-        </ol>
-
-        <div className="mt-auto flex flex-wrap items-center gap-2 pt-6">
-          <span className="label text-[10px] text-fg-3">Integrações</span>
-          {example.tools.map((t) => (
-            <ToolChip key={t} tool={t} />
-          ))}
-        </div>
-      </div>
-
-      <div className="tile window-lift flex flex-col p-3 sm:p-4">
-        <div className="flex items-center justify-between gap-4 px-1 pt-1 pb-3">
-          <span className="label flex items-center gap-3 text-[10.5px] text-fg-2">
-            <span aria-hidden className="flex gap-1.5">
+      <div className="tile window-lift overflow-hidden">
+        <div className="flex items-center justify-between gap-4 border-b border-hair px-4 py-3 sm:px-5">
+          <span className="flex min-w-0 items-center gap-3 text-[13px]">
+            <span aria-hidden className="flex shrink-0 gap-1.5">
               <span className="size-2.5 rounded-full bg-[#ff5f57]" />
               <span className="size-2.5 rounded-full bg-[#febc2e]" />
               <span className="size-2.5 rounded-full bg-[#28c840]" />
             </span>
-            Pré-visualização · {example.tab}
+            <span className="truncate text-fg-3">
+              Automações <span aria-hidden>/</span> <span className="text-fg">{flow.name}</span>
+            </span>
           </span>
-          <span className="hidden font-mono text-[10px] tracking-wider text-fg-3 uppercase sm:inline">
-            Exemplo ilustrativo · nomes e valores fictícios
+          <span className="flex shrink-0 items-center gap-2.5 text-[12.5px] text-fg-2">
+            <span className="hidden font-mono text-[10px] tracking-wider text-fg-3 uppercase md:inline">
+              Exemplo ilustrativo
+            </span>
+            <span aria-hidden className="flow-toggle" />
+            Ativa
           </span>
         </div>
-        <div className={cn("preview-wrap", fading && "is-fading")}>
-          <Preview step={Math.min(step, example.steps.length - 1)} />
+
+        <div className="relative">
+          <div ref={scroller} className="flow-scroll">
+            <div className="flow-frame">
+              <FlowCanvas flow={flow} step={canvasStep} />
+            </div>
+          </div>
+          {/* Editor chrome, purely decorative. */}
+          <span aria-hidden className="flow-zoom">
+            <span>+</span>
+            <span>−</span>
+            <span>⤢</span>
+          </span>
         </div>
-        {/* Step timeline: one segment per step, the current one fills over its duration. */}
-        <div className="mt-3 flex items-stretch gap-[2px]">
-          <ol aria-hidden className="flex flex-1 gap-[2px]">
-            {example.steps.map((s, i) => (
-              <li key={s} className="relative h-11 flex-1 overflow-hidden bg-white/50">
+
+        <div className="flex items-center justify-between gap-4 border-t border-hair py-2 pr-2 pl-4 sm:pl-5">
+          <p className="flex min-w-0 items-center gap-2.5 text-[13px]" aria-live="off">
+            {runningNode ? (
+              <>
                 <span
-                  key={i === step ? `${i}-now` : `${i}-${i < step ? "done" : "next"}`}
-                  className={cn(
-                    "absolute inset-0 origin-left bg-accent",
-                    i < step || reduced ? "scale-x-100" : "scale-x-0",
-                  )}
-                  style={
-                    i === step && !reduced
-                      ? {
-                          animation: `seg-fill ${example.durations[i] ?? 2000}ms linear both`,
-                          animationPlayState: running ? "running" : "paused",
-                        }
-                      : undefined
-                  }
+                  aria-hidden
+                  className="size-2 shrink-0 animate-pulse rounded-full bg-accent"
                 />
-                <span
-                  className={cn(
-                    "absolute inset-0 grid place-items-center font-mono text-[10.5px] transition-colors duration-300",
-                    i < step || reduced ? "text-white" : "text-fg-2",
-                  )}
-                >
-                  0{i + 1}
+                <span className="truncate text-fg-2">
+                  A executar · passo {canvasStep + 1} de {total}:{" "}
+                  <span className="text-fg">
+                    {runningNode.app}, {runningNode.title.toLowerCase()}
+                  </span>
                 </span>
-              </li>
-            ))}
-          </ol>
+              </>
+            ) : canvasStep === total ? (
+              <>
+                <span aria-hidden className="size-2 shrink-0 rounded-full bg-[#1f9d68]" />
+                <span className="truncate text-fg-2">
+                  Execução concluída em <span className="text-fg tabular-nums">{flow.runtime}</span>{" "}
+                  · {total} passos · sem erros
+                </span>
+              </>
+            ) : (
+              <span className="text-fg-3">À espera do próximo pedido</span>
+            )}
+          </p>
           {!reduced && (
             <PauseButton paused={paused} onToggle={() => setPaused((p) => !p)} tone="light" />
           )}
         </div>
       </div>
-    </div>
-  );
-}
 
-/** Tab mark: the tool's official logo, or a generic icon on a neutral tile. */
-function Mark({ mark }: { mark: Example["mark"] }) {
-  if (typeof mark === "string") {
-    return (
-      <span className="grid size-9 place-items-center bg-white">
-        <BrandIcon brand={mark} className="size-5" />
-      </span>
-    );
-  }
-  const Icon = mark;
-  return (
-    <span className="grid size-9 place-items-center bg-accent text-white">
-      <Icon className="size-[18px]" />
-    </span>
+      {/* The same flow in words, for screen readers (the canvas is decorative). */}
+      <ol className="sr-only" aria-label={`Passos da automação: ${flow.tab}`}>
+        {flow.order.map((id) => {
+          const n = kinds.get(id);
+          return n ? (
+            <li key={id}>{`${n.app}: ${n.title}${n.output ? `. Resultado: ${n.output}` : ""}`}</li>
+          ) : null;
+        })}
+      </ol>
+
+      <div className="grid gap-[2px] sm:grid-cols-2 lg:grid-cols-[1fr_1fr_0.7fr]">
+        <div className="tile p-5">
+          <p className="label flex items-center gap-2 text-[10px] text-rose-ink">
+            <span className="size-1.5 bg-rose-ink" />
+            Hoje, à mão
+          </p>
+          <p className="mt-2 text-[14px] leading-[1.55] text-fg-2">{flow.before}</p>
+        </div>
+        <div className="tile p-5 shadow-[inset_2px_0_0_var(--color-accent)]">
+          <p className="label flex items-center gap-2 text-[10px] text-accent">
+            <span className="size-1.5 bg-accent" />
+            Com a automação
+          </p>
+          <p className="mt-2 text-[14px] leading-[1.55] text-fg">{flow.after}</p>
+        </div>
+        <div className="panel-navy flex items-center justify-between gap-4 p-5 text-white sm:col-span-2 lg:col-span-1 lg:flex-col lg:items-start lg:justify-center">
+          <p className="label text-[10px] text-white/70">Tempo poupado</p>
+          <p className="font-display text-[30px] leading-none tracking-[-0.04em] tabular-nums lg:mt-1">
+            {flow.saving}
+          </p>
+        </div>
+      </div>
+    </div>
   );
 }

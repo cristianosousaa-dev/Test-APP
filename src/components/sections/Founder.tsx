@@ -16,7 +16,7 @@ export function Founder() {
     <section
       id="quem"
       aria-labelledby="quem-title"
-      className="relative overflow-x-clip py-28 sm:py-40"
+      className="relative overflow-x-clip py-20 sm:py-32 lg:py-40"
     >
       <Container>
         <SectionHead
@@ -33,7 +33,7 @@ export function Founder() {
           desenvolvimento full-stack e automação com inteligência artificial.
         </SectionHead>
 
-        <div className="mt-14 grid grid-cols-1 gap-8 lg:grid-cols-[minmax(0,1fr)_minmax(0,2fr)]">
+        <div className="mt-10 sm:mt-14 grid grid-cols-1 gap-8 lg:grid-cols-[minmax(0,1fr)_minmax(0,2fr)]">
           <div className="hidden lg:block" />
           <div
             data-reveal
@@ -62,7 +62,7 @@ export function Founder() {
                   href={founder.linkedin}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="label mt-5 inline-flex items-center gap-2 text-[11px] text-accent transition-colors hover:text-accent-2"
+                  className="label mt-2 inline-flex items-center gap-2 py-3 text-[11px] text-accent transition-colors hover:text-accent-2"
                 >
                   Perfil no LinkedIn <span aria-hidden>↗</span>
                 </a>

@@ -15,7 +15,7 @@ export function HowItWorks() {
       id="como-funciona"
       data-loop
       aria-labelledby="como-funciona-title"
-      className="section-dark relative py-28 sm:py-40"
+      className="section-dark relative py-20 sm:py-32 lg:py-40"
     >
       <Container>
         <SectionHead

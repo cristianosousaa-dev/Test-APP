@@ -66,7 +66,7 @@ export function Footer() {
               <li>
                 <a
                   href={contactHref()}
-                  className="underline decoration-hair-2 underline-offset-4 transition-colors hover:text-accent hover:decoration-accent"
+                  className="inline-block py-2 underline decoration-hair-2 underline-offset-4 transition-colors hover:text-accent hover:decoration-accent"
                 >
                   {site.email}
                 </a>
@@ -75,7 +75,7 @@ export function Footer() {
               <li>
                 <a
                   href={proposalHref}
-                  className="group label inline-flex items-center gap-2 text-[11.5px] text-accent"
+                  className="group label inline-flex items-center gap-2 py-2.5 text-[11.5px] text-accent"
                 >
                   {site.cta}
                   <span className="transition-transform duration-300 ease-out-soft group-hover:translate-x-1">
@@ -103,7 +103,7 @@ export function Footer() {
             <span>Os exemplos nesta página são ilustrativos.</span>
             <a
               href="/privacidade"
-              className="underline underline-offset-4 transition-colors hover:text-accent"
+              className="inline-block py-2 underline underline-offset-4 transition-colors hover:text-accent sm:py-0"
             >
               Política de privacidade
             </a>

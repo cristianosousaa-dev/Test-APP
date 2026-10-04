@@ -57,6 +57,10 @@ const ICONS = {
   shopify: ["Shopify", simple("siShopify")],
   calendly: ["Calendly", simple("siCalendly")],
   woocommerce: ["WooCommerce", iconify(logos, "woocommerce-icon")],
+  claude: ["Claude", iconify(logos, "claude-icon")],
+  pipedrive: ["Pipedrive", iconify(logos, "pipedrive")],
+  airtable: ["Airtable", iconify(logos, "airtable")],
+  googleForms: ["Google Forms", simple("siGoogleforms")],
 };
 
 // Gradients and other <defs> are hoisted into one always-rendered sprite. If they stayed

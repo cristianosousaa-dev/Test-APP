@@ -15,7 +15,7 @@ export function Cta() {
       id="contacto"
       data-loop
       aria-labelledby="contacto-title"
-      className="section-dark relative isolate mt-8 overflow-hidden py-24 sm:py-36"
+      className="section-dark relative isolate mt-8 overflow-hidden py-20 sm:py-36"
     >
       {/* The brand mark, whole, turning slowly in the lower right corner of the band. */}
       <div

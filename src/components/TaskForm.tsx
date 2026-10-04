@@ -90,7 +90,7 @@ export function TaskForm({
         aria-describedby={error ? `${id}-error` : undefined}
         placeholder="Use as suas palavras. Por exemplo: todos os dias copiamos os pedidos que chegam por email para uma folha de Excel."
         className={cn(
-          "task-field mt-3 block w-full resize-none px-4 py-3.5 text-[15.5px] leading-[1.55]",
+          "task-field mt-3 block min-h-[7.5rem] w-full resize-none px-4 py-3.5 text-[15.5px] leading-[1.55] sm:min-h-0",
           dark ? "task-field-dark" : "task-field-light",
         )}
       />
@@ -116,7 +116,7 @@ export function TaskForm({
               field.current?.focus();
             }}
             className={cn(
-              "task-chip h-8 px-2.5 text-[12px]",
+              "task-chip h-10 px-3 text-[12.5px] sm:h-8 sm:px-2.5 sm:text-[12px]",
               dark
                 ? "bg-white/10 text-white/80 hover:bg-white/20"
                 : "bg-chip text-fg-2 hover:bg-fg hover:text-white",

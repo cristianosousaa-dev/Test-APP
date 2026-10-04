@@ -1,5 +1,5 @@
 import { HeroBackdrop } from "@/components/sections/HeroBackdrop";
-import { HeroDemo } from "@/components/sections/HeroDemo";
+import { HeroFlow } from "@/components/sections/HeroFlow";
 import { TaskForm } from "@/components/TaskForm";
 import { Container } from "@/components/ui/Container";
 import { delay } from "@/lib/delay";
@@ -18,12 +18,12 @@ export function Hero() {
     <section
       id="top"
       data-loop
-      className="relative isolate -mt-[76px] pt-[116px] pb-20 sm:pt-[124px] lg:pt-[100px] lg:pb-24"
+      className="relative isolate -mt-[76px] pt-[100px] pb-16 sm:pt-[124px] sm:pb-20 lg:pt-[100px] lg:pb-24"
     >
       <HeroBackdrop />
       <Container className="relative">
         {/* No construction rules here: the background grid is the hero's structure. */}
-        <div className="relative grid grid-cols-1 gap-12 pt-8 lg:grid-cols-[minmax(0,55fr)_minmax(0,45fr)] lg:gap-0 lg:pt-0">
+        <div className="relative grid grid-cols-1 gap-10 pt-4 sm:gap-12 sm:pt-8 lg:grid-cols-[minmax(0,55fr)_minmax(0,45fr)] lg:gap-0 lg:pt-0">
           <div className="relative z-10 flex flex-col lg:pt-6 lg:pr-14">
             <p data-rise className="label flex items-center gap-2.5 text-[11px] text-fg-2">
               <span className="size-1.5 bg-accent" />
@@ -52,7 +52,7 @@ export function Hero() {
           </div>
 
           <div data-rise style={delay(200)} className="relative z-10 lg:pl-14">
-            <HeroDemo />
+            <HeroFlow />
           </div>
         </div>
 

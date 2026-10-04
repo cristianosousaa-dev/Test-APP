@@ -45,7 +45,7 @@ export function Faq() {
     <section
       id="faq"
       aria-labelledby="faq-title"
-      className="relative overflow-x-clip py-28 sm:py-40"
+      className="relative overflow-x-clip py-20 sm:py-32 lg:py-40"
     >
       <Container>
         <SectionHead
@@ -62,7 +62,7 @@ export function Faq() {
           responder.
         </SectionHead>
 
-        <div className="mt-14 grid grid-cols-1 gap-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,2fr)] lg:gap-8">
+        <div className="mt-10 sm:mt-14 grid grid-cols-1 gap-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,2fr)] lg:gap-8">
           <div className="lg:sticky lg:top-28 lg:self-start">
             <div data-reveal="left" data-frame className="tile p-6">
               <span className="flex gap-[2px]">
@@ -76,7 +76,7 @@ export function Faq() {
               <p className="mt-1 text-[14.5px] text-fg-2">
                 Escreva para o nosso email e responderemos com brevidade.
               </p>
-              <LinkButton href={contactHref("Questão")} variant="mist" size="sm" className="mt-5">
+              <LinkButton href={contactHref("Questão")} variant="mist" size="md" className="mt-5">
                 Enviar questão
               </LinkButton>
             </div>
@@ -86,7 +86,7 @@ export function Faq() {
             {FAQS.map((f, i) => (
               <details key={f.q} name="faq" open={i === 0} className="faq-item group relative">
                 <span aria-hidden className="rule-x absolute inset-x-0 top-0" />
-                <summary className="flex list-none items-center gap-5 py-6 text-[19px] tracking-[-0.015em] transition-colors duration-300 hover:text-accent [&::-webkit-details-marker]:hidden">
+                <summary className="flex list-none items-center gap-4 py-5 text-[17px] tracking-[-0.015em] transition-colors duration-300 hover:text-accent sm:gap-5 sm:py-6 sm:text-[19px] [&::-webkit-details-marker]:hidden">
                   <span aria-hidden className="font-mono text-[11px] text-fg-3">
                     0{i + 1}
                   </span>

@@ -64,7 +64,11 @@ export function Process() {
   }, []);
 
   return (
-    <section id="processo" aria-labelledby="processo-title" className="relative py-28 sm:py-40">
+    <section
+      id="processo"
+      aria-labelledby="processo-title"
+      className="relative py-20 sm:py-32 lg:py-40"
+    >
       <Container>
         <SectionHead
           index="07"
@@ -80,7 +84,7 @@ export function Process() {
           Em cada fase sabe o que vai acontecer, o que precisamos de si e o que vai receber.
         </SectionHead>
 
-        <div className="mt-14 grid grid-cols-1 gap-10 [timeline-scope:--process] lg:grid-cols-[minmax(0,1fr)_minmax(0,2fr)] lg:gap-8">
+        <div className="mt-10 sm:mt-14 grid grid-cols-1 gap-10 [timeline-scope:--process] lg:grid-cols-[minmax(0,1fr)_minmax(0,2fr)] lg:gap-8">
           {/* Pinned index (desktop) */}
           <div aria-hidden className="hidden lg:block">
             <div className="sticky top-28 flex gap-5">
@@ -121,7 +125,7 @@ export function Process() {
                 key={s.title}
                 data-step={i}
                 className={cn(
-                  "relative grid gap-6 p-6 transition-[background-color,opacity] duration-700 sm:grid-cols-[96px_minmax(0,1fr)] sm:p-8",
+                  "relative grid gap-3 p-5 transition-[background-color,opacity] duration-700 sm:grid-cols-[96px_minmax(0,1fr)] sm:gap-6 sm:p-8",
                   active === i ? "bg-tile-2" : "bg-tile lg:opacity-70",
                 )}
               >
@@ -134,21 +138,25 @@ export function Process() {
                 />
                 <span
                   className={cn(
-                    "step-num font-display text-[56px] leading-none tracking-[-0.04em] tabular-nums sm:text-[72px]",
+                    "step-num font-display text-[44px] leading-none tracking-[-0.04em] tabular-nums sm:text-[72px]",
                     active === i && "is-active",
                   )}
                 >
                   0{i + 1}
                 </span>
                 <div className="flex flex-col">
-                  <h3 className="font-display text-[26px] tracking-[-0.025em]">{s.title}</h3>
-                  <p className="mt-2 max-w-[36rem] text-[16px] leading-[1.6] text-fg-2">{s.text}</p>
-                  <dl className="mt-6 grid grid-cols-1 gap-[2px] sm:grid-cols-2">
-                    <div className="bg-white/50 p-4">
+                  <h3 className="font-display text-[23px] tracking-[-0.025em] sm:text-[26px]">
+                    {s.title}
+                  </h3>
+                  <p className="mt-2 max-w-[36rem] text-[15px] leading-[1.6] text-fg-2 sm:text-[16px]">
+                    {s.text}
+                  </p>
+                  <dl className="mt-5 grid grid-cols-1 gap-[2px] sm:grid-cols-2">
+                    <div className="bg-white/50 p-3.5 sm:p-4">
                       <dt className="label text-[10px] text-fg-3">A sua parte</dt>
                       <dd className="mt-1.5 text-[14.5px] leading-[1.5]">{s.yours}</dd>
                     </div>
-                    <div className="bg-fg p-4 text-white">
+                    <div className="bg-fg p-3.5 text-white sm:p-4">
                       <dt className="label text-[10px] text-white/60">O que recebe</dt>
                       <dd className="mt-1.5 text-[14.5px] leading-[1.5]">{s.gets}</dd>
                     </div>

@@ -33,7 +33,11 @@ const INCLUDED = [
 
 export function Pricing() {
   return (
-    <section id="precos" aria-labelledby="precos-title" className="relative py-28 sm:py-40">
+    <section
+      id="precos"
+      aria-labelledby="precos-title"
+      className="relative py-20 sm:py-32 lg:py-40"
+    >
       <Container>
         <SectionHead
           index="05"
@@ -49,7 +53,7 @@ export function Pricing() {
           os ajustes. O valor exato fica escrito na proposta, depois de percebermos a sua tarefa.
         </SectionHead>
 
-        <ul className="mt-14 grid grid-cols-1 gap-[2px] lg:grid-cols-3">
+        <ul className="mt-10 sm:mt-14 grid grid-cols-1 gap-[2px] lg:grid-cols-3">
           {PLANS.map((p, i) => {
             const dark = "featured" in p && p.featured;
             return (
@@ -62,7 +66,7 @@ export function Pricing() {
                   dark ? "panel-navy plan-featured relative z-10" : "tile spot overflow-hidden"
                 }
               >
-                <div className="flex h-full min-h-[340px] flex-col p-6 sm:p-8">
+                <div className="flex h-full flex-col p-5 sm:p-8 lg:min-h-[340px]">
                   {dark && <span aria-hidden className="marker top-0 left-0" />}
                   <div className="flex items-center justify-between gap-4">
                     <span className={dark ? "badge badge-light" : "badge"}>0{i + 1}</span>
@@ -75,7 +79,7 @@ export function Pricing() {
                     {p.text}
                   </p>
 
-                  <div className="mt-auto pt-10">
+                  <div className="mt-auto pt-7 sm:pt-10">
                     {p.price ? (
                       <dl className="flex flex-col">
                         <div className="flex items-baseline justify-between gap-4 pb-3">

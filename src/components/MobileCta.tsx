@@ -44,7 +44,7 @@ export function MobileCta() {
         <LinkButton
           href={proposalHref}
           variant="ink"
-          size="sm"
+          size="md"
           arrow
           ariaLabel={site.cta}
           className="shrink-0"

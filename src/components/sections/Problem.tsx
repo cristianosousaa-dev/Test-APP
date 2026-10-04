@@ -31,7 +31,7 @@ export function Problem() {
     <section
       id="problema"
       aria-labelledby="problema-title"
-      className="relative overflow-x-clip py-28 sm:py-40"
+      className="relative overflow-x-clip py-20 sm:py-32 lg:py-40"
     >
       <Container>
         <SectionHead
@@ -49,7 +49,7 @@ export function Problem() {
           alguém as contabiliza.
         </SectionHead>
 
-        <ul className="mt-14 grid gap-[2px] sm:grid-cols-2 lg:grid-cols-4">
+        <ul className="mt-10 sm:mt-14 grid gap-[2px] sm:grid-cols-2 lg:grid-cols-4">
           {PAINS.map((p, i) => {
             const Icon = p.icon;
             return (
@@ -58,16 +58,22 @@ export function Problem() {
                 data-reveal
                 data-spot
                 style={{ ["--i" as string]: i }}
-                className="tile spot group relative flex flex-col overflow-hidden p-6 sm:p-7"
+                className="tile spot group relative grid grid-cols-[auto_minmax(0,1fr)] gap-x-4 overflow-hidden p-5 sm:flex sm:flex-col sm:p-7"
               >
-                <div className="flex items-center justify-between">
-                  <span className="grid size-11 place-items-center bg-fg text-white transition-colors duration-300 group-hover:bg-accent">
+                <div className="flex items-start justify-between sm:items-center">
+                  <span className="grid size-10 place-items-center sm:size-11 bg-fg text-white transition-colors duration-300 group-hover:bg-accent">
                     <Icon className="size-5" strokeWidth={1.5} />
                   </span>
-                  <span className="font-mono text-[11px] text-fg-3">0{i + 1}</span>
+                  <span className="font-mono text-[11px] text-fg-3 max-sm:hidden">0{i + 1}</span>
                 </div>
-                <h3 className="mt-8 font-display text-[21px] tracking-[-0.02em]">{p.title}</h3>
-                <p className="mt-2 text-[14.5px] leading-[1.6] text-fg-2">{p.text}</p>
+                <div>
+                  <h3 className="font-display text-[19px] tracking-[-0.02em] sm:mt-8 sm:text-[21px]">
+                    {p.title}
+                  </h3>
+                  <p className="mt-1.5 text-[14px] leading-[1.55] text-fg-2 sm:mt-2 sm:text-[14.5px] sm:leading-[1.6]">
+                    {p.text}
+                  </p>
+                </div>
               </li>
             );
           })}
