@@ -10,19 +10,20 @@
   /* Type */
   --font-sans: var(--font-mona), ui-sans-serif, system-ui, sans-serif;
   --font-mono: var(--font-martian), ui-monospace, "SF Mono", monospace;
+  --font-display: var(--font-nohemi), var(--font-mona), ui-sans-serif, sans-serif;
 
   /* Page */
   --color-mist: #c3d3e6;
   --color-mist-2: #dbe3ec;
-  --color-paper-2: #f2f1ec;
+  --color-paper-2: #f4f5f7;
   --color-fg: #0a0c10;
   --color-fg-2: #3a414b;
   --color-fg-3: #5a636f;
   --color-rule: rgb(10 22 40 / 0.22);
   --color-hair: rgb(10 22 40 / 0.1);
   --color-hair-2: rgb(10 22 40 / 0.18);
-  --color-tile: rgb(255 255 255 / 0.34);
-  --color-tile-2: rgb(255 255 255 / 0.55);
+  --color-tile: rgb(255 255 255 / 0.72);
+  --color-tile-2: rgb(255 255 255 / 0.95);
   --color-chip: rgb(150 170 195 / 0.38);
 
   /* Brand */
@@ -103,7 +104,8 @@
   }
   @keyframes pop {
     from {
-      transform: scale(0);
+      opacity: 0;
+      transform: scale(0.5);
     }
   }
   @keyframes orbit {
@@ -127,8 +129,38 @@
 }
 
 @layer base {
+  /* Brand details people touch: text selection, scrollbar. */
+  ::selection {
+    background: rgb(43 91 255 / 0.18);
+    color: var(--color-fg);
+  }
   html {
-    scroll-behavior: smooth;
+    scrollbar-width: thin;
+    scrollbar-color: rgb(10 22 40 / 0.28) transparent;
+  }
+  /* Static film grain over the whole page: surfaces read as material, not flat fills.
+     Fixed and non-animated, so it is composited once and costs nothing while scrolling. */
+  body::after {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: 100;
+    pointer-events: none;
+    opacity: 0.035;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 width=%27180%27 height=%27180%27%3E%3Cfilter id=%27n%27%3E%3CfeTurbulence type=%27fractalNoise%27 baseFrequency=%270.85%27 numOctaves=%272%27 stitchTiles=%27stitch%27/%3E%3C/filter%3E%3Crect width=%27100%25%27 height=%27100%25%27 filter=%27url(%23n)%27/%3E%3C/svg%3E");
+  }
+  /* Balanced headings, no orphans in short copy, steady digits wherever numbers change. */
+  :is(h1, h2, h3, .display, .h2) {
+    text-wrap: balance;
+  }
+  :is(p, li, dd, figcaption) {
+    text-wrap: pretty;
+  }
+  :is(output, dd, .tabular) {
+    font-variant-numeric: tabular-nums;
+  }
+  html {
+    /* Lenis smooths scrolling; native smooth-behaviour would fight it. */
     scroll-padding-top: 84px;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
@@ -180,15 +212,17 @@
 @layer components {
   /* ---- Type ------------------------------------------------------------------------- */
   .display {
-    font-weight: 400;
-    letter-spacing: -0.045em;
-    line-height: 0.98;
-  }
-  .h2 {
-    font-weight: 400;
+    font-family: var(--font-display);
+    font-weight: 500;
     letter-spacing: -0.04em;
     line-height: 1.02;
-    font-size: clamp(36px, 5vw, 64px);
+  }
+  .h2 {
+    font-family: var(--font-display);
+    font-weight: 500;
+    letter-spacing: -0.035em;
+    line-height: 1.04;
+    font-size: clamp(38px, 5.4vw, 76px);
   }
   /* Uppercase interface label (nav, buttons, data labels). */
   .label {
@@ -252,10 +286,15 @@
   }
 
   /* ---- Surfaces --------------------------------------------------------------------- */
+  /* Surfaces sit on the page with real depth: a white edge, a hairline and a long soft shadow. */
   .tile {
     position: relative;
     background: var(--color-tile);
-    box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.45);
+    box-shadow:
+      inset 0 0 0 1px rgb(255 255 255 / 0.8),
+      0 0 0 1px rgb(10 22 40 / 0.05),
+      0 1px 2px rgb(10 22 40 / 0.04),
+      0 24px 48px -30px rgb(10 22 40 / 0.22);
   }
   /* Data panel: deep navy, lit from below. */
   .panel-navy {
@@ -275,9 +314,9 @@
   }
   /* Glass on light: only for the header and floating bars. */
   .glass {
-    background: rgb(226 233 241 / 0.72);
-    -webkit-backdrop-filter: blur(16px) saturate(140%);
-    backdrop-filter: blur(16px) saturate(140%);
+    background: rgb(232 238 246 / 0.84);
+    -webkit-backdrop-filter: blur(8px);
+    backdrop-filter: blur(8px);
   }
   @supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
     .glass {
@@ -293,10 +332,10 @@
     align-items: stretch;
     gap: 2px;
     max-width: 100%;
-    transition: transform 0.2s var(--ease-out-soft);
+    transition: transform 0.16s var(--ease-out-soft);
   }
   .btn:active {
-    transform: translateY(1px);
+    transform: scale(0.97);
   }
   .btn-label,
   .btn-arrow {
@@ -329,8 +368,10 @@
     transform-origin: left;
     transition: transform 0.45s var(--ease-out-soft);
   }
-  .btn:hover .btn-label::before {
-    transform: scaleX(1);
+  @media (hover: hover) and (pointer: fine) {
+    .btn:hover .btn-label::before {
+      transform: scaleX(1);
+    }
   }
   /* Arrow swap: the arrow leaves right, a new one enters from the left. */
   .btn-arrow svg {
@@ -343,11 +384,13 @@
     margin: -8px 0 0 -8px;
     transform: translateX(-240%);
   }
-  .btn:hover .btn-arrow svg:first-child {
-    transform: translateX(240%);
-  }
-  .btn:hover .btn-arrow svg + svg {
-    transform: translateX(0);
+  @media (hover: hover) and (pointer: fine) {
+    .btn:hover .btn-arrow svg:first-child {
+      transform: translateX(240%);
+    }
+    .btn:hover .btn-arrow svg + svg {
+      transform: translateX(0);
+    }
   }
 
   .btn-ink .btn-label {
@@ -498,8 +541,9 @@
   clip-path: inset(0 0 100% 0);
   transform: translateY(24px);
 }
+/* Pops grow from half size, never from nothing. */
 .js [data-pop] {
-  transform: scale(0) rotate(45deg);
+  transform: scale(0.5) rotate(45deg);
 }
 .js :is([data-reveal], [data-pop]).is-in {
   opacity: 1;
@@ -553,7 +597,7 @@
 @keyframes rv-pop {
   from {
     opacity: 0;
-    transform: scale(0) rotate(45deg);
+    transform: scale(0.5) rotate(45deg);
   }
 }
 @keyframes rv-draw-x {
@@ -714,40 +758,356 @@
   }
 }
 
-/* Hero data packets: travel along the grid, fading in and out. */
-@keyframes packet-x {
-  0% {
-    transform: translateX(0);
+/* The hero product panel is the only element allowed a cast shadow: it floats above the page. */
+.panel-lift {
+  box-shadow:
+    0 50px 100px -40px rgb(6 18 42 / 0.55),
+    0 24px 48px -32px rgb(6 18 42 / 0.4),
+    inset 0 1px 0 rgb(255 255 255 / 0.12);
+}
+
+/* Estimator sliders: a square thumb on a dotted track, filled up to the value. */
+.range {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 28px;
+  background: transparent;
+  cursor: pointer;
+}
+.range::-webkit-slider-runnable-track {
+  height: 2px;
+  background: linear-gradient(
+    90deg,
+    var(--color-accent) var(--fill),
+    var(--color-hair-2) var(--fill)
+  );
+}
+.range::-moz-range-track {
+  height: 2px;
+  background: linear-gradient(
+    90deg,
+    var(--color-accent) var(--fill),
+    var(--color-hair-2) var(--fill)
+  );
+}
+.range::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 16px;
+  height: 16px;
+  margin-top: -7px;
+  background: var(--color-fg);
+  border: 0;
+  border-radius: 0;
+  transition: transform 0.16s var(--ease-out-soft);
+}
+.range::-moz-range-thumb {
+  width: 16px;
+  height: 16px;
+  background: var(--color-fg);
+  border: 0;
+  border-radius: 0;
+}
+.range:active::-webkit-slider-thumb {
+  transform: scale(1.15);
+}
+.range:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 4px;
+}
+
+/* Full-bleed dark band: a deliberate change of register (How it works, closing CTA). */
+.section-dark {
+  color: #fff;
+  background:
+    radial-gradient(70% 55% at 50% 115%, rgb(42 90 166 / 0.6), transparent 70%),
+    radial-gradient(50% 40% at 85% 0%, rgb(43 91 255 / 0.18), transparent 70%), #06122a;
+}
+
+/* Light hero: a static blue gradient, white at the headline, deepening towards the demo. */
+.hero-light-bg {
+  background:
+    radial-gradient(70% 90% at 82% 30%, rgb(43 91 255 / 0.2), transparent 70%),
+    radial-gradient(60% 70% at 10% 100%, rgb(124 156 255 / 0.18), transparent 70%),
+    linear-gradient(180deg, #ffffff 0%, #eef3ff 60%, #e2eafd 100%);
+}
+
+/* Hero demo: each scenario enters softly, is told in stages, and fades out before the next. */
+.demo-body {
+  animation: demo-in 0.7s var(--ease-out-soft) backwards;
+  transition:
+    opacity 0.6s var(--ease-out-soft),
+    transform 0.6s var(--ease-out-soft);
+}
+.demo-out {
+  opacity: 0;
+  transform: translateY(-6px);
+}
+@keyframes demo-in {
+  from {
     opacity: 0;
-  }
-  15%,
-  80% {
-    opacity: 0.85;
-  }
-  100% {
-    transform: translateX(var(--dist));
-    opacity: 0;
+    transform: translateY(8px);
   }
 }
-@keyframes packet-y {
-  0% {
-    transform: translateY(0);
+.demo-node {
+  color: rgb(255 255 255 / 0.5);
+  box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.25);
+  transition:
+    background-color 0.5s var(--ease-out-soft),
+    color 0.5s,
+    box-shadow 0.5s;
+}
+.demo-node.is-lit {
+  background: var(--color-accent);
+  color: #fff;
+  box-shadow: none;
+}
+.demo-rail {
+  transform: scaleY(0);
+  transition: transform 0.9s var(--ease-in-out-soft);
+}
+.demo-rail.is-lit {
+  transform: scaleY(1);
+}
+.demo-action {
+  opacity: 0.4;
+  transition: opacity 0.45s var(--ease-out-soft);
+}
+.demo-action[data-state="now"],
+.demo-action[data-state="done"] {
+  opacity: 1;
+}
+.demo-tick {
+  box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.3);
+  transition:
+    background-color 0.35s var(--ease-out-soft),
+    box-shadow 0.35s;
+}
+.demo-action[data-state="done"] .demo-tick {
+  background: var(--color-accent);
+  box-shadow: none;
+}
+.demo-action[data-state="done"] .demo-tick svg {
+  animation: demo-tick 0.35s var(--ease-out-soft) backwards;
+}
+@keyframes demo-tick {
+  from {
     opacity: 0;
-  }
-  15%,
-  80% {
-    opacity: 0.85;
-  }
-  100% {
-    transform: translateY(var(--dist));
-    opacity: 0;
+    transform: scale(0.6);
   }
 }
-.packet {
-  animation: var(--anim);
+.demo-spin {
+  border: 1.5px solid rgb(255 255 255 / 0.25);
+  border-top-color: #fff;
+  animation: demo-spin 0.9s linear infinite;
 }
-[data-loop]:not(.is-playing) .packet {
-  animation-play-state: paused;
+@keyframes demo-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+.demo-result {
+  opacity: 0;
+  transform: translateY(8px);
+  transition:
+    opacity 0.6s var(--ease-out-soft),
+    transform 0.6s var(--ease-out-soft);
+}
+.demo-result[data-on="true"] {
+  opacity: 1;
+  transform: none;
+}
+
+/* Floating header: a hairline frame once solid; reading progress along its bottom edge. */
+.header-bar.is-solid {
+  box-shadow:
+    inset 0 0 0 1px rgb(255 255 255 / 0.55),
+    0 18px 40px -24px rgb(10 22 40 / 0.35);
+}
+.header-progress {
+  opacity: 0;
+  transform: scaleX(0);
+  transition: opacity 0.4s;
+}
+.is-solid .header-progress {
+  opacity: 1;
+}
+@supports (animation-timeline: scroll()) {
+  .header-progress {
+    animation: header-progress linear both;
+    animation-timeline: scroll(root);
+  }
+}
+@keyframes header-progress {
+  to {
+    transform: scaleX(1);
+  }
+}
+
+/* Spotlight cards: a light that follows the pointer, a border that lights up near it, and
+   a short lift. Pointer position comes from PageEffects (--sx/--sy on [data-spot]). */
+.spot {
+  transition:
+    transform 0.5s var(--ease-out-soft),
+    box-shadow 0.5s var(--ease-out-soft);
+}
+.spot::before,
+.spot::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.4s var(--ease-out-soft);
+}
+.spot::after {
+  background: radial-gradient(
+    380px circle at var(--sx, 50%) var(--sy, 50%),
+    rgb(43 91 255 / 0.09),
+    transparent 45%
+  );
+}
+.spot::before {
+  padding: 1px;
+  background: radial-gradient(
+    260px circle at var(--sx, 50%) var(--sy, 50%),
+    rgb(43 91 255 / 0.6),
+    transparent 60%
+  );
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  mask-composite: exclude;
+}
+@media (hover: hover) and (pointer: fine) {
+  .spot:hover {
+    transform: translateY(-4px);
+    box-shadow:
+      inset 0 0 0 1px rgb(255 255 255 / 0.9),
+      0 0 0 1px rgb(10 22 40 / 0.05),
+      0 30px 60px -30px rgb(10 22 40 / 0.35);
+  }
+  .spot:hover::before,
+  .spot:hover::after {
+    opacity: 1;
+  }
+}
+
+/* Product window: the use-case demo framed as an application, with real depth. */
+.window-lift {
+  box-shadow:
+    inset 0 0 0 1px rgb(255 255 255 / 0.9),
+    0 0 0 1px rgb(10 22 40 / 0.06),
+    0 2px 4px rgb(10 22 40 / 0.04),
+    0 50px 100px -50px rgb(10 22 40 / 0.45);
+}
+
+/* Enters on scroll with a slight 3D tilt that straightens out (scroll-driven; static where
+   unsupported). */
+@supports (animation-timeline: view()) {
+  .tilt-in {
+    transform-origin: 50% 100%;
+    animation: tilt-in linear both;
+    animation-timeline: view();
+    animation-range: entry 0% cover 35%;
+  }
+}
+@keyframes tilt-in {
+  from {
+    opacity: 0.4;
+    transform: perspective(1600px) rotateX(9deg) translateY(48px) scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* Editorial step numbers: outlined, filled with the signal blue on the active phase. */
+.step-num {
+  color: transparent;
+  -webkit-text-stroke: 1px rgb(10 22 40 / 0.35);
+  transition:
+    color 0.5s var(--ease-out-soft),
+    -webkit-text-stroke-color 0.5s var(--ease-out-soft);
+}
+.step-num.is-active {
+  color: var(--color-accent);
+  -webkit-text-stroke-color: var(--color-accent);
+}
+
+/* The recommended plan: a lit blue edge and a long blue shadow make it the focal point. */
+.plan-featured {
+  box-shadow:
+    0 0 0 1px rgb(124 156 255 / 0.55),
+    0 40px 90px -40px rgb(43 91 255 / 0.65);
+}
+
+/* Use-case previews: fade out at the end of a run and back in as it restarts. */
+.preview-wrap {
+  transition:
+    opacity 0.7s var(--ease-out-soft) 0.3s,
+    filter 0.7s var(--ease-out-soft) 0.3s,
+    transform 0.7s var(--ease-out-soft) 0.3s;
+}
+.preview-wrap.is-fading {
+  opacity: 0;
+  filter: blur(4px);
+  transform: scale(0.985);
+  transition:
+    opacity 0.55s var(--ease-out-soft),
+    filter 0.55s var(--ease-out-soft),
+    transform 0.55s var(--ease-out-soft);
+}
+
+/* Task form: a square field on the grid with one blue focus edge. */
+.task-field {
+  border-radius: 0;
+  outline: none;
+  transition:
+    background-color 0.3s,
+    box-shadow 0.3s;
+}
+.task-field-light {
+  background: rgb(255 255 255 / 0.6);
+  box-shadow: inset 0 0 0 1px var(--color-hair-2);
+  color: var(--color-fg);
+}
+.task-field-light::placeholder {
+  color: var(--color-fg-3);
+}
+.task-field-light:focus {
+  background: #fff;
+  box-shadow: inset 0 0 0 2px var(--color-accent);
+}
+.task-field-dark {
+  background: rgb(255 255 255 / 0.08);
+  box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.22);
+  color: #fff;
+}
+.task-field-dark::placeholder {
+  color: rgb(255 255 255 / 0.5);
+}
+.task-field-dark:focus {
+  background: rgb(255 255 255 / 0.12);
+  box-shadow: inset 0 0 0 2px #fff;
+}
+.task-field[aria-invalid] {
+  box-shadow: inset 0 0 0 2px var(--color-rose-ink);
+}
+.task-chip {
+  cursor: pointer;
+  transition:
+    background-color 0.2s,
+    color 0.2s,
+    transform 0.16s var(--ease-out-soft);
+}
+.task-chip:active {
+  transform: scale(0.97);
 }
 
 /* Continuous loops only run while their section is on screen. */
@@ -810,7 +1170,29 @@
   block-size: auto;
 }
 
+@media (max-width: 767px) {
+  html {
+    scroll-padding-bottom: 88px;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
+  .header-progress,
+  .demo-spin {
+    animation: none;
+  }
+  header,
+  header * {
+    transition: none;
+  }
+  .tilt-in {
+    animation: none;
+  }
+  .spot,
+  .spot::before,
+  .spot::after {
+    transition: none;
+  }
   html {
     scroll-behavior: auto;
   }
@@ -843,8 +1225,20 @@
   .group:hover .iso :is(path, ellipse, line) {
     animation: none;
   }
-  .packet {
-    display: none;
+  .task-chip {
+    transition: none;
+  }
+  .demo-body,
+  .demo-node,
+  .demo-rail,
+  .demo-action,
+  .demo-tick,
+  .demo-result {
+    animation: none;
+    transition: none;
+  }
+  .demo-tick svg {
+    animation: none;
   }
   .seq > *,
   .step-in {

@@ -68,6 +68,7 @@ export function OrchestrLogo({
   return (
     <svg
       viewBox={`0 0 ${WORDMARK.width} 32`}
+      shapeRendering="geometricPrecision"
       className={cn("h-7 w-auto shrink-0", className)}
       role={title ? "img" : undefined}
       aria-hidden={title ? undefined : true}

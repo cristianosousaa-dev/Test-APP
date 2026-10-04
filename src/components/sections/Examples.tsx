@@ -1,7 +1,7 @@
 "use client";
 
 import { Check } from "lucide-react";
-import { type KeyboardEvent, useLayoutEffect, useRef, useState } from "react";
+import { type KeyboardEvent, useLayoutEffect, useMemo, useRef, useState } from "react";
 import { BrandIcon, ToolChip } from "@/components/brand/BrandIcon";
 import { bookings } from "@/components/previews/Bookings";
 import { leads } from "@/components/previews/Leads";
@@ -53,16 +53,20 @@ export function Examples() {
   if (!active) return null;
 
   return (
-    <section id="exemplos" aria-labelledby="exemplos-title" className="relative py-20 sm:py-28">
+    <section id="exemplos" aria-labelledby="exemplos-title" className="relative py-28 sm:py-40">
       <Container>
         <SectionHead
-          index="05"
+          index="04"
           kicker="Casos de uso"
           id="exemplos-title"
-          title="Quatro processos, do início ao fim."
+          title={
+            <>
+              Veja quatro automações <span className="text-accent">a funcionar.</span>
+            </>
+          }
         >
-          Selecione um caso para ver o processo atual, o processo automatizado e cada etapa da
-          execução.
+          Escolha um exemplo para comparar a forma como o processo é feito hoje com a versão
+          automatizada, passo a passo.
         </SectionHead>
 
         <div
@@ -107,7 +111,9 @@ export function Examples() {
           })}
         </div>
 
-        <ExamplePanel key={active.id} example={active} />
+        <div className="tilt-in">
+          <ExamplePanel key={active.id} example={active} />
+        </div>
       </Container>
     </section>
   );
@@ -116,7 +122,10 @@ export function Examples() {
 function ExamplePanel({ example }: { example: Example }) {
   const ref = useRef<HTMLDivElement>(null);
   const [paused, setPaused] = useState(false);
-  const { step, reduced, running } = useStepper(ref, example.durations, paused);
+  // One extra phase at the end of each run: the preview fades out before it starts again.
+  const durations = useMemo(() => [...example.durations, 900], [example]);
+  const { step, reduced, running } = useStepper(ref, durations, paused);
+  const fading = !reduced && step === example.steps.length;
   const { Preview } = example;
 
   return (
@@ -186,17 +195,23 @@ function ExamplePanel({ example }: { example: Example }) {
         </div>
       </div>
 
-      <div className="tile flex flex-col p-3 sm:p-4">
+      <div className="tile window-lift flex flex-col p-3 sm:p-4">
         <div className="flex items-center justify-between gap-4 px-1 pt-1 pb-3">
-          <span className="label flex items-center gap-2 text-[10.5px] text-fg-2">
-            <span className="size-1.5 bg-accent" />
+          <span className="label flex items-center gap-3 text-[10.5px] text-fg-2">
+            <span aria-hidden className="flex gap-1.5">
+              <span className="size-2.5 rounded-full bg-[#ff5f57]" />
+              <span className="size-2.5 rounded-full bg-[#febc2e]" />
+              <span className="size-2.5 rounded-full bg-[#28c840]" />
+            </span>
             Pré-visualização · {example.tab}
           </span>
           <span className="hidden font-mono text-[10px] tracking-wider text-fg-3 uppercase sm:inline">
             Exemplo ilustrativo · nomes e valores fictícios
           </span>
         </div>
-        <Preview step={step} />
+        <div className={cn("preview-wrap", fading && "is-fading")}>
+          <Preview step={Math.min(step, example.steps.length - 1)} />
+        </div>
         {/* Step timeline: one segment per step, the current one fills over its duration. */}
         <div className="mt-3 flex items-stretch gap-[2px]">
           <ol aria-hidden className="flex flex-1 gap-[2px]">

@@ -27,22 +27,32 @@ export function Tools() {
     ...LOCAL.map((l) => ({ key: l, brand: null as Brand | null, label: l })),
   ];
   return (
-    <section data-loop aria-labelledby="tools-title" className="relative overflow-x-clip pb-20">
+    <section
+      data-loop
+      aria-labelledby="tools-title"
+      className="relative overflow-x-clip pt-4 pb-20"
+    >
       <Container>
-        <div className="grid grid-cols-1 items-center gap-6 lg:grid-cols-[minmax(0,1fr)_minmax(0,2fr)] lg:gap-8">
-          <p id="tools-title" data-reveal="left" className="label max-w-[18rem] text-fg-2">
-            Integra-se com os sistemas que a sua empresa já utiliza
-          </p>
+        <div className="group/tools grid grid-cols-1 items-center gap-6 lg:grid-cols-[minmax(0,1fr)_minmax(0,2fr)] lg:gap-8">
+          <div data-reveal="left">
+            <p id="tools-title" className="label max-w-[18rem] text-fg-2">
+              Trabalha com os sistemas que a sua empresa já utiliza
+            </p>
+            <label className="mt-3 inline-flex cursor-pointer items-center gap-2 text-[12px] text-fg-2 motion-reduce:hidden">
+              <input type="checkbox" className="size-4 accent-[var(--color-accent)]" />
+              Pausar movimento
+            </label>
+          </div>
           <div className="group relative overflow-hidden [mask-image:linear-gradient(90deg,transparent,#000_8%,#000_92%,transparent)]">
             <div aria-hidden className="rule-x absolute inset-x-0 top-0" />
             <div aria-hidden className="rule-x absolute inset-x-0 bottom-0" />
-            <ul className="flex w-max animate-marquee items-stretch group-hover:[animation-play-state:paused] motion-reduce:w-auto motion-reduce:flex-wrap">
+            <ul className="flex w-max animate-marquee items-stretch group-hover:[animation-play-state:paused] group-has-[:checked]/tools:[animation-play-state:paused] motion-reduce:w-auto motion-reduce:flex-wrap">
               {[0, 1].map((copy) =>
                 items.map((it) => (
                   <li
                     key={`${copy}-${it.key}`}
                     aria-hidden={copy === 1 || undefined}
-                    className="relative flex h-16 shrink-0 items-center gap-3 px-6 text-[14.5px] text-fg-2 grayscale transition-[filter,color,background-color] duration-300 hover:bg-tile-2 hover:text-fg hover:grayscale-0 motion-reduce:[&[aria-hidden]]:hidden"
+                    className="relative flex h-16 shrink-0 items-center gap-3 px-6 text-[14.5px] text-fg-2 transition-[color,background-color] duration-300 hover:bg-tile-2 hover:text-fg motion-reduce:[&[aria-hidden]]:hidden"
                   >
                     <span aria-hidden className="rule-y absolute top-3 right-0 bottom-3" />
                     {it.brand ? (

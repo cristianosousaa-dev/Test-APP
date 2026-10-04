@@ -14,11 +14,10 @@ export function PauseButton({
     <button
       type="button"
       onClick={onToggle}
-      aria-pressed={paused}
       className={`label inline-flex h-11 shrink-0 items-center gap-2 px-4 text-[10.5px] transition-colors duration-300 ${
         tone === "light"
           ? "bg-chip text-fg hover:bg-fg hover:text-white"
-          : "bg-white/15 text-white hover:bg-white hover:text-navy"
+          : "bg-white/20 text-white hover:bg-white hover:text-navy"
       }`}
     >
       <svg viewBox="0 0 16 16" className="size-3" aria-hidden>

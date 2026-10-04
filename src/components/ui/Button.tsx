@@ -8,7 +8,7 @@ const sizes = {
 } as const;
 const arrowSizes = { sm: "w-9", md: "w-11", lg: "w-13" } as const;
 
-function Arrow() {
+export function Arrow() {
   return (
     <svg viewBox="0 0 16 16" fill="none" aria-hidden className="size-4">
       <path

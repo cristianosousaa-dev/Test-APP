@@ -1,7 +1,9 @@
 import type { Metadata, Viewport } from "next";
 import { Martian_Mono, Mona_Sans } from "next/font/google";
+import localFont from "next/font/local";
+import { headers } from "next/headers";
 import type { ReactNode } from "react";
-import { site } from "@/lib/site";
+import { isLive, site } from "@/lib/site";
 import "./globals.css";
 
 /* Mona Sans: one variable family. Light display weights, regular for reading, semibold labels. */
@@ -20,29 +22,52 @@ const mono = Martian_Mono({
   display: "swap",
 });
 
+/* Nohemi (variable, 100–900): headlines only. Supplied by the client; licence: verify before launch. */
+const nohemi = localFont({
+  src: "./fonts/Nohemi-VF.ttf",
+  weight: "100 900",
+  variable: "--font-nohemi",
+  display: "swap",
+});
+
+const TITLE = `${site.name} | Automação de processos para PME em Portugal`;
+
 export const metadata: Metadata = {
   metadataBase: new URL(site.url),
-  title: `${site.name} — Automação de processos para PME`,
+  title: { default: TITLE, template: `%s | ${site.name}` },
   description: site.description,
+  applicationName: site.name,
+  alternates: { canonical: "/" },
+  // Preview deploys (no real domain yet) stay out of search results.
+  robots: isLive ? { index: true, follow: true } : { index: false, follow: false },
   openGraph: {
-    title: `${site.name} — ${site.tagline}`,
+    title: TITLE,
     description: site.description,
+    url: "/",
+    siteName: site.name,
     locale: "pt_PT",
     type: "website",
   },
+  twitter: { card: "summary_large_image", title: TITLE, description: site.description },
 };
 
 export const viewport: Viewport = {
-  themeColor: "#c3d3e6",
+  themeColor: "#ffffff",
   colorScheme: "light",
 };
 
-export default function RootLayout({ children }: { children: ReactNode }) {
+export default async function RootLayout({ children }: { children: ReactNode }) {
+  // Set by src/proxy.ts; the CSP only lets scripts carrying this nonce run.
+  const nonce = (await headers()).get("x-nonce") ?? undefined;
   return (
-    <html lang="pt-PT" className={`${mona.variable} ${mono.variable}`} suppressHydrationWarning>
+    <html
+      lang="pt-PT"
+      className={`${mona.variable} ${mono.variable} ${nohemi.variable}`}
+      suppressHydrationWarning
+    >
       <head>
         {/* Scroll reveals hide content only when JS is available to show it again. */}
-        <script>{"document.documentElement.classList.add('js')"}</script>
+        <script nonce={nonce}>{"document.documentElement.classList.add('js')"}</script>
       </head>
       <body className="min-h-dvh">
         <a

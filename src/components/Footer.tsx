@@ -1,7 +1,7 @@
 import { type Brand, BrandIcon, brandLabel } from "@/components/brand/BrandIcon";
 import { OrchestrLogo } from "@/components/brand/OrchestrLogo";
 import { Container } from "@/components/ui/Container";
-import { contactHref, nav, site } from "@/lib/site";
+import { contactHref, nav, proposalHref, site } from "@/lib/site";
 
 const INTEGRATIONS: Brand[] = [
   "whatsapp",
@@ -74,7 +74,7 @@ export function Footer() {
               <li className="text-fg-2">Portugal</li>
               <li>
                 <a
-                  href={contactHref()}
+                  href={proposalHref}
                   className="group label inline-flex items-center gap-2 text-[11.5px] text-accent"
                 >
                   {site.cta}
@@ -86,20 +86,30 @@ export function Footer() {
             </ul>
           </div>
         </div>
-        <div className="relative flex flex-col justify-between gap-3 pt-6 font-mono text-[11px] tracking-[0.02em] text-fg-3 sm:flex-row">
+      </Container>
+      {/* Oversized wordmark as the closing signature, shown whole, then the legal line. */}
+      <Container>
+        <div aria-hidden className="pointer-events-none mt-10 select-none sm:mt-14">
+          <OrchestrLogo
+            tone="on-light"
+            className="h-auto w-full opacity-[0.08]"
+            id="orx-footer-xl"
+          />
+        </div>
+        <div className="relative mt-8 flex flex-col justify-between gap-3 pt-6 pb-8 font-mono text-[11px] tracking-[0.02em] text-fg-3 sm:flex-row sm:pb-6">
           <div aria-hidden className="rule-x absolute inset-x-0 top-0" />
           <p>© 2026 {site.name}. Todos os direitos reservados.</p>
-          <p>Os exemplos nesta página são ilustrativos.</p>
+          <p className="flex flex-wrap gap-x-5 gap-y-1">
+            <span>Os exemplos nesta página são ilustrativos.</span>
+            <a
+              href="/privacidade"
+              className="underline underline-offset-4 transition-colors hover:text-accent"
+            >
+              Política de privacidade
+            </a>
+          </p>
         </div>
       </Container>
-      {/* Oversized wordmark, cropped by the page edge: a quiet signature. */}
-      <div aria-hidden className="pointer-events-none mt-16 -mb-[3.5vw] px-5 select-none sm:px-7">
-        <OrchestrLogo
-          tone="on-light"
-          className="mx-auto h-auto w-full max-w-[1360px] opacity-[0.07]"
-          id="orx-footer-xl"
-        />
-      </div>
     </footer>
   );
 }

@@ -5,26 +5,37 @@ import { Container } from "@/components/ui/Container";
 import { SectionHead } from "@/components/ui/SectionHead";
 import { cn } from "@/lib/cn";
 
+/* Each phase states what happens, what is asked of the client and what they receive. */
 const STEPS = [
   {
+    title: "Pedido",
+    text: "Descreve a tarefa que pretende automatizar, com as suas palavras. Analisamos o pedido e confirmamos se é viável.",
+    yours: "Descrever a tarefa no formulário ou por email.",
+    gets: "Resposta sobre a viabilidade, sem custos.",
+  },
+  {
     title: "Diagnóstico",
-    text: "Analisamos os seus processos e identificamos as automações com maior impacto.",
-    gets: "Mapa de processos prioritários",
+    text: "Numa conversa de 30 minutos, por telefone ou videochamada, vemos como a tarefa é feita hoje, que programas utiliza e onde se perde mais tempo.",
+    yours: "Mostrar como o processo funciona atualmente.",
+    gets: "Uma recomendação clara sobre o que automatizar primeiro.",
   },
   {
     title: "Proposta",
-    text: "Âmbito, prazo e preço fixo definidos por escrito, antes de iniciar.",
-    gets: "Proposta com âmbito, prazo e preço",
+    text: "Enviamos uma proposta escrita com o âmbito, o prazo e o preço fixo. Nada avança sem a sua aprovação.",
+    yours: "Aprovar, pedir ajustes ou recusar.",
+    gets: "Proposta com âmbito, prazo e preço definidos.",
   },
   {
-    title: "Implementação e testes",
-    text: "Integramos os sistemas existentes e validamos com casos reais da sua operação.",
-    gets: "Automação em produção",
+    title: "Implementação",
+    text: "Desenvolvemos a automação e fazemos a ligação aos seus sistemas, sem interromper o trabalho da equipa. Antes de entrar em funcionamento, é testada com casos reais.",
+    yours: "Disponibilizar os acessos necessários e validar os resultados.",
+    gets: "A automação em funcionamento, com documentação simples.",
   },
   {
     title: "Acompanhamento",
-    text: "Monitorizamos o funcionamento e ajustamos à medida que o negócio evolui.",
-    gets: "Suporte e melhoria contínua",
+    text: "Monitorizamos cada execução. Se um sistema mudar ou algo falhar, somos nós a corrigir. Quando o negócio evolui, a automação acompanha.",
+    yours: "Informar-nos sempre que a forma de trabalhar mudar.",
+    gets: "Monitorização, correções e ajustes incluídos na mensalidade.",
   },
 ];
 
@@ -53,15 +64,20 @@ export function Process() {
   }, []);
 
   return (
-    <section id="processo" aria-labelledby="processo-title" className="relative py-20 sm:py-28">
+    <section id="processo" aria-labelledby="processo-title" className="relative py-28 sm:py-40">
       <Container>
         <SectionHead
           index="07"
-          kicker="Metodologia"
+          kicker="Como trabalhamos"
           id="processo-title"
-          title="Do diagnóstico à automação em produção."
+          title={
+            <>
+              Um processo simples,{" "}
+              <span className="text-accent">do primeiro contacto à manutenção.</span>
+            </>
+          }
         >
-          Quatro fases, com entregáveis definidos em cada etapa.
+          Em cada fase sabe o que vai acontecer, o que precisamos de si e o que vai receber.
         </SectionHead>
 
         <div className="mt-14 grid grid-cols-1 gap-10 [timeline-scope:--process] lg:grid-cols-[minmax(0,1fr)_minmax(0,2fr)] lg:gap-8">
@@ -105,7 +121,7 @@ export function Process() {
                 key={s.title}
                 data-step={i}
                 className={cn(
-                  "relative grid gap-6 p-6 transition-[background-color,opacity] duration-700 sm:grid-cols-[120px_minmax(0,1fr)] sm:p-8 lg:min-h-[260px]",
+                  "relative grid gap-6 p-6 transition-[background-color,opacity] duration-700 sm:grid-cols-[96px_minmax(0,1fr)] sm:p-8",
                   active === i ? "bg-tile-2" : "bg-tile lg:opacity-70",
                 )}
               >
@@ -116,18 +132,27 @@ export function Process() {
                     active === i ? "scale-y-100" : "scale-y-0",
                   )}
                 />
-                <span className="text-[56px] leading-none tracking-[-0.05em] text-fg-3 tabular-nums sm:text-[72px]">
+                <span
+                  className={cn(
+                    "step-num font-display text-[56px] leading-none tracking-[-0.04em] tabular-nums sm:text-[72px]",
+                    active === i && "is-active",
+                  )}
+                >
                   0{i + 1}
                 </span>
                 <div className="flex flex-col">
-                  <h3 className="text-[26px] tracking-[-0.025em]">{s.title}</h3>
-                  <p className="mt-2 max-w-[34rem] text-[16px] leading-[1.6] text-fg-2">{s.text}</p>
-                  <p className="mt-auto flex flex-wrap items-center gap-3 pt-6">
-                    <span className="label bg-fg px-2.5 py-1.5 text-[10px] text-white">
-                      Entregável
-                    </span>
-                    <span className="text-[15px]">{s.gets}</span>
-                  </p>
+                  <h3 className="font-display text-[26px] tracking-[-0.025em]">{s.title}</h3>
+                  <p className="mt-2 max-w-[36rem] text-[16px] leading-[1.6] text-fg-2">{s.text}</p>
+                  <dl className="mt-6 grid grid-cols-1 gap-[2px] sm:grid-cols-2">
+                    <div className="bg-white/50 p-4">
+                      <dt className="label text-[10px] text-fg-3">A sua parte</dt>
+                      <dd className="mt-1.5 text-[14.5px] leading-[1.5]">{s.yours}</dd>
+                    </div>
+                    <div className="bg-fg p-4 text-white">
+                      <dt className="label text-[10px] text-white/60">O que recebe</dt>
+                      <dd className="mt-1.5 text-[14.5px] leading-[1.5]">{s.gets}</dd>
+                    </div>
+                  </dl>
                 </div>
               </li>
             ))}
