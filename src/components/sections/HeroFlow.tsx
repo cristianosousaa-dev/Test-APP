@@ -8,8 +8,9 @@ import { PauseButton } from "@/components/ui/PauseButton";
 import { cn } from "@/lib/cn";
 import { useStepper } from "@/lib/useStepper";
 
-/* Every hero flow has four nodes: trigger, three actions, then hold the finished run and reset. */
-const DURATIONS = [1100, 1300, 1300, 1300, 2600, 800] as const;
+/* Every hero flow has four nodes: trigger, three actions. Then hold the finished run, dissolve it,
+   and reset unseen while the next flow is swapped in. */
+const DURATIONS = [1100, 1300, 1300, 1300, 2600, 700, 120] as const;
 const NODES = 4;
 
 /** Hero preview: an automation editor that runs one flow after another. */
@@ -55,7 +56,8 @@ function Run({
     if (focus >= 0) picks.current[focus]?.focus();
   }, [focus]);
 
-  const canvasStep = reduced ? NODES : step > NODES ? -1 : step;
+  const phase = reduced || step <= NODES ? "run" : step === NODES + 1 ? "fade" : "reset";
+  const canvasStep = reduced ? NODES : phase === "reset" ? -1 : Math.min(step, NODES);
   const runningX = flow?.nodes.find((n) => n.id === flow.order[canvasStep])?.x;
   const stageW = flow?.stage?.[0] ?? 600;
 
@@ -99,8 +101,8 @@ function Run({
       </div>
 
       <div ref={scroller} className="flow-scroll">
-        <div key={flow.id} className="flow-frame is-fit animate-feed-in">
-          <FlowCanvas flow={flow} step={canvasStep} />
+        <div className="flow-frame is-fit animate-feed-in">
+          <FlowCanvas flow={flow} step={canvasStep} phase={phase} fadeAll />
         </div>
       </div>
 

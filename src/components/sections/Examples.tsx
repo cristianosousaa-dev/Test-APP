@@ -11,9 +11,10 @@ import { SectionHead } from "@/components/ui/SectionHead";
 import { cn } from "@/lib/cn";
 import { useStepper } from "@/lib/useStepper";
 
-/* After the last node: hold the finished run, then a short reset before it starts again. */
+/* After the last node: hold the finished run, fade what it added, then reset unseen and rerun. */
 const HOLD_MS = 2800;
-const RESET_MS = 900;
+const FADE_MS = 700;
+const RESET_MS = 120;
 
 export function Examples() {
   const [activeId, setActiveId] = useState(FLOWS[0]?.id ?? "");
@@ -130,13 +131,20 @@ function FlowPanel({ flow }: { flow: Flow }) {
   const [paused, setPaused] = useState(false);
   const kinds = useMemo(() => new Map(flow.nodes.map((n) => [n.id, n])), [flow]);
   const durations = useMemo(
-    () => [...flow.order.map((id) => RUN_MS[kinds.get(id)?.kind ?? "action"]), HOLD_MS, RESET_MS],
+    () => [
+      ...flow.order.map((id) => RUN_MS[kinds.get(id)?.kind ?? "action"]),
+      HOLD_MS,
+      FADE_MS,
+      RESET_MS,
+    ],
     [flow, kinds],
   );
   const { step, reduced } = useStepper(ref, durations, paused);
   const total = flow.order.length;
-  // Reduced motion rests on the finished run; the reset phase clears the canvas (step -1).
-  const canvasStep = reduced ? total : step > total ? -1 : step;
+  // Steps past the last node: hold (complete), fade (still complete, fading), reset (idle, unseen).
+  // Reduced motion rests on the finished run.
+  const phase = reduced || step <= total ? "run" : step === total + 1 ? "fade" : "reset";
+  const canvasStep = reduced ? total : phase === "reset" ? -1 : Math.min(step, total);
   const runningNode =
     canvasStep >= 0 && canvasStep < total ? kinds.get(flow.order[canvasStep] ?? "") : undefined;
 
@@ -184,7 +192,7 @@ function FlowPanel({ flow }: { flow: Flow }) {
         <div className="relative">
           <div ref={scroller} className="flow-scroll">
             <div className="flow-frame">
-              <FlowCanvas flow={flow} step={canvasStep} />
+              <FlowCanvas flow={flow} step={canvasStep} phase={phase} />
             </div>
           </div>
           {/* Editor chrome, purely decorative. */}
@@ -210,7 +218,7 @@ function FlowPanel({ flow }: { flow: Flow }) {
                   </span>
                 </span>
               </>
-            ) : canvasStep === total ? (
+            ) : canvasStep === total || phase === "reset" ? (
               <>
                 <span aria-hidden className="size-2 shrink-0 rounded-full bg-[#1f9d68]" />
                 <span className="truncate text-fg-2">

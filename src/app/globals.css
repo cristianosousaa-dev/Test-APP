@@ -1016,13 +1016,14 @@
     0 calc(var(--u) * 1) calc(var(--u) * 2) rgb(10 22 40 / 0.05),
     0 calc(var(--u) * 10) calc(var(--u) * 20) calc(var(--u) * -12) rgb(10 22 40 / 0.3);
   transition:
-    border-color 0.35s var(--ease-out-soft),
-    box-shadow 0.35s var(--ease-out-soft);
+    border-color 0.45s ease,
+    box-shadow 0.45s ease;
 }
 .flow-node[data-kind="trigger"] {
   border-radius: calc(var(--u) * 42) calc(var(--u) * 14) calc(var(--u) * 14) calc(var(--u) * 42);
 }
 .flow-node[data-state="running"] {
+  transition-delay: 0.55s;
   border-color: var(--color-accent);
   box-shadow:
     0 0 0 calc(var(--u) * 5) rgb(43 91 255 / 0.13),
@@ -1093,10 +1094,10 @@
   color: #fff;
   box-shadow: 0 0 0 calc(var(--u) * 2.5) #fff;
   opacity: 0;
-  transform: scale(0.5);
+  transform: scale(0.4);
   transition:
-    opacity 0.3s var(--ease-out-soft),
-    transform 0.45s var(--ease-out-soft);
+    opacity 0.3s ease,
+    transform 0.55s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 .flow-check :where(svg) {
   width: 60%;
@@ -1110,7 +1111,15 @@
   background: #fff;
   border: calc(var(--u) * 2.5) solid rgb(43 91 255 / 0.18);
   border-top-color: var(--color-accent);
-  animation: flow-spin 0.7s linear infinite;
+  opacity: 0;
+  transition: opacity 0.25s ease;
+  animation: flow-spin 0.7s linear infinite paused;
+}
+/* The spinner hands over to the tick: it fades in as the pulse lands and out as the tick pops. */
+.flow-node[data-state="running"] .flow-spin {
+  opacity: 1;
+  animation-play-state: running;
+  transition: opacity 0.3s ease 0.55s;
 }
 @keyframes flow-spin {
   to {
@@ -1125,9 +1134,10 @@
   background: #fff;
   border: calc(var(--u) * 1.5) solid #d3d8e0;
   box-shadow: 0 calc(var(--u) * 6) calc(var(--u) * 14) calc(var(--u) * -8) rgb(10 22 40 / 0.25);
-  transition: border-color 0.35s var(--ease-out-soft);
+  transition: border-color 0.45s ease;
 }
 .flow-sub[data-state="running"] {
+  transition-delay: 0.55s;
   border-color: var(--color-accent);
 }
 .flow-sub[data-state="done"] {
@@ -1144,10 +1154,15 @@
   stroke-width: 2.5;
   stroke-dasharray: 1;
   stroke-dashoffset: 1;
-  transition: stroke-dashoffset 0.6s var(--ease-out-soft);
+  transition:
+    stroke-dashoffset 0.75s var(--ease-in-out-soft),
+    stroke 0.5s ease;
 }
 .flow-edge-done[data-on] {
   stroke-dashoffset: 0;
+}
+.flow-edge-done[data-on="running"] {
+  stroke: var(--color-accent);
 }
 /* A short lit segment that travels the edge once, into the node that is about to run. */
 .flow-packet {
@@ -1157,7 +1172,8 @@
   stroke-linecap: round;
   stroke-dasharray: 0.08 1.2;
   stroke-dashoffset: 0.08;
-  animation: flow-packet 0.8s var(--ease-in-out-soft) forwards;
+  /* Same duration and curve as the line drawing behind it, so the pulse is its leading edge. */
+  animation: flow-packet 0.75s var(--ease-in-out-soft) forwards;
 }
 @keyframes flow-packet {
   to {
@@ -1168,9 +1184,10 @@
   stroke: #c3c9d2;
   stroke-width: 1.6;
   stroke-dasharray: 4 4;
-  transition: stroke 0.35s var(--ease-out-soft);
+  transition: stroke 0.45s ease;
 }
 .flow-sub-line[data-state="running"] {
+  transition-delay: 0.55s;
   stroke: var(--color-accent);
   animation: flow-dash 0.6s linear infinite;
 }
@@ -1215,8 +1232,8 @@
   opacity: 0;
   transform: translateY(calc(var(--u) * 6));
   transition:
-    opacity 0.45s var(--ease-out-soft),
-    transform 0.45s var(--ease-out-soft);
+    opacity 0.5s ease,
+    transform 0.65s var(--ease-out-soft);
 }
 .flow-bubble.is-below {
   transform: translateY(calc(var(--u) * -6));
@@ -1224,6 +1241,50 @@
 .flow-bubble[data-on] {
   opacity: 1;
   transform: none;
+  transition-delay: 0.15s;
+}
+
+/* End of a run: everything the run added fades out together. Nothing rewinds. */
+.flow-stage {
+  transition:
+    opacity 0.6s ease,
+    transform 0.7s var(--ease-out-soft);
+}
+.flow-stage[data-phase="fade"] :is(.flow-edge-done, .flow-check, .flow-bubble, .flow-items) {
+  opacity: 0;
+  transition: opacity 0.6s ease;
+}
+.flow-stage[data-phase="fade"] :is(.flow-node, .flow-sub) {
+  border-color: #d3d8e0;
+  box-shadow:
+    0 calc(var(--u) * 1) calc(var(--u) * 2) rgb(10 22 40 / 0.05),
+    0 calc(var(--u) * 10) calc(var(--u) * 20) calc(var(--u) * -12) rgb(10 22 40 / 0.3);
+  transition:
+    border-color 0.6s ease,
+    box-shadow 0.6s ease;
+}
+.flow-stage[data-phase="fade"] .flow-sub-line {
+  stroke: #c3c9d2;
+}
+/* When the next run is a different flow, the whole canvas dissolves and the next one rises in. */
+.flow-stage[data-fade-all]:is([data-phase="fade"], [data-phase="reset"]) {
+  opacity: 0;
+  transform: translateY(calc(var(--u) * 6));
+}
+/* Reset: back to idle at once while nothing run-related is visible, so the next run starts clean. */
+.flow-stage[data-phase="reset"],
+.flow-stage[data-phase="reset"]
+  :is(
+    .flow-node,
+    .flow-sub,
+    .flow-sub-line,
+    .flow-edge-done,
+    .flow-check,
+    .flow-spin,
+    .flow-bubble,
+    .flow-items
+  ) {
+  transition: none;
 }
 .flow-bubble-head {
   display: flex;

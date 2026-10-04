@@ -63,12 +63,21 @@ function Glyph({ icon, size }: { icon: NodeIcon; size: number }) {
   );
 }
 
+/**
+ * phase "fade" clears the finished run softly (decorations fade, nothing rewinds); "reset" then
+ * returns every node to idle with transitions off, so the next run starts clean, without a cut.
+ * fadeAll also fades the nodes, for when the next run is a different flow.
+ */
 export function FlowCanvas({
   flow,
   step,
+  phase = "run",
+  fadeAll = false,
 }: {
   flow: Pick<Flow, "nodes" | "edges" | "order" | "stage">;
   step: number;
+  phase?: "run" | "fade" | "reset";
+  fadeAll?: boolean;
 }) {
   const [W, H] = flow.stage ?? STAGE;
   const byId = new Map(flow.nodes.map((n) => [n.id, n]));
@@ -93,6 +102,8 @@ export function FlowCanvas({
   return (
     <div
       className="flow-stage"
+      data-phase={phase}
+      data-fade-all={fadeAll || undefined}
       aria-hidden
       style={{ "--stage-w": W, "--stage-h": H } as CSSProperties}
     >
@@ -141,7 +152,8 @@ export function FlowCanvas({
               d={e.d}
               pathLength={1}
               className="flow-edge-done"
-              data-on={e.state === "done" || undefined}
+              // Draws in step with the travelling pulse, then settles green once the node is done.
+              data-on={e.state === "idle" ? undefined : e.state}
             />
             {e.state === "running" && (
               <path
@@ -215,7 +227,7 @@ export function FlowCanvas({
               ) : (
                 <span className="flow-port" style={{ right: u(-5) }} />
               )}
-              {state === "running" && <span className="flow-spin" />}
+              <span className="flow-spin" />
               <span className="flow-check">
                 <Check strokeWidth={3.2} />
               </span>
