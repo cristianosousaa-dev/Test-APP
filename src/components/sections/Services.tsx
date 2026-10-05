@@ -115,73 +115,41 @@ export function Services() {
     >
       <Container>
         <SectionHead
-          index="03"
           kicker="Serviços"
           id="servicos-title"
-          title={
-            <>
-              Praticamente tudo o que se repete{" "}
-              <span className="text-accent">pode ser automatizado.</span>
-            </>
-          }
+          title={<>Praticamente tudo o que se repete pode ser automatizado.</>}
         >
           Estas são as áreas mais pedidas. Cada automação é desenhada à medida da forma como a sua
           empresa trabalha, e nada o impede de nos pedir algo que não esteja nesta lista.
         </SectionHead>
 
-        <p className="label mt-12 flex items-center gap-2 text-[11px] text-fg-3 sm:hidden">
-          Deslize para ver as oito áreas <span aria-hidden>→</span>
-        </p>
-        <ul className="relative mt-4 -mx-5 flex snap-x snap-mandatory scroll-px-5 gap-[2px] overflow-x-auto px-5 [scrollbar-width:none] sm:mx-0 sm:mt-14 sm:grid sm:grid-cols-2 sm:overflow-visible sm:px-0 lg:grid-cols-4">
+        {/* A two-column index of areas, separated by hairlines: reads like a menu, not a card grid. */}
+        <ul className="mt-12 grid gap-x-14 sm:mt-16 lg:grid-cols-2">
           {AREAS.map((a, i) => {
             const Icon = a.icon;
             return (
               <li
                 key={a.title}
                 data-reveal
-                style={{ ["--i" as string]: i % 4 }}
-                className="flex w-[84%] shrink-0 snap-start sm:w-auto"
+                style={{ ["--i" as string]: i % 2 }}
+                className="group grid grid-cols-[auto_minmax(0,1fr)] gap-x-5 border-t border-hair-2 py-6 sm:py-7"
               >
-                <div
-                  data-spot
-                  className="tile spot group relative flex w-full flex-col overflow-hidden p-5 sm:p-6"
-                >
-                  {/* Signal bar fills across the top of the hovered card. */}
-                  <span
-                    aria-hidden
-                    className="absolute inset-x-0 top-0 h-[2px] origin-left scale-x-0 bg-accent transition-transform duration-300 ease-out-soft group-hover:scale-x-100"
-                  />
-                  <div className="flex items-center justify-between">
-                    <span className="grid size-10 place-items-center bg-fg text-white transition-colors duration-300 group-hover:bg-accent">
-                      <Icon className="size-[18px]" strokeWidth={1.6} />
-                    </span>
-                    <span className="font-mono text-[11px] text-fg-3">
-                      {String(i + 1).padStart(2, "0")}
+                <Icon aria-hidden className="mt-1 size-5 text-accent" strokeWidth={1.6} />
+                <div>
+                  <div className="flex items-start justify-between gap-4">
+                    <h3 className="font-display text-[21px] leading-snug tracking-[-0.02em] sm:text-[23px]">
+                      {a.title}
+                    </h3>
+                    <span className="mt-1 flex shrink-0 gap-2">
+                      {a.tools.map((t) => (
+                        <span key={t} title={brandLabel(t)}>
+                          <BrandIcon brand={t} className="size-[18px]" />
+                          <span className="sr-only">{brandLabel(t)}</span>
+                        </span>
+                      ))}
                     </span>
                   </div>
-                  <h3 className="mt-5 font-display text-[20px] leading-snug tracking-[-0.02em] sm:mt-6 sm:text-[21px]">
-                    {a.title}
-                  </h3>
-                  <ul className="mt-4 flex flex-col text-[14px] leading-[1.5] text-fg-2">
-                    {a.items.map((it) => (
-                      <li key={it} className="flex items-start gap-2.5 border-t border-hair py-2">
-                        <span className="mt-[8px] size-1 shrink-0 bg-fg-3 transition-colors duration-300 group-hover:bg-accent" />
-                        {it}
-                      </li>
-                    ))}
-                  </ul>
-                  <span className="mt-auto flex gap-[2px] pt-5">
-                    {a.tools.map((t) => (
-                      <span
-                        key={t}
-                        title={brandLabel(t)}
-                        className="grid size-7 place-items-center bg-white"
-                      >
-                        <BrandIcon brand={t} className="size-4" />
-                        <span className="sr-only">{brandLabel(t)}</span>
-                      </span>
-                    ))}
-                  </span>
+                  <p className="mt-2 text-[15px] leading-[1.65] text-fg-2">{a.items.join(" · ")}</p>
                 </div>
               </li>
             );
@@ -191,9 +159,8 @@ export function Services() {
         {/* Bespoke: what Claude-assisted development makes affordable for an SME. */}
         <div
           data-reveal
-          className="panel-navy mt-[2px] grid grid-cols-1 gap-8 p-6 sm:p-8 lg:grid-cols-[minmax(0,7fr)_minmax(0,5fr)] lg:items-end"
+          className="panel-navy mt-10 grid grid-cols-1 gap-8 p-6 sm:p-8 lg:grid-cols-[minmax(0,7fr)_minmax(0,5fr)] lg:items-end"
         >
-          <span aria-hidden className="marker top-0 left-0" />
           <div>
             <p className="label text-[11px] text-white/60">À medida</p>
             <h3 className="mt-4 font-display text-[clamp(24px,2.6vw,34px)] leading-[1.15] tracking-[-0.025em]">

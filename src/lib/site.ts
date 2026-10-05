@@ -47,11 +47,10 @@ export const isLive = !site.url.includes("example.com");
 export const euros = (n: number) => `${n.toLocaleString("pt-PT")} €`;
 
 export const nav = [
-  { href: "#como-funciona", label: "Como funciona" },
+  { href: "#exemplos", label: "Automações" },
   { href: "#servicos", label: "Serviços" },
-  { href: "#exemplos", label: "Casos de uso" },
   { href: "#precos", label: "Preços" },
-  { href: "#processo", label: "Processo" },
+  { href: "#quem", label: "Sobre" },
   { href: "#faq", label: "FAQ" },
 ] as const;
 

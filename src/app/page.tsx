@@ -7,10 +7,8 @@ import { Examples } from "@/components/sections/Examples";
 import { Faq } from "@/components/sections/Faq";
 import { Founder } from "@/components/sections/Founder";
 import { Hero } from "@/components/sections/Hero";
-import { HowItWorks } from "@/components/sections/HowItWorks";
 import { Pricing } from "@/components/sections/Pricing";
 import { Problem } from "@/components/sections/Problem";
-import { Process } from "@/components/sections/Process";
 import { Proof } from "@/components/sections/Proof";
 import { Services } from "@/components/sections/Services";
 import { Tools } from "@/components/sections/Tools";
@@ -19,8 +17,8 @@ import { SmoothScroll } from "@/components/ui/SmoothScroll";
 import { pageSchema, toJsonLd } from "@/lib/schema";
 
 /*
- * Narrative: describe your task (hero) → tools it connects to → problem → how it works →
- * what can be automated → product in action → what it costs → who builds it → process →
+ * Narrative, kept short on purpose: the promise (hero) → tools it connects to → the problem →
+ * automations running → what can be automated → what it costs → who builds it and how →
  * social proof (only when real) → FAQ → describe your task (closing).
  */
 export default function Home() {
@@ -37,12 +35,10 @@ export default function Home() {
         <Hero />
         <Tools />
         <Problem />
-        <HowItWorks />
-        <Services />
         <Examples />
+        <Services />
         <Pricing />
         <Founder />
-        <Process />
         <Proof />
         <Faq />
         <Cta />

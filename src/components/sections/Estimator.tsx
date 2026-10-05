@@ -69,7 +69,6 @@ export function Estimator() {
       </div>
 
       <div className="panel-navy flex flex-col p-6 sm:p-8">
-        <span aria-hidden className="marker top-0 left-0" />
         <p className="label text-[11px] text-white/60">Por mês</p>
         <p
           role="status"

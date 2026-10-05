@@ -27,14 +27,10 @@ export function Cta() {
       <Container>
         <div className="relative">
           <div aria-hidden className="rule-x rule-light absolute inset-x-0 -top-10 sm:-top-16" />
-          <span aria-hidden className="marker -top-[43px] -left-[3px] sm:-top-[67px]" />
 
           <div className="grid grid-cols-1 gap-12 lg:grid-cols-[minmax(0,58fr)_minmax(0,42fr)] lg:gap-0">
             <div className="lg:pr-14">
-              <p className="flex items-center gap-3">
-                <span className="badge badge-light">09</span>
-                <span className="label text-white/70">Próximo passo</span>
-              </p>
+              <p className="label text-[11px] text-white/60">Próximo passo</p>
               <h2
                 id="contacto-title"
                 data-reveal="mask"
@@ -60,7 +56,9 @@ export function Cta() {
                     className="relative flex items-start gap-4 py-5 text-[16px] leading-[1.55] text-white/85"
                   >
                     <span aria-hidden className="rule-x rule-light absolute inset-x-0 top-0" />
-                    <span className="badge badge-light mt-0.5 shrink-0">0{i + 1}</span>
+                    <span className="mt-0.5 w-6 shrink-0 font-display text-[17px] text-[#8fa9ff] tabular-nums">
+                      0{i + 1}
+                    </span>
                     {t}
                   </li>
                 ))}

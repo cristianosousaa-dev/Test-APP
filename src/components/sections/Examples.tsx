@@ -60,7 +60,6 @@ export function Examples() {
     >
       <Container>
         <SectionHead
-          index="04"
           kicker="Casos de uso"
           id="exemplos-title"
           title={
@@ -181,9 +180,6 @@ function FlowPanel({ flow }: { flow: Flow }) {
             </span>
           </span>
           <span className="flex shrink-0 items-center gap-2.5 text-[12.5px] text-fg-2">
-            <span className="hidden font-mono text-[10px] tracking-wider text-fg-3 uppercase md:inline">
-              Exemplo ilustrativo
-            </span>
             <span aria-hidden className="flow-toggle" />
             Ativa
           </span>

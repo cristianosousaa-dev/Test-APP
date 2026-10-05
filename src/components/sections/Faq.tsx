@@ -49,14 +49,9 @@ export function Faq() {
     >
       <Container>
         <SectionHead
-          index="08"
           kicker="Perguntas frequentes"
           id="faq-title"
-          title={
-            <>
-              Perguntas <span className="text-accent">frequentes.</span>
-            </>
-          }
+          title={<>Perguntas frequentes.</>}
         >
           Reunimos aqui as dúvidas mais comuns. Se tiver outra questão, teremos todo o gosto em
           responder.

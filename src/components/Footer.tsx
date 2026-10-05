@@ -20,7 +20,6 @@ export function Footer() {
       <Container>
         <div className="relative grid gap-12 pt-10 pb-14 sm:grid-cols-2 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)_minmax(0,1fr)] lg:gap-8">
           <div data-draw="x" aria-hidden className="rule-x absolute inset-x-0 top-0" />
-          <span data-pop aria-hidden className="marker -top-[3px] -left-[3px]" />
           <div className="max-w-[24rem]">
             <a href="#top" aria-label={`${site.name}, voltar ao início`} className="inline-block">
               <OrchestrLogo tone="on-light" className="h-[26px]" id="orx-footer" />

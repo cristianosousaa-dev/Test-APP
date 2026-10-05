@@ -2,12 +2,10 @@ import type { ReactNode } from "react";
 import { cn } from "@/lib/cn";
 
 /**
- * Section opener on the construction grid: a dotted rule draws in across the frame, the
- * index badge pops at its start, the title wipes up. Kicker on the left column, title and
- * lead on the right (stacked on mobile).
+ * Section opener: one hairline across the frame, a quiet kicker on the left, title and lead on
+ * the right (stacked on mobile). Deliberately plain: the titles carry the section, not chrome.
  */
 export function SectionHead({
-  index,
   kicker,
   title,
   children,
@@ -15,7 +13,6 @@ export function SectionHead({
   className,
   tone = "light",
 }: {
-  index: string;
   kicker: string;
   title: ReactNode;
   children?: ReactNode;
@@ -25,30 +22,29 @@ export function SectionHead({
 }) {
   const dark = tone === "dark";
   return (
-    <div className={cn("relative", className)}>
-      <div data-draw="x" aria-hidden className={cn("rule-x", dark && "rule-light")} />
-      <span data-pop aria-hidden className="marker -top-[3px] -left-[3px]" />
-      <div className="grid grid-cols-1 gap-6 pt-6 lg:grid-cols-[minmax(0,1fr)_minmax(0,2fr)] lg:gap-8 lg:pt-8">
-        <p className="flex items-center gap-3">
-          <span className={cn("badge", dark && "badge-light")}>{index}</span>
-          <span className={cn("label", dark ? "text-white/70" : "text-fg-2")}>{kicker}</span>
-        </p>
-        <div>
-          <h2 id={id} data-reveal="mask" className={cn("h2", dark && "text-white")}>
-            {title}
-          </h2>
-          {children && (
-            <p
-              data-reveal
-              className={cn(
-                "mt-6 max-w-[40rem] text-[17px] leading-[1.6]",
-                dark ? "text-white/70" : "text-fg-2",
-              )}
-            >
-              {children}
-            </p>
-          )}
-        </div>
+    <div
+      className={cn(
+        "grid grid-cols-1 gap-5 border-t pt-6 lg:grid-cols-[minmax(0,1fr)_minmax(0,2fr)] lg:gap-8 lg:pt-8",
+        dark ? "border-white/15" : "border-hair",
+        className,
+      )}
+    >
+      <p className={cn("label text-[11px]", dark ? "text-white/60" : "text-fg-3")}>{kicker}</p>
+      <div>
+        <h2 id={id} data-reveal="mask" className={cn("h2", dark && "text-white")}>
+          {title}
+        </h2>
+        {children && (
+          <p
+            data-reveal
+            className={cn(
+              "mt-6 max-w-[38rem] text-[17px] leading-[1.6]",
+              dark ? "text-white/70" : "text-fg-2",
+            )}
+          >
+            {children}
+          </p>
+        )}
       </div>
     </div>
   );

@@ -40,14 +40,9 @@ export function Pricing() {
     >
       <Container>
         <SectionHead
-          index="05"
           kicker="Preços"
           id="precos-title"
-          title={
-            <>
-              Preço fixo, <span className="text-accent">conhecido antes de começar.</span>
-            </>
-          }
+          title={<>Preço fixo, conhecido antes de começar.</>}
         >
           Paga a implementação uma vez e uma mensalidade que cobre o alojamento, a monitorização e
           os ajustes. O valor exato fica escrito na proposta, depois de percebermos a sua tarefa.
@@ -67,12 +62,10 @@ export function Pricing() {
                 }
               >
                 <div className="flex h-full flex-col p-5 sm:p-8 lg:min-h-[340px]">
-                  {dark && <span aria-hidden className="marker top-0 left-0" />}
-                  <div className="flex items-center justify-between gap-4">
-                    <span className={dark ? "badge badge-light" : "badge"}>0{i + 1}</span>
-                    {dark && <span className="label text-[10.5px] text-white/60">Recomendado</span>}
-                  </div>
-                  <h3 className="mt-6 text-[24px] tracking-[-0.02em]">{p.name}</h3>
+                  <p className={`label text-[10.5px] ${dark ? "text-[#8fa9ff]" : "text-fg-3"}`}>
+                    {dark ? "Recomendado" : `Plano 0${i + 1}`}
+                  </p>
+                  <h3 className="mt-4 font-display text-[26px] tracking-[-0.025em]">{p.name}</h3>
                   <p
                     className={`mt-2 text-[15px] leading-[1.6] ${dark ? "text-white/70" : "text-fg-2"}`}
                   >
