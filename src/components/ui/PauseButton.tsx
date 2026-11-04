@@ -14,9 +14,9 @@ export function PauseButton({
     <button
       type="button"
       onClick={onToggle}
-      className={`label inline-flex h-11 shrink-0 items-center gap-2 px-4 text-[10.5px] transition-colors duration-300 ${
+      className={`inline-flex h-8 shrink-0 items-center gap-2 rounded-[7px] px-3 text-[12px] font-medium transition-colors duration-300 ${
         tone === "light"
-          ? "bg-chip text-fg hover:bg-fg hover:text-white"
+          ? "bg-chip text-fg hover:bg-fg hover:text-onfg"
           : "bg-white/20 text-white hover:bg-white hover:text-navy"
       }`}
     >

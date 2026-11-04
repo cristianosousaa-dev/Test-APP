@@ -1,37 +1,30 @@
 "use client";
 
-import { type KeyboardEvent, useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
+import { Check } from "lucide-react";
+import { type KeyboardEvent, useMemo, useRef, useState } from "react";
 import { BrandIcon } from "@/components/brand/BrandIcon";
 import { FLOWS, RUN_MS } from "@/components/flows/data";
-import { FlowCanvas, STAGE } from "@/components/flows/FlowCanvas";
-import type { Flow } from "@/components/flows/types";
+import type { Flow, FlowNode } from "@/components/flows/types";
 import { Container } from "@/components/ui/Container";
 import { PauseButton } from "@/components/ui/PauseButton";
 import { SectionHead } from "@/components/ui/SectionHead";
-import { cn } from "@/lib/cn";
 import { useStepper } from "@/lib/useStepper";
 
-/* After the last node: hold the finished run, fade what it added, then reset unseen and rerun. */
+/* After the last step: hold the finished run, fade it, then reset unseen and rerun. */
 const HOLD_MS = 2800;
 const FADE_MS = 700;
 const RESET_MS = 120;
+
+function StepIcon({ node }: { node: FlowNode }) {
+  if (typeof node.icon === "string") return <BrandIcon brand={node.icon} className="size-[22px]" />;
+  const Glyph = node.icon.glyph;
+  return <Glyph className="size-[20px]" strokeWidth={1.6} />;
+}
 
 export function Examples() {
   const [activeId, setActiveId] = useState(FLOWS[0]?.id ?? "");
   const tabs = useRef<(HTMLButtonElement | null)[]>([]);
   const active = FLOWS.find((f) => f.id === activeId) ?? FLOWS[0];
-  const [thumb, setThumb] = useState<{ x: number; w: number } | null>(null);
-
-  // Slide one ink tile under the active tab (transform + width, measured once per change).
-  useLayoutEffect(() => {
-    const i = FLOWS.findIndex((f) => f.id === activeId);
-    const el = tabs.current[i];
-    if (!el) return;
-    const measure = () => setThumb({ x: el.offsetLeft, w: el.offsetWidth });
-    measure();
-    window.addEventListener("resize", measure);
-    return () => window.removeEventListener("resize", measure);
-  }, [activeId]);
 
   function onKeyDown(e: KeyboardEvent<HTMLDivElement>) {
     const i = FLOWS.findIndex((f) => f.id === activeId);
@@ -60,63 +53,51 @@ export function Examples() {
     >
       <Container>
         <SectionHead
-          kicker="Casos de uso"
+          kicker="Automação incluída"
           id="exemplos-title"
           title={
             <>
-              Seis automações, <span className="text-accent">a correr à sua frente.</span>
+              E o que se repete <span className="text-accent-hi">passa a correr sozinho.</span>
             </>
           }
         >
-          Cada exemplo mostra o fluxo tal como funciona: o que o dispara, o que acontece em cada
-          passo e o resultado. As ferramentas são as que as empresas já utilizam.
+          Além das aplicações, ligamos os sistemas que já utiliza e automatizamos as tarefas
+          repetitivas. Seis exemplos de fluxos a funcionar, passo a passo, com as ferramentas que as
+          empresas já utilizam. Exemplos ilustrativos.
         </SectionHead>
 
-        <div
-          role="tablist"
-          aria-label="Exemplos de automações"
-          onKeyDown={onKeyDown}
-          data-reveal
-          className="relative -mx-5 mt-10 sm:mt-14 flex w-auto gap-[2px] overflow-x-auto px-5 [scrollbar-width:none] sm:mx-0 sm:px-0"
-        >
-          {thumb && (
-            <span
-              aria-hidden
-              className="absolute top-0 left-0 h-12 bg-fg transition-[transform,width] duration-500 ease-out-soft motion-reduce:transition-none"
-              style={{ width: thumb.w, transform: `translateX(${thumb.x}px)` }}
-            />
-          )}
-          {FLOWS.map((f, i) => {
-            const selected = f.id === activeId;
-            return (
-              <button
-                key={f.id}
-                ref={(el) => {
-                  tabs.current[i] = el;
-                }}
-                type="button"
-                role="tab"
-                id={`tab-${f.id}`}
-                aria-selected={selected}
-                aria-controls={`panel-${f.id}`}
-                tabIndex={selected ? 0 : -1}
-                onClick={() => setActiveId(f.id)}
-                className={cn(
-                  "label relative flex h-12 shrink-0 items-center gap-2.5 pr-5 pl-1.5 text-[11.5px] transition-[background-color,color] duration-300",
-                  selected ? "text-white" : "bg-chip text-fg hover:bg-[rgb(120_142_170/0.5)]",
-                  selected && !thumb && "bg-fg",
-                )}
-              >
-                <span className="grid size-9 place-items-center bg-white">
-                  <BrandIcon brand={f.mark} className="size-5" />
-                </span>
-                {f.tab}
-              </button>
-            );
-          })}
-        </div>
+        <div className="fl-scope mt-10 sm:mt-14">
+          <div
+            role="tablist"
+            aria-label="Exemplos de automações"
+            onKeyDown={onKeyDown}
+            data-reveal
+            className="fl-tabs"
+          >
+            {FLOWS.map((f, i) => {
+              const selected = f.id === activeId;
+              return (
+                <button
+                  key={f.id}
+                  ref={(el) => {
+                    tabs.current[i] = el;
+                  }}
+                  type="button"
+                  role="tab"
+                  id={`tab-${f.id}`}
+                  aria-selected={selected}
+                  aria-controls={`panel-${f.id}`}
+                  tabIndex={selected ? 0 : -1}
+                  onClick={() => setActiveId(f.id)}
+                  className="fl-tab"
+                >
+                  <BrandIcon brand={f.mark} className="size-4" />
+                  {f.tab}
+                </button>
+              );
+            })}
+          </div>
 
-        <div className="tilt-in">
           <FlowPanel key={active.id} flow={active} />
         </div>
       </Container>
@@ -126,36 +107,24 @@ export function Examples() {
 
 function FlowPanel({ flow }: { flow: Flow }) {
   const ref = useRef<HTMLDivElement>(null);
-  const scroller = useRef<HTMLDivElement>(null);
   const [paused, setPaused] = useState(false);
-  const kinds = useMemo(() => new Map(flow.nodes.map((n) => [n.id, n])), [flow]);
+  const steps = useMemo(
+    () =>
+      flow.order
+        .map((id) => flow.nodes.find((n) => n.id === id))
+        .filter((n): n is FlowNode => Boolean(n)),
+    [flow],
+  );
   const durations = useMemo(
-    () => [
-      ...flow.order.map((id) => RUN_MS[kinds.get(id)?.kind ?? "action"]),
-      HOLD_MS,
-      FADE_MS,
-      RESET_MS,
-    ],
-    [flow, kinds],
+    () => [...steps.map((n) => RUN_MS[n.kind]), HOLD_MS, FADE_MS, RESET_MS],
+    [steps],
   );
   const { step, reduced } = useStepper(ref, durations, paused);
-  const total = flow.order.length;
-  // Steps past the last node: hold (complete), fade (still complete, fading), reset (idle, unseen).
-  // Reduced motion rests on the finished run.
+  const total = steps.length;
+  // Past the last step: hold (complete), fade (complete, fading), reset (idle). Reduced motion rests complete.
   const phase = reduced || step <= total ? "run" : step === total + 1 ? "fade" : "reset";
-  const canvasStep = reduced ? total : phase === "reset" ? -1 : Math.min(step, total);
-  const runningNode =
-    canvasStep >= 0 && canvasStep < total ? kinds.get(flow.order[canvasStep] ?? "") : undefined;
-
-  const stageW = (flow.stage ?? STAGE)[0];
-
-  // On narrow screens the canvas scrolls sideways: keep the node that is running in view.
-  useEffect(() => {
-    const el = scroller.current;
-    if (!el || !runningNode || el.scrollWidth <= el.clientWidth) return;
-    const x = (runningNode.x / stageW) * el.scrollWidth - el.clientWidth / 2;
-    el.scrollTo({ left: Math.max(0, x), behavior: "smooth" });
-  }, [runningNode, stageW]);
+  const current = reduced ? total : phase === "reset" ? -1 : Math.min(step, total);
+  const running = current >= 0 && current < total ? steps[current] : undefined;
 
   return (
     <div
@@ -165,66 +134,53 @@ function FlowPanel({ flow }: { flow: Flow }) {
       aria-labelledby={`tab-${flow.id}`}
       // biome-ignore lint/a11y/noNoninteractiveTabindex: APG tabs; the panel itself takes focus.
       tabIndex={0}
-      className="mt-[2px] grid animate-feed-in gap-[2px]"
+      className="mt-6 grid animate-feed-in items-start gap-10 lg:grid-cols-[minmax(0,7fr)_minmax(0,4fr)] lg:gap-16"
     >
-      <div className="tile window-lift overflow-hidden">
-        <div className="flex items-center justify-between gap-4 border-b border-hair px-4 py-3 sm:px-5">
-          <span className="flex min-w-0 items-center gap-3 text-[13px]">
-            <span aria-hidden className="flex shrink-0 gap-1.5">
-              <span className="size-2.5 rounded-full bg-[#ff5f57]" />
-              <span className="size-2.5 rounded-full bg-[#febc2e]" />
-              <span className="size-2.5 rounded-full bg-[#28c840]" />
-            </span>
-            <span className="truncate text-fg-3">
-              Automações <span aria-hidden>/</span> <span className="text-fg">{flow.name}</span>
-            </span>
+      <div className="ios fl-window" data-phase={phase}>
+        <header className="fl-head">
+          <h3 className="fl-title">{flow.name}</h3>
+          <span className="fl-meta">
+            <i data-done={current === total || undefined} />
+            {current === total || phase === "reset"
+              ? flow.runtime
+              : `${Math.max(current, 0)}/${total}`}
           </span>
-          <span className="flex shrink-0 items-center gap-2.5 text-[12.5px] text-fg-2">
-            <span aria-hidden className="flow-toggle" />
-            Ativa
-          </span>
-        </div>
+        </header>
 
-        <div className="relative">
-          <div ref={scroller} className="flow-scroll">
-            <div className="flow-frame">
-              <FlowCanvas flow={flow} step={canvasStep} phase={phase} />
-            </div>
-          </div>
-          {/* Editor chrome, purely decorative. */}
-          <span aria-hidden className="flow-zoom">
-            <span>+</span>
-            <span>−</span>
-            <span>⤢</span>
-          </span>
-        </div>
+        <ol className="fl-list" aria-label={`Passos da automação: ${flow.tab}`}>
+          {steps.map((n, i) => {
+            const state = i < current ? "done" : i === current ? "running" : "pending";
+            return (
+              <li key={n.id} className="fl-step" data-s={state}>
+                <span className="fl-ic">
+                  <StepIcon node={n} />
+                </span>
+                <span className="fl-txt">
+                  <b>{n.output ? n.title : n.app}</b>
+                  <small>{n.output ?? n.title}</small>
+                </span>
+                <span className="fl-state" aria-hidden>
+                  {state === "done" && <Check strokeWidth={3.5} />}
+                </span>
+                <span className="sr-only">
+                  {state === "done"
+                    ? "Concluído"
+                    : state === "running"
+                      ? "A executar"
+                      : "Por executar"}
+                </span>
+              </li>
+            );
+          })}
+        </ol>
 
-        <div className="flex items-center justify-between gap-4 border-t border-hair py-2 pr-2 pl-4 sm:pl-5">
-          <p className="flex min-w-0 items-center gap-2.5 text-[13px]" aria-live="off">
-            {runningNode ? (
-              <>
-                <span
-                  aria-hidden
-                  className="size-2 shrink-0 animate-pulse rounded-full bg-accent"
-                />
-                <span className="truncate text-fg-2">
-                  A executar · passo {canvasStep + 1} de {total}:{" "}
-                  <span className="text-fg">
-                    {runningNode.app}, {runningNode.title.toLowerCase()}
-                  </span>
-                </span>
-              </>
-            ) : canvasStep === total || phase === "reset" ? (
-              <>
-                <span aria-hidden className="size-2 shrink-0 rounded-full bg-[#1f9d68]" />
-                <span className="truncate text-fg-2">
-                  Execução concluída em <span className="text-fg tabular-nums">{flow.runtime}</span>{" "}
-                  · {total} passos · sem erros
-                </span>
-              </>
-            ) : (
-              <span className="text-fg-3">À espera do próximo pedido</span>
-            )}
+        <div className="fl-foot">
+          <p aria-live="off">
+            {running
+              ? `A executar · passo ${current + 1} de ${total}`
+              : current === total || phase === "reset"
+                ? `Execução concluída em ${flow.runtime} · ${total} passos · sem erros`
+                : "À espera do próximo pedido"}
           </p>
           {!reduced && (
             <PauseButton paused={paused} onToggle={() => setPaused((p) => !p)} tone="light" />
@@ -232,38 +188,20 @@ function FlowPanel({ flow }: { flow: Flow }) {
         </div>
       </div>
 
-      {/* The same flow in words, for screen readers (the canvas is decorative). */}
-      <ol className="sr-only" aria-label={`Passos da automação: ${flow.tab}`}>
-        {flow.order.map((id) => {
-          const n = kinds.get(id);
-          return n ? (
-            <li key={id}>{`${n.app}: ${n.title}${n.output ? `. Resultado: ${n.output}` : ""}`}</li>
-          ) : null;
-        })}
-      </ol>
-
-      <div className="grid gap-[2px] sm:grid-cols-2 lg:grid-cols-[1fr_1fr_0.7fr]">
-        <div className="tile p-5">
-          <p className="label flex items-center gap-2 text-[10px] text-rose-ink">
-            <span className="size-1.5 bg-rose-ink" />
-            Hoje, à mão
-          </p>
-          <p className="mt-2 text-[14px] leading-[1.55] text-fg-2">{flow.before}</p>
+      <dl className="fl-notes">
+        <div>
+          <dt>Hoje, à mão</dt>
+          <dd>{flow.before}</dd>
         </div>
-        <div className="tile p-5 shadow-[inset_2px_0_0_var(--color-accent)]">
-          <p className="label flex items-center gap-2 text-[10px] text-accent">
-            <span className="size-1.5 bg-accent" />
-            Com a automação
-          </p>
-          <p className="mt-2 text-[14px] leading-[1.55] text-fg">{flow.after}</p>
+        <div>
+          <dt>Com a automação</dt>
+          <dd className="text-fg">{flow.after}</dd>
         </div>
-        <div className="panel-navy flex items-center justify-between gap-4 p-5 text-white sm:col-span-2 lg:col-span-1 lg:flex-col lg:items-start lg:justify-center">
-          <p className="label text-[10px] text-white/70">Tempo poupado</p>
-          <p className="font-display text-[30px] leading-none tracking-[-0.04em] tabular-nums lg:mt-1">
-            {flow.saving}
-          </p>
+        <div>
+          <dt>Tempo poupado</dt>
+          <dd className="tabular-nums text-fg">{flow.saving}</dd>
         </div>
-      </div>
+      </dl>
     </div>
   );
 }

@@ -3,15 +3,16 @@
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { OrchestrLogo } from "@/components/brand/OrchestrLogo";
 import { LinkButton } from "@/components/ui/Button";
+import { ThemeToggle } from "@/components/ui/ThemeToggle";
 import { cn } from "@/lib/cn";
 import { nav, proposalHref, site } from "@/lib/site";
 
 /**
- * Dynamic header. Full width and transparent over the hero; once scrolled it narrows into a
- * compact glass bar (sentinel + IntersectionObserver), hides while reading down and returns
- * on scroll up. An ink
- * tile slides under the current section (scrollspy), and a hairline along the bottom shows
- * reading progress (CSS scroll-driven animation, absent where unsupported).
+ * Dynamic header on dark glass, so it reads over both the night stages and the paper sections.
+ * Full width over the hero; once scrolled it narrows into a compact bar (sentinel +
+ * IntersectionObserver), hides while reading down and returns on scroll up. A tile slides under
+ * the current section (scrollspy) and a hairline along the bottom shows reading progress (CSS
+ * scroll-driven animation, absent where unsupported).
  */
 export function Header() {
   const sentinel = useRef<HTMLDivElement>(null);
@@ -69,7 +70,7 @@ export function Header() {
     return () => io.disconnect();
   }, []);
 
-  // Slide the ink tile under the active link (transform + width, measured per change).
+  // Slide the tile under the active link (transform + width, measured per change).
   useLayoutEffect(() => {
     const i = nav.findIndex((n) => n.href === active);
     const el = links.current[i];
@@ -113,9 +114,8 @@ export function Header() {
       >
         <div
           className={cn(
-            "header-bar relative mx-auto transition-[max-width,background-color,box-shadow,backdrop-filter] duration-700 ease-out-soft",
-            solid ? "max-w-[1100px]" : "max-w-[1376px]",
-            (solid || open) && "glass is-solid",
+            "header-bar glass relative mx-auto transition-[max-width] duration-700 ease-out-soft",
+            solid ? "is-solid max-w-[1100px]" : "max-w-[1376px]",
           )}
         >
           <div
@@ -132,20 +132,25 @@ export function Header() {
               <OrchestrLogo
                 tone="on-light"
                 className={cn(
-                  "w-auto transition-[height] duration-500 ease-out-soft",
+                  "w-auto transition-[height] duration-500 ease-out-soft dark:hidden",
                   solid ? "h-[25px]" : "h-[28px]",
                 )}
-                id="orx-header"
+                id="orx-header-l"
+              />
+              <OrchestrLogo
+                tone="on-dark"
+                className={cn(
+                  "hidden w-auto transition-[height] duration-500 ease-out-soft dark:block",
+                  solid ? "h-[25px]" : "h-[28px]",
+                )}
+                id="orx-header-d"
               />
             </a>
 
             <nav aria-label="Principal" className="relative hidden items-center lg:flex">
               <span
                 aria-hidden
-                className={cn(
-                  "absolute top-0 left-0 h-9 transition-[transform,width,opacity,background-color] duration-500 ease-out-soft",
-                  "bg-fg",
-                )}
+                className="absolute top-0 left-0 h-9 bg-nfill-2 transition-[transform,width,opacity] duration-500 ease-out-soft"
                 style={{
                   width: thumb?.w ?? 0,
                   transform: `translateX(${thumb?.x ?? 0}px)`,
@@ -162,7 +167,7 @@ export function Header() {
                   aria-current={active === n.href ? "location" : undefined}
                   className={cn(
                     "label relative grid h-9 place-items-center px-3.5 text-[11px] transition-colors duration-300",
-                    active === n.href ? "text-white" : "text-fg-2 hover:text-fg",
+                    active === n.href ? "text-strong" : "text-nmute hover:text-strong",
                   )}
                 >
                   {n.label}
@@ -170,13 +175,15 @@ export function Header() {
               ))}
             </nav>
 
+            <ThemeToggle />
+
             <LinkButton
               href={proposalHref}
               size="sm"
-              variant="ink"
+              variant="light"
               className="hidden sm:inline-flex"
             >
-              Pedir proposta
+              Pedir diagnóstico
             </LinkButton>
             <button
               ref={toggle}
@@ -184,10 +191,7 @@ export function Header() {
               aria-expanded={open}
               aria-controls="menu"
               onClick={() => setOpen((v) => !v)}
-              className={cn(
-                "label flex h-11 items-center gap-2 px-4 text-[11px] transition-colors hover:bg-fg hover:text-white sm:h-9 sm:px-3 lg:hidden",
-                "bg-chip text-fg",
-              )}
+              className="label flex h-11 items-center gap-2 bg-nfill-2 px-4 text-[11px] text-strong transition-colors hover:bg-fg hover:text-onfg sm:h-9 sm:px-3 lg:hidden"
             >
               <svg viewBox="0 0 16 16" className="size-3.5" aria-hidden>
                 <path
@@ -202,18 +206,17 @@ export function Header() {
 
           <div id="menu" hidden={!open} className="lg:hidden">
             <nav aria-label="Menu" className="flex flex-col gap-[2px] px-4 pb-4 sm:px-5">
-              {nav.map((n, i) => (
+              {nav.map((n) => (
                 <a
                   key={n.href}
                   href={n.href}
                   onClick={() => setOpen(false)}
-                  className="flex items-center justify-between bg-tile px-4 py-4 text-[17px] text-fg transition-colors hover:bg-fg hover:text-white"
+                  className="flex items-center justify-between bg-nfill px-4 py-4 text-[17px] text-strong transition-colors hover:bg-fg hover:text-onfg"
                 >
                   {n.label}
-                  <span className="font-mono text-[11px] text-fg-3">0{i + 1}</span>
                 </a>
               ))}
-              <LinkButton href={proposalHref} size="lg" className="mt-3 w-full">
+              <LinkButton href={proposalHref} variant="light" size="lg" className="mt-3 w-full">
                 {site.cta}
               </LinkButton>
             </nav>
@@ -221,7 +224,7 @@ export function Header() {
 
           <span
             aria-hidden
-            className="header-progress absolute inset-x-0 bottom-0 h-[2px] origin-left bg-accent"
+            className="header-progress absolute inset-x-0 bottom-0 h-[2px] origin-left bg-accent-hi"
           />
         </div>
       </header>

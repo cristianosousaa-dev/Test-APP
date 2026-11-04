@@ -1,13 +1,18 @@
+"use client";
+
+import { useState } from "react";
 import { type Brand, BrandIcon, brandLabel } from "@/components/brand/BrandIcon";
+import LogoLoop from "@/components/react-bits/LogoLoop";
 import { Container } from "@/components/ui/Container";
 
 const BRANDS: Brand[] = [
-  "whatsapp",
-  "gmail",
-  "outlook",
-  "googleCalendar",
   "excel",
   "googleSheets",
+  "outlook",
+  "gmail",
+  "whatsapp",
+  "googleCalendar",
+  "googleDrive",
   "stripe",
   "hubspot",
   "shopify",
@@ -15,61 +20,69 @@ const BRANDS: Brand[] = [
   "teams",
   "notion",
   "calendly",
-  "googleDrive",
 ];
 /* Portuguese tools without an open-licence logo: shown by name. */
 const LOCAL = ["Moloni", "InvoiceXpress", "PHC", "Primavera", "MB WAY"];
 
-/** Visual proof of fit: the tools Orchestr connects to. Pauses off-screen and on hover. */
+const LOGOS = [
+  ...BRANDS.map((b) => ({
+    title: brandLabel(b),
+    node: (
+      <span className="tool-chip">
+        <span className="grid size-8 place-items-center bg-white">
+          <BrandIcon brand={b} className="size-[18px]" />
+        </span>
+        {brandLabel(b)}
+      </span>
+    ),
+  })),
+  ...LOCAL.map((l) => ({
+    title: l,
+    node: (
+      <span className="tool-chip">
+        <span className="grid size-8 place-items-center bg-nfill font-mono text-[9.5px] text-strong">
+          {l.slice(0, 2).toUpperCase()}
+        </span>
+        {l}
+      </span>
+    ),
+  })),
+];
+
+/** Proof of fit: the programs the application connects to. Stoppable (WCAG 2.2.2). */
 export function Tools() {
-  const items = [
-    ...BRANDS.map((b) => ({ key: b, brand: b as Brand | null, label: brandLabel(b) })),
-    ...LOCAL.map((l) => ({ key: l, brand: null as Brand | null, label: l })),
-  ];
+  const [paused, setPaused] = useState(false);
   return (
     <section
-      data-loop
       aria-labelledby="tools-title"
-      className="relative overflow-x-clip pt-4 pb-20"
+      className="night relative overflow-x-clip border-t border-nline pt-10 pb-16"
     >
       <Container>
-        <div className="group/tools grid grid-cols-1 items-center gap-6 lg:grid-cols-[minmax(0,1fr)_minmax(0,2fr)] lg:gap-8">
-          <div data-reveal="left">
-            <p id="tools-title" className="label max-w-[18rem] text-fg-2">
-              Trabalha com os sistemas que a sua empresa já utiliza
+        <div className="grid grid-cols-1 items-center gap-6 lg:grid-cols-[minmax(0,1fr)_minmax(0,2.4fr)] lg:gap-10">
+          <div>
+            <p id="tools-title" className="kicker-n max-w-[18rem] text-[10.5px] leading-[1.7]">
+              Liga-se aos programas que a sua empresa já utiliza
             </p>
-            <label className="mt-3 inline-flex cursor-pointer items-center gap-2 text-[12px] text-fg-2 motion-reduce:hidden">
-              <input type="checkbox" className="size-4 accent-[var(--color-accent)]" />
-              Pausar movimento
-            </label>
+            <button
+              type="button"
+              onClick={() => setPaused((p) => !p)}
+              aria-pressed={paused}
+              className="kicker-n mt-3 inline-flex h-11 items-center gap-2 text-[10.5px] text-ntext transition-colors hover:text-strong motion-reduce:hidden"
+            >
+              {paused ? "Continuar movimento" : "Pausar movimento"}
+            </button>
           </div>
-          <div className="group relative overflow-hidden [mask-image:linear-gradient(90deg,transparent,#000_8%,#000_92%,transparent)]">
-            <div aria-hidden className="rule-x absolute inset-x-0 top-0" />
-            <div aria-hidden className="rule-x absolute inset-x-0 bottom-0" />
-            <ul className="flex w-max animate-marquee items-stretch group-hover:[animation-play-state:paused] group-has-[:checked]/tools:[animation-play-state:paused] motion-reduce:w-auto motion-reduce:flex-wrap">
-              {[0, 1].map((copy) =>
-                items.map((it) => (
-                  <li
-                    key={`${copy}-${it.key}`}
-                    aria-hidden={copy === 1 || undefined}
-                    className="relative flex h-16 shrink-0 items-center gap-3 px-6 text-[14.5px] text-fg-2 transition-[color,background-color] duration-300 hover:bg-tile-2 hover:text-fg motion-reduce:[&[aria-hidden]]:hidden"
-                  >
-                    <span aria-hidden className="rule-y absolute top-3 right-0 bottom-3" />
-                    {it.brand ? (
-                      <span className="grid size-8 place-items-center bg-white">
-                        <BrandIcon brand={it.brand} className="size-[18px]" />
-                      </span>
-                    ) : (
-                      <span className="grid size-8 place-items-center bg-fg font-mono text-[9.5px] text-white">
-                        {it.label.slice(0, 2).toUpperCase()}
-                      </span>
-                    )}
-                    {it.label}
-                  </li>
-                )),
-              )}
-            </ul>
-          </div>
+          <LogoLoop
+            logos={LOGOS}
+            speed={paused ? 0 : 42}
+            gap={10}
+            logoHeight={44}
+            pauseOnHover
+            fadeOut
+            fadeOutColor="var(--stage-base)"
+            fadeOutWidth={80}
+            ariaLabel="Programas e serviços com que a Orchestr se liga"
+          />
         </div>
       </Container>
     </section>

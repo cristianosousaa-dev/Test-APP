@@ -36,14 +36,14 @@ export function MobileCta() {
         show ? "translate-y-0 opacity-100" : "pointer-events-none translate-y-[130%] opacity-0"
       }`}
     >
-      <div className="glass flex items-center justify-between gap-3 py-2 pr-2 pl-4 shadow-[0_20px_40px_-16px_rgb(10_22_40/0.45)]">
-        <p className="min-w-0 text-[13px] leading-tight text-fg-2">
-          <span className="block font-medium text-fg">Proposta gratuita</span>
+      <div className="glass flex items-center justify-between gap-3 py-2 pr-2 pl-4 shadow-[0_20px_40px_-16px_rgb(0_0_0/0.7)]">
+        <p className="min-w-0 text-[13px] leading-tight text-nmute">
+          <span className="block font-medium text-strong">Diagnóstico gratuito</span>
           Preço fixo · sem compromisso
         </p>
         <LinkButton
           href={proposalHref}
-          variant="ink"
+          variant="light"
           size="md"
           arrow
           ariaLabel={site.cta}

@@ -1,42 +1,52 @@
 import { Plus } from "lucide-react";
-import { BrandIcon } from "@/components/brand/BrandIcon";
 import { LinkButton } from "@/components/ui/Button";
 import { Container } from "@/components/ui/Container";
 import { SectionHead } from "@/components/ui/SectionHead";
-import { contactHref, euros, pricing } from "@/lib/site";
+import { contactHref, euros, plans } from "@/lib/site";
+
+const app = plans.find((p) => p.id === "aplicacao");
+const auto = plans.find((p) => p.id === "automacao");
 
 export const FAQS = [
   {
-    q: "Que tipo de empresas podem beneficiar?",
-    a: "Clínicas, oficinas, imobiliárias, restauração, comércio online, escritórios e prestadores de serviços. Qualquer processo repetitivo e baseado em regras é normalmente passível de automação.",
+    q: "Quanto custa uma aplicação à medida?",
+    a: `Depende do âmbito. Uma aplicação para substituir o Excel ou o papel de um processo começa nos ${euros(app?.setup ?? 0)} de implementação e ${euros(app?.monthly ?? 0)} por mês de manutenção, sem IVA. Uma automação simples começa nos ${euros(auto?.setup ?? 0)}. Depois do diagnóstico recebe uma proposta com preço fixo, escrito, antes de iniciarmos.`,
   },
   {
-    q: "E se a automação deixar de funcionar?",
-    a: "A mensalidade cobre a monitorização. Cada execução fica registada e, se um sistema mudar ou falhar, somos nós a corrigir, sem custo adicional dentro do âmbito acordado.",
+    q: "Quanto tempo demora?",
+    a: "Uma aplicação para um processo costuma ficar pronta em 2 a 4 semanas. Plataformas com vários módulos e integrações levam 6 a 12 semanas. O prazo é fixado por escrito na proposta e acompanhado com entregas semanais.",
   },
   {
-    q: "É necessário mudar de software?",
-    a: "Não. As automações são integradas nos sistemas que já utiliza: WhatsApp, email, agenda, faturação, CRM ou folhas de cálculo. A equipa mantém a sua forma de trabalhar.",
+    q: "Tenho de abandonar o Excel de um dia para o outro?",
+    a: "Não. Importamos os seus ficheiros, validamos os dados consigo e a equipa pode trabalhar em paralelo durante um período combinado. Só deixa a folha de cálculo quando se sentir seguro.",
   },
   {
-    q: "E se a minha tarefa não estiver nos exemplos?",
-    a: "Descreva a tarefa na mesma. Se for repetitiva e seguir regras, é quase sempre possível automatizar. Se não for, informamos antes de qualquer custo.",
+    q: "A demonstração tem custos?",
+    a: "O diagnóstico e a demonstração com os seus próprios dados são feitos antes de qualquer compromisso, para ver o resultado antes de decidir.",
   },
   {
-    q: "Qual é o investimento?",
-    a: `Uma automação simples começa nos ${euros(pricing.single.setup)} de implementação e ${euros(pricing.single.monthly)} por mês de manutenção, sem IVA. Depois de percebermos a sua tarefa, recebe uma proposta com preço fixo, para conhecer o valor exato antes de iniciarmos.`,
+    q: "De quem são os dados e o software?",
+    a: "Os dados são sempre seus e pode exportá-los a qualquer momento. As condições de propriedade e de licença do software ficam definidas, por escrito, na proposta.",
   },
   {
-    q: "Qual é o prazo de implementação?",
-    a: "Varia consoante a complexidade. O prazo é definido por escrito na proposta, antes do início do projeto.",
+    q: "E se já utilizo o PHC, o Primavera ou o Moloni?",
+    a: "A aplicação pode ligar-se a eles. Cada integração é avaliada caso a caso, porque depende do que o sistema permite. Quando é complexa, propomos deixá-la para uma segunda fase.",
   },
   {
-    q: "Utilizam inteligência artificial?",
-    a: "Sempre que acrescenta valor: interpretação de mensagens, leitura de documentos ou redação de respostas. Nos restantes casos, utilizamos regras determinísticas e previsíveis. As decisões críticas podem ficar sempre sujeitas à sua aprovação.",
+    q: "O que acontece depois de a aplicação estar em uso?",
+    a: "A mensalidade cobre o alojamento, as cópias de segurança, a manutenção, o suporte e um número de horas por mês para alterações. Se um sistema externo mudar ou falhar, somos nós a corrigir.",
+  },
+  {
+    q: "Funciona no telemóvel?",
+    a: "Sim. As aplicações funcionam no computador, no tablet e no telemóvel, a partir do navegador, e podem ser instaladas no ecrã inicial.",
   },
   {
     q: "Como é garantida a segurança dos dados?",
-    a: "Cada automação utiliza apenas os acessos estritamente necessários. Seguimos as boas práticas do RGPD e documentamos o que cada automação faz e a que dados acede.",
+    a: "Cada pessoa vê apenas o que o seu perfil permite. Os dados ficam alojados na União Europeia, com cópias de segurança, e seguimos as boas práticas do RGPD. Documentamos o que a aplicação guarda e a que dados acede.",
+  },
+  {
+    q: "Utilizam inteligência artificial?",
+    a: "Sempre que acrescenta valor: leitura de documentos, interpretação de mensagens ou redação de respostas. Nos restantes casos usamos regras previsíveis. As decisões críticas podem ficar sempre sujeitas à sua aprovação.",
   },
 ];
 
@@ -53,25 +63,20 @@ export function Faq() {
           id="faq-title"
           title={<>Perguntas frequentes.</>}
         >
-          Reunimos aqui as dúvidas mais comuns. Se tiver outra questão, teremos todo o gosto em
+          As dúvidas mais comuns antes de começar. Se tiver outra questão, teremos todo o gosto em
           responder.
         </SectionHead>
 
-        <div className="mt-10 sm:mt-14 grid grid-cols-1 gap-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,2fr)] lg:gap-8">
+        <div className="mt-10 grid grid-cols-1 gap-10 sm:mt-14 lg:grid-cols-[minmax(0,1fr)_minmax(0,2fr)] lg:gap-8">
           <div className="lg:sticky lg:top-28 lg:self-start">
-            <div data-reveal="left" data-frame className="tile p-6">
-              <span className="flex gap-[2px]">
-                {(["whatsapp", "gmail", "outlook"] as const).map((b) => (
-                  <span key={b} className="grid size-9 place-items-center bg-white">
-                    <BrandIcon brand={b} className="size-[18px]" />
-                  </span>
-                ))}
-              </span>
-              <p className="mt-5 text-[19px] tracking-[-0.015em]">Tem outra questão?</p>
-              <p className="mt-1 text-[14.5px] text-fg-2">
-                Escreva para o nosso email e responderemos com brevidade.
+            <div data-reveal className="bg-fg p-7 text-onfg">
+              <p className="font-display text-[24px] leading-[1.15] tracking-[-0.025em]">
+                Tem outra questão?
               </p>
-              <LinkButton href={contactHref("Questão")} variant="mist" size="md" className="mt-5">
+              <p className="mt-2 text-[14.5px] leading-[1.55] text-onfg/70">
+                Escreva-nos e responderemos com brevidade.
+              </p>
+              <LinkButton href={contactHref("Questão")} variant="light" size="md" className="mt-6">
                 Enviar questão
               </LinkButton>
             </div>
@@ -81,21 +86,16 @@ export function Faq() {
             {FAQS.map((f, i) => (
               <details key={f.q} name="faq" open={i === 0} className="faq-item group relative">
                 <span aria-hidden className="rule-x absolute inset-x-0 top-0" />
-                <summary className="flex list-none items-center gap-4 py-5 text-[17px] tracking-[-0.015em] transition-colors duration-300 hover:text-accent sm:gap-5 sm:py-6 sm:text-[19px] [&::-webkit-details-marker]:hidden">
-                  <span aria-hidden className="font-mono text-[11px] text-fg-3">
-                    0{i + 1}
-                  </span>
+                <summary className="flex list-none items-center gap-4 py-5 text-[17px] tracking-[-0.015em] transition-colors duration-300 hover:text-accent-hi sm:gap-5 sm:py-6 sm:text-[19px] [&::-webkit-details-marker]:hidden">
                   <span className="flex-1">{f.q}</span>
-                  <span className="grid size-9 shrink-0 place-items-center bg-chip text-fg transition-[background-color,color] duration-200 group-open:bg-fg group-open:text-white">
+                  <span className="grid size-9 shrink-0 place-items-center bg-chip text-fg transition-[background-color,color] duration-200 group-open:bg-fg group-open:text-onfg">
                     <Plus
                       className="size-4 transition-transform duration-250 ease-out-soft group-open:rotate-45"
                       strokeWidth={1.6}
                     />
                   </span>
                 </summary>
-                <p className="max-w-[44rem] pb-7 pl-[46px] text-[16px] leading-[1.65] text-fg-2">
-                  {f.a}
-                </p>
+                <p className="max-w-[44rem] pb-7 text-[16px] leading-[1.65] text-fg-2">{f.a}</p>
               </details>
             ))}
             <div aria-hidden className="rule-x" />

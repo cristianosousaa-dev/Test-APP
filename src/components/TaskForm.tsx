@@ -5,23 +5,27 @@ import { Arrow } from "@/components/ui/Button";
 import { cn } from "@/lib/cn";
 import { contactHref, site, whatsappHref } from "@/lib/site";
 
-/* Starting points for people who know the pain but not the words for it. */
+/* Starting points for people who know the problem but not the words for it. */
 const EXAMPLES = [
   {
-    label: "Marcações",
-    text: "Respondemos à mão, todos os dias, aos mesmos pedidos de marcação por WhatsApp e passamos tudo para a agenda.",
+    label: "Encomendas",
+    text: "Registamos as encomendas num Excel e acompanhamos o estado de cada uma por telefone e por mensagens.",
+  },
+  {
+    label: "Orçamentos",
+    text: "Fazemos os orçamentos em Word e Excel, um a um, e perdemos o rasto dos que ficam por responder.",
+  },
+  {
+    label: "Stock",
+    text: "O stock está numa folha de cálculo que ninguém atualiza a tempo e só descobrimos as faltas quando o cliente pede.",
   },
   {
     label: "Cobranças",
     text: "Acompanhamos as faturas vencidas por telefone e confirmamos os pagamentos no extrato, um a um.",
   },
   {
-    label: "Faturas de fornecedores",
-    text: "Recebemos faturas de fornecedores por email e temos de as lançar manualmente no programa de faturação.",
-  },
-  {
-    label: "Orçamentos",
-    text: "Os pedidos de orçamento chegam pelo site e por email e demoram horas, às vezes dias, a ter resposta.",
+    label: "Agenda",
+    text: "A agenda é de papel e as marcações chegam por WhatsApp, o que gera sobreposições e esquecimentos.",
   },
 ];
 
@@ -62,7 +66,7 @@ export function TaskForm({
         e.preventDefault();
         if (!valid()) return;
         window.location.href = contactHref(
-          "Pedido de proposta",
+          "Pedido de diagnóstico",
           `${text.trim()}\n\nEmpresa:\nTelefone:`,
         );
         setSent(true);
@@ -71,9 +75,9 @@ export function TaskForm({
     >
       <label
         htmlFor={`${id}-task`}
-        className={cn("label block text-[11px]", dark ? "text-white/70" : "text-fg-2")}
+        className={cn("label block text-[11px]", dark ? "text-nmute" : "text-fg-2")}
       >
-        Que tarefa gostaria de automatizar?
+        Que processo faz hoje em Excel ou em papel?
       </label>
       <textarea
         ref={field}
@@ -88,7 +92,7 @@ export function TaskForm({
         }}
         aria-invalid={error || undefined}
         aria-describedby={error ? `${id}-error` : undefined}
-        placeholder="Use as suas palavras. Por exemplo: todos os dias copiamos os pedidos que chegam por email para uma folha de Excel."
+        placeholder="Use as suas palavras. Por exemplo: registamos as encomendas num Excel e acompanhamos o estado de cada uma por telefone."
         className={cn(
           "task-field mt-3 block min-h-[7.5rem] w-full resize-none px-4 py-3.5 text-[15.5px] leading-[1.55] sm:min-h-0",
           dark ? "task-field-dark" : "task-field-light",
@@ -98,14 +102,14 @@ export function TaskForm({
         <p
           id={`${id}-error`}
           role="alert"
-          className={cn("mt-2 text-[13.5px]", dark ? "text-[#ffb4a8]" : "text-rose-ink")}
+          className={cn("mt-2 text-[13.5px]", dark ? "text-err" : "text-rose-ink")}
         >
-          Escreva pelo menos uma frase sobre a tarefa, para a podermos avaliar.
+          Escreva pelo menos uma frase sobre o processo, para o podermos avaliar.
         </p>
       )}
 
       <fieldset className="mt-3 flex flex-wrap gap-[2px]">
-        <legend className="sr-only">Exemplos de tarefas</legend>
+        <legend className="sr-only">Exemplos de processos</legend>
         {EXAMPLES.map((ex) => (
           <button
             key={ex.label}
@@ -118,7 +122,7 @@ export function TaskForm({
             className={cn(
               "task-chip h-10 px-3 text-[12.5px] sm:h-8 sm:px-2.5 sm:text-[12px]",
               dark
-                ? "bg-white/10 text-white/80 hover:bg-white/20"
+                ? "bg-nfill text-ntext hover:bg-nline-2"
                 : "bg-chip text-fg-2 hover:bg-fg hover:text-white",
             )}
           >
@@ -127,16 +131,13 @@ export function TaskForm({
         ))}
       </fieldset>
 
-      <div className="mt-5 flex flex-col gap-[2px] sm:flex-row">
+      <div className="mt-5 flex flex-col gap-2 sm:flex-row">
         <button
           type="submit"
-          className={cn("btn label h-13 text-[12px] sm:flex-1", dark ? "btn-light" : "btn-ink")}
+          className={cn("btn h-10 text-[13.5px] sm:flex-1", dark ? "btn-light" : "btn-ink")}
         >
-          <span className="btn-label flex-1">{site.cta}</span>
-          <span className="btn-arrow w-13">
-            <Arrow />
-            <Arrow />
-          </span>
+          <span>{site.cta}</span>
+          <Arrow />
         </button>
         {whatsapp && (
           <a
@@ -146,14 +147,14 @@ export function TaskForm({
             onClick={(e) => {
               if (!valid()) e.preventDefault();
             }}
-            className={cn("btn label h-13 text-[12px]", dark ? "btn-glass" : "btn-mist")}
+            className={cn("btn h-10 text-[13.5px]", dark ? "btn-glass" : "btn-mist")}
           >
-            <span className="btn-label flex-1">Enviar por WhatsApp</span>
+            Enviar por WhatsApp
           </a>
         )}
       </div>
-      <p className={cn("kicker mt-3 text-[10.5px]", dark ? "text-white/55" : "text-fg-2")}>
-        Abre o seu email com o pedido preenchido · Sem compromisso
+      <p className={cn("kicker mt-3 text-[10.5px]", dark ? "text-nmute" : "text-fg-2")}>
+        Abre o seu email com o pedido preenchido · Sem compromisso · Resposta com preço fixo
       </p>
       {sent && (
         <div
@@ -161,7 +162,7 @@ export function TaskForm({
           className={cn(
             "mt-4 p-4 text-[14px] leading-[1.55]",
             dark
-              ? "bg-white/10 text-white/90"
+              ? "bg-nfill text-ntext"
               : "bg-white/80 text-fg-2 shadow-[inset_0_0_0_1px_var(--color-hair-2)]",
           )}
         >
@@ -169,7 +170,7 @@ export function TaskForm({
           texto e envie-o para{" "}
           <a
             href={`mailto:${site.email}`}
-            className={cn("underline underline-offset-4", dark ? "text-white" : "text-fg")}
+            className={cn("underline underline-offset-4", dark ? "text-strong" : "text-fg")}
           >
             {site.email}
           </a>
@@ -187,7 +188,9 @@ export function TaskForm({
             }}
             className={cn(
               "label mt-3 flex h-10 items-center px-4 text-[11px] transition-colors",
-              dark ? "bg-white text-navy hover:bg-white/90" : "bg-fg text-white hover:bg-accent",
+              dark
+                ? "bg-fg text-onfg hover:bg-accent hover:text-white"
+                : "bg-fg text-white hover:bg-accent",
             )}
           >
             {copied ? "Texto copiado" : "Copiar o texto do pedido"}

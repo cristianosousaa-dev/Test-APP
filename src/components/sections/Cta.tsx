@@ -1,12 +1,12 @@
-import { OrchestrMark } from "@/components/brand/OrchestrLogo";
+import { GridBackdrop } from "@/components/sections/GridBackdrop";
 import { TaskForm } from "@/components/TaskForm";
 import { Container } from "@/components/ui/Container";
 import { delay } from "@/lib/delay";
 
 const NEXT = [
   "Lemos o seu pedido. Se for preciso, marcamos 30 minutos para perceber o processo.",
-  "Recebe uma proposta escrita com âmbito, prazo e preço fixo.",
-  "Só avança se aprovar. Até lá, não há qualquer compromisso.",
+  "Preparamos uma demonstração com os seus próprios dados.",
+  "Recebe uma proposta escrita com âmbito, prazo e preço fixo. Só avança se aprovar.",
 ];
 
 export function Cta() {
@@ -15,48 +15,44 @@ export function Cta() {
       id="contacto"
       data-loop
       aria-labelledby="contacto-title"
-      className="section-dark relative isolate mt-8 overflow-hidden py-20 sm:py-36"
+      className="night relative isolate overflow-hidden py-20 sm:py-36"
     >
-      {/* The brand mark, whole, turning slowly in the lower right corner of the band. */}
-      <div
-        aria-hidden
-        className="pointer-events-none absolute right-[3%] bottom-[6%] -z-10 hidden opacity-[0.07] xl:block"
-      >
-        <OrchestrMark className="size-[380px] animate-orbit" id="orx-cta-orbit" />
-      </div>
+      <GridBackdrop className="[mask-image:radial-gradient(70%_80%_at_70%_40%,#000,transparent)]" />
       <Container>
         <div className="relative">
-          <div aria-hidden className="rule-x rule-light absolute inset-x-0 -top-10 sm:-top-16" />
-
-          <div className="grid grid-cols-1 gap-12 lg:grid-cols-[minmax(0,58fr)_minmax(0,42fr)] lg:gap-0">
+          <div className="grid grid-cols-1 gap-14 lg:grid-cols-[minmax(0,58fr)_minmax(0,42fr)] lg:gap-0">
             <div className="lg:pr-14">
-              <p className="label text-[11px] text-white/60">Próximo passo</p>
+              <p className="kicker-n">Próximo passo</p>
               <h2
                 id="contacto-title"
                 data-reveal="mask"
-                className="display mt-8 text-[clamp(40px,5vw,72px)] text-white"
+                className="display mt-8 text-[clamp(40px,5.2vw,78px)] text-strong"
               >
-                Comece por <span className="text-[#8fa9ff]">descrever a tarefa.</span>
+                Mostre-nos o seu Excel.{" "}
+                <span className="text-accent-hi">
+                  <span className="whitespace-nowrap">Mostramos-lhe</span> a aplicação.
+                </span>
               </h2>
-              <p className="mt-6 max-w-[32rem] text-[17px] leading-[1.6] text-white/75">
-                Não precisa de conhecer termos técnicos. Basta explicar o que é feito hoje à mão e
-                quanto tempo ocupa. Analisamos o pedido e respondemos com uma proposta.
+              <p className="mt-7 max-w-[34rem] text-[17.5px] leading-[1.6] text-nmute">
+                Descreva o processo que hoje faz em Excel ou em papel. Não precisa de termos
+                técnicos: basta explicar o que é feito e quanto tempo ocupa. Respondemos com uma
+                proposta de preço fixo.
               </p>
-              <TaskForm tone="dark" className="mt-10 max-w-[36rem]" />
+              <TaskForm tone="dark" className="mt-10 max-w-[38rem]" />
             </div>
 
             <div className="lg:pl-14">
-              <p className="label text-white/60">O que acontece a seguir</p>
+              <p className="kicker-n">O que acontece a seguir</p>
               <ol className="mt-6 flex flex-col">
                 {NEXT.map((t, i) => (
                   <li
                     key={t}
                     data-reveal="right"
                     style={{ ...delay(i * 120), ["--i" as string]: i }}
-                    className="relative flex items-start gap-4 py-5 text-[16px] leading-[1.55] text-white/85"
+                    className="relative flex items-start gap-4 py-5 text-[16px] leading-[1.55] text-ntext"
                   >
                     <span aria-hidden className="rule-x rule-light absolute inset-x-0 top-0" />
-                    <span className="mt-0.5 w-6 shrink-0 font-display text-[17px] text-[#8fa9ff] tabular-nums">
+                    <span className="mt-0.5 w-6 shrink-0 font-display text-[17px] text-accent-hi tabular-nums">
                       0{i + 1}
                     </span>
                     {t}

@@ -1,4 +1,5 @@
 import { BrandDefs } from "@/components/brand/BrandIcon";
+import { ConvertDemo } from "@/components/convert/ConvertDemo";
 import { Footer } from "@/components/Footer";
 import { Header } from "@/components/Header";
 import { MobileCta } from "@/components/MobileCta";
@@ -9,7 +10,7 @@ import { Founder } from "@/components/sections/Founder";
 import { Hero } from "@/components/sections/Hero";
 import { Pricing } from "@/components/sections/Pricing";
 import { Problem } from "@/components/sections/Problem";
-import { Proof } from "@/components/sections/Proof";
+import { Process } from "@/components/sections/Process";
 import { Services } from "@/components/sections/Services";
 import { Tools } from "@/components/sections/Tools";
 import { PageEffects } from "@/components/ui/PageEffects";
@@ -17,9 +18,10 @@ import { SmoothScroll } from "@/components/ui/SmoothScroll";
 import { pageSchema, toJsonLd } from "@/lib/schema";
 
 /*
- * Narrative, kept short on purpose: the promise (hero) → tools it connects to → the problem →
- * automations running → what can be automated → what it costs → who builds it and how →
- * social proof (only when real) → FAQ → describe your task (closing).
+ * Narrative: the promise (hero) → what it connects to → the reader's problem → the spreadsheet
+ * becoming an application (the signature moment) → what gets built → how a project runs →
+ * automation as a module → what it costs → who builds it → questions → describe your process.
+ * Night stages and paper sections alternate so the page has rhythm.
  */
 export default function Home() {
   return (
@@ -35,11 +37,12 @@ export default function Home() {
         <Hero />
         <Tools />
         <Problem />
-        <Examples />
+        <ConvertDemo />
         <Services />
+        <Process />
+        <Examples />
         <Pricing />
         <Founder />
-        <Proof />
         <Faq />
         <Cta />
       </main>

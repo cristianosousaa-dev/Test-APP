@@ -30,7 +30,7 @@ const nohemi = localFont({
   display: "swap",
 });
 
-const TITLE = `${site.name} | Automação de processos para PME em Portugal`;
+const TITLE = `${site.name} | Software à medida para PME em Portugal`;
 
 export const metadata: Metadata = {
   metadataBase: new URL(site.url),
@@ -53,7 +53,7 @@ export const metadata: Metadata = {
 
 export const viewport: Viewport = {
   themeColor: "#ffffff",
-  colorScheme: "light",
+  colorScheme: "light dark",
 };
 
 export default async function RootLayout({ children }: { children: ReactNode }) {
@@ -67,7 +67,11 @@ export default async function RootLayout({ children }: { children: ReactNode }) 
     >
       <head>
         {/* Scroll reveals hide content only when JS is available to show it again. */}
-        <script nonce={nonce}>{"document.documentElement.classList.add('js')"}</script>
+        <script nonce={nonce}>
+          {
+            "document.documentElement.classList.add('js');try{var t=localStorage.getItem('theme');document.documentElement.dataset.theme=t==='dark'?'dark':'light'}catch(e){document.documentElement.dataset.theme='light'}"
+          }
+        </script>
       </head>
       <body className="min-h-dvh">
         <a

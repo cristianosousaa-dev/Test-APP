@@ -1,180 +1,143 @@
 import {
   BarChart3,
   Boxes,
+  Cable,
+  CalendarClock,
+  FileCheck2,
   FileText,
-  Handshake,
   type LucideIcon,
-  Megaphone,
-  MessagesSquare,
-  Receipt,
-  Users,
+  PackageCheck,
+  ReceiptEuro,
+  UsersRound,
 } from "lucide-react";
-import { type Brand, BrandIcon, brandLabel } from "@/components/brand/BrandIcon";
+import type { CSSProperties } from "react";
 import { LinkButton } from "@/components/ui/Button";
 import { Container } from "@/components/ui/Container";
 import { SectionHead } from "@/components/ui/SectionHead";
+import { ThemedSpotlightCard } from "@/components/ui/ThemedReactBits";
+import { delay } from "@/lib/delay";
 import { proposalHref } from "@/lib/site";
 
-const AREAS: { title: string; icon: LucideIcon; items: string[]; tools: Brand[] }[] = [
+/* Practical by design: what it replaces, then what the application does about it. */
+const SERVICES = [
   {
-    title: "Atendimento e agenda",
-    icon: MessagesSquare,
-    items: [
-      "Respostas a pedidos por WhatsApp, email e site",
-      "Marcações, reagendamentos e lembretes",
-      "Confirmações que reduzem as faltas",
-      "Pedidos de avaliação no Google",
-    ],
-    tools: ["whatsapp", "googleCalendar", "google"],
+    title: "Encomendas e produção",
+    replaces: "Folhas de Excel e papéis de obra",
+    text: "Pedidos, estados, prazos e entregas num só sítio, com toda a equipa a ver o mesmo.",
   },
   {
-    title: "Vendas e propostas",
-    icon: Handshake,
-    items: [
-      "Resposta imediata a novos contactos",
-      "Orçamentos com a sua tabela de preços",
-      "Seguimento de propostas enviadas",
-      "Registo automático no CRM",
-    ],
-    tools: ["gmail", "hubspot", "outlook"],
+    title: "Orçamentos e propostas",
+    replaces: "Word e Excel",
+    text: "Orçamentos com os seus preços, PDF automático, estados e seguimento até à decisão.",
   },
   {
     title: "Faturação e cobranças",
-    icon: Receipt,
-    items: [
-      "Emissão e envio de faturas",
-      "Lembretes com referência MB e MB WAY",
-      "Conciliação de recebimentos",
-      "Alertas de faturas vencidas",
-    ],
-    tools: ["stripe", "excel", "gmail"],
+    replaces: "Lançamentos manuais",
+    text: "Ligação ao Moloni, InvoiceXpress, PHC ou Primavera. Avisos de vencimento e conciliação.",
   },
   {
-    title: "Documentos e contabilidade",
-    icon: FileText,
-    items: [
-      "Leitura de faturas de fornecedores",
-      "Extração de dados de PDF e digitalizações",
-      "Arquivo organizado por mês e por cliente",
-      "Envio de documentos ao contabilista",
-    ],
-    tools: ["googleDrive", "outlook", "openai"],
+    title: "Marcações e agenda",
+    replaces: "Agenda de papel e mensagens",
+    text: "Agenda partilhada, confirmações e lembretes enviados por email e SMS.",
   },
   {
-    title: "Operações e stock",
-    icon: Boxes,
-    items: [
-      "Alertas de stock mínimo",
-      "Encomendas a fornecedores",
-      "Sincronização entre loja online e armazém",
-      "Ordens de trabalho e listas de verificação",
-    ],
-    tools: ["shopify", "woocommerce", "googleSheets"],
+    title: "Portais de clientes e fornecedores",
+    replaces: "Emails e chamadas",
+    text: "Acesso seguro a pedidos, documentos e estados, sem ter de pedir informação por telefone.",
   },
   {
-    title: "Marketing e comunicação",
-    icon: Megaphone,
-    items: [
-      "Newsletters e campanhas segmentadas",
-      "Publicações programadas nas redes sociais",
-      "Mensagens de reativação de clientes",
-      "Gestão e resposta a avaliações",
-    ],
-    tools: ["gmail", "google", "notion"],
+    title: "Stock e armazém",
+    replaces: "Contagens em folha",
+    text: "Entradas, saídas, alertas de stock mínimo e leitura de códigos pelo telemóvel.",
   },
   {
-    title: "Equipa e recursos humanos",
-    icon: Users,
-    items: [
-      "Integração de novos colaboradores",
-      "Pedidos de férias e ausências",
-      "Registo de horas e escalas",
-      "Documentos para assinatura",
-    ],
-    tools: ["teams", "slack", "googleDrive"],
+    title: "Documentos e aprovações",
+    replaces: "Pastas e circuitos por email",
+    text: "Circuito de aprovação com histórico, responsáveis e arquivo organizado.",
   },
   {
-    title: "Relatórios e gestão",
-    icon: BarChart3,
-    items: [
-      "Relatório semanal no seu email",
-      "Painéis com os números do negócio",
-      "Alertas quando algo foge ao normal",
-      "Dados de vários sistemas num só lugar",
-    ],
-    tools: ["googleSheets", "excel", "notion"],
+    title: "Painéis e relatórios",
+    replaces: "Relatórios feitos no fim do mês",
+    text: "Os números da empresa atualizados todos os dias, por cliente, produto e período.",
   },
-];
+  {
+    title: "Ligação a sistemas antigos",
+    replaces: "Copiar e colar entre programas",
+    text: "Ligamos a aplicação ao PHC, ao Primavera, a bases de dados e a ficheiros que já tem.",
+  },
+] as const;
+
+const ICONS: Record<string, LucideIcon> = {
+  "Encomendas e produção": PackageCheck,
+  "Orçamentos e propostas": FileText,
+  "Faturação e cobranças": ReceiptEuro,
+  "Marcações e agenda": CalendarClock,
+  "Portais de clientes e fornecedores": UsersRound,
+  "Stock e armazém": Boxes,
+  "Documentos e aprovações": FileCheck2,
+  "Painéis e relatórios": BarChart3,
+  "Ligação a sistemas antigos": Cable,
+};
 
 export function Services() {
   return (
     <section
       id="servicos"
       aria-labelledby="servicos-title"
-      className="relative py-20 sm:py-32 lg:py-40"
+      className="relative overflow-x-clip py-20 sm:py-32 lg:py-40"
     >
       <Container>
         <SectionHead
           kicker="Serviços"
           id="servicos-title"
-          title={<>Praticamente tudo o que se repete pode ser automatizado.</>}
+          title={<>O que construímos, em termos práticos.</>}
         >
-          Estas são as áreas mais pedidas. Cada automação é desenhada à medida da forma como a sua
-          empresa trabalha, e nada o impede de nos pedir algo que não esteja nesta lista.
+          Cada projeto parte do processo que a sua empresa já tem. Estes são os pontos de partida
+          mais comuns. Se o seu não está na lista, descreva-o: é quase sempre possível.
         </SectionHead>
 
-        {/* A two-column index of areas, separated by hairlines: reads like a menu, not a card grid. */}
-        <ul className="mt-12 grid gap-x-14 sm:mt-16 lg:grid-cols-2">
-          {AREAS.map((a, i) => {
-            const Icon = a.icon;
+        <ul className="cells mt-12 sm:mt-16">
+          {SERVICES.map((s, i) => {
+            const Icon = ICONS[s.title] ?? Cable;
             return (
-              <li
-                key={a.title}
-                data-reveal
-                style={{ ["--i" as string]: i % 2 }}
-                className="group grid grid-cols-[auto_minmax(0,1fr)] gap-x-5 border-t border-hair-2 py-6 sm:py-7"
-              >
-                <Icon aria-hidden className="mt-1 size-5 text-accent" strokeWidth={1.6} />
-                <div>
-                  <div className="flex items-start justify-between gap-4">
-                    <h3 className="font-display text-[21px] leading-snug tracking-[-0.02em] sm:text-[23px]">
-                      {a.title}
-                    </h3>
-                    <span className="mt-1 flex shrink-0 gap-2">
-                      {a.tools.map((t) => (
-                        <span key={t} title={brandLabel(t)}>
-                          <BrandIcon brand={t} className="size-[18px]" />
-                          <span className="sr-only">{brandLabel(t)}</span>
-                        </span>
-                      ))}
-                    </span>
-                  </div>
-                  <p className="mt-2 text-[15px] leading-[1.65] text-fg-2">{a.items.join(" · ")}</p>
-                </div>
+              <li key={s.title} data-reveal style={delay((i % 3) * 70)} className="group min-w-0">
+                <ThemedSpotlightCard
+                  className="flex h-full min-h-[220px] flex-col rounded-none! p-7! sm:p-8!"
+                  style={
+                    {
+                      "--spotlight-card-shadow": "none",
+                      "--spotlight-card-surface": "var(--cell-surface)",
+                    } as CSSProperties
+                  }
+                >
+                  <span
+                    aria-hidden
+                    className="absolute top-6 right-6 grid size-10 place-items-center bg-fg/5 text-fg-2 transition-[background-color,color,transform] duration-500 ease-out-soft group-hover:-translate-y-0.5 group-hover:bg-accent group-hover:text-white"
+                  >
+                    <Icon className="size-5" strokeWidth={1.5} />
+                  </span>
+                  <p className="kicker pr-14 text-[10.5px]">
+                    Substitui <span className="text-fg">{s.replaces}</span>
+                  </p>
+                  <h3 className="mt-5 font-display text-[24px] leading-[1.15] tracking-[-0.025em]">
+                    {s.title}
+                  </h3>
+                  <p className="mt-3 text-[15px] leading-[1.6] text-fg-2">{s.text}</p>
+                </ThemedSpotlightCard>
               </li>
             );
           })}
         </ul>
 
-        {/* Bespoke: what Claude-assisted development makes affordable for an SME. */}
         <div
           data-reveal
-          className="panel-navy mt-10 grid grid-cols-1 gap-8 p-6 sm:p-8 lg:grid-cols-[minmax(0,7fr)_minmax(0,5fr)] lg:items-end"
+          className="mt-8 flex flex-col items-start justify-between gap-6 bg-fg p-7 text-onfg sm:flex-row sm:items-center sm:p-10"
         >
-          <div>
-            <p className="label text-[11px] text-white/60">À medida</p>
-            <h3 className="mt-4 font-display text-[clamp(24px,2.6vw,34px)] leading-[1.15] tracking-[-0.025em]">
-              Quando a ferramenta certa não existe,{" "}
-              <span className="text-[#8fa9ff]">desenvolvemos uma à medida.</span>
-            </h3>
-            <p className="mt-4 max-w-[38rem] text-[15.5px] leading-[1.6] text-white/70">
-              Portais para clientes, pequenas aplicações internas, integrações entre programas que
-              não comunicam e assistentes de inteligência artificial que respondem com a informação
-              da sua empresa.
-            </p>
-          </div>
-          <LinkButton href={proposalHref} variant="light" size="lg" className="w-full">
-            Descrever o que precisa
+          <p className="max-w-[34rem] font-display text-[clamp(22px,2.4vw,30px)] leading-[1.2] tracking-[-0.025em]">
+            Precisa de algo que não está na lista? Construímos à medida, a partir do seu processo.
+          </p>
+          <LinkButton href={proposalHref} variant="light" size="lg" className="shrink-0">
+            Descrever o que preciso
           </LinkButton>
         </div>
       </Container>

@@ -1,5 +1,5 @@
 import { FAQS } from "@/components/sections/Faq";
-import { founder, pricing, site } from "@/lib/site";
+import { founder, plans, site } from "@/lib/site";
 
 /*
  * One schema.org graph for the page, built from the same constants the page renders, so the
@@ -8,20 +8,17 @@ import { founder, pricing, site } from "@/lib/site";
  */
 export function pageSchema() {
   const url = site.url.replace(/\/$/, "");
-  const offers = pricing.confirmed
+  // Only prices the owner has confirmed are published as structured data.
+  const confirmed = plans.filter((p) => p.confirmed);
+  const offers = confirmed.length
     ? {
         hasOfferCatalog: {
           "@type": "OfferCatalog",
           name: "Planos",
-          itemListElement: (
-            [
-              ["Uma automação", pricing.single],
-              ["Processos ligados", pricing.bundle],
-            ] as const
-          ).flatMap(([name, p]) => [
+          itemListElement: confirmed.flatMap((p) => [
             {
               "@type": "Offer",
-              name: `${name}: implementação`,
+              name: `${p.name}: implementação`,
               priceSpecification: {
                 "@type": "PriceSpecification",
                 minPrice: p.setup,
@@ -31,7 +28,7 @@ export function pageSchema() {
             },
             {
               "@type": "Offer",
-              name: `${name}: manutenção mensal`,
+              name: `${p.name}: manutenção mensal`,
               priceSpecification: {
                 "@type": "UnitPriceSpecification",
                 price: p.monthly,
@@ -80,8 +77,8 @@ export function pageSchema() {
       {
         "@type": "Service",
         "@id": `${url}/#servico`,
-        name: "Automação de processos para PME",
-        serviceType: "Automação de processos de negócio",
+        name: "Software à medida para PME",
+        serviceType: "Desenvolvimento de software à medida e automação de processos",
         provider: { "@id": `${url}/#org` },
         areaServed: { "@type": "Country", name: "Portugal" },
         ...offers,

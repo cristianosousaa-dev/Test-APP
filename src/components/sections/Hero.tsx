@@ -1,54 +1,55 @@
-import { HeroBackdrop } from "@/components/sections/HeroBackdrop";
-import { HeroFlow } from "@/components/sections/HeroFlow";
+import { HeroDemo } from "@/components/sections/HeroDemo";
 import { LinkButton } from "@/components/ui/Button";
 import { Container } from "@/components/ui/Container";
+import { ThemedShinyText } from "@/components/ui/ThemedReactBits";
 import { delay } from "@/lib/delay";
 import { proposalHref, site } from "@/lib/site";
 
-/* One statement, one action, one visual. The task form lives in the closing section. */
+const FACTS = ["Preço e prazo fixos", "Demonstração com os seus dados", "Manutenção incluída"];
+
+/* One promise, one action, one picture: the application that replaces the spreadsheet. */
 export function Hero() {
   return (
     <section
       id="top"
       data-loop
-      className="relative isolate -mt-[76px] pt-[100px] pb-20 sm:pt-[124px] sm:pb-28 lg:pt-[136px] lg:pb-32"
+      className="night hero-solid relative isolate -mt-[76px] overflow-hidden pt-[124px] pb-20 sm:pt-[148px] sm:pb-28 lg:pt-[164px] lg:pb-32"
     >
-      <HeroBackdrop />
       <Container className="relative">
-        <div className="grid grid-cols-1 items-center gap-12 pt-4 sm:pt-8 lg:grid-cols-[minmax(0,52fr)_minmax(0,48fr)] lg:gap-0 lg:pt-0">
-          <div className="relative z-10 flex flex-col lg:pr-14">
-            <p data-rise className="label text-[11px] text-fg-2">
-              Automação de processos para PME em Portugal
+        <div className="grid grid-cols-1 items-center gap-16 lg:grid-cols-[minmax(0,6fr)_minmax(0,5fr)] lg:gap-8">
+          <div className="relative z-10">
+            <p data-rise className="kicker-n">
+              <ThemedShinyText text="Software à medida para PME" speed={3.5} delay={1.2} />
             </p>
             <h1
               data-rise="mask"
               style={delay(80)}
-              className="display mt-6 text-[clamp(42px,4.6vw,72px)]"
+              className="display mt-6 text-[clamp(44px,5.7vw,94px)] text-strong"
             >
-              Quantas horas perde a sua equipa{" "}
-              <span className="text-accent">em tarefas repetitivas?</span>
+              Do Excel e do papel a uma{" "}
+              <span className="text-accent-hi">aplicação feita à medida.</span>
             </h1>
             <p
               data-rise
               style={delay(200)}
-              className="mt-6 max-w-[32rem] text-[17.5px] leading-[1.6] text-fg-2"
+              className="mt-7 max-w-[34rem] text-[18px] leading-[1.6] text-nmute"
             >
-              A {site.name} automatiza o trabalho administrativo da sua empresa, nos programas que
-              já utiliza. Preço fixo, acordado por escrito antes de começar.
+              Desenhamos e construímos o software que o processo da sua empresa precisa, com prazo e
+              preço fixos. Veja a aplicação a funcionar com os seus dados antes de decidir.
             </p>
             <div
               data-rise
               style={delay(280)}
-              className="mt-9 flex flex-col gap-4 sm:flex-row sm:items-center sm:gap-7"
+              className="mt-10 flex flex-col gap-4 sm:flex-row sm:items-center sm:gap-7"
             >
-              <LinkButton href={proposalHref} size="lg" className="sm:w-auto">
+              <LinkButton href={proposalHref} variant="light" size="lg" className="sm:w-auto">
                 {site.cta}
               </LinkButton>
               <a
-                href="#exemplos"
-                className="group inline-flex items-center gap-2 py-2 text-[15px] text-fg underline decoration-hair-2 underline-offset-[6px] transition-colors hover:decoration-accent"
+                href="#conversao"
+                className="group inline-flex items-center gap-2 py-2 text-[15px] text-strong underline decoration-nline-2 underline-offset-[6px] transition-colors hover:decoration-accent-hi"
               >
-                Ver automações a funcionar
+                Ver como funciona
                 <span
                   aria-hidden
                   className="transition-transform duration-300 ease-out-soft group-hover:translate-y-0.5"
@@ -57,10 +58,22 @@ export function Hero() {
                 </span>
               </a>
             </div>
+            <ul
+              data-rise
+              style={delay(360)}
+              className="kicker-n mt-12 flex flex-col gap-2 text-[10.5px] sm:flex-row sm:gap-8"
+            >
+              {FACTS.map((f) => (
+                <li key={f} className="flex items-center gap-2.5">
+                  <span aria-hidden className="size-1.5 bg-accent-hi" />
+                  {f}
+                </li>
+              ))}
+            </ul>
           </div>
 
-          <div data-rise style={delay(200)} className="relative z-10 lg:pl-6">
-            <HeroFlow />
+          <div data-rise style={delay(240)} className="relative z-10">
+            <HeroDemo />
           </div>
         </div>
       </Container>

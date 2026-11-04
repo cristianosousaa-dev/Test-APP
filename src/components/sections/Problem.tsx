@@ -1,31 +1,37 @@
-import { CalendarClock, FileClock, MessageSquareMore, Wallet } from "lucide-react";
 import { Estimator } from "@/components/sections/Estimator";
 import { Container } from "@/components/ui/Container";
 import { SectionHead } from "@/components/ui/SectionHead";
+import { delay } from "@/lib/delay";
 
-const PAINS = [
+const SIGNS = [
   {
-    icon: MessageSquareMore,
-    title: "As mesmas perguntas",
-    text: "Horários, preços e disponibilidade respondidos um a um, todos os dias.",
+    sign: "Só uma pessoa sabe como a folha de Excel funciona.",
+    cost: "Se essa pessoa sai ou está de férias, o trabalho pára.",
+    tag: "Dependência",
   },
   {
-    icon: CalendarClock,
-    title: "Agenda feita à mão",
-    text: "Chamadas, mensagens e reagendamentos que interrompem o trabalho.",
+    sign: "A mesma informação é escrita três vezes.",
+    cost: "No papel, no Excel e no programa de faturação. Cada cópia é uma oportunidade de erro.",
+    tag: "Erros",
   },
   {
-    icon: FileClock,
-    title: "Orçamentos que esperam",
-    text: "Pedidos que chegam durante o dia e só têm resposta horas depois.",
+    sign: "Os pedidos chegam por WhatsApp, email e telefone.",
+    cost: "Ninguém sabe ao certo o que está por responder, por produzir ou por entregar.",
+    tag: "Pedidos perdidos",
   },
   {
-    icon: Wallet,
-    title: "Cobranças por fazer",
-    text: "Faturas vencidas acompanhadas por telefone e pagamentos confirmados no extrato.",
+    sign: "Fechar o mês demora dias.",
+    cost: "Conferir, copiar e corrigir ocupa a equipa em vez de servir os clientes.",
+    tag: "Tempo",
   },
-];
+  {
+    sign: "O programa que utiliza já não acompanha a empresa.",
+    cost: "Tudo o que o software não permite acaba feito à mão, fora do sistema.",
+    tag: "Limites",
+  },
+] as const;
 
+/* The reader's own situation, in their words, then what it costs them in hours. */
 export function Problem() {
   return (
     <section
@@ -34,36 +40,42 @@ export function Problem() {
       className="relative overflow-x-clip py-20 sm:py-32 lg:py-40"
     >
       <Container>
-        <SectionHead
-          kicker="O desafio"
-          id="problema-title"
-          title={<>O trabalho administrativo ocupa o tempo que devia ser dos seus clientes.</>}
-        >
-          Pequenas tarefas, repetidas dezenas de vezes por dia, somam horas no fim do mês. Raramente
-          alguém as contabiliza.
+        <SectionHead kicker="O problema" id="problema-title" title={<>Reconhece estes sinais?</>}>
+          Quando o negócio cresce mais depressa do que as folhas e os papéis que o sustentam, o
+          problema não é a equipa. São as ferramentas.
         </SectionHead>
 
-        {/* An editorial list, not cards: a hairline above each pain, the words carry it. */}
-        <ul className="mt-12 grid gap-x-8 gap-y-8 sm:mt-16 sm:grid-cols-2 lg:grid-cols-4">
-          {PAINS.map((p, i) => {
-            const Icon = p.icon;
-            return (
-              <li
-                key={p.title}
-                data-reveal
-                style={{ ["--i" as string]: i }}
-                className="border-t border-hair-2 pt-5"
-              >
-                <Icon aria-hidden className="size-5 text-accent" strokeWidth={1.6} />
-                <h3 className="mt-4 font-display text-[20px] tracking-[-0.02em]">{p.title}</h3>
-                <p className="mt-2 text-[15px] leading-[1.6] text-fg-2">{p.text}</p>
-              </li>
-            );
-          })}
+        <ul className="mt-12 sm:mt-16">
+          {SIGNS.map((s, i) => (
+            <li
+              key={s.sign}
+              data-reveal
+              style={delay(i * 60)}
+              className="grid grid-cols-1 gap-3 border-t border-hair-2 py-7 lg:grid-cols-[minmax(0,1fr)_minmax(0,2fr)_minmax(0,1fr)] lg:items-baseline lg:gap-8"
+            >
+              <p className="kicker order-last lg:order-first">{s.tag}</p>
+              <p className="font-display text-[clamp(22px,2.4vw,32px)] leading-[1.15] tracking-[-0.025em]">
+                {s.sign}
+              </p>
+              <p className="max-w-[28rem] text-[15.5px] leading-[1.6] text-fg-2 lg:justify-self-end">
+                {s.cost}
+              </p>
+            </li>
+          ))}
+          <li aria-hidden className="rule-x" />
         </ul>
 
-        <div className="mt-16 sm:mt-20">
-          <Estimator />
+        <div className="mt-20 sm:mt-28">
+          <p className="kicker">Quanto custa continuar assim</p>
+          <h3
+            data-reveal="mask"
+            className="h2 mt-5 max-w-[38rem] text-[clamp(30px,3.6vw,48px)] text-fg"
+          >
+            Faça as contas com os seus números.
+          </h3>
+          <div className="mt-10">
+            <Estimator />
+          </div>
         </div>
       </Container>
     </section>

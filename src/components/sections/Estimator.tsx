@@ -1,6 +1,6 @@
 "use client";
 
-import { useId, useState } from "react";
+import { type KeyboardEvent, useEffect, useId, useRef, useState } from "react";
 import { LinkButton } from "@/components/ui/Button";
 import { proposalHref } from "@/lib/site";
 
@@ -14,7 +14,37 @@ const FIELDS = [
 ] as const;
 type Key = (typeof FIELDS)[number]["key"];
 
-const fmt = (n: number) => Math.round(n).toLocaleString("pt-PT");
+/* The thumb follows the pointer continuously; the value shown and used snaps to the field's step. */
+const snap = (f: (typeof FIELDS)[number], x: number) =>
+  Math.min(f.max, Math.max(f.min, Math.round(x / f.step) * f.step));
+
+const fmt = (n: number) => Math.round(n).toLocaleString("pt-PT", { useGrouping: "always" });
+
+/* Eases a displayed number towards its target. Reduced motion: it jumps. */
+function useTween(target: number) {
+  const [value, setValue] = useState(target);
+  const from = useRef(target);
+  useEffect(() => {
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      from.current = target;
+      setValue(target);
+      return;
+    }
+    const start = from.current;
+    const t0 = performance.now();
+    let raf = 0;
+    const tick = (t: number) => {
+      const k = Math.min(1, (t - t0) / 500);
+      const v = start + (target - start) * (1 - (1 - k) ** 3);
+      from.current = v;
+      setValue(v);
+      if (k < 1) raf = requestAnimationFrame(tick);
+    };
+    raf = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(raf);
+  }, [target]);
+  return value;
+}
 
 /**
  * Time-cost estimator. Every number comes from the visitor's own inputs: the page claims
@@ -22,72 +52,100 @@ const fmt = (n: number) => Math.round(n).toLocaleString("pt-PT");
  */
 export function Estimator() {
   const id = useId();
-  const [v, setV] = useState<Record<Key, number>>({ tasks: 25, minutes: 4, rate: 12 });
+  const [raw, setRaw] = useState<Record<Key, number>>({ tasks: 25, minutes: 4, rate: 12 });
+  const v = {
+    tasks: snap(FIELDS[0], raw.tasks),
+    minutes: snap(FIELDS[1], raw.minutes),
+    rate: snap(FIELDS[2], raw.rate),
+  };
+
+  // Native arrows would move one raw unit (step="any"); move by the field's own step instead.
+  function onKey(f: (typeof FIELDS)[number], e: KeyboardEvent<HTMLInputElement>) {
+    const dir = { ArrowRight: 1, ArrowUp: 1, ArrowLeft: -1, ArrowDown: -1 }[e.key];
+    if (!dir) return;
+    e.preventDefault();
+    setRaw((p) => ({ ...p, [f.key]: snap(f, v[f.key] + dir * f.step) }));
+  }
   const hours = (v.tasks * v.minutes * DAYS) / 60;
   const yearly = hours * 12 * v.rate;
+  const hoursShown = useTween(hours);
+  const yearlyShown = useTween(yearly);
 
   return (
-    <div
-      data-reveal
-      className="grid grid-cols-1 gap-[2px] lg:grid-cols-[minmax(0,7fr)_minmax(0,5fr)]"
-    >
-      <div className="tile p-6 sm:p-8">
-        <p className="label text-[11px] text-fg-2">Calcule o tempo que está a perder</p>
-        <div className="mt-6 flex flex-col gap-6">
-          {FIELDS.map((f) => {
-            const fill = `${((v[f.key] - f.min) / (f.max - f.min)) * 100}%`;
-            return (
-              <div key={f.key}>
-                <div className="flex items-baseline justify-between gap-4">
-                  <label htmlFor={`${id}-${f.key}`} className="text-[15px] text-fg-2">
-                    {f.label}
-                  </label>
-                  <output
-                    htmlFor={`${id}-${f.key}`}
-                    className="text-[20px] tracking-[-0.02em] tabular-nums"
-                  >
-                    {v[f.key]}
-                    {f.unit}
-                  </output>
-                </div>
-                <input
-                  id={`${id}-${f.key}`}
-                  type="range"
-                  min={f.min}
-                  max={f.max}
-                  step={f.step}
-                  value={v[f.key]}
-                  aria-valuetext={`${v[f.key]}${f.unit}`}
-                  onChange={(e) => setV((p) => ({ ...p, [f.key]: Number(e.target.value) }))}
-                  className="range mt-2"
-                  style={{ ["--fill" as string]: fill }}
-                />
-              </div>
-            );
-          })}
-        </div>
-      </div>
+    <div data-reveal className="fl-scope">
+      <div className="ios est">
+        <div className="est-in">
+          <div className="p-6 sm:p-8">
+            <p className="pr-from">Calcule o tempo que está a perder</p>
+            <div className="mt-6 flex flex-col gap-6">
+              {FIELDS.map((f) => {
+                const fill = `${((raw[f.key] - f.min) / (f.max - f.min)) * 100}%`;
+                return (
+                  <div key={f.key}>
+                    <div className="flex items-baseline justify-between gap-4">
+                      <label
+                        htmlFor={`${id}-${f.key}`}
+                        className="text-[14px] text-[var(--ios-ink-2)]"
+                      >
+                        {f.label}
+                      </label>
+                      <output
+                        htmlFor={`${id}-${f.key}`}
+                        className="text-[17px] font-semibold tracking-[-0.02em] tabular-nums"
+                      >
+                        {v[f.key]}
+                        {f.unit}
+                      </output>
+                    </div>
+                    <input
+                      id={`${id}-${f.key}`}
+                      type="range"
+                      min={f.min}
+                      max={f.max}
+                      step="any"
+                      value={raw[f.key]}
+                      aria-valuetext={`${v[f.key]}${f.unit}`}
+                      onChange={(e) => setRaw((p) => ({ ...p, [f.key]: Number(e.target.value) }))}
+                      onKeyDown={(e) => onKey(f, e)}
+                      className="range mt-2"
+                      style={{ ["--fill" as string]: fill }}
+                    />
+                  </div>
+                );
+              })}
+            </div>
+          </div>
 
-      <div className="panel-navy flex flex-col p-6 sm:p-8">
-        <p className="label text-[11px] text-white/60">Por mês</p>
-        <p
-          role="status"
-          aria-atomic="true"
-          className="mt-3 text-[clamp(48px,6vw,80px)] leading-none tracking-[-0.045em] tabular-nums"
-        >
-          {fmt(hours)} <span className="text-[0.4em] tracking-[-0.01em] text-white/65">horas</span>
-        </p>
-        <div className="rule-x rule-light mt-6" />
-        <div className="flex items-baseline justify-between gap-4 pt-4">
-          <p className="label text-[10.5px] text-white/60">Custo estimado por ano</p>
-          <p className="text-[24px] tracking-[-0.02em] tabular-nums">{fmt(yearly)} €</p>
+          <div className="est-out flex flex-col p-6 sm:p-8">
+            <p className="pr-from">Por mês</p>
+            <p
+              role="status"
+              aria-atomic="true"
+              className="mt-2 text-[clamp(34px,4vw,46px)] leading-none font-semibold tracking-[-0.04em] tabular-nums"
+            >
+              <span aria-hidden>
+                {fmt(hoursShown)}{" "}
+                <span className="text-[0.42em] font-medium tracking-[-0.01em] text-[var(--ios-ink-2)]">
+                  horas
+                </span>
+              </span>
+              <span className="sr-only">{fmt(hours)} horas</span>
+            </p>
+            <div className="mt-6 flex items-baseline justify-between gap-4 border-t border-[var(--ios-sep)] pt-4">
+              <p className="pr-from">Custo estimado por ano</p>
+              <p className="text-[17px] font-semibold tracking-[-0.02em] tabular-nums">
+                <span aria-hidden>{fmt(yearlyShown)} €</span>
+                <span className="sr-only">{fmt(yearly)} €</span>
+              </p>
+            </div>
+            <p className="mt-4 text-[13px] leading-[1.55] text-[var(--ios-ink-2)]">
+              Estimativa com {DAYS} dias úteis por mês, calculada apenas com os valores que indicou.
+            </p>
+            <LinkButton href={proposalHref} variant="ink" className="mt-6 self-start lg:mt-auto">
+              Recuperar este tempo
+            </LinkButton>
+          </div>
         </div>
-        <p className="mt-4 text-[13px] leading-[1.55] text-white/90">
-          Estimativa com {DAYS} dias úteis por mês, calculada apenas com os valores que indicou.
-        </p>
-        <LinkButton href={proposalHref} variant="light" className="mt-8 w-full lg:mt-auto">
-          Recuperar este tempo
-        </LinkButton>
       </div>
     </div>
   );

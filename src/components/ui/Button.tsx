@@ -2,29 +2,28 @@ import type { ReactNode } from "react";
 import { cn } from "@/lib/cn";
 
 const sizes = {
-  sm: "h-9 text-[11px]",
-  md: "h-11 text-[11.5px]",
-  lg: "h-13 text-[12px]",
+  sm: "h-8 text-[12.5px]",
+  md: "h-9 text-[13px]",
+  lg: "h-10 text-[13.5px]",
 } as const;
-const arrowSizes = { sm: "w-9", md: "w-11", lg: "w-13" } as const;
 
 export function Arrow() {
   return (
-    <svg viewBox="0 0 16 16" fill="none" aria-hidden className="size-4">
+    <svg viewBox="0 0 16 16" fill="none" aria-hidden className="btn-arrow size-4">
       <path
         d="M2.5 8h10.5M9 4l4 4-4 4"
         stroke="currentColor"
-        strokeWidth="1.4"
-        strokeLinecap="square"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
       />
     </svg>
   );
 }
 
 /**
- * Link styled as a square tile button: a label cell and a separate arrow cell.
- * Hover: the label fills from the left and the arrow is swapped. Variants map to .btn-* in
- * globals.css.
+ * Compact link button: one rounded cell, sentence case, a small arrow that nudges on hover.
+ * Variants map to .btn-* in globals.css.
  */
 export function LinkButton({
   href,
@@ -50,15 +49,10 @@ export function LinkButton({
       href={href}
       aria-label={ariaLabel}
       {...(external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
-      className={cn("btn label", `btn-${variant}`, sizes[size], className)}
+      className={cn("btn", `btn-${variant}`, sizes[size], className)}
     >
-      <span className="btn-label flex-1">{children}</span>
-      {arrow && (
-        <span className={cn("btn-arrow", arrowSizes[size])}>
-          <Arrow />
-          <Arrow />
-        </span>
-      )}
+      <span className="min-w-0 truncate">{children}</span>
+      {arrow && <Arrow />}
     </a>
   );
 }

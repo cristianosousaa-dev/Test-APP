@@ -2,7 +2,14 @@
   "$schema": "./node_modules/@biomejs/biome/configuration_schema.json",
   "vcs": { "enabled": true, "clientKind": "git", "useIgnoreFile": true },
   "files": {
-    "includes": ["**", "!**/node_modules", "!**/.next", "!.claude", "!next-env.d.ts"]
+    "includes": [
+      "**",
+      "!**/node_modules",
+      "!**/.next",
+      "!.claude",
+      "!next-env.d.ts",
+      "!src/components/react-bits"
+    ]
   },
   "formatter": { "enabled": true, "indentStyle": "space", "indentWidth": 2, "lineWidth": 100 },
   "javascript": {

@@ -1,5 +1,4 @@
 import {
-  Bot,
   Calculator,
   Clock,
   Database,
@@ -7,7 +6,7 @@ import {
   GitFork,
   Globe,
   Hourglass,
-  Receipt,
+  ReceiptEuro,
   Repeat,
 } from "lucide-react";
 import type { Flow } from "./types";
@@ -18,7 +17,7 @@ const AMBER = "#d98a12";
 const ROSE = "#e5484d";
 const INK = "#3a414b";
 
-const agent = { glyph: Bot, tone: ACCENT };
+const agent = { glyph: FileText, tone: ACCENT };
 const branch = { glyph: GitFork, tone: ACCENT };
 const memory = { glyph: Database, tone: INK };
 
@@ -294,7 +293,7 @@ export const FLOWS: Flow[] = [
         kind: "action",
         x: 250,
         y: 200,
-        icon: { glyph: Receipt, tone: ACCENT },
+        icon: { glyph: ReceiptEuro, tone: ACCENT },
         app: "Faturação",
         title: "Faturas vencidas",
         output: "3 faturas em atraso · 1.245,60 €",
@@ -463,7 +462,7 @@ export const FLOWS: Flow[] = [
         kind: "action",
         x: 270,
         y: 200,
-        icon: { glyph: Receipt, tone: ACCENT },
+        icon: { glyph: ReceiptEuro, tone: ACCENT },
         app: "Faturação",
         title: "Emitir fatura-recibo",
         output: "FR 2026/388 emitida",

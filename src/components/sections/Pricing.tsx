@@ -1,145 +1,46 @@
 import { Check } from "lucide-react";
-import { LinkButton } from "@/components/ui/Button";
 import { Container } from "@/components/ui/Container";
 import { SectionHead } from "@/components/ui/SectionHead";
-import { euros, pricing, proposalHref } from "@/lib/site";
-
-const PLANS = [
-  {
-    name: "Uma automação",
-    text: "Um processo, de ponta a ponta. Por exemplo: marcações por WhatsApp ou lembretes de faturas em atraso.",
-    price: pricing.single,
-  },
-  {
-    name: "Processos ligados",
-    text: "Dois ou três processos que passam informação entre si. Por exemplo: orçamento, fatura e cobrança.",
-    price: pricing.bundle,
-    featured: true,
-  },
-  {
-    name: "À medida",
-    text: "Vários sistemas, programas de gestão como PHC ou Primavera, ou volume elevado de pedidos.",
-    price: null,
-  },
-] as const;
-
-const INCLUDED = [
-  "Análise da tarefa, sem custo",
-  "Integração nos sistemas que já utiliza",
-  "Testes com casos reais antes de entrar em produção",
-  "Registo de cada execução",
-  "A sua aprovação nos passos que escolher",
-];
+import { allPlans } from "@/lib/site";
+import { PricingTable } from "./PricingTable";
 
 export function Pricing() {
   return (
     <section
       id="precos"
       aria-labelledby="precos-title"
-      className="relative py-20 sm:py-32 lg:py-40"
+      className="night relative overflow-x-clip py-20 sm:py-32 lg:py-40"
     >
       <Container>
         <SectionHead
+          center
           kicker="Preços"
           id="precos-title"
           title={<>Preço fixo, conhecido antes de começar.</>}
         >
-          Paga a implementação uma vez e uma mensalidade que cobre o alojamento, a monitorização e
-          os ajustes. O valor exato fica escrito na proposta, depois de percebermos a sua tarefa.
+          Valores de entrada, sem IVA. Depois do diagnóstico, a proposta fixa o preço exato, por
+          escrito, para saber quanto vai pagar antes de iniciarmos.
         </SectionHead>
 
-        <ul className="mt-10 sm:mt-14 grid grid-cols-1 gap-[2px] lg:grid-cols-3">
-          {PLANS.map((p, i) => {
-            const dark = "featured" in p && p.featured;
-            return (
-              <li
-                key={p.name}
-                data-reveal
-                style={{ ["--i" as string]: i }}
-                data-spot
-                className={
-                  dark ? "panel-navy plan-featured relative z-10" : "tile spot overflow-hidden"
-                }
-              >
-                <div className="flex h-full flex-col p-5 sm:p-8 lg:min-h-[340px]">
-                  <p className={`label text-[10.5px] ${dark ? "text-[#8fa9ff]" : "text-fg-3"}`}>
-                    {dark ? "Recomendado" : `Plano 0${i + 1}`}
-                  </p>
-                  <h3 className="mt-4 font-display text-[26px] tracking-[-0.025em]">{p.name}</h3>
-                  <p
-                    className={`mt-2 text-[15px] leading-[1.6] ${dark ? "text-white/70" : "text-fg-2"}`}
-                  >
-                    {p.text}
-                  </p>
+        <div data-reveal className="mt-12 sm:mt-16">
+          <PricingTable />
+        </div>
 
-                  <div className="mt-auto pt-7 sm:pt-10">
-                    {p.price ? (
-                      <dl className="flex flex-col">
-                        <div className="flex items-baseline justify-between gap-4 pb-3">
-                          <dt
-                            className={`label text-[10.5px] ${dark ? "text-white/60" : "text-fg-3"}`}
-                          >
-                            Implementação
-                          </dt>
-                          <dd className="font-display text-[40px] leading-none tracking-[-0.04em] tabular-nums">
-                            <span
-                              className={`mr-1.5 text-[13px] tracking-normal ${dark ? "text-white/60" : "text-fg-3"}`}
-                            >
-                              desde
-                            </span>
-                            {euros(p.price.setup)}
-                          </dd>
-                        </div>
-                        <div className={`rule-x ${dark ? "rule-light" : ""}`} />
-                        <div className="flex items-baseline justify-between gap-4 pt-3">
-                          <dt
-                            className={`label text-[10.5px] ${dark ? "text-white/60" : "text-fg-3"}`}
-                          >
-                            Manutenção
-                          </dt>
-                          <dd className="text-[18px] tabular-nums">
-                            {euros(p.price.monthly)}
-                            <span className={dark ? "text-white/60" : "text-fg-3"}> / mês</span>
-                          </dd>
-                        </div>
-                      </dl>
-                    ) : (
-                      <p className="font-display text-[40px] leading-none tracking-[-0.04em]">
-                        Sob proposta
-                      </p>
-                    )}
-                    <LinkButton
-                      href={proposalHref}
-                      variant={dark ? "light" : "mist"}
-                      className="mt-8 w-full"
-                    >
-                      Descrever a minha tarefa
-                    </LinkButton>
-                  </div>
-                </div>
-              </li>
-            );
-          })}
-        </ul>
-
-        <div data-reveal className="mt-8 flex flex-col gap-5 lg:flex-row lg:items-start lg:gap-8">
-          <p className="label shrink-0 pt-1 text-[11px] text-fg-2 lg:w-[calc(33.33%-1.5rem)]">
-            Incluído em todos
-          </p>
-          <ul className="flex flex-wrap gap-x-7 gap-y-3">
-            {INCLUDED.map((t) => (
-              <li key={t} className="flex items-center gap-2.5 text-[15px] text-fg-2">
-                <span className="grid size-[17px] shrink-0 place-items-center bg-mint text-navy">
-                  <Check className="size-[11px]" strokeWidth={3} />
-                </span>
+        <div data-reveal className="mt-12 flex flex-col items-center gap-4 text-center">
+          <p className="kicker-n">Incluído em todos os planos</p>
+          <ul className="flex flex-wrap justify-center gap-x-8 gap-y-3">
+            {allPlans.map((t) => (
+              <li key={t} className="flex items-center gap-2.5 text-[14px] text-ntext">
+                <Check aria-hidden className="size-4 shrink-0 text-accent-hi" strokeWidth={2} />
                 {t}
               </li>
             ))}
           </ul>
         </div>
-        <p className="mt-6 font-mono text-[11px] text-fg-3 lg:ml-[calc(33.33%+0.5rem)]">
-          Valores sem IVA. Custos de terceiros (por exemplo, a API do WhatsApp) são indicados na
-          proposta.
+        <p className="mx-auto mt-8 max-w-[44rem] text-center text-[13px] leading-[1.6] text-nmute">
+          A mensalidade cobre alojamento, cópias de segurança, manutenção, suporte e as horas de
+          alterações indicadas em cada plano. Os valores das aplicações e plataformas são de
+          referência e dependem do âmbito, do número de utilizadores e das integrações.
         </p>
       </Container>
     </section>
