@@ -1,5 +1,6 @@
 "use client";
 
+import { ArrowUp } from "lucide-react";
 import { useEffect, useState } from "react";
 import { LinkButton } from "@/components/ui/Button";
 import { proposalHref, site } from "@/lib/site";
@@ -38,9 +39,16 @@ export function MobileCta() {
     >
       <div className="glass flex items-center justify-between gap-3 py-2 pr-2 pl-4 shadow-[0_20px_40px_-16px_rgb(0_0_0/0.7)]">
         <p className="min-w-0 text-[13px] leading-tight text-nmute">
-          <span className="block font-medium text-strong">Diagnóstico gratuito</span>
-          Preço fixo · sem compromisso
+          <span className="block font-medium text-strong">Demonstração gratuita</span>
+          Resposta com proposta escrita
         </p>
+        <a
+          href="#top"
+          aria-label="Voltar ao topo"
+          className="ml-auto grid size-11 shrink-0 place-items-center text-strong"
+        >
+          <ArrowUp aria-hidden className="size-[18px]" strokeWidth={1.6} />
+        </a>
         <LinkButton
           href={proposalHref}
           variant="light"

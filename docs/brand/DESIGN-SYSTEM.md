@@ -1,151 +1,96 @@
-# Orchestr design system — "Blueprint"
+# Orchestr design system: "hairline"
 
-Source of truth: `src/app/globals.css` (`@theme` tokens, `@layer components`, motion
-catalogue). This file explains the rules. If the two disagree, the CSS is right and this
-file must be updated.
-
-Visual reference: editorial institutional sites (a light misty background, a visible
-dotted grid, square tiles, navy data panels, isometric line art).
+Source of truth: `src/app/globals.css` (tokens, `.ios-*` preview parts, `.sv-*`, `.pc-*`).
+This file explains the rules. If the two disagree, the CSS is right and this file must be
+updated. (It replaces the earlier "Blueprint" system: dotted grid, square tiles, isometric art.)
 
 ## 1. Principles
-1. **Structure is visible.** A dotted construction grid frames the page. Sections open on
-   a rule with an index badge.
-2. **Square, quiet, precise.** No radii on the interface, few colours, light headline
-   weight, uppercase labels.
-3. **One signal colour.** Blue marks action and state. Ink black carries the primary
-   button and the badges.
-4. **Data panels are navy.** The product and the key moments sit on deep navy, lit from
-   below.
-5. **Every effect is cheap.** Motion uses `transform`, `opacity` and `clip-path` only. It is
-   scroll-driven where supported, uses no scroll handlers, pauses loops off-screen and
-   respects reduced motion.
-6. **Show, don't claim.** Illustrations are labelled illustrative. There are no invented
-   clients, metrics or testimonials.
+1. **Hairline, not boxes.** 1px borders, small radii (10px windows, 7px buttons), no shadows
+   and no cards inside windows, no gradients in previews.
+2. **Previews are the product.** Every demo window shows illustrative data (made-up names and
+   values) and says so. No invented clients, metrics or testimonials.
+3. **One accent.** Blue marks action and state. Ink carries the primary button.
+4. **Data in a second voice.** Numbers, dates and kickers in Martian Mono; everything else in
+   Mona Sans.
+5. **Motion is cheap and meaningful.** `transform` and `opacity` only. One clock: Lenis runs on
+   GSAP's ticker and ScrollTrigger shares it. CSS view timelines where supported. Loops pause
+   off-screen and have a visible pause. Reduced motion: nothing moves.
+6. **Both themes are designed** (`html[data-theme]`), switched with a soft cross-fade.
 
-## 2. Colour
-| Token | Value | Use |
+## 2. Voice
+- Verbs: "desenvolvemos", not "construímos". No "de raiz", no calques such as "de prateleira".
+- Portuguese (pt-PT), always "você" forms: Veja, Explique, Pode, a sua. Never tu forms.
+- Prices are always "desde" (before VAT). Never "preço fixo". The final value is in the written
+  proposal.
+- The pre-sale demo is a **protótipo** with the client's data, never "the app working".
+- The brand is the idea: "Orchestr, o futuro da sua empresa." Use the music metaphor once or
+  twice (hero, closing), not in every title.
+- Cover the whole job, not only spreadsheets: old software, processes without logic, work done
+  by hand or on the phone, websites, new opportunities.
+- Do not repeat a claim across sections. "Personalizado" appears once as a promise, not as a
+  tag on every plan.
+
+## 3. Palette: the Strict.Dev green
+Taken from the live strict-dev.com CSS, so the two sites read as one family: forest green `#2F5E50`
+as the accent on light, mint `#7FD8BD` on dark, with green-tinted neutrals. Tried and rejected:
+cobalt blue (same as BOOKLIN), ember orange on ivory (a generated default), burgundy (read as red
+and pink).
+| Role | Light | Dark |
 |---|---|---|
-| `mist` → `mist-2` → `paper-2` | `#C3D3E6` → `#DBE3EC` → `#F2F1EC` | page atmosphere (body gradient, static) |
-| `fg` | `#0A0C10` | text, primary button, badges |
-| `fg-2` | `#3A414B` | body copy |
-| `fg-3` | `#5A636F` | metadata, secondary headline line (≥ 4.5:1 on paper) |
-| `rule` | ink 22% | dotted rules |
-| `hair` / `hair-2` | ink 10% / 18% | solid hairlines |
-| `tile` / `tile-2` | white 34% / 55% | tiles, hover state |
-| `chip` | `rgb(150 170 195 / .38)` | nav tiles, secondary buttons |
-| `accent` | `#2B5BFF` | signal: arrow cells, markers, active state, focus ring |
-| `accent-2` | `#1D47E0` | accent hover |
-| `navy` → `navy-2` → `navy-3` → `sky` | `#040A17` → `#0B2049` → `#2A5AA6` → `#A9C3E6` | data panels (`.panel-navy`) |
-| `amber` | `#E8A33A` | "pending" only |
+| Stage / page | `#FBFCFB`, `#F2F5F3` | `#0B0F0E`, `#101513` |
+| Ink | near-black, body and meta in green-grey | `#F5F7F6` and softer steps |
+| Accent | `#2F5E50` (7:1 on white) | `#7FD8BD` |
+| Deep tones | `#234A3E` hover | `#14201C` raised surfaces |
+Status colours in previews (green ok, amber warning) stay apart from the accent. Third-party logos
+keep their own colours. Mock UIs that imitate other software (the Excel sheet) stay as they are.
+To change palette, map the hex values of this section across `globals.css` and the files that repeat
+them (logo, OG image, manifest, ThemedReactBits, flows data).
 
-Mockup tokens (`paper`, `ink`, `brand`, `mint` …) apply only inside product illustrations.
+## 3a. Hero background: a staff
+`HeroStaff`: five hairlines and four bar lines along the foot of the hero, with six small notes
+(each with a short trail) crossing slowly, 58 to 100 seconds per crossing. It says what the product
+does: work moving between people, processes and programs, in an orchestra. Transform only, hidden
+from assistive tech, notes hidden under reduced motion.
 
-## 3. Typography
-- **Mona Sans** (variable): display and body. **Martian Mono**: numbers, kickers, metadata.
+## 3b. Header: a plain bar with two useful things
+Solid, flat, sticky; no glass pill. Links in sentence case; the section being read is marked with a
+2px accent line under its link. "Serviços" opens a menu with every area (icon, name, what it
+replaces), each going straight to its example in the services section. A thin line along the bottom
+shows how far down the page you are (ScrollTrigger scrub on the Lenis clock). On phones the links
+fold into a menu.
 
-| Role | Class / size | Weight | Tracking | Line height |
-|---|---|---|---|---|
-| Hero | `.display` `clamp(42px, 4.5vw, 68px)` | 400 | −0.045em | 0.98 |
-| Section title | `.h2` `clamp(36px, 5vw, 64px)` | 400 | −0.04em | 1.02 |
-| Closing title | `.display` `clamp(40px, 5.4vw, 76px)` | 400 | −0.045em | 0.98 |
-| Card title | 17–26px | 400 | −0.01 to −0.03em | snug |
-| Body | 15–17px | 400 | — | 1.6 |
-| Label | `.label` 10.5–12px uppercase | 600 | 0.09em | — |
-| Kicker / meta | `.kicker` 10.5–11px mono uppercase | 500 | 0.08em | — |
-| Badge | `.badge` 10.5px mono on ink (or white on navy) | 500 | — | 22px tall |
+## 4. Tokens (preview scope)
+`.ios` / `.fl-scope` define `--ios-card, --ios-ink, --ios-ink-2, --ios-ink-3, --ios-sep,
+--ios-edge, --ios-fill, --ios-sel, --ios-btn, --ios-btn-ink, --ios-banner, --ios-ok,
+--ios-warn, --ios-accent`. `--ios-ink-3` is for decoration only (contrast 2.3:1); text uses
+`--ios-ink-2` or darker. The convert demo keeps its own `--ap-*` layer.
 
-## 4. Grid, space, breakpoints
-- **Frame**: `Container`, max 1360px, gutters 20 / 28px.
-- **Editorial split**: section heads use `[1fr | 2fr]`, with the label on the left and the
-  title on the right. The hero uses three equal columns, with dotted vertical rules in the
-  gutters.
-- **Section rhythm**: 80px on mobile and 112px from `sm` up. The gap between tiles is
-  28px (`gap-7`), and between joined tiles 2px.
-- **Breakpoints**: `sm` 640 · `md` 768 · `lg` 1024 · `xl` 1280.
-- **Mobile is recomposed**:
-  - the columns stack;
-  - the vertical rules give way to horizontal ones;
-  - the hero buttons go full width;
-  - the methodology loses its pinned index;
-  - a sticky glass CTA bar appears after the hero.
+## 5. Components
+- **Window** (`.ios`): head (title, count), rows (`.ios-row` > `.ios-main`, `.ios-end`,
+  `.ios-status` with a dot), 4 rows in services so the height never jumps.
+- **Services** (`.sv-*`): a tab list of areas and one window. On wide screens the window is
+  `position: sticky` so picking an item at the bottom never leaves the example off-screen; on
+  phones the tabs are a scrolling row and the window follows.
+- **Pricing** (`.pc-*`): three open columns separated by hairlines, "desde" before every price,
+  `StarBorder` (React Bits) only on the recommended plan's button.
+- **Buttons** (`LinkButton`): one compact cell, no hover movement.
+- **Back to top**: floating button from `md` up, an arrow inside the phone bar, and a link in
+  the footer.
+- **Scroll depth** (`ScrollDepth`, poses in `src/lib/depth.ts`): the hero window leans back as
+  the page scrolls away; services and pricing rise into place. Scrubbed, transform + opacity.
+- **ScrollWords**: the problem lines firm up word by word (CSS view timeline).
 
-## 5. Shape and depth
-- **Radius: 0** for tiles, buttons, badges, tabs and panels. Mockups keep 4–8px internally.
-- **No drop shadows** on the interface. Depth comes from translucency (tiles over the
-  atmosphere) and from navy panels. The only shadow is on the mobile CTA bar.
-- **Glass**: only the header (after scrolling) and the mobile CTA bar (`.glass`: 72% mist,
-  blur 16px). There is a fallback without `backdrop-filter`.
+## 6. Layout
+- `Container` max 1360px; section rhythm 80px on phones, 112 to 160px from `sm`.
+- Section head: kicker left, title and lead right from `lg`; stacked on phones. Pricing is
+  centred.
+- Breakpoints: `sm` 640 · `md` 768 · `lg` 1024 · `xl` 1280. Phones are recomposed, not shrunk:
+  the FAQ contact card goes after the questions, tabs become a row.
 
-## 6. Components and states
-### Buttons (`LinkButton`)
-A label cell plus a separate square arrow cell, joined by 2px.
-
-| Variant | Label | Arrow cell | Hover |
-|---|---|---|---|
-| `ink` (primary) | ink, white text | blue | the label fills from the left (darker); the arrow leaves right and a new one enters from the left; the arrow cell darkens |
-| `mist` (secondary) | chip | chip | the label fills; the arrow cell turns ink |
-| `light` (on navy) | white, navy text | blue | the label fills with soft blue |
-| `glass` (on navy) | white 16% | white 16% | the label fills; the arrow cell turns white |
-
-- Active: 1px press.
-- Focus: 2px blue outline.
-- Sizes: `sm` 36px, `md` 44px, `lg` 52px.
-- Shortened labels pass `ariaLabel`.
-
-### Tiles (`.tile` + `data-frame`)
-On hover, blue corner brackets close in from outside, the tile brightens to `tile-2`, and
-its isometric drawing "marches" (the dashes move) and lifts.
-
-### Navigation
-- The header is transparent over the hero. Once scrolled, it becomes a glass band with a
-  dotted bottom rule.
-- Desktop nav uses segmented chip tiles; the active section is an ink tile (scrollspy).
-  The CTA is an ink + blue button.
-- Mobile has a "Menu" tile, which opens numbered tile rows.
-
-### Tabs (use cases)
-Segmented tiles, with an ink tile sliding under the active one. They follow the ARIA tabs
-pattern (Arrow/Home/End keys).
-
-### FAQ
-Rows on dotted rules. The "+" sits on a chip tile that turns ink when open, and the icon
-rotates to "×". Native `<details name>`, with smooth height.
-
-### Data panels (`.panel-navy`)
-- A marker in the top-left corner.
-- Labels at white 55–70%, values in regular weight, and dotted light rules
-  (`.rule-light`).
-
-### Isometric art (`IsoArt`)
-Kinds: `chat`, `nodes`, `chart`, `calendar`, `doc`, `coins`, `clock` and `shield`. They are
-built from boxes, planes, cylinders and lines in a 30° projection, with dashed strokes and
-one solid blue part. Server-rendered SVG with no assets.
-
-## 7. Motion catalogue
-| Pattern | Attribute / class | Behaviour |
-|---|---|---|
-| Fade-up | `data-reveal` | rises 28–32px and fades in |
-| Side entries | `data-reveal="left" \| "right"` | slides 40–48px from a side (sections clip on x) |
-| Settle | `data-reveal="scale"` | from 92–94% |
-| Heading wipe | `data-reveal="mask"` / `data-rise="mask"` | wipes up from a hard edge |
-| Rules drawing | `data-draw="x" \| "y"`, `.load-draw-x/y` | dotted rules draw themselves |
-| Markers | `data-pop`, `.load-pop` | blue squares and checks pop in, rotating |
-| Drift rows | `data-drift` + `--from/--to` | rows slide sideways with the scroll (the "pending" backlog) |
-| Chart lines | `.line-draw` (on load), `.line-draw-scroll` | clip wipe from left to right |
-| Methodology | IntersectionObserver + `.process-fill` | pinned index, active phase, rail filling |
-| Travel signal | `animate-travel` | a blue square runs along the rule between steps |
-| Live board | `useStepper` | the counter ticks and the latest execution changes; pausable |
-| Loops | `animate-marquee`, `animate-orbit`, `animate-blink` | paused off-screen (`data-loop`) |
-
-- Easing: `ease-out-soft` `cubic-bezier(.22,1,.36,1)` for entrances and hovers, and
-  `ease-in-out-soft` for travelling signals and chart lines.
-- Durations: 200ms press, 300–500ms hover, 600–900ms reveal, 1.2–2.4s drawing.
-- Reduced motion: everything is shown in its final state, loops and wipes are disabled, and
-  hover transitions are removed.
-
-## 8. Accessibility checklist
-- Body text contrast ≥ 4.5:1 on paper and on navy. The focus ring is visible everywhere.
-- Hit areas ≥ 36px (buttons 44–52px). Every clickable element has `cursor: pointer`.
-- Skip link, landmarks, one `h1`, and ordered `h2`s with `aria-labelledby`.
-- Decorative SVGs and grid lines are `aria-hidden`. Illustrations have text alternatives.
-- Looping illustrations can be paused (WCAG 2.2.2).
+## 7. Accessibility checklist
+- WCAG 2.2 AA in both themes. Last measured with Lighthouse on the production build:
+  accessibility 100 on phone; desktop reported one contrast issue (hero demo timestamp) that was
+  fixed after.
+- Visible focus on every control; tabs follow the ARIA tabs pattern (arrows, Home, End).
+- `prefers-reduced-motion`: no smooth scroll beyond native, no scrub, no word reveal, no loops.
+- Decorative SVG and icons are `aria-hidden`.

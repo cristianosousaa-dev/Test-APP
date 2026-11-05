@@ -8,15 +8,15 @@ export const site = {
   tagline: "Software à medida para PME.",
   // ≈140 characters: search engines truncate descriptions past ~155.
   description:
-    "Transformamos o Excel e o papel da sua empresa numa aplicação à medida. Prazo e preço fixos, escritos antes de começar. Manutenção incluída.",
+    "A Orchestr desenvolve software, automação e sites para PME. Coordena pessoas, processos e programas, poupa horas e abre novas oportunidades.",
   // Production domain comes from NEXT_PUBLIC_SITE_URL (e.g. https://orchestr.pt).
   url: process.env.NEXT_PUBLIC_SITE_URL ?? "https://example.com",
   // TODO: real contact email (example.com is a reserved placeholder domain).
   email: "ola@example.com",
   // TODO: WhatsApp number in international format without "+", e.g. "351912345678". Null hides the button.
   whatsapp: null as string | null,
-  cta: "Pedir diagnóstico gratuito",
-  ctaNote: "Resposta com proposta de preço fixo, sem compromisso",
+  cta: "Pedir demonstração gratuita",
+  ctaNote: "Resposta com uma proposta escrita, sem compromisso",
 } as const;
 
 /* The person who answers and builds. Photo: public/cristiano-linkedin.jpg (4:5; a new file name busts the image cache). */
@@ -25,6 +25,7 @@ export const founder = {
   role: "Full-stack e engenharia assistida por IA",
   linkedin: "https://www.linkedin.com/in/cristiano-sousa-a18b4a176",
   studio: { name: "Strict.Dev", url: "https://strict-dev.com" },
+  booklin: { name: "BOOKLIN", url: "https://booklin.pt" },
   photo: "/cristiano-linkedin.jpg",
 } as const;
 
@@ -55,13 +56,13 @@ export const plans: readonly Plan[] = [
   {
     id: "automacao",
     name: "Automação",
-    summary: "Um processo repetitivo passa a correr sozinho.",
+    summary: "Uma tarefa repetitiva deixa de ser feita à mão.",
     setup: 490,
     monthly: 49,
     lead: "Prazo típico: 1 a 2 semanas",
     includes: [
-      "Um fluxo ligado aos sistemas que já utiliza",
-      "Registo de cada execução",
+      "Um processo ligado aos programas que já usa",
+      "Fica registado tudo o que foi feito",
       "Correções incluídas na mensalidade",
       "A equipa mantém a forma de trabalhar",
     ],
@@ -69,14 +70,14 @@ export const plans: readonly Plan[] = [
   },
   {
     id: "aplicacao",
-    name: "Aplicação à medida",
-    summary: "Substitui o Excel ou o papel de um processo.",
+    name: "Aplicação",
+    summary: "Um processo da empresa, numa aplicação própria.",
     setup: 3400,
     monthly: 99,
     lead: "Prazo típico: 2 a 4 semanas",
     includes: [
       "Aplicação web, no computador, tablet e telemóvel",
-      "Até 10 utilizadores, com perfis de acesso",
+      "Até 10 utilizadores, cada um com o acesso certo",
       "Importação dos seus ficheiros atuais",
       "Painel com os números do processo",
       "Alojamento, cópias de segurança e suporte",
@@ -87,29 +88,21 @@ export const plans: readonly Plan[] = [
   },
   {
     id: "plataforma",
-    name: "Plataforma de gestão",
-    summary: "Vários processos ligados, com utilizadores e integrações.",
+    name: "Plataforma",
+    summary: "Vários processos ligados numa só plataforma.",
     setup: 8900,
     monthly: 199,
     lead: "Prazo típico: 6 a 12 semanas",
     includes: [
       "Vários módulos ligados entre si",
       "Utilizadores e permissões por função",
-      "Integração com PHC, Primavera, Moloni ou InvoiceXpress",
-      "Portal para clientes ou fornecedores",
+      "Ligação ao PHC, Primavera, Moloni ou InvoiceXpress",
+      "Área para clientes ou fornecedores",
       "Formação da equipa e acompanhamento no arranque",
       "6 horas por mês para evolução",
     ],
     confirmed: false,
   },
-] as const;
-
-/* Included in every plan, stated once. */
-export const allPlans = [
-  "Preço e prazo fixos, por escrito",
-  "Alojamento na União Europeia",
-  "Conformidade com o RGPD",
-  "Dados seus, exportáveis a qualquer momento",
 ] as const;
 
 /* Until a real domain is configured, the site asks search engines not to index it. */
@@ -120,7 +113,7 @@ export const euros = (n: number) => `${n.toLocaleString("pt-PT", { useGrouping: 
 
 export const nav = [
   { href: "#servicos", label: "Serviços" },
-  { href: "#processo", label: "Como trabalhamos" },
+  { href: "#processo", label: "Processo" },
   { href: "#precos", label: "Preços" },
   { href: "#quem", label: "Sobre" },
   { href: "#faq", label: "FAQ" },
@@ -129,7 +122,7 @@ export const nav = [
 /* Where every "ask for a proposal" button lands: the form in the closing section. */
 export const proposalHref = "#contacto";
 
-export function contactHref(subject = "Pedido de diagnóstico", body?: string): string {
+export function contactHref(subject = "Pedido de demonstração", body?: string): string {
   // Capped: mail clients silently drop very long mailto URLs (~2000 chars on Windows).
   const q = `subject=${encodeURIComponent(subject)}${body ? `&body=${encodeURIComponent(body.slice(0, 1500))}` : ""}`;
   return `mailto:${site.email}?${q}`;

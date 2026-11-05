@@ -1,50 +1,30 @@
 "use client";
 
-import { useEffect, useLayoutEffect, useRef, useState } from "react";
+import { ArrowRight, ChevronDown } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
 import { OrchestrLogo } from "@/components/brand/OrchestrLogo";
+import { SERVICES } from "@/components/sections/Services";
 import { LinkButton } from "@/components/ui/Button";
 import { ThemeToggle } from "@/components/ui/ThemeToggle";
-import { cn } from "@/lib/cn";
+import { gsap } from "@/lib/motion";
 import { nav, proposalHref, site } from "@/lib/site";
 
 /**
- * Dynamic header on dark glass, so it reads over both the night stages and the paper sections.
- * Full width over the hero; once scrolled it narrows into a compact bar (sentinel +
- * IntersectionObserver), hides while reading down and returns on scroll up. A tile slides under
- * the current section (scrollspy) and a hairline along the bottom shows reading progress (CSS
- * scroll-driven animation, absent where unsupported).
+ * A plain, solid bar with two things that earn their place: the section being read is marked under
+ * its link, and "Serviços" opens a menu with every area we build, each one going straight to its
+ * example. A thin line along the bottom shows how far down the page you are (GSAP ScrollTrigger on
+ * the Lenis clock). On phones the links fold into a menu.
  */
 export function Header() {
   const sentinel = useRef<HTMLDivElement>(null);
   const toggle = useRef<HTMLButtonElement>(null);
-  const links = useRef<(HTMLAnchorElement | null)[]>([]);
+  const root = useRef<HTMLElement>(null);
+  const total = useRef<HTMLSpanElement>(null);
+  const closeTimer = useRef<number>(0);
   const [solid, setSolid] = useState(false);
   const [open, setOpen] = useState(false);
+  const [mega, setMega] = useState(false);
   const [active, setActive] = useState<string | null>(null);
-  const [thumb, setThumb] = useState<{ x: number; w: number } | null>(null);
-  const [hidden, setHidden] = useState(false);
-
-  // Direction-aware: the bar slides away while reading down and returns on the way up.
-  // One passive listener, throttled to animation frames.
-  useEffect(() => {
-    let last = window.scrollY;
-    let frame = 0;
-    const onScroll = () => {
-      if (frame) return;
-      frame = requestAnimationFrame(() => {
-        frame = 0;
-        const y = window.scrollY;
-        if (y > last + 8 && y > 480) setHidden(true);
-        else if (y < last - 8 || y <= 480) setHidden(false);
-        last = y;
-      });
-    };
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => {
-      window.removeEventListener("scroll", onScroll);
-      cancelAnimationFrame(frame);
-    };
-  }, []);
 
   useEffect(() => {
     const el = sentinel.current;
@@ -54,6 +34,7 @@ export function Header() {
     return () => io.disconnect();
   }, []);
 
+  // The section in the middle of the screen is the current one.
   useEffect(() => {
     const seen = new Map<string, boolean>();
     const io = new IntersectionObserver(
@@ -70,120 +51,133 @@ export function Header() {
     return () => io.disconnect();
   }, []);
 
-  // Slide the tile under the active link (transform + width, measured per change).
-  useLayoutEffect(() => {
-    const i = nav.findIndex((n) => n.href === active);
-    const el = links.current[i];
-    if (!el) {
-      setThumb(null);
-      return;
-    }
-    const measure = () => setThumb({ x: el.offsetLeft, w: el.offsetWidth });
-    measure();
-    window.addEventListener("resize", measure);
-    return () => window.removeEventListener("resize", measure);
-  }, [active]);
-
   useEffect(() => {
-    if (!open) return;
+    const mm = gsap.matchMedia();
+    mm.add("(prefers-reduced-motion: no-preference)", () => {
+      if (total.current)
+        gsap.fromTo(
+          total.current,
+          { scaleX: 0 },
+          {
+            scaleX: 1,
+            ease: "none",
+            scrollTrigger: {
+              trigger: document.documentElement,
+              start: "top top",
+              end: "bottom bottom",
+              scrub: true,
+            },
+          },
+        );
+    });
+    return () => mm.revert();
+  }, []);
+
+  // Escape closes either menu; a click outside closes the services menu; the phone menu closes on
+  // reaching desktop width.
+  useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
-      if (e.key === "Escape") {
+      if (e.key !== "Escape") return;
+      if (mega) setMega(false);
+      if (open) {
         setOpen(false);
         toggle.current?.focus();
       }
     };
+    const onDown = (e: MouseEvent) => {
+      if (mega && root.current && !root.current.contains(e.target as Node)) setMega(false);
+    };
     const desktop = window.matchMedia("(min-width: 1024px)");
     const onChange = () => desktop.matches && setOpen(false);
     document.addEventListener("keydown", onKey);
+    document.addEventListener("mousedown", onDown);
     desktop.addEventListener("change", onChange);
     return () => {
       document.removeEventListener("keydown", onKey);
+      document.removeEventListener("mousedown", onDown);
       desktop.removeEventListener("change", onChange);
     };
-  }, [open]);
+  }, [open, mega]);
+
+  const hoverOpen = () => {
+    window.clearTimeout(closeTimer.current);
+    setMega(true);
+  };
+  const hoverClose = () => {
+    window.clearTimeout(closeTimer.current);
+    closeTimer.current = window.setTimeout(() => setMega(false), 140);
+  };
+  const pick = (id: string) => {
+    setMega(false);
+    setOpen(false);
+    window.dispatchEvent(new CustomEvent("orchestr:area", { detail: id }));
+  };
 
   return (
     <>
       <div ref={sentinel} aria-hidden className="absolute top-0 h-6 w-full" />
+      {/* biome-ignore lint/a11y/noStaticElementInteractions: hover only opens a menu that is also reachable by keyboard (button) */}
       <header
-        onFocusCapture={() => setHidden(false)}
-        className={cn(
-          "sticky top-0 z-50 px-3 pt-3 transition-transform duration-300 ease-out-soft sm:px-4",
-          hidden && !open && "-translate-y-[120%] focus-within:translate-y-0",
-        )}
+        ref={root}
+        className="hd"
+        data-solid={solid || undefined}
+        onMouseLeave={hoverClose}
+        onMouseEnter={() => window.clearTimeout(closeTimer.current)}
       >
-        <div
-          className={cn(
-            "header-bar glass relative mx-auto transition-[max-width] duration-700 ease-out-soft",
-            solid ? "is-solid max-w-[1100px]" : "max-w-[1376px]",
-          )}
-        >
-          <div
-            className={cn(
-              "flex items-center gap-6 px-4 transition-[height] duration-500 ease-out-soft sm:px-5",
-              solid ? "h-14" : "h-16",
-            )}
-          >
-            <a
-              href="#top"
-              aria-label={`${site.name}, início`}
-              className="mr-auto shrink-0 transition-opacity duration-200 hover:opacity-70"
-            >
-              <OrchestrLogo
-                tone="on-light"
-                className={cn(
-                  "w-auto transition-[height] duration-500 ease-out-soft dark:hidden",
-                  solid ? "h-[25px]" : "h-[28px]",
-                )}
-                id="orx-header-l"
-              />
-              <OrchestrLogo
-                tone="on-dark"
-                className={cn(
-                  "hidden w-auto transition-[height] duration-500 ease-out-soft dark:block",
-                  solid ? "h-[25px]" : "h-[28px]",
-                )}
-                id="orx-header-d"
-              />
-            </a>
+        <div className="hd-row">
+          <a href="#top" aria-label={`${site.name}, início`} className="hd-logo">
+            <OrchestrLogo
+              tone="on-light"
+              className="h-[26px] w-auto dark:hidden"
+              id="orx-header-l"
+            />
+            <OrchestrLogo
+              tone="on-dark"
+              className="hidden h-[26px] w-auto dark:block"
+              id="orx-header-d"
+            />
+          </a>
 
-            <nav aria-label="Principal" className="relative hidden items-center lg:flex">
-              <span
-                aria-hidden
-                className="absolute top-0 left-0 h-9 bg-nfill-2 transition-[transform,width,opacity] duration-500 ease-out-soft"
-                style={{
-                  width: thumb?.w ?? 0,
-                  transform: `translateX(${thumb?.x ?? 0}px)`,
-                  opacity: thumb ? 1 : 0,
-                }}
-              />
-              {nav.map((n, i) => (
+          <nav aria-label="Principal" className="hd-nav">
+            {nav.map((n) =>
+              n.href === "#servicos" ? (
+                <button
+                  key={n.href}
+                  type="button"
+                  className="hd-link"
+                  data-on={active === n.href || mega || undefined}
+                  aria-expanded={mega}
+                  aria-controls="hd-mega"
+                  onClick={() => setMega((v) => !v)}
+                  onMouseEnter={hoverOpen}
+                >
+                  {n.label}
+                  <ChevronDown aria-hidden className="hd-chev size-3.5" strokeWidth={1.8} />
+                </button>
+              ) : (
                 <a
                   key={n.href}
-                  ref={(el) => {
-                    links.current[i] = el;
-                  }}
                   href={n.href}
+                  className="hd-link"
+                  data-on={active === n.href || undefined}
                   aria-current={active === n.href ? "location" : undefined}
-                  className={cn(
-                    "label relative grid h-9 place-items-center px-3.5 text-[11px] transition-colors duration-300",
-                    active === n.href ? "text-strong" : "text-nmute hover:text-strong",
-                  )}
+                  onMouseEnter={hoverClose}
                 >
                   {n.label}
                 </a>
-              ))}
-            </nav>
+              ),
+            )}
+          </nav>
 
+          <div className="hd-end">
             <ThemeToggle />
-
             <LinkButton
               href={proposalHref}
               size="sm"
-              variant="light"
+              variant="ink"
               className="hidden sm:inline-flex"
             >
-              Pedir diagnóstico
+              Pedir demonstração
             </LinkButton>
             <button
               ref={toggle}
@@ -191,7 +185,7 @@ export function Header() {
               aria-expanded={open}
               aria-controls="menu"
               onClick={() => setOpen((v) => !v)}
-              className="label flex h-11 items-center gap-2 bg-nfill-2 px-4 text-[11px] text-strong transition-colors hover:bg-fg hover:text-onfg sm:h-9 sm:px-3 lg:hidden"
+              className="label hd-menu-btn"
             >
               <svg viewBox="0 0 16 16" className="size-3.5" aria-hidden>
                 <path
@@ -203,29 +197,66 @@ export function Header() {
               {open ? "Fechar" : "Menu"}
             </button>
           </div>
+        </div>
 
-          <div id="menu" hidden={!open} className="lg:hidden">
-            <nav aria-label="Menu" className="flex flex-col gap-[2px] px-4 pb-4 sm:px-5">
-              {nav.map((n) => (
-                <a
-                  key={n.href}
-                  href={n.href}
-                  onClick={() => setOpen(false)}
-                  className="flex items-center justify-between bg-nfill px-4 py-4 text-[17px] text-strong transition-colors hover:bg-fg hover:text-onfg"
-                >
-                  {n.label}
-                </a>
-              ))}
-              <LinkButton href={proposalHref} variant="light" size="lg" className="mt-3 w-full">
-                {site.cta}
-              </LinkButton>
-            </nav>
+        {/* Services menu: every area, each straight to its example. */}
+        <div id="hd-mega" className="hd-mega" data-open={mega || undefined} inert={!mega}>
+          <div className="hd-mega-in">
+            <div className="hd-mega-intro">
+              <p className="hd-idx">O que a {site.name} desenvolve</p>
+              <p className="hd-mega-title">Cada solução nasce do seu processo.</p>
+              <p className="hd-mega-text">
+                Escolha uma área para ver um exemplo. Se o seu caso não está na lista, descreva-o.
+              </p>
+              {/* biome-ignore lint/a11y/useValidAnchor: in-page link that also closes the menu */}
+              <a href="#servicos" className="hd-mega-all" onClick={() => setMega(false)}>
+                Ver todos os serviços{" "}
+                <ArrowRight aria-hidden className="size-4" strokeWidth={1.6} />
+              </a>
+            </div>
+            <ul className="hd-areas">
+              {SERVICES.map((s) => {
+                const Icon = s.icon;
+                return (
+                  <li key={s.id}>
+                    {/* biome-ignore lint/a11y/useValidAnchor: in-page link that also picks the area */}
+                    <a href="#servicos" className="hd-area" onClick={() => pick(s.id)}>
+                      <span className="hd-area-ic">
+                        <Icon aria-hidden className="size-[18px]" strokeWidth={1.6} />
+                      </span>
+                      <span>
+                        <b>{s.title}</b>
+                        <small>Substitui {s.replaces}</small>
+                      </span>
+                    </a>
+                  </li>
+                );
+              })}
+            </ul>
           </div>
+        </div>
 
-          <span
-            aria-hidden
-            className="header-progress absolute inset-x-0 bottom-0 h-[2px] origin-left bg-accent-hi"
-          />
+        <span aria-hidden className="hd-total">
+          <span ref={total} className="hd-fill" />
+        </span>
+
+        <div id="menu" hidden={!open} className="hd-menu">
+          <nav aria-label="Menu">
+            {nav.map((n) => (
+              <a
+                key={n.href}
+                href={n.href}
+                onClick={() => setOpen(false)}
+                aria-current={active === n.href ? "location" : undefined}
+              >
+                <span className="flex-1">{n.label}</span>
+                <ArrowRight aria-hidden className="size-4" strokeWidth={1.6} />
+              </a>
+            ))}
+            <LinkButton href={proposalHref} variant="ink" size="lg" className="mt-4 w-full">
+              {site.cta}
+            </LinkButton>
+          </nav>
         </div>
       </header>
     </>

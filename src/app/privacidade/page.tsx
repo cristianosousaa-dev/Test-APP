@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { LinkButton } from "@/components/ui/Button";
 import { Container } from "@/components/ui/Container";
 import { site } from "@/lib/site";
 
@@ -17,9 +18,9 @@ export default function Privacidade() {
     <main id="conteudo" className="py-24 sm:py-32">
       <Container>
         <div className="max-w-[44rem]">
-          <a href="/" className="label text-[11px] text-accent">
-            ← Voltar
-          </a>
+          <LinkButton href="/" variant="mist" size="md" arrow={false}>
+            ← Voltar ao site
+          </LinkButton>
           <h1 className="h2 mt-8">Política de privacidade</h1>
           <div className="mt-10 space-y-6 text-[16px] leading-[1.7] text-fg-2">
             <p>

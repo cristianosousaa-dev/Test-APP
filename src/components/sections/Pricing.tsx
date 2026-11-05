@@ -1,7 +1,7 @@
-import { Check } from "lucide-react";
 import { Container } from "@/components/ui/Container";
+import { ScrollDepth } from "@/components/ui/ScrollDepth";
 import { SectionHead } from "@/components/ui/SectionHead";
-import { allPlans } from "@/lib/site";
+import { FLAT, RISE } from "@/lib/depth";
 import { PricingTable } from "./PricingTable";
 
 export function Pricing() {
@@ -16,31 +16,23 @@ export function Pricing() {
           center
           kicker="Preços"
           id="precos-title"
-          title={<>Preço fixo, conhecido antes de começar.</>}
+          title={<>Cada projeto é único. Os preços partem daqui.</>}
         >
-          Valores de entrada, sem IVA. Depois do diagnóstico, a proposta fixa o preço exato, por
-          escrito, para saber quanto vai pagar antes de iniciarmos.
+          Como cada projeto é desenhado para o seu caso, os valores indicados são pontos de partida,
+          sem IVA. O valor final depende do que precisa e é apresentado por escrito, na proposta,
+          antes de começarmos.
         </SectionHead>
 
         <div data-reveal className="mt-12 sm:mt-16">
-          <PricingTable />
+          <ScrollDepth from={RISE} to={FLAT} start="top 98%" end="top 62%">
+            <PricingTable />
+          </ScrollDepth>
         </div>
 
-        <div data-reveal className="mt-12 flex flex-col items-center gap-4 text-center">
-          <p className="kicker-n">Incluído em todos os planos</p>
-          <ul className="flex flex-wrap justify-center gap-x-8 gap-y-3">
-            {allPlans.map((t) => (
-              <li key={t} className="flex items-center gap-2.5 text-[14px] text-ntext">
-                <Check aria-hidden className="size-4 shrink-0 text-accent-hi" strokeWidth={2} />
-                {t}
-              </li>
-            ))}
-          </ul>
-        </div>
         <p className="mx-auto mt-8 max-w-[44rem] text-center text-[13px] leading-[1.6] text-nmute">
           A mensalidade cobre alojamento, cópias de segurança, manutenção, suporte e as horas de
-          alterações indicadas em cada plano. Os valores das aplicações e plataformas são de
-          referência e dependem do âmbito, do número de utilizadores e das integrações.
+          alterações indicadas em cada plano. Todos os valores são “desde” e dependem do âmbito, do
+          número de utilizadores e das ligações a outros programas.
         </p>
       </Container>
     </section>

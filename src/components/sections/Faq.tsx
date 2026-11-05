@@ -10,43 +10,55 @@ const auto = plans.find((p) => p.id === "automacao");
 export const FAQS = [
   {
     q: "Quanto custa uma aplicação à medida?",
-    a: `Depende do âmbito. Uma aplicação para substituir o Excel ou o papel de um processo começa nos ${euros(app?.setup ?? 0)} de implementação e ${euros(app?.monthly ?? 0)} por mês de manutenção, sem IVA. Uma automação simples começa nos ${euros(auto?.setup ?? 0)}. Depois do diagnóstico recebe uma proposta com preço fixo, escrito, antes de iniciarmos.`,
+    a: `Depende do que precisa. Uma aplicação que modernize um processo da sua empresa custa desde ${euros(app?.setup ?? 0)}, mais desde ${euros(app?.monthly ?? 0)} por mês de manutenção (valores sem IVA). Uma automação simples custa desde ${euros(auto?.setup ?? 0)}. Cada projeto é feito à medida, por isso o valor final depende do que precisa e vem por escrito, na proposta, antes de começarmos.`,
   },
   {
     q: "Quanto tempo demora?",
-    a: "Uma aplicação para um processo costuma ficar pronta em 2 a 4 semanas. Plataformas com vários módulos e integrações levam 6 a 12 semanas. O prazo é fixado por escrito na proposta e acompanhado com entregas semanais.",
+    a: "Uma aplicação para um processo costuma ficar pronta em 2 a 4 semanas. Plataformas com vários módulos e ligações a outros programas levam 6 a 12 semanas. O prazo vem por escrito na proposta e acompanha o progresso em entregas semanais.",
   },
   {
-    q: "Tenho de abandonar o Excel de um dia para o outro?",
-    a: "Não. Importamos os seus ficheiros, validamos os dados consigo e a equipa pode trabalhar em paralelo durante um período combinado. Só deixa a folha de cálculo quando se sentir seguro.",
+    q: "Tenho de pagar para ver a demonstração?",
+    a: "Não. A conversa inicial e a demonstração são feitas antes de qualquer compromisso. É um protótipo com os seus próprios dados, para ver como a aplicação ficaria. A aplicação completa só é construída depois de aprovar a proposta.",
   },
   {
-    q: "A demonstração tem custos?",
-    a: "O diagnóstico e a demonstração com os seus próprios dados são feitos antes de qualquer compromisso, para ver o resultado antes de decidir.",
+    q: "Tenho de mudar tudo de um dia para o outro?",
+    a: "Não. Passamos os seus dados para a aplicação e conferimos tudo consigo. A equipa pode trabalhar nos dois sistemas durante o tempo que combinarmos. Só deixa o que usa hoje quando se sentir seguro.",
+  },
+  {
+    q: "Preciso de uma equipa de informática?",
+    a: "Não. Tratamos do alojamento, das cópias de segurança e das atualizações. A sua equipa só tem de usar a aplicação, que funciona no navegador.",
+  },
+  {
+    q: "O meu software atual está ultrapassado. Pode ser renovado?",
+    a: "Pode. Reconstruímos o programa que usa hoje, mantendo os seus dados e o que funciona bem, numa aplicação mais rápida que funciona no navegador e no telemóvel.",
+  },
+  {
+    q: "Fazem também sites e lojas online?",
+    a: "Sim, quando fazem parte do que a sua empresa precisa. Um site feito à medida pode receber pedidos, marcações e encomendas, e esses pedidos entram diretamente na aplicação.",
   },
   {
     q: "De quem são os dados e o software?",
-    a: "Os dados são sempre seus e pode exportá-los a qualquer momento. As condições de propriedade e de licença do software ficam definidas, por escrito, na proposta.",
+    a: "Os dados são sempre seus e pode exportá-los a qualquer momento. As condições do software, incluindo o que acontece se deixarmos de trabalhar juntos, ficam definidas por escrito na proposta.",
   },
   {
-    q: "E se já utilizo o PHC, o Primavera ou o Moloni?",
-    a: "A aplicação pode ligar-se a eles. Cada integração é avaliada caso a caso, porque depende do que o sistema permite. Quando é complexa, propomos deixá-la para uma segunda fase.",
+    q: "E se já uso o PHC, o Primavera ou o Moloni?",
+    a: "A aplicação pode ligar-se a eles. Cada ligação é avaliada caso a caso, porque depende do que o programa permite. Quando é complicada, propomos deixá-la para uma segunda fase.",
   },
   {
     q: "O que acontece depois de a aplicação estar em uso?",
-    a: "A mensalidade cobre o alojamento, as cópias de segurança, a manutenção, o suporte e um número de horas por mês para alterações. Se um sistema externo mudar ou falhar, somos nós a corrigir.",
+    a: "A mensalidade cobre o alojamento, as cópias de segurança, a manutenção, o suporte e um número de horas por mês para alterações. Se um programa externo mudar ou falhar, somos nós a corrigir.",
   },
   {
     q: "Funciona no telemóvel?",
-    a: "Sim. As aplicações funcionam no computador, no tablet e no telemóvel, a partir do navegador, e podem ser instaladas no ecrã inicial.",
+    a: "Sim. Funciona no computador, no tablet e no telemóvel, a partir do navegador, e pode ser instalada no ecrã inicial.",
   },
   {
-    q: "Como é garantida a segurança dos dados?",
-    a: "Cada pessoa vê apenas o que o seu perfil permite. Os dados ficam alojados na União Europeia, com cópias de segurança, e seguimos as boas práticas do RGPD. Documentamos o que a aplicação guarda e a que dados acede.",
+    q: "Os meus dados estão seguros?",
+    a: "Cada pessoa vê apenas o que o seu perfil permite. Os dados ficam alojados na União Europeia, com cópias de segurança, e seguimos as boas práticas do RGPD. Explicamos por escrito o que a aplicação guarda e a que dados acede.",
   },
   {
     q: "Utilizam inteligência artificial?",
-    a: "Sempre que acrescenta valor: leitura de documentos, interpretação de mensagens ou redação de respostas. Nos restantes casos usamos regras previsíveis. As decisões críticas podem ficar sempre sujeitas à sua aprovação.",
+    a: "Quando ajuda de facto: ler documentos, perceber mensagens ou redigir respostas. Nos restantes casos usamos regras simples e previsíveis. As decisões importantes podem ficar sempre dependentes da sua aprovação.",
   },
 ];
 
@@ -61,14 +73,13 @@ export function Faq() {
         <SectionHead
           kicker="Perguntas frequentes"
           id="faq-title"
-          title={<>Perguntas frequentes.</>}
+          title={<>As dúvidas de quem está a pensar começar.</>}
         >
-          As dúvidas mais comuns antes de começar. Se tiver outra questão, teremos todo o gosto em
-          responder.
+          Respostas diretas às perguntas mais comuns. Se a sua não estiver aqui, escreva-nos.
         </SectionHead>
 
         <div className="mt-10 grid grid-cols-1 gap-10 sm:mt-14 lg:grid-cols-[minmax(0,1fr)_minmax(0,2fr)] lg:gap-8">
-          <div className="lg:sticky lg:top-28 lg:self-start">
+          <div className="order-last lg:order-none lg:sticky lg:top-28 lg:self-start">
             <div data-reveal className="bg-fg p-7 text-onfg">
               <p className="font-display text-[24px] leading-[1.15] tracking-[-0.025em]">
                 Tem outra questão?

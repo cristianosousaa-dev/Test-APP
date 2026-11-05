@@ -21,15 +21,15 @@ export function ThemedSpotlightCard(props: ComponentProps<typeof SpotlightCard>)
 
 export function ThemedStarBorder(props: ComponentProps<typeof StarBorder>) {
   const theme = useTheme();
-  return <StarBorder theme={theme} color={theme === "dark" ? "#7b9bff" : "#2b5bff"} {...props} />;
+  return <StarBorder theme={theme} color={theme === "dark" ? "#7fd8bd" : "#2f5e50"} {...props} />;
 }
 
 export function ThemedShinyText(props: ComponentProps<typeof ShinyText>) {
   const theme = useTheme();
   return (
     <ShinyText
-      color={theme === "dark" ? "#9fb0cc" : "#46526b"}
-      shineColor={theme === "dark" ? "#ffffff" : "#0a0c10"}
+      color={theme === "dark" ? "#a9b2ae" : "#56615d"}
+      shineColor={theme === "dark" ? "#ffffff" : "#111312"}
       {...props}
     />
   );

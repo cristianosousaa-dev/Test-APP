@@ -33,7 +33,7 @@ export function GridBackdrop({ className }: { className?: string }) {
       {gl && (
         <RippleGrid
           className="absolute inset-0"
-          color={dark ? "#6f93ff" : "#2b5bff"}
+          color={dark ? "#6f93ff" : "#2f5e50"}
           lightMode={!dark}
           variant="lines"
           cellSize={coarse ? 56 : 72}

@@ -61,9 +61,8 @@ export function Examples() {
             </>
           }
         >
-          Além das aplicações, ligamos os sistemas que já utiliza e automatizamos as tarefas
-          repetitivas. Seis exemplos de fluxos a funcionar, passo a passo, com as ferramentas que as
-          empresas já utilizam. Exemplos ilustrativos.
+          Além das aplicações, automatizamos tarefas repetitivas em articulação com os programas que
+          já usa. Veja seis exemplos, passo a passo, ilustrativos e com dados fictícios.
         </SectionHead>
 
         <div className="fl-scope mt-10 sm:mt-14">

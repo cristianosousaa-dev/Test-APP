@@ -5,30 +5,35 @@ import { delay } from "@/lib/delay";
 /* The process in order, with how long each phase takes and what the client gets from it. */
 const STEPS = [
   {
-    title: "Diagnóstico",
+    title: "Conversa",
+    yours: "30 minutos do seu tempo.",
     time: "30 minutos",
-    text: "Uma conversa para perceber como o trabalho é feito hoje e que ficheiros e programas usa.",
+    text: "Explique-nos como o trabalho é feito hoje e que ficheiros e programas usa. Sem termos técnicos.",
   },
   {
     title: "Demonstração",
+    yours: "Enviar um ficheiro de exemplo.",
     time: "2 a 3 dias",
-    text: "Mostramos uma versão a funcionar com os seus próprios dados, antes de qualquer compromisso.",
+    text: "Mostramos um protótipo com os seus próprios dados, para ver como ficaria. A aplicação só é construída depois de aprovar a proposta.",
     highlight: true,
   },
   {
     title: "Proposta",
+    yours: "Ler e decidir.",
     time: "Em 48 horas",
-    text: "Âmbito, prazo e preço fixo por escrito. Nada avança sem a sua aprovação.",
+    text: "O que fazemos, em quanto tempo e por quanto, tudo por escrito. Nada avança sem a sua aprovação.",
   },
   {
-    title: "Construção",
+    title: "Desenvolvimento",
+    yours: "Validar cada entrega semanal.",
     time: "2 a 12 semanas",
-    text: "Entregas semanais para validar. Migramos os dados e formamos a equipa antes de arrancar.",
+    text: "Entregas semanais para validar. Passamos os seus dados para a aplicação e formamos a equipa antes de arrancar.",
   },
   {
     title: "Acompanhamento",
+    yours: "Usar a aplicação e pedir o que falta.",
     time: "Contínuo",
-    text: "Alojamento, manutenção, suporte e pequenas evoluções incluídos na mensalidade.",
+    text: "Alojamento, manutenção, suporte e pequenas alterações incluídos na mensalidade.",
   },
 ] as const;
 
@@ -45,8 +50,8 @@ export function Process() {
           id="processo-title"
           title={<>Do primeiro contacto à aplicação em uso.</>}
         >
-          Um processo curto, com decisões suas em cada passo. Veja o resultado antes de pagar e só
-          avance com o preço escrito.
+          Um processo curto, com decisões suas em cada passo. Veja um protótipo antes de pagar e só
+          avance com a proposta escrita.
         </SectionHead>
 
         <ol className="relative mt-12 grid grid-cols-1 sm:mt-16 lg:grid-cols-5">
@@ -74,6 +79,8 @@ export function Process() {
                 {s.title}
               </h3>
               <p className="mt-3 text-[15px] leading-[1.6] text-nmute">{s.text}</p>
+              <p className="kicker-n mt-5 text-[10px]">A sua parte</p>
+              <p className="mt-1.5 text-[14px] leading-[1.5] text-ntext">{s.yours}</p>
               {"highlight" in s && (
                 <p className="kicker-n mt-4 text-[10px] text-accent-hi">O que nos distingue</p>
               )}

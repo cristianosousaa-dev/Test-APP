@@ -12,10 +12,10 @@ import {
 import type { Flow } from "./types";
 
 /* Core-node glyph colours, picked to sit next to the official brand logos. */
-const ACCENT = "#2b5bff";
+const ACCENT = "#2f5e50";
 const AMBER = "#d98a12";
 const ROSE = "#e5484d";
-const INK = "#3a414b";
+const INK = "#3a413e";
 
 const agent = { glyph: FileText, tone: ACCENT };
 const branch = { glyph: GitFork, tone: ACCENT };
@@ -49,7 +49,7 @@ export const FLOWS: Flow[] = [
         x: 350,
         y: 200,
         icon: agent,
-        app: "Agente de IA",
+        app: "Assistente de IA",
         title: "Percebe o pedido",
         output: "Marcação · amanhã, entre as 17h e as 19h",
         subs: [
@@ -136,7 +136,7 @@ export const FLOWS: Flow[] = [
         x: 350,
         y: 200,
         icon: agent,
-        app: "Agente de IA",
+        app: "Assistente de IA",
         title: "Prepara o orçamento",
         output: "2 instalações + deslocação: 585,00 € + IVA",
         subs: [
@@ -385,7 +385,7 @@ export const FLOWS: Flow[] = [
         x: 350,
         y: 200,
         icon: agent,
-        app: "Agente de IA",
+        app: "Assistente de IA",
         title: "Qualifica o contacto",
         output: "Contacto quente · clínica com 4 médicos",
         subs: [

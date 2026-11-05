@@ -17,7 +17,7 @@ export default function OpengraphImage() {
         justifyContent: "space-between",
         padding: 80,
         background:
-          "radial-gradient(60% 70% at 8% 110%, rgba(43,91,255,0.35), transparent 70%), #040a17",
+          "radial-gradient(60% 70% at 8% 110%, rgba(43,91,255,0.35), transparent 70%), #0b0f0e",
         color: "#ffffff",
         fontFamily: "sans-serif",
       }}
@@ -25,16 +25,14 @@ export default function OpengraphImage() {
       <div
         style={{ display: "flex", alignItems: "center", gap: 18, fontSize: 40, fontWeight: 600 }}
       >
-        <div style={{ width: 22, height: 22, background: "#2b5bff" }} />
+        <div style={{ width: 22, height: 22, background: "#2f5e50" }} />
         {site.name.toLowerCase()}
       </div>
       <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
         <div style={{ fontSize: 72, lineHeight: 1.05, letterSpacing: -2, maxWidth: 940 }}>
-          Do Excel e do papel a uma aplicação feita à medida.
+          Orchestr, o futuro da sua empresa.
         </div>
-        <div style={{ fontSize: 30, color: "#9fb0cc" }}>
-          Software à medida para PME. Prazo e preço fixos.
-        </div>
+        <div style={{ fontSize: 30, color: "#a9b2ae" }}>Software à medida para PME.</div>
       </div>
     </div>,
     size,

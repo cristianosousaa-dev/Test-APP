@@ -13,3 +13,6 @@ test-results/
 
 # Agent tooling (prompts, skills): local only, never published
 .claude/
+
+# graphify output (rebuilds for free)
+graphify-out/

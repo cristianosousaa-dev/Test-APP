@@ -5,8 +5,8 @@ import { delay } from "@/lib/delay";
 
 const NEXT = [
   "Lemos o seu pedido. Se for preciso, marcamos 30 minutos para perceber o processo.",
-  "Preparamos uma demonstração com os seus próprios dados.",
-  "Recebe uma proposta escrita com âmbito, prazo e preço fixo. Só avança se aprovar.",
+  "Preparamos um protótipo com os seus próprios dados, para ver como ficaria.",
+  "Recebe uma proposta escrita com o que fazemos, o valor e o prazo. Só avança se aprovar.",
 ];
 
 export function Cta() {
@@ -28,15 +28,13 @@ export function Cta() {
                 data-reveal="mask"
                 className="display mt-8 text-[clamp(40px,5.2vw,78px)] text-strong"
               >
-                Mostre-nos o seu Excel.{" "}
-                <span className="text-accent-hi">
-                  <span className="whitespace-nowrap">Mostramos-lhe</span> a aplicação.
-                </span>
+                Diga-nos o que lhe custa mais tempo.{" "}
+                <span className="text-accent-hi">Nós orquestramos a solução.</span>
               </h2>
               <p className="mt-7 max-w-[34rem] text-[17.5px] leading-[1.6] text-nmute">
-                Descreva o processo que hoje faz em Excel ou em papel. Não precisa de termos
-                técnicos: basta explicar o que é feito e quanto tempo ocupa. Respondemos com uma
-                proposta de preço fixo.
+                Descreva como o trabalho é feito hoje: em Excel, em papel, no telemóvel ou num
+                programa que já não serve. Não precisa de termos técnicos: basta explicar o que é
+                feito e quanto tempo ocupa. Respondemos com uma proposta escrita.
               </p>
               <TaskForm tone="dark" className="mt-10 max-w-[38rem]" />
             </div>

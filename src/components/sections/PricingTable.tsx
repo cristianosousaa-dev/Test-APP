@@ -13,9 +13,11 @@ export function PricingTable() {
           <h3 className="pc-name">{p.name}</h3>
           <p className="pc-sum">{p.summary}</p>
 
-          <p className="pc-price">{euros(p.setup)}</p>
+          <p className="pc-price">
+            <span className="pc-desde">desde</span> {euros(p.setup)}
+          </p>
           <p className="pc-month">
-            + {euros(p.monthly)} por mês · {p.lead.replace("Prazo típico: ", "")}
+            + desde {euros(p.monthly)} por mês · {p.lead.replace("Prazo típico: ", "")}
           </p>
 
           <ul className="pc-list">

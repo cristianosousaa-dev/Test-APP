@@ -27,6 +27,14 @@ const EXAMPLES = [
     label: "Agenda",
     text: "A agenda é de papel e as marcações chegam por WhatsApp, o que gera sobreposições e esquecimentos.",
   },
+  {
+    label: "Software antigo",
+    text: "O programa que usamos é antigo e lento, não se liga a mais nada e já ninguém sabe fazer alterações.",
+  },
+  {
+    label: "Equipas no terreno",
+    text: "As equipas apontam horas e trabalhos em papel ou por mensagem, e só no fim do dia a informação chega ao escritório.",
+  },
 ];
 
 const MIN = 12;
@@ -66,7 +74,7 @@ export function TaskForm({
         e.preventDefault();
         if (!valid()) return;
         window.location.href = contactHref(
-          "Pedido de diagnóstico",
+          "Pedido de demonstração",
           `${text.trim()}\n\nEmpresa:\nTelefone:`,
         );
         setSent(true);
@@ -77,7 +85,7 @@ export function TaskForm({
         htmlFor={`${id}-task`}
         className={cn("label block text-[11px]", dark ? "text-nmute" : "text-fg-2")}
       >
-        Que processo faz hoje em Excel ou em papel?
+        Que trabalho faz hoje à mão, ou num programa que já não serve?
       </label>
       <textarea
         ref={field}
@@ -92,7 +100,7 @@ export function TaskForm({
         }}
         aria-invalid={error || undefined}
         aria-describedby={error ? `${id}-error` : undefined}
-        placeholder="Use as suas palavras. Por exemplo: registamos as encomendas num Excel e acompanhamos o estado de cada uma por telefone."
+        placeholder="Use as suas palavras. Por exemplo: o programa que usamos é lento e as equipas apontam tudo em papel."
         className={cn(
           "task-field mt-3 block min-h-[7.5rem] w-full resize-none px-4 py-3.5 text-[15.5px] leading-[1.55] sm:min-h-0",
           dark ? "task-field-dark" : "task-field-light",
@@ -154,7 +162,7 @@ export function TaskForm({
         )}
       </div>
       <p className={cn("kicker mt-3 text-[10.5px]", dark ? "text-nmute" : "text-fg-2")}>
-        Abre o seu email com o pedido preenchido · Sem compromisso · Resposta com preço fixo
+        Abre o seu email com o pedido preenchido · Sem compromisso · Resposta com proposta escrita
       </p>
       {sent && (
         <div

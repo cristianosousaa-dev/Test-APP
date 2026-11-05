@@ -1,17 +1,18 @@
 import { Estimator } from "@/components/sections/Estimator";
 import { Container } from "@/components/ui/Container";
+import { ScrollWords } from "@/components/ui/ScrollWords";
 import { SectionHead } from "@/components/ui/SectionHead";
 import { delay } from "@/lib/delay";
 
 const SIGNS = [
   {
-    sign: "Só uma pessoa sabe como a folha de Excel funciona.",
-    cost: "Se essa pessoa sai ou está de férias, o trabalho pára.",
+    sign: "Só uma pessoa sabe como as coisas funcionam.",
+    cost: "Se essa pessoa sai ou está de férias, o trabalho para.",
     tag: "Dependência",
   },
   {
-    sign: "A mesma informação é escrita três vezes.",
-    cost: "No papel, no Excel e no programa de faturação. Cada cópia é uma oportunidade de erro.",
+    sign: "A mesma informação é escrita mais do que uma vez.",
+    cost: "Num caderno, numa folha, no telemóvel e no programa. Cada cópia é uma oportunidade de erro.",
     tag: "Erros",
   },
   {
@@ -20,14 +21,19 @@ const SIGNS = [
     tag: "Pedidos perdidos",
   },
   {
+    sign: "O programa que utiliza já está ultrapassado.",
+    cost: "É lento, não se liga a mais nada, e o que ele não permite acaba feito à mão.",
+    tag: "Software antigo",
+  },
+  {
+    sign: "Cada pessoa trabalha à sua maneira.",
+    cost: "Sem um processo claro, ninguém sabe em que ponto está cada tarefa, e o tempo perde-se em confirmações.",
+    tag: "Processos sem lógica",
+  },
+  {
     sign: "Fechar o mês demora dias.",
     cost: "Conferir, copiar e corrigir ocupa a equipa em vez de servir os clientes.",
     tag: "Tempo",
-  },
-  {
-    sign: "O programa que utiliza já não acompanha a empresa.",
-    cost: "Tudo o que o software não permite acaba feito à mão, fora do sistema.",
-    tag: "Limites",
   },
 ] as const;
 
@@ -40,9 +46,13 @@ export function Problem() {
       className="relative overflow-x-clip py-20 sm:py-32 lg:py-40"
     >
       <Container>
-        <SectionHead kicker="O problema" id="problema-title" title={<>Reconhece estes sinais?</>}>
-          Quando o negócio cresce mais depressa do que as folhas e os papéis que o sustentam, o
-          problema não é a equipa. São as ferramentas.
+        <SectionHead
+          kicker="Onde se perde tempo"
+          id="problema-title"
+          title={<>Onde a sua empresa perde horas.</>}
+        >
+          Quando o negócio cresce mais depressa do que as ferramentas e os processos que o
+          sustentam, o problema não é a equipa. É a forma como o trabalho está montado.
         </SectionHead>
 
         <ul className="mt-12 sm:mt-16">
@@ -55,7 +65,7 @@ export function Problem() {
             >
               <p className="kicker order-last lg:order-first">{s.tag}</p>
               <p className="font-display text-[clamp(22px,2.4vw,32px)] leading-[1.15] tracking-[-0.025em]">
-                {s.sign}
+                <ScrollWords text={s.sign} />
               </p>
               <p className="max-w-[28rem] text-[15.5px] leading-[1.6] text-fg-2 lg:justify-self-end">
                 {s.cost}

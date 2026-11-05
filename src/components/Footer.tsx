@@ -29,8 +29,7 @@ export function Footer() {
               />
             </a>
             <p className="mt-5 text-[15px] leading-[1.65] text-nmute">
-              Software à medida para pequenas e médias empresas: do Excel e do papel a uma
-              aplicação, com prazo e preço fixos.
+              Software, automação e sites desenvolvidos para pequenas e médias empresas.
             </p>
             <ul className="mt-6 flex flex-wrap gap-[2px]" aria-label="Algumas integrações">
               {INTEGRATIONS.map((b) => (
@@ -105,6 +104,12 @@ export function Footer() {
           <p>© 2026 {site.name}. Todos os direitos reservados.</p>
           <p className="flex flex-wrap gap-x-5 gap-y-1">
             <span>Os exemplos nesta página são ilustrativos.</span>
+            <a
+              href="#top"
+              className="inline-block py-2 underline underline-offset-4 transition-colors hover:text-strong sm:py-0"
+            >
+              Voltar ao topo
+            </a>
             <a
               href="/privacidade"
               className="inline-block py-2 underline underline-offset-4 transition-colors hover:text-strong sm:py-0"

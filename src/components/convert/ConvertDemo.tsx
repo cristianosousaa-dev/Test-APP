@@ -15,7 +15,7 @@ const STEPS = [
   },
   {
     title: "Desenhamos o processo",
-    text: "Estados, regras, perfis de acesso e avisos ficam definidos antes de escrevermos o código.",
+    text: "O que acontece em cada fase, quem vê o quê e quando é avisado fica definido antes de começarmos o desenvolvimento.",
   },
   {
     title: "Entregamos a aplicação",
@@ -138,7 +138,7 @@ export function ConvertDemo() {
           <Container className="w-full py-20 sm:py-28 lg:py-0">
             <div className="grid items-center gap-12 lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)] lg:gap-16">
               <div>
-                <p className="kicker-n">Do Excel à aplicação</p>
+                <p className="kicker-n">Um exemplo: do Excel à aplicação</p>
                 <h2
                   id="conversao-title"
                   data-reveal="mask"
@@ -147,8 +147,9 @@ export function ConvertDemo() {
                   O seu Excel, convertido <span className="text-accent-hi">numa aplicação.</span>
                 </h2>
                 <p className="mt-6 max-w-[30rem] text-[17px] leading-[1.6] text-nmute">
-                  Não mudamos a forma como a sua equipa trabalha. Passamos o trabalho que hoje vive
-                  em folhas e papéis para uma aplicação feita à sua medida.
+                  Seja uma folha de Excel, papel ou um programa antigo, o princípio é o mesmo:
+                  partimos do trabalho que a sua equipa já faz e convertemos esse trabalho numa
+                  aplicação desenvolvida para si.
                 </p>
 
                 <ol className="relative mt-10 flex flex-col gap-1 pl-7">

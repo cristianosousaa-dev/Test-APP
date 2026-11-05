@@ -19,11 +19,10 @@ export function useTheme(): Theme {
 }
 
 /**
- * Switches theme. Where View Transitions exist the new theme is revealed as a circle growing from
- * `origin` (the toggle); elsewhere, or with reduced motion, it switches at once. The choice is
- * stored, so the next visit starts in it.
+ * Switches theme with a soft cross-fade (View Transitions; see globals.css). Without them, or with
+ * reduced motion, it switches at once. The choice is stored, so the next visit starts in it.
  */
-export function setTheme(next: Theme, origin?: { x: number; y: number }) {
+export function setTheme(next: Theme) {
   const root = document.documentElement;
   const apply = () => {
     root.dataset.theme = next;
@@ -34,7 +33,7 @@ export function setTheme(next: Theme, origin?: { x: number; y: number }) {
     }
     document
       .querySelector('meta[name="theme-color"]')
-      ?.setAttribute("content", next === "dark" ? "#040a17" : "#ffffff");
+      ?.setAttribute("content", next === "dark" ? "#0b0f0e" : "#fbfcfb");
   };
 
   const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -42,25 +41,5 @@ export function setTheme(next: Theme, origin?: { x: number; y: number }) {
     apply();
     return;
   }
-  const x = origin?.x ?? window.innerWidth / 2;
-  const y = origin?.y ?? 0;
-  const radius = Math.hypot(
-    Math.max(x, window.innerWidth - x),
-    Math.max(y, window.innerHeight - y),
-  );
-  const transition = document.startViewTransition(apply);
-  transition.ready
-    .then(() => {
-      root.animate(
-        { clipPath: [`circle(0px at ${x}px ${y}px)`, `circle(${radius}px at ${x}px ${y}px)`] },
-        {
-          duration: 720,
-          easing: "cubic-bezier(0.22, 1, 0.36, 1)",
-          pseudoElement: "::view-transition-new(root)",
-        },
-      );
-    })
-    .catch(() => {
-      // The transition was skipped (for example by a second click); the theme is already applied.
-    });
+  document.startViewTransition(apply);
 }
