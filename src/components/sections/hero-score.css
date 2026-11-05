@@ -1,0 +1,342 @@
+/* HeroScore: the hero is a staff. Imported by the component so palette scripts cannot overwrite it.
+   --p (percent) is the playhead position and is set by the GSAP timeline; the ties are clipped to it.
+   Mobile first: staff, then the step cards as a list, then the caption row. From 1200px the cards sit
+   in a row above the staff, linked to their notes by stems. */
+.sc {
+  --gap: 22px;
+  --p: 4;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  container-type: inline-size;
+}
+.sc-staff {
+  position: relative;
+  order: 1;
+  height: calc(var(--gap) * 4);
+  margin-block: 40px 0;
+}
+.sc-line,
+.sc-bar {
+  position: absolute;
+  background: var(--color-nline-2);
+}
+.sc-line {
+  top: calc(var(--i) * var(--gap));
+  right: 0;
+  left: 0;
+  height: 1px;
+}
+.sc-bar {
+  top: 0;
+  bottom: 0;
+  width: 1px;
+  opacity: 0.8;
+}
+.sc-clef {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  display: block;
+  transform: translateY(-50%);
+  opacity: 0.9;
+}
+.sc-clef svg {
+  width: calc(var(--gap) * 2.4);
+  height: calc(var(--gap) * 2.4);
+}
+/* The ties: drawn in full, shown only up to the playhead. */
+.sc-slurs {
+  position: absolute;
+  top: -70px;
+  right: 0;
+  bottom: -20px;
+  left: 0;
+  pointer-events: none;
+  clip-path: inset(0 calc(100% - var(--p) * 1%) 0 0);
+}
+.sc-slurs svg {
+  position: absolute;
+  top: 70px;
+  left: 0;
+  width: 100%;
+  height: calc(var(--gap) * 4);
+  overflow: visible;
+}
+.sc-slurs path {
+  fill: none;
+  stroke: var(--color-accent-hi);
+  stroke-width: 1.6;
+  stroke-linecap: round;
+}
+.sc-note {
+  position: absolute;
+  top: calc(var(--line) * var(--gap));
+  left: var(--x);
+  width: 0;
+  height: 0;
+}
+.sc-fill {
+  position: absolute;
+  top: -7px;
+  left: -7px;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: var(--color-accent-hi);
+  box-shadow: 0 0 0 3px var(--stage-base);
+  transform: scale(0);
+}
+/* The step number under its note (phones and tablets; the cards carry it on wide screens). */
+.sc-n {
+  position: absolute;
+  top: 12px;
+  left: 0;
+  padding: 0 3px;
+  background: var(--stage-base);
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-style: normal;
+  line-height: 14px;
+  color: var(--color-accent-hi);
+  transform: translateX(-50%);
+}
+.sc-stem {
+  display: none;
+}
+.sc-play {
+  position: absolute;
+  top: -14px;
+  bottom: -14px;
+  left: calc(var(--p) * 1%);
+  width: 0;
+  opacity: 0;
+  pointer-events: none;
+}
+.sc-play::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: -1px;
+  width: 2px;
+  background: linear-gradient(
+    180deg,
+    transparent,
+    var(--color-accent-hi) 22%,
+    var(--color-accent-hi) 78%,
+    transparent
+  );
+  box-shadow: 0 0 14px color-mix(in srgb, var(--color-accent-hi) 45%, transparent);
+}
+.sc-now {
+  position: absolute;
+  bottom: -4px;
+  left: 8px;
+  font-family: var(--font-mono);
+  font-size: 9.5px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--color-accent-hi);
+}
+
+/* The step cards: a list under the staff. */
+.sc-chips {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 8px;
+  order: 2;
+  margin: 30px 0 0;
+  padding: 0;
+}
+.sc-chip {
+  display: grid;
+  grid-template-columns: 30px minmax(0, 1fr);
+  align-items: center;
+  column-gap: 12px;
+  padding: 11px 14px;
+  border: 1px solid var(--color-nline-2);
+  border-radius: 9px;
+  background: var(--stage-base);
+  list-style: none;
+}
+.sc-chip-top {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  grid-row: 1 / span 2;
+  gap: 4px;
+  color: var(--color-accent-hi);
+}
+.sc-no {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  color: var(--color-nmute);
+}
+.sc-chip b {
+  display: block;
+  grid-column: 2;
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: var(--color-strong);
+}
+.sc-chip small {
+  display: block;
+  grid-column: 2;
+  margin-top: 2px;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--color-nmute);
+}
+
+.sc-foot {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px 20px;
+  order: 3;
+  margin-top: 26px;
+}
+.sc-ill {
+  flex: 1;
+  min-width: 12rem;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  line-height: 1.6;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--color-nmute);
+}
+@media (min-width: 640px) {
+  .sc {
+    --gap: 28px;
+  }
+  .sc-chips {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+@media (min-width: 1200px) {
+  .sc {
+    --gap: 34px;
+  }
+  .sc-n {
+    display: none;
+  }
+  .sc-staff {
+    order: 1;
+    margin-block: 0;
+  }
+  /* The cards sit in a row above the staff, each over its own note. */
+  .sc-chips {
+    position: relative;
+    display: block;
+    order: 0;
+    height: 96px;
+    margin: 0 0 36px;
+  }
+  .sc-chip {
+    position: absolute;
+    bottom: 0;
+    left: var(--x);
+    display: block;
+    width: 13cqw;
+    min-height: 82px;
+    margin-left: -6.5cqw;
+    padding: 11px 13px 12px;
+  }
+  .sc-chip-top {
+    flex-direction: row;
+    justify-content: space-between;
+    margin-bottom: 7px;
+  }
+  .sc-chip b {
+    font-size: 13.5px;
+  }
+  .sc-chip small {
+    margin-top: 3px;
+    font-size: 9.5px;
+  }
+  /* The stem links a card to its note; it grows from the card down. */
+  .sc-stem {
+    position: absolute;
+    top: -36px;
+    left: 0;
+    display: block;
+    width: 1px;
+    height: calc(36px + var(--line) * var(--gap));
+    background: var(--color-accent-hi);
+    opacity: 0.55;
+    transform-origin: top;
+  }
+  .sc-play {
+    top: -52px;
+  }
+  .sc-foot {
+    order: 2;
+    margin-top: 30px;
+  }
+}
+/* Motion allowed: cards, numbers and stems start hidden and the timeline shows them one by one. */
+@media (prefers-reduced-motion: no-preference) {
+  .sc-chip,
+  .sc-n {
+    opacity: 0;
+  }
+  .sc-stem {
+    transform: scaleY(0);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .sc {
+    --p: 100;
+  }
+  .sc-fill {
+    transform: none;
+  }
+  .sc-play {
+    display: none;
+  }
+}
+
+/* Hero watermark: the Orchestr symbol in the logo green, very faint, centred behind the hero's lead
+   text and buttons (z-index -1 inside that block, so the text always sits above it). The colour
+   follows the theme through --color-accent-hi. */
+.hero-wm {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  z-index: -1;
+  width: min(84vw, 400px);
+  aspect-ratio: 1;
+  transform: translate(-50%, -50%);
+  color: var(--color-accent-hi);
+  opacity: 0.05;
+  pointer-events: none;
+}
+:root[data-theme="dark"] .hero-wm {
+  opacity: 0.06;
+}
+@media (min-width: 1024px) {
+  .hero-wm {
+    width: min(30vw, 440px);
+  }
+}
+
+/* The watermark turns very slowly (one turn in 2 minutes 20 seconds). Transform only. */
+.hero-wm-spin {
+  width: 100%;
+  height: 100%;
+  animation: hero-wm-turn 140s linear infinite;
+}
+@keyframes hero-wm-turn {
+  to {
+    transform: rotate(360deg);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .hero-wm-spin {
+    animation: none;
+  }
+}

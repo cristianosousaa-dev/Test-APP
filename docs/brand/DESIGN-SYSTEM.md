@@ -46,11 +46,23 @@ keep their own colours. Mock UIs that imitate other software (the Excel sheet) s
 To change palette, map the hex values of this section across `globals.css` and the files that repeat
 them (logo, OG image, manifest, ThemedReactBits, flows data).
 
-## 3a. Hero background: a staff
-`HeroStaff`: five hairlines and four bar lines along the foot of the hero, with six small notes
-(each with a short trail) crossing slowly, 58 to 100 seconds per crossing. It says what the product
-does: work moving between people, processes and programs, in an orchestra. Transform only, hidden
-from assistive tech, notes hidden under reduced motion.
+## 3a. Hero: a score that plays
+`HeroScore` (GSAP timeline): a request arrives by WhatsApp and passes through the company in six
+evenly spaced steps (15% apart), each a note on a five-line staff. One value, `--p` (the playhead
+position in percent), drives the playhead and the clip that reveals the ties, so a curve is never drawn
+after the playhead has passed. The ties start and end exactly at the centre of each note (checked:
+0.1px). Nothing is drawn before it is reached: notes, cards and stems all appear on arrival. Reaching
+a step does four plain things: the note fills, its card appears, a stem links the card to the note, and
+the previous card steps back so the current one reads as "now". No bounce, ripple, flash or top line.
+Cards (number, icon, title, detail) are sized in container units so they never overlap (24 to 26px
+apart from 1280 to 1440). Below 1200px the same cards are a list under the staff (one column on phones, two on tablets) and each note shows its step number, so nothing is lost on small screens. The phrase holds,
+fades and plays again (about 17 seconds); plays only while the hero is on screen, has a visible pause
+button, and under reduced motion shows the finished score, still. Illustrative data.
+
+Watermark: the Orchestr symbol in the logo green (`--color-accent-hi`, so it follows the theme), very
+faint (5% light, 6% dark), centred behind the hero's lead text and buttons (z-index -1 inside that block,
+so the text always sits above it), turning very slowly (one turn in 140 seconds, transform only, still
+under reduced motion).
 
 ## 3b. Header: a plain bar with two useful things
 Solid, flat, sticky; no glass pill. Links in sentence case; the section being read is marked with a
