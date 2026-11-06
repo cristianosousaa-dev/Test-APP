@@ -19,7 +19,6 @@ import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import { BrandDefs } from "@/components/brand/BrandIcon";
 import { OrchestrLogo, OrchestrMark } from "@/components/brand/OrchestrLogo";
-import Magnet from "@/components/react-bits/Magnet";
 import SpotlightCard from "@/components/react-bits/SpotlightCard";
 import { founder } from "@/lib/site";
 import { AnimatedFaq } from "./AnimatedFaq";
@@ -146,12 +145,10 @@ export function Landing() {
                 Ligamos o que hoje está separado, para o seu negócio avançar.
               </p>
               <div className="hero-actions">
-                <Magnet padding={18} magnetStrength={8} maxOffset={4} disabled={paused}>
-                  <a href="#contacto" className="action action-light">
-                    Pedir demonstração gratuita
-                    <ArrowUpRight size={19} />
-                  </a>
-                </Magnet>
+                <a href="#contacto" className="action action-light">
+                  Pedir demonstração gratuita
+                  <ArrowUpRight size={19} />
+                </a>
                 <a href="#demonstracao" className="hero-demo-link">
                   <span>
                     <Play size={12} fill="currentColor" />

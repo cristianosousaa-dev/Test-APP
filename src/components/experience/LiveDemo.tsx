@@ -17,7 +17,16 @@ import {
 import { useEffect, useRef, useState } from "react";
 import { BrandIcon } from "@/components/brand/BrandIcon";
 import { OrchestrMark } from "@/components/brand/OrchestrLogo";
+import { demoStages } from "@/lib/demo-stages";
 import { gsap } from "@/lib/motion";
+
+const STEP_DURATION = 6;
+const heroExplanations = [
+  "Ana pede 24 cadeiras para dia 20. O pedido entra no processo.",
+  "É criada a ENC-0250 com cliente, quantidade e prazo, visível à equipa.",
+  "A produção recebe a tarefa. O painel passa de 12 para 13 pedidos.",
+  "Ana recebe a confirmação com a referência e a data de entrega.",
+];
 
 const examples = [
   {
@@ -77,18 +86,21 @@ function useSequence(paused: boolean) {
   const root = useRef<HTMLDivElement>(null);
   const progress = useRef<HTMLSpanElement>(null);
   const phaseRef = useRef(0);
+  const manuallySelected = useRef(false);
   const timelineRef = useRef<gsap.core.Timeline | null>(null);
   const [revision, setRevision] = useState(0);
   const [phase, updatePhase] = useState(0);
   const [playing, setPlaying] = useState(true);
   const setPhase = (value: number) => {
+    manuallySelected.current = true;
     phaseRef.current = value;
     updatePhase(value);
-    timelineRef.current?.pause().seek(value * 3.2 + 0.01, true);
+    timelineRef.current?.pause().seek(value * STEP_DURATION + 0.01, true);
     if (playing && !paused && !window.matchMedia("(prefers-reduced-motion: reduce)").matches)
       timelineRef.current?.play();
   };
   const restart = () => {
+    manuallySelected.current = false;
     phaseRef.current = 0;
     updatePhase(0);
     setPlaying(true);
@@ -108,22 +120,25 @@ function useSequence(paused: boolean) {
           updatePhase(index);
         },
         [],
-        index * 3.2,
+        index * STEP_DURATION,
       );
     if (progress.current)
       timeline.fromTo(
         progress.current,
         { scaleX: 0 },
-        { scaleX: 1, duration: 12.8, ease: "none" },
+        { scaleX: 1, duration: STEP_DURATION * 4, ease: "none" },
         0,
       );
-    else timeline.to({ value: 0 }, { value: 1, duration: 12.8 }, 0);
-    timeline.seek(phaseRef.current * 3.2 + 0.01, false);
+    else timeline.to({ value: 0 }, { value: 1, duration: STEP_DURATION * 4 }, 0);
+    timeline.seek(phaseRef.current * STEP_DURATION + 0.01, false);
     const sync = () => {
       if (reduced.matches) {
         timeline.pause();
-        phaseRef.current = 3;
-        updatePhase(3);
+        element.dataset.running = "false";
+        if (!manuallySelected.current) {
+          phaseRef.current = 3;
+          updatePhase(3);
+        }
         if (progress.current) gsap.set(progress.current, { scaleX: 1 });
         return;
       }
@@ -171,6 +186,62 @@ function useSequence(paused: boolean) {
     return () => context.revert();
   }, [phase, paused]);
   return { root, progress, phase, setPhase, playing, setPlaying, restart };
+}
+
+function StageDetail({ index, phase }: { index: number; phase: number }) {
+  const stage = demoStages[index]?.[phase];
+  if (!stage) return null;
+  return (
+    <div className="operation-stage-detail" key={`${index}-${phase}`} data-arrival>
+      <div className="stage-route">
+        <span>{stage.from}</span>
+        <ArrowRight size={12} />
+        <strong>{stage.to}</strong>
+      </div>
+      <div className="stage-detail-heading">
+        <span>{String(phase + 1).padStart(2, "0")} / 04</span>
+        <h5>{stage.title}</h5>
+      </div>
+      <dl>
+        {stage.facts.map(([label, value]) => (
+          <div key={label}>
+            <dt>{label}</dt>
+            <dd>{value}</dd>
+          </div>
+        ))}
+      </dl>
+      {stage.message && (
+        <div className="stage-message">
+          <Mail size={15} />
+          <p>{stage.message}</p>
+        </div>
+      )}
+    </div>
+  );
+}
+function StageNarrative({
+  index,
+  phase,
+  hero = false,
+}: {
+  index: number;
+  phase: number;
+  hero?: boolean;
+}) {
+  const stage = demoStages[index]?.[phase];
+  if (!stage) return null;
+  return (
+    <div className={`stage-narrative ${hero ? "hero-stage-narrative" : ""}`}>
+      <span className="stage-narrative-number">
+        {String(phase + 1).padStart(2, "0")}
+        <small>/ 04</small>
+      </span>
+      <div key={`${index}-${phase}`} data-arrival>
+        <strong>{stage.title}</strong>
+        <p>{hero ? heroExplanations[phase] : stage.explanation}</p>
+      </div>
+    </div>
+  );
 }
 
 function IncomingMessage({
@@ -488,7 +559,7 @@ function AfterScene({
   hero?: boolean;
 }) {
   return (
-    <div className={`operation-app ${hero ? "hero-operation-app" : ""}`}>
+    <div className={`operation-app ${hero ? "hero-operation-app" : ""}`} data-phase={phase}>
       <div className="operation-toolbar">
         <span className="operation-company">
           <OrchestrMark
@@ -500,7 +571,7 @@ function AfterScene({
         </span>
         <span className="operation-user">CS</span>
       </div>
-      <div className="operation-content">
+      <div className="operation-content" aria-hidden={!hero} inert={!hero}>
         {index === 0 ? (
           <OrdersApp phase={phase} />
         ) : index === 1 ? (
@@ -509,6 +580,7 @@ function AfterScene({
           <AppointmentsApp phase={phase} />
         )}
       </div>
+      {!hero && <StageDetail index={index} phase={phase} />}
       <div className="operation-activity" key={`${index}-${phase}`} data-arrival>
         <span className={`activity-check ${phase === 3 ? "activity-complete" : ""}`}>
           {phase === 3 ? <CheckCheck size={16} /> : <Check size={15} />}
@@ -525,7 +597,7 @@ function AfterScene({
                   : "O processo avança sem voltar a escrever os dados"}
           </span>
         </div>
-        <span className="activity-time">{`00:0${phase + 1}`}</span>
+        <span className="activity-time">{`${phase + 1} / 4`}</span>
       </div>
     </div>
   );
@@ -549,6 +621,7 @@ export function HeroPreview({ paused }: { paused: boolean }) {
           <IncomingMessage example={example} phase={phase} compact />
         </div>
       </div>
+      <StageNarrative index={0} phase={phase} hero />
       <div className="hero-sequence">
         {example.after.map((label, i) => (
           <button
@@ -602,6 +675,7 @@ function DemoComparison({ index, motionPaused }: { index: number; motionPaused: 
           </button>
         </div>
       </div>
+      <StageNarrative index={index} phase={phase} />
       <div className="comparison-grid">
         <div className="comparison-panel before-panel">
           <div className="comparison-label">

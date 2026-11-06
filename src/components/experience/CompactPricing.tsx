@@ -1,7 +1,19 @@
+// biome-ignore-all lint/a11y/useValidAnchor: These fragment links navigate to the brief and preselect the chosen plan.
 "use client";
 import { ArrowUpRight, Check, ChevronDown } from "lucide-react";
 import StarBorder from "@/components/react-bits/StarBorder";
 import { euros, plans } from "@/lib/site";
+
+const choosePlan = (id: string, plan: string) =>
+  window.dispatchEvent(
+    new CustomEvent("orchestr:brief", {
+      detail: {
+        service: id === "automacao" ? "Automação" : "Aplicação à medida",
+        workflow: id === "plataforma" ? "Portal de clientes" : undefined,
+        plan,
+      },
+    }),
+  );
 
 export function CompactPricing({ paused }: { paused: boolean }) {
   return (
@@ -57,10 +69,12 @@ export function CompactPricing({ paused }: { paused: boolean }) {
                 <StarBorder
                   as="a"
                   href="#contacto"
+                  onClick={() => choosePlan(plan.id, plan.name)}
                   className="featured-plan-button"
                   radius={8}
                   thickness={1.5}
-                  duration={5}
+                  duration={12}
+                  hover="brighten"
                   trailLength={0.45}
                   glow={0.8}
                   sparkle={false}
@@ -76,6 +90,7 @@ export function CompactPricing({ paused }: { paused: boolean }) {
               ) : (
                 <a
                   href="#contacto"
+                  onClick={() => choosePlan(plan.id, plan.name)}
                   className={`action ${plan.featured ? "static-featured-button" : "action-outline"}`}
                 >
                   Pedir proposta

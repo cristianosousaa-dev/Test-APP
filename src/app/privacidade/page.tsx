@@ -30,7 +30,9 @@ export default function Privacidade() {
           <p>
             Este site não utiliza cookies de publicidade, ferramentas de análise nem formulários que
             enviem dados para os nossos servidores. As demonstrações usam dados fictícios. Os
-            separadores e as opções de movimento funcionam apenas no seu navegador.
+            separadores e as opções de movimento funcionam apenas no seu navegador. A preferência de
+            tema claro ou escuro fica guardada neste navegador; os dados do formulário não são
+            guardados.
           </p>
           <h2>Pedidos de demonstração</h2>
           <p>

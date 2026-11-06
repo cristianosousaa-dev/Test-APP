@@ -36,11 +36,11 @@ export function IntegrationMarquee({ paused }: { paused: boolean }) {
           <LogoLoop
             logos={logos}
             speed={paused ? 0 : 44}
-            gap={56}
-            logoHeight={28}
+            gap={48}
+            logoHeight={24}
             pauseOnHover
             fadeOut
-            fadeOutColor="#0e1014"
+            fadeOutColor="var(--marquee-surface)"
             intro={false}
             muted={0}
             ariaLabel="Ferramentas que podemos integrar"

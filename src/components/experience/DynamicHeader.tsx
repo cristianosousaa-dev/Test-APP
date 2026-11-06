@@ -15,6 +15,7 @@ import {
 } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { OrchestrLogo } from "@/components/brand/OrchestrLogo";
+import { ThemeSwitch } from "./ThemeSwitch";
 
 const services = [
   {
@@ -187,8 +188,14 @@ export function DynamicHeader() {
                 </a>
               ))}
             </nav>
-            <a href="#contacto" className="nav-cta">
-              Vamos conversar
+            <ThemeSwitch />
+            <a
+              href="#contacto"
+              className="nav-cta"
+              aria-label="Pedir demonstração gratuita"
+              title="Vamos conversar"
+            >
+              <span className="nav-cta-text">Vamos conversar</span>
               <ArrowUpRight size={17} />
             </a>
             <button
@@ -304,7 +311,7 @@ export function DynamicHeader() {
               <ArrowUpRight size={23} />
             </a>
             <a href="#contacto" onClick={() => pick()}>
-              Vamos conversar
+              <span className="nav-cta-text">Vamos conversar</span>
               <ArrowUpRight size={23} />
             </a>
           </nav>

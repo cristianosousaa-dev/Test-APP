@@ -6,6 +6,7 @@ import type { ReactNode } from "react";
 import { isLive, site } from "@/lib/site";
 import "./globals.css";
 import "./refinements.css";
+import "./themes.css";
 
 /* Mona Sans: one variable family. Light display weights, regular for reading, semibold labels. */
 const mona = Mona_Sans({
@@ -54,14 +55,26 @@ export const metadata: Metadata = {
 
 export const viewport: Viewport = {
   themeColor: "#0c0e11",
-  colorScheme: "dark",
+  colorScheme: "light dark",
 };
 
 export default async function RootLayout({ children }: { children: ReactNode }) {
   // Keep rendering per request: Next must stamp its scripts with the proxy's CSP nonce.
-  await headers();
+  const nonce = (await headers()).get("x-nonce") ?? undefined;
   return (
-    <html lang="pt-PT" className={`${mona.variable} ${mono.variable} ${nohemi.variable}`}>
+    <html
+      lang="pt-PT"
+      data-theme="dark"
+      suppressHydrationWarning
+      className={`${mona.variable} ${mono.variable} ${nohemi.variable}`}
+    >
+      <head>
+        <script nonce={nonce}>
+          {
+            "try{var t=localStorage.getItem('orchestr-theme')||localStorage.getItem('theme');document.documentElement.dataset.theme=t==='light'||t==='dark'?t:matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light'}catch(e){document.documentElement.dataset.theme='dark'}"
+          }
+        </script>
+      </head>
       <body className="min-h-dvh">
         <a
           href="#conteudo"
