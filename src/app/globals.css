@@ -185,9 +185,6 @@ h2 > span {
   flex-shrink: 0;
   transition: transform 0.25s;
 }
-.action:hover svg {
-  transform: translate(2px, -2px);
-}
 .action-light {
   background: var(--cream);
   color: var(--ink);
@@ -223,9 +220,6 @@ h2 > span {
 }
 .text-link svg {
   transition: transform 0.25s;
-}
-.text-link:hover svg {
-  transform: translate(2px, -2px);
 }
 .signal-dot {
   display: inline-block;
@@ -624,7 +618,7 @@ h2 > span {
   padding: 30px 30px 25px !important;
   border: 0 !important;
   box-shadow: none !important;
-  background: transparent !important;
+  background: transparent;
 }
 .service-card-top {
   display: flex;
@@ -676,7 +670,6 @@ h2 > span {
   transition: transform 0.25s;
 }
 .service-link:hover svg {
-  transform: translate(3px, -3px);
   color: var(--blue);
 }
 .solutions-note {
@@ -3254,7 +3247,7 @@ h2 > span {
     border-left: 0;
   }
   .service-card {
-    border-bottom: 1px solid #cecec7 !important;
+    border-bottom: 1px solid var(--line-theme) !important;
     padding: 25px 0 23px !important;
     display: grid;
     grid-template-columns: 1fr 1fr;

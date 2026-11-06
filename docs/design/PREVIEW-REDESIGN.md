@@ -163,3 +163,24 @@ The optimized server also passes: nonce-bearing CSP, actual header-to-demo align
 visible moving transfer and completion, manual playback, the local contact result,
 all five legal routes, live theme reset and the 320 px footer. The exercised flow
 produces no browser errors, external application requests or POST requests.
+
+## Service alignment and action details
+
+Service cards share six content rows on desktop and tablet, so titles, descriptions,
+lists, separators and actions remain aligned when copy wraps differently. The former
+cursor spotlight has been replaced by a uniform subtle hover/focus surface. Each
+service action has equal top/bottom padding and a rounded, complete hover area.
+
+Controls remain stationary. Directional arrows now move 2–3 px; replay, disclosure,
+theme and playback icons use small context-appropriate responses. Keyboard focus
+receives the same feedback, and reduced motion disables these icon movements.
+
+Header underlines are a single 1 px line with a slower fade/expansion and quieter
+current-section state. The section indicator now clears outside its actual section,
+including when returning from the demonstration to the hero.
+
+Verification: optimized build, TypeScript and both changed TSX Biome checks pass.
+Browser checks cover seven widths (320–1562 px), both themes, aligned content rows,
+uniform hover surfaces, stationary button bounds, moving/returning arrows, header
+state reset, 1 px underline and reduced motion. Four focused axe audits of the
+service section report zero violations on desktop/mobile in both themes.

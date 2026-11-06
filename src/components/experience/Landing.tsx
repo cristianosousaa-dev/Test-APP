@@ -20,7 +20,6 @@ import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import { BrandDefs } from "@/components/brand/BrandIcon";
 import { OrchestrLogo, OrchestrMark } from "@/components/brand/OrchestrLogo";
-import SpotlightCard from "@/components/react-bits/SpotlightCard";
 import { briefServices, selectBriefContext } from "@/lib/brief-context";
 import { legalLinks } from "@/lib/legal/config";
 import { founder } from "@/lib/site";
@@ -239,21 +238,7 @@ export function Landing() {
                   key={service.title}
                   data-reveal
                 >
-                  <SpotlightCard
-                    className="service-card"
-                    theme="light"
-                    spotlightColor="#9caec6"
-                    intensity={0.08}
-                    borderGlow={0.12}
-                    proximity={0}
-                    style={
-                      {
-                        "--spotlight-card-surface": "transparent",
-                        "--spotlight-card-shadow": "none",
-                        "--spotlight-card-border": "transparent",
-                      } as React.CSSProperties
-                    }
-                  >
+                  <article className="service-card">
                     <div className="service-card-top">
                       <span className="mono">0{i + 1} /</span>
                       <service.icon size={18} strokeWidth={1.4} />
@@ -278,7 +263,7 @@ export function Landing() {
                       Explorar possibilidades
                       <ArrowUpRight size={17} />
                     </a>
-                  </SpotlightCard>
+                  </article>
                 </div>
               ))}
             </div>

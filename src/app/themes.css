@@ -571,11 +571,6 @@ h2 > span,
 .brief-save:hover {
   transform: none;
 }
-.action:hover svg,
-.text-link:hover svg,
-.service-link:hover svg {
-  transform: none;
-}
 .action {
   transition:
     background-color 0.3s,

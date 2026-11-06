@@ -137,12 +137,6 @@ html {
 .services-toggle[aria-expanded="true"] {
   color: #fff;
 }
-.primary-nav > a[aria-current] {
-  text-decoration: underline;
-  text-decoration-color: #7c99ff;
-  text-underline-offset: 9px;
-  text-decoration-thickness: 2px;
-}
 .services-toggle {
   display: flex;
   align-items: center;

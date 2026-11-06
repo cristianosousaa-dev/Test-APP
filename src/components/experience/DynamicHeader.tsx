@@ -71,19 +71,29 @@ export function DynamicHeader() {
       setScrolled(!(entry?.isIntersecting ?? true)),
     );
     if (sentinel.current) top.observe(sentinel.current);
-    const sections = new IntersectionObserver(
-      (entries) => {
-        for (const entry of entries) if (entry.isIntersecting) setActive(`#${entry.target.id}`);
-      },
-      { rootMargin: "-15% 0px -65% 0px" },
-    );
-    for (const item of nav) {
-      const el = document.querySelector(item.href);
-      if (el) sections.observe(el);
-    }
+    const sections = nav.map((item) => ({ ...item, element: document.querySelector(item.href) }));
+    let frame = 0;
+    const syncActive = () => {
+      frame = 0;
+      const probe = Math.min(window.innerHeight * 0.32, 240);
+      const current = sections.find(({ element }) => {
+        const rect = element?.getBoundingClientRect();
+        return rect && rect.top <= probe && rect.bottom > probe;
+      });
+      // Clear the previous section when the hero or an unlisted section is visible.
+      setActive(current?.href ?? "");
+    };
+    const onScroll = () => {
+      if (!frame) frame = requestAnimationFrame(syncActive);
+    };
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onScroll);
+    syncActive();
     return () => {
       top.disconnect();
-      sections.disconnect();
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", onScroll);
+      cancelAnimationFrame(frame);
       if (closeTimer.current) clearTimeout(closeTimer.current);
     };
   }, []);

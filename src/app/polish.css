@@ -3726,24 +3726,16 @@
   position: absolute;
   left: 0;
   right: 0;
-  bottom: -7px;
-  height: 1.5px;
-  border-radius: 2px;
-  background: linear-gradient(
-    90deg,
-    color-mix(in srgb, currentColor 30%, transparent),
-    currentColor,
-    color-mix(in srgb, currentColor 30%, transparent)
-  );
-  background-size: 200% 100%;
-  background-position: var(--underline-origin) 50%;
+  bottom: -6px;
+  height: 1px;
+  border-radius: 1px;
+  background: currentColor;
   transform: scaleX(0);
   transform-origin: var(--underline-origin) 50%;
   opacity: 0;
   transition:
-    transform 0.3s cubic-bezier(0.22, 1, 0.36, 1),
-    opacity 0.25s,
-    background-position 0.15s;
+    transform 0.42s cubic-bezier(0.22, 1, 0.36, 1),
+    opacity 0.3s ease;
   pointer-events: none;
 }
 .primary-nav > a[aria-current] {
@@ -3753,10 +3745,10 @@
 .primary-nav > a[aria-current] .nav-label::after,
 .services-toggle[aria-expanded="true"] .nav-label::after {
   transform: scaleX(1);
-  opacity: 1;
+  opacity: 0.65;
 }
 .primary-nav > a[aria-current]:not(:hover) .nav-label::after {
-  opacity: 0.45;
+  opacity: 0.3;
 }
 .orchestr-experience :is(a, button, summary),
 .legal-shell :is(a, button, summary) {
@@ -3832,7 +3824,6 @@
   text-underline-offset: 5px;
   text-decoration-color: color-mix(in srgb, var(--text) 55%, transparent);
 }
-.service-link:hover,
 .flow-demo-footnote > a:hover {
   background: var(--surface-hover);
 }
@@ -4342,5 +4333,119 @@ html:has(.legal-shell) {
 @media (prefers-reduced-motion: reduce) {
   html:has(.legal-shell) {
     scroll-behavior: auto;
+  }
+}
+
+/* Shared content rows keep each service and its action aligned at every width. */
+.services-grid .service-card {
+  transition: background-color 0.3s ease;
+}
+.services-grid .service-card:is(:hover, :focus-within) {
+  background: color-mix(in srgb, var(--text) 2.5%, transparent);
+}
+@media (min-width: 701px) {
+  .services-grid > div,
+  .services-grid .service-card {
+    display: grid;
+    grid-template-rows: subgrid;
+    grid-row: span 6;
+  }
+  .services-grid .service-card > p {
+    min-height: 0;
+  }
+}
+.service-card .service-link {
+  position: relative;
+  align-self: end;
+  min-height: 48px;
+  margin-top: 8px;
+  padding: 13px 12px;
+  border-top: 0;
+  border-radius: 10px;
+}
+.service-link::before {
+  content: "";
+  position: absolute;
+  top: -8px;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: var(--line-theme);
+  pointer-events: none;
+}
+.service-card .service-link:is(:hover, :focus-visible) {
+  background: var(--surface-hover);
+}
+
+/* Icons acknowledge the action; the control's surface and label remain still. */
+:is(.orchestr-experience, .legal-shell) :is(a, button, summary) > .lucide {
+  transition:
+    translate 0.36s cubic-bezier(0.22, 1, 0.36, 1),
+    scale 0.3s ease,
+    rotate 0.36s ease,
+    transform 0.36s ease,
+    opacity 0.3s ease;
+}
+:is(.orchestr-experience, .legal-shell)
+  :is(a, button, summary):is(:hover, :focus-visible):not(:disabled)
+  > .lucide-arrow-up-right {
+  translate: 3px -2px;
+}
+:is(.orchestr-experience, .legal-shell)
+  :is(a, button, summary):is(:hover, :focus-visible):not(:disabled)
+  > .lucide-arrow-right {
+  translate: 3px 0;
+}
+:is(.orchestr-experience, .legal-shell)
+  :is(a, button, summary):is(:hover, :focus-visible):not(:disabled)
+  > .lucide-arrow-left {
+  translate: -3px 0;
+}
+:is(.orchestr-experience, .legal-shell)
+  :is(a, button, summary):is(:hover, :focus-visible):not(:disabled)
+  > :is(.lucide-chevron-down, .lucide-arrow-down, .lucide-download) {
+  translate: 0 2px;
+}
+.back-top:is(:hover, :focus-visible) > .lucide {
+  translate: 0 -3px;
+}
+:is(.flow-controls, .legal-preferences)
+  > button:is(:hover, :focus-visible):not(:disabled)
+  > .lucide-rotate-ccw {
+  rotate: -28deg;
+}
+:is(.flow-controls, .conversation-result-actions, .motion-toggle)
+  :is(button, a):is(:hover, :focus-visible):not(:disabled)
+  > :is(.lucide-play, .lucide-pause, .lucide-copy, .lucide-check) {
+  scale: 1.12;
+}
+.motion-toggle:is(:hover, :focus-visible) > .lucide,
+.hero-demo-link:is(:hover, :focus-visible) > span > .lucide,
+.theme-switch:is(:hover, :focus-visible) .theme-switch-track > .lucide {
+  scale: 1.1;
+}
+.theme-switch-track > .lucide,
+.hero-demo-link > span > .lucide {
+  transition:
+    scale 0.3s ease,
+    opacity 0.3s ease,
+    transform 0.4s ease;
+}
+:is(.conversation-add-note, .faq-disclosure h3 > button):is(:hover, :focus-visible) > .lucide-plus {
+  rotate: 12deg;
+}
+@media (prefers-reduced-motion: reduce) {
+  :is(.orchestr-experience, .legal-shell) :is(a, button, summary) > .lucide,
+  :is(.orchestr-experience, .legal-shell)
+    :is(a, button, summary):is(:hover, :focus-visible, :active):not(:disabled)
+    > .lucide,
+  .theme-switch .theme-switch-track > .lucide,
+  .theme-switch:is(:hover, :focus-visible) .theme-switch-track > .lucide,
+  .hero-demo-link > span > .lucide,
+  .hero-demo-link:is(:hover, :focus-visible) > span > .lucide {
+    transition: none;
+    translate: none;
+    scale: none;
+    rotate: none;
   }
 }
