@@ -15,6 +15,7 @@ import {
 } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { OrchestrLogo } from "@/components/brand/OrchestrLogo";
+import { selectBriefContext } from "@/lib/brief-context";
 import { ThemeSwitch } from "./ThemeSwitch";
 
 const services = [
@@ -192,8 +193,9 @@ export function DynamicHeader() {
             <a
               href="#contacto"
               className="nav-cta"
-              aria-label="Pedir demonstração gratuita"
+              aria-label="Pedir uma conversa"
               title="Vamos conversar"
+              onClick={() => selectBriefContext()}
             >
               <span className="nav-cta-text">Vamos conversar</span>
               <ArrowUpRight size={17} />

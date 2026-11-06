@@ -7,6 +7,7 @@ import { isLive, site } from "@/lib/site";
 import "./globals.css";
 import "./refinements.css";
 import "./themes.css";
+import "./polish.css";
 
 /* Mona Sans: one variable family. Light display weights, regular for reading, semibold labels. */
 const mona = Mona_Sans({
@@ -32,7 +33,7 @@ const nohemi = localFont({
   display: "swap",
 });
 
-const TITLE = `${site.name} | Software à medida para PME em Portugal`;
+const TITLE = `${site.name} | Software à medida e automação para empresas`;
 
 export const metadata: Metadata = {
   metadataBase: new URL(site.url),

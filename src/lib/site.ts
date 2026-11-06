@@ -8,14 +8,14 @@ export const site = {
   tagline: "Software à medida. Negócios em sintonia.",
   // ≈140 characters: search engines truncate descriptions past ~155.
   description:
-    "Software, automação e sites à medida para PME. Ligamos pessoas, processos e programas. Veja uma demonstração gratuita antes de decidir.",
+    "Software, automação e sites à medida para empresas. Ligamos pessoas, processos e sistemas. Conheça as soluções e marque uma primeira conversa.",
   // Production domain comes from NEXT_PUBLIC_SITE_URL (e.g. https://orchestr.pt).
   url: process.env.NEXT_PUBLIC_SITE_URL ?? "https://example.com",
   // TODO: real contact email (example.com is a reserved placeholder domain).
   email: "ola@example.com",
   // TODO: WhatsApp number in international format without "+", e.g. "351912345678". Null hides the button.
   whatsapp: null as string | null,
-  cta: "Pedir demonstração gratuita",
+  cta: "Pedir uma conversa",
   ctaNote: "Resposta com uma proposta escrita, sem compromisso",
 } as const;
 

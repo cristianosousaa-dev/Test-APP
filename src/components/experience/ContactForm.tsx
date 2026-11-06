@@ -1,437 +1,220 @@
 "use client";
 
-import {
-  ArrowLeft,
-  ArrowRight,
-  ArrowUpRight,
-  Check,
-  CheckCheck,
-  Copy,
-  Download,
-  Globe2,
-  Layers3,
-  PlugZap,
-} from "lucide-react";
+import { ArrowLeft, ArrowUpRight, Check, Copy, Download, MessageSquare, Plus } from "lucide-react";
 import { useEffect, useId, useRef, useState } from "react";
-import { type BriefService, briefPresets, briefSystems } from "@/lib/brief-presets";
+import { type BriefContext, briefServices } from "@/lib/brief-context";
 import { contactHref, site } from "@/lib/site";
-
-const services = [
-  { name: "Aplicação à medida", detail: "Organizar a operação", icon: Layers3 },
-  { name: "Automação", detail: "Ligar os seus processos", icon: PlugZap },
-  { name: "Site ou loja", detail: "Criar uma presença digital", icon: Globe2 },
-];
-type BriefDraft = {
-  workflow: string;
-  description: string;
-  systems: string[];
-  objective: string;
-  edited: boolean;
-};
-const makeDraft = (service: BriefService): BriefDraft => {
-  const preset = briefPresets[service];
-  return {
-    workflow: preset.cases[0].name,
-    description: preset.cases[0].text,
-    systems: [...preset.systems],
-    objective: preset.objective,
-    edited: false,
-  };
-};
 
 export function ContactForm() {
   const id = useId();
-  const [step, setStep] = useState(1);
-  const [service, setService] = useState<BriefService>("Aplicação à medida");
-  const [drafts, setDrafts] = useState<Record<BriefService, BriefDraft>>(() => ({
-    "Aplicação à medida": makeDraft("Aplicação à medida"),
-    Automação: makeDraft("Automação"),
-    "Site ou loja": makeDraft("Site ou loja"),
-  }));
-  const [selectedPlan, setSelectedPlan] = useState("");
-  const { description, workflow, systems, objective } = drafts[service];
-  const updateDraft = (patch: Partial<BriefDraft>) =>
-    setDrafts((current) => ({ ...current, [service]: { ...current[service], ...patch } }));
-  const setDescription = (value: string) => updateDraft({ description: value, edited: true });
-  const selectWorkflow = (value: string) => {
-    const preset = briefPresets[service].cases.find((item) => item.name === value);
-    if (!preset) return;
-    updateDraft({
-      workflow: value,
-      ...(!drafts[service].edited ? { description: preset.text } : {}),
-    });
-  };
+  const [context, setContext] = useState<BriefContext>({});
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [message, setMessage] = useState("");
+  const [messageOpen, setMessageOpen] = useState(false);
+  const [prepared, setPrepared] = useState("");
+  const [copied, setCopied] = useState(false);
+  const [error, setError] = useState("");
+  const result = useRef<HTMLDivElement>(null);
+  const isExample = site.email.endsWith("@example.com");
+
   useEffect(() => {
     const select = (event: Event) => {
-      const detail = (event as CustomEvent<{ service?: string; workflow?: string; plan?: string }>)
-        .detail;
-      if (!detail?.service || !(detail.service in briefPresets)) return;
-      const next = detail.service as BriefService;
-      setService(next);
-      setSelectedPlan(detail.plan ?? "");
+      const detail = (event as CustomEvent<BriefContext>).detail;
+      if (!detail) return;
+      setContext({
+        service: briefServices.some((service) => service === detail.service)
+          ? detail.service
+          : undefined,
+        plan: typeof detail.plan === "string" ? detail.plan : undefined,
+      });
       setPrepared("");
-      setStep(1);
       setError("");
-      if (detail.workflow) {
-        const preset = briefPresets[next].cases.find((item) => item.name === detail.workflow);
-        if (preset)
-          setDrafts((current) => ({
-            ...current,
-            [next]: {
-              ...current[next],
-              workflow: preset.name,
-              ...(!current[next].edited ? { description: preset.text } : {}),
-            },
-          }));
-      }
     };
     window.addEventListener("orchestr:brief", select);
     return () => window.removeEventListener("orchestr:brief", select);
   }, []);
-  const [deadline, setDeadline] = useState("Sem data definida");
-  const [name, setName] = useState("");
-  const [company, setCompany] = useState("");
-  const [email, setEmail] = useState("");
-  const [error, setError] = useState("");
-  const [prepared, setPrepared] = useState("");
-  const [copied, setCopied] = useState(false);
-  const field = useRef<HTMLTextAreaElement>(null);
-  const heading = useRef<HTMLHeadingElement>(null);
-  const result = useRef<HTMLDivElement>(null);
-  const isExample = site.email.endsWith("@example.com");
-  const go = (next: number) => {
-    setStep(next);
-    setError("");
-    requestAnimationFrame(() => heading.current?.focus());
-  };
+
   const save = () => {
     const url = URL.createObjectURL(new Blob([prepared], { type: "text/plain;charset=utf-8" }));
     const link = document.createElement("a");
     link.href = url;
-    link.download = "pedido-orchestr.txt";
+    link.download = "conversa-orchestr.txt";
     link.click();
     setTimeout(() => URL.revokeObjectURL(url), 1000);
   };
+
   return (
-    <div className="project-brief">
-      <div className="brief-top">
-        <div className="brief-steps">
-          <span data-current={step === 1} data-done={step > 1}>
-            <i>{step > 1 ? <Check size={12} /> : "01"}</i>O seu projeto
-          </span>
-          <span className="brief-step-line" />
-          <span data-current={step === 2}>
-            <i>02</i>O seu contacto
-          </span>
-        </div>
-        <span className="brief-duration">2 MINUTOS</span>
-      </div>
+    <div className="conversation-card">
       {prepared ? (
-        <div ref={result} tabIndex={-1} className="brief-result" role="status">
-          <span className="brief-success-icon">
-            <CheckCheck size={28} />
+        <div className="conversation-result" ref={result} tabIndex={-1} role="status">
+          <span className="conversation-result-icon">
+            <Check size={22} />
           </span>
-          <h3>O primeiro passo está preparado.</h3>
+          <h3>O seu pedido está preparado.</h3>
           <p>
             {isExample
-              ? "Este é um formulário de exemplo. Reveja e guarde o pedido; nenhum email foi enviado."
-              : "Confirme o envio no seu programa de email. Pode também guardar uma cópia."}
+              ? "Esta é uma demonstração. Pode guardar o resumo; nenhum email foi enviado."
+              : "Confirme o envio no seu programa de email para iniciarmos a conversa."}
           </p>
-          <pre>{prepared}</pre>
-          <div className="brief-result-actions">
+          <details className="conversation-summary">
+            <summary>Ver resumo do pedido</summary>
+            <pre>{prepared}</pre>
+          </details>
+          <div className="conversation-result-actions">
             <button
-              type="button"
               className="action action-dark"
+              type="button"
               onClick={async () => {
                 try {
                   await navigator.clipboard.writeText(prepared);
                   setCopied(true);
                 } catch {
-                  setError("Selecione o texto acima para o copiar.");
+                  setError("Abra o resumo para selecionar e copiar o texto.");
                 }
               }}
             >
-              {copied ? <Check size={16} /> : <Copy size={16} />}{" "}
-              {copied ? "Pedido copiado" : "Copiar pedido"}
+              {copied ? <Check size={15} /> : <Copy size={15} />}
+              {copied ? "Copiado" : "Copiar pedido"}
             </button>
-            <button type="button" className="brief-save" onClick={save}>
-              <Download size={17} />
+            <button className="conversation-download" type="button" onClick={save}>
+              <Download size={16} />
               Guardar .txt
             </button>
           </div>
-          {error && <p className="form-error">{error}</p>}
+          {error && (
+            <p className="form-error" role="alert">
+              {error}
+            </p>
+          )}
           <button
-            className="brief-back"
             type="button"
+            className="conversation-edit"
             onClick={() => {
               setPrepared("");
-              go(2);
+              setError("");
             }}
           >
-            <ArrowLeft size={15} />
-            Editar pedido
+            <ArrowLeft size={14} />
+            Editar contacto
           </button>
         </div>
       ) : (
         <form
-          className="advanced-contact-form"
+          className="conversation-form"
           onSubmit={(event) => {
             event.preventDefault();
-            setError("");
-            if (step === 1) {
-              if (description.trim().length < 12) {
-                setError("Conte-nos um pouco mais sobre o processo, numa frase.");
-                field.current?.focus();
-                return;
-              }
-              go(2);
-              return;
-            }
-            const body = `Olá, Orchestr.\n\nInteresse: ${service}\nTipo de projeto: ${workflow}\nSistemas atuais: ${systems.join(", ") || "A definir"}\nObjetivo: ${objective}${selectedPlan ? `\nPlano escolhido: ${selectedPlan}` : ""}\nProcesso: ${description.trim()}\nPrazo desejado: ${deadline}\n\nNome: ${name.trim()}\nEmpresa: ${company.trim() || "Ainda não indicada"}\nEmail: ${email.trim()}`;
+            const body = `Olá, Orchestr.\n\nGostaria de marcar uma primeira conversa.\nInteresse: ${context.service || "Explorar uma solução"}${context.plan ? `\nPlano: ${context.plan}` : ""}\n\nNome: ${name.trim()}\nEmail: ${email.trim()}${message.trim() ? `\n\nMensagem: ${message.trim()}` : ""}`;
             setPrepared(body);
             setCopied(false);
-            if (!isExample) window.location.href = contactHref("Pedido de demonstração", body);
+            setError("");
+            if (!isExample) window.location.href = contactHref("Primeira conversa", body);
             requestAnimationFrame(() => result.current?.focus());
           }}
         >
-          <div className="brief-form-heading">
-            <span className="eyebrow">
-              {step === 1 ? "COMEÇAMOS PELO QUE IMPORTA" : "COM QUEM VAMOS CONVERSAR?"}
+          <div className="conversation-heading">
+            <span className="conversation-heading-icon">
+              <MessageSquare size={19} strokeWidth={1.5} />
             </span>
-            <h3 ref={heading} tabIndex={-1}>
-              {step === 1 ? "O que gostaria de fazer melhor?" : "Dê um rosto à sua ideia."}
-            </h3>
-            <p>
-              {step === 1
-                ? "Uma ideia é suficiente para começarmos. Os detalhes afinamos em conjunto."
-                : "Ficamos com o contexto certo para uma primeira conversa útil."}
-            </p>
+            <div>
+              <h3>O seu contacto.</h3>
+              <p>Uma primeira conversa, sem compromisso.</p>
+            </div>
           </div>
-          {step === 1 ? (
-            <div className="brief-form-fields" key="project">
-              <fieldset className="brief-service-fieldset">
-                <legend>Qual é o ponto de partida?</legend>
-                <div className="brief-service-options">
-                  {services.map((item) => (
-                    <label key={item.name} data-selected={service === item.name}>
-                      <input
-                        type="radio"
-                        name="servico"
-                        value={item.name}
-                        checked={service === item.name}
-                        onChange={() => {
-                          setService(item.name as BriefService);
-                          setSelectedPlan("");
-                          setError("");
-                        }}
-                      />
-                      <item.icon size={21} strokeWidth={1.4} />
-                      <strong>{item.name}</strong>
-                      <span>{item.detail}</span>
-                      <i>{service === item.name && <Check size={10} />}</i>
-                    </label>
-                  ))}
-                </div>
-              </fieldset>
-              <div className="brief-prefill-note">
-                <CheckCheck size={17} />
-                <p>
-                  Já preparámos um ponto de partida para si.{" "}
-                  <strong>Ajuste apenas o que for diferente.</strong>
-                </p>
-              </div>
-              {selectedPlan && (
-                <p className="brief-selected-plan">
-                  Plano escolhido: <strong>{selectedPlan}</strong>
-                </p>
-              )}
-              <label className="brief-field brief-usecase" htmlFor={`${id}-workflow`}>
-                Que processo vamos melhorar?
-                <select
-                  id={`${id}-workflow`}
-                  value={workflow}
-                  onChange={(event) => selectWorkflow(event.target.value)}
-                >
-                  {briefPresets[service].cases.map((item) => (
-                    <option key={item.name}>{item.name}</option>
-                  ))}
-                </select>
-              </label>
-              <fieldset className="brief-system-fieldset">
-                <legend>
-                  O que já utiliza? <span>Pode ajustar a sugestão.</span>
-                </legend>
-                <div className="brief-system-options">
-                  {briefSystems.map((system) => (
-                    <label key={system} data-selected={systems.includes(system)}>
-                      <input
-                        type="checkbox"
-                        checked={systems.includes(system)}
-                        onChange={() =>
-                          updateDraft({
-                            systems: systems.includes(system)
-                              ? systems.filter((value) => value !== system)
-                              : [...systems, system],
-                          })
-                        }
-                      />
-                      {systems.includes(system) && <Check size={11} />}
-                      <span>{system}</span>
-                    </label>
-                  ))}
-                </div>
-              </fieldset>
-              <label className="brief-field" htmlFor={`${id}-objective`}>
-                Resultado principal
-                <input
-                  id={`${id}-objective`}
-                  value={objective}
-                  onChange={(event) => updateDraft({ objective: event.target.value })}
-                  maxLength={180}
-                />
-              </label>
-              <label className="brief-field brief-process-field" htmlFor={`${id}-process`}>
-                O que acontece hoje e o que gostaria de mudar?
-                <textarea
-                  ref={field}
-                  id={`${id}-process`}
-                  name="processo"
-                  rows={3}
-                  maxLength={1000}
-                  value={description}
-                  onChange={(event) => {
-                    setDescription(event.target.value);
-                    setError("");
-                  }}
-                  placeholder="Por exemplo: a informação está espalhada entre Excel, emails e mensagens…"
-                  aria-invalid={!!error}
-                  aria-describedby={error ? `${id}-error` : undefined}
-                  required
-                />
-              </label>
-              <div className="brief-examples">
-                <span>Sugestão editável para {workflow.toLowerCase()}.</span>
-                <button
-                  type="button"
-                  onClick={() => {
-                    const preset = briefPresets[service].cases.find(
-                      (item) => item.name === workflow,
-                    );
-                    if (preset) updateDraft({ description: preset.text, edited: false });
-                    setError("");
-                  }}
-                >
-                  Repor sugestão
-                  <ArrowUpRight size={11} />
-                </button>
-              </div>
-              <label className="brief-field brief-select" htmlFor={`${id}-deadline`}>
-                Quando gostaria de começar?
-                <select
-                  id={`${id}-deadline`}
-                  value={deadline}
-                  onChange={(event) => setDeadline(event.target.value)}
-                >
-                  <option>Sem data definida</option>
-                  <option>Assim que possível</option>
-                  <option>No próximo mês</option>
-                  <option>Nos próximos 3 meses</option>
-                  <option>Estou a explorar possibilidades</option>
-                </select>
-              </label>
-            </div>
-          ) : (
-            <div className="brief-form-fields" key="contact">
-              <div className="brief-project-summary">
-                <span className="summary-check">
-                  <Check size={15} />
-                </span>
-                <div>
-                  <strong>{service}</strong>
-                  <span>
-                    {workflow} · {deadline}
-                  </span>
-                </div>
-                <button type="button" onClick={() => go(1)}>
-                  Editar
-                </button>
-              </div>
-              <div className="brief-contact-grid">
-                <label className="brief-field" htmlFor={`${id}-name`}>
-                  O seu nome
-                  <input
-                    autoComplete="name"
-                    id={`${id}-name`}
-                    value={name}
-                    onChange={(event) => setName(event.target.value)}
-                    placeholder="Nome e apelido"
-                    maxLength={120}
-                    required
-                  />
-                </label>
-                <label className="brief-field" htmlFor={`${id}-company`}>
-                  Empresa (opcional)
-                  <input
-                    autoComplete="organization"
-                    id={`${id}-company`}
-                    value={company}
-                    onChange={(event) => setCompany(event.target.value)}
-                    placeholder="Nome da empresa"
-                    maxLength={120}
-                  />
-                </label>
-              </div>
-              <label className="brief-field" htmlFor={`${id}-email`}>
-                Email profissional
-                <input
-                  autoComplete="email"
-                  type="email"
-                  id={`${id}-email`}
-                  value={email}
-                  onChange={(event) => setEmail(event.target.value)}
-                  placeholder="nome@empresa.pt"
-                  maxLength={160}
-                  required
-                />
-              </label>
-              <div className="brief-contact-note">
-                <span className="signal-dot" />
-                <p>
-                  A primeira conversa é gratuita. Falamos sobre o seu processo e exploramos uma
-                  solução antes de qualquer compromisso.
-                </p>
-              </div>
-            </div>
-          )}
-          {error && (
-            <p className="form-error" role="alert" id={`${id}-error`}>
-              {error}
-            </p>
-          )}
-          <div className="brief-form-bottom">
-            {step === 2 ? (
-              <button className="brief-back" type="button" onClick={() => go(1)}>
-                <ArrowLeft size={15} />
-                Voltar
+          <div className="conversation-context">
+            <label htmlFor={`${id}-service`}>Sobre</label>
+            <select
+              id={`${id}-service`}
+              value={context.service || ""}
+              onChange={(event) => setContext({ service: event.target.value || undefined })}
+            >
+              <option value="">Explorar uma solução</option>
+              {briefServices.map((service) => (
+                <option key={service}>{service}</option>
+              ))}
+            </select>
+            {context.plan && <span className="conversation-plan">{context.plan}</span>}
+          </div>
+          <div className="conversation-fields">
+            <label htmlFor={`${id}-name`}>
+              Nome
+              <input
+                id={`${id}-name`}
+                name="nome"
+                autoComplete="name"
+                placeholder="O seu nome"
+                value={name}
+                onChange={(event) => setName(event.target.value)}
+                minLength={2}
+                maxLength={120}
+                required
+              />
+            </label>
+            <label htmlFor={`${id}-email`}>
+              Email
+              <input
+                id={`${id}-email`}
+                name="email"
+                type="email"
+                autoComplete="email"
+                placeholder="nome@empresa.pt"
+                value={email}
+                onChange={(event) => setEmail(event.target.value)}
+                maxLength={160}
+                required
+              />
+            </label>
+            <div className="conversation-note">
+              <button
+                type="button"
+                className="conversation-add-note"
+                aria-expanded={messageOpen}
+                aria-controls={`${id}-note-panel`}
+                onClick={() => setMessageOpen(!messageOpen)}
+              >
+                <Plus size={13} />
+                {message ? "Mensagem adicionada" : "Adicionar uma mensagem"}
+                <span>Opcional</span>
               </button>
-            ) : (
-              <span>
-                Sem compromisso.
-                <br />
-                <strong>À medida desde o primeiro contacto.</strong>
-              </span>
-            )}
+              <div
+                className="conversation-note-panel"
+                id={`${id}-note-panel`}
+                data-open={messageOpen}
+                inert={!messageOpen}
+              >
+                <div>
+                  <label className="sr-only" htmlFor={`${id}-message`}>
+                    Em que podemos ajudar?
+                  </label>
+                  <textarea
+                    id={`${id}-message`}
+                    name="mensagem"
+                    rows={2}
+                    placeholder="Uma frase sobre o que gostaria de melhorar."
+                    value={message}
+                    onChange={(event) => setMessage(event.target.value)}
+                    maxLength={600}
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="conversation-submit">
+            <span>
+              <span className="signal-dot" />
+              Conversa inicial gratuita
+            </span>
             <button className="action action-dark" type="submit">
-              {step === 1 ? "Continuar" : isExample ? "Preparar pedido" : "Pedir demonstração"}
-              <ArrowRight size={17} />
+              Pedir uma conversa
+              <ArrowUpRight size={17} />
             </button>
           </div>
-          <p className="brief-privacy">
+          <p className="conversation-privacy">
             {isExample
-              ? "Preview demonstrativo. Nenhum pedido é enviado."
-              : "Abre o seu email com o pedido preenchido."}
+              ? "Formulário de exemplo. Nenhum pedido será enviado."
+              : "Abre o seu email com o pedido preparado."}
             <a href="/privacidade">
-              Como tratamos os seus dados
+              Privacidade
               <ArrowUpRight size={11} />
             </a>
           </p>

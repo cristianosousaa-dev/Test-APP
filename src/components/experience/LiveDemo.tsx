@@ -1,106 +1,50 @@
 "use client";
 
 import {
-  ArrowRight,
   ArrowUpRight,
-  CalendarDays,
+  Bell,
   Check,
   CheckCheck,
-  ChevronDown,
+  ChevronRight,
+  Clock3,
   FileText,
   Mail,
   MoreHorizontal,
+  MousePointer2,
   Pause,
   Play,
   RotateCcw,
+  Send,
 } from "lucide-react";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { BrandIcon } from "@/components/brand/BrandIcon";
 import { OrchestrMark } from "@/components/brand/OrchestrLogo";
 import { demoStages } from "@/lib/demo-stages";
 import { gsap } from "@/lib/motion";
+import { type ProcessExample, processExamples } from "@/lib/process-examples";
 
-const STEP_DURATION = 6;
-const heroExplanations = [
-  "Ana pede 24 cadeiras para dia 20. O pedido entra no processo.",
-  "É criada a ENC-0250 com cliente, quantidade e prazo, visível à equipa.",
-  "A produção recebe a tarefa. O painel passa de 12 para 13 pedidos.",
-  "Ana recebe a confirmação com a referência e a data de entrega.",
-];
-
-const examples = [
-  {
-    id: "encomendas",
-    label: "Encomendas",
-    title: "O pedido entra. A encomenda avança.",
-    intro: "Do email do cliente à produção, com a informação certa em cada etapa.",
-    before: ["Ler o email", "Copiar para o Excel", "Ligar à produção", "Responder ao cliente"],
-    after: ["Pedido recebido", "Encomenda criada", "Produção notificada", "Cliente informado"],
-    sender: "Ana · Atelier Norte",
-    subject: "Nova encomenda · 24 unidades",
-    message:
-      "Bom dia! Precisamos de 24 cadeiras para dia 20. Podem confirmar a encomenda? Obrigada, Ana.",
-    result: "Confirmação enviada a Ana",
-    caption: "Um pedido, um registo e um histórico partilhado.",
-  },
-  {
-    id: "faturacao",
-    label: "Faturação",
-    title: "A venda fecha. A faturação acompanha.",
-    intro:
-      "Os dados seguem para a fatura e o vencimento fica acompanhado, sem voltar a escrever tudo.",
-    before: [
-      "Confirmar a venda",
-      "Reescrever os dados",
-      "Preparar a fatura",
-      "Anotar o vencimento",
-    ],
-    after: ["Venda confirmada", "Dados preenchidos", "Fatura preparada", "Lembrete agendado"],
-    sender: "Comercial · Estúdio Forma",
-    subject: "Venda confirmada · proposta 0182",
-    message:
-      "O cliente aprovou a proposta de 1 230,00 €. Podem preparar a fatura com os dados da ficha de cliente?",
-    result: "Lembrete de vencimento agendado",
-    caption: "Da venda à cobrança, sem duplicar informação.",
-  },
-  {
-    id: "marcacoes",
-    label: "Marcações",
-    title: "Uma marcação. Toda a agenda alinhada.",
-    intro:
-      "A hora fica reservada e o cliente recebe a confirmação e o lembrete, sem troca de mensagens.",
-    before: ["Ler a mensagem", "Consultar a agenda", "Reservar a hora", "Lembrar o cliente"],
-    after: ["Marcação recebida", "Hora reservada", "Confirmação enviada", "Lembrete agendado"],
-    sender: "Ana Martins",
-    subject: "Pedido de marcação",
-    message:
-      "Olá! Têm disponibilidade na quinta-feira, dia 12, às 14:30? Gostaria de marcar uma consulta.",
-    result: "Confirmação e lembrete preparados",
-    caption: "Uma agenda atualizada. Menos chamadas e esquecimentos.",
-  },
-] as const;
-
-type Example = (typeof examples)[number];
+const STEP_DURATION = 7.5;
 
 function useSequence(paused: boolean) {
   const root = useRef<HTMLDivElement>(null);
   const progress = useRef<HTMLSpanElement>(null);
   const phaseRef = useRef(0);
-  const manuallySelected = useRef(false);
-  const timelineRef = useRef<gsap.core.Timeline | null>(null);
-  const [revision, setRevision] = useState(0);
+  const manual = useRef(false);
+  const timeline = useRef<gsap.core.Timeline | null>(null);
   const [phase, updatePhase] = useState(0);
   const [playing, setPlaying] = useState(true);
-  const setPhase = (value: number) => {
-    manuallySelected.current = true;
+  const [running, setRunning] = useState(false);
+  const [reduced, setReduced] = useState(false);
+  const [revision, setRevision] = useState(0);
+  const select = (value: number) => {
+    manual.current = true;
     phaseRef.current = value;
     updatePhase(value);
-    timelineRef.current?.pause().seek(value * STEP_DURATION + 0.01, true);
-    if (playing && !paused && !window.matchMedia("(prefers-reduced-motion: reduce)").matches)
-      timelineRef.current?.play();
+    setPlaying(false);
+    timeline.current?.pause().seek(value * STEP_DURATION + 0.01, true);
   };
   const restart = () => {
-    manuallySelected.current = false;
+    manual.current = false;
     phaseRef.current = 0;
     updatePhase(0);
     setPlaying(true);
@@ -109,164 +53,433 @@ function useSequence(paused: boolean) {
   useEffect(() => {
     const element = root.current;
     if (!element) return;
-    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const media = window.matchMedia("(prefers-reduced-motion: reduce)");
     let visible = false;
-    const timeline = gsap.timeline({ paused: true, repeat: -1, data: revision });
-    timelineRef.current = timeline;
-    for (let index = 0; index < 4; index++)
-      timeline.call(
+    const clock = gsap.timeline({ paused: true, repeat: -1, data: revision });
+    timeline.current = clock;
+    for (let i = 0; i < 4; i++)
+      clock.call(
         () => {
-          phaseRef.current = index;
-          updatePhase(index);
+          phaseRef.current = i;
+          updatePhase(i);
         },
         [],
-        index * STEP_DURATION,
+        i * STEP_DURATION,
       );
     if (progress.current)
-      timeline.fromTo(
+      clock.fromTo(
         progress.current,
         { scaleX: 0 },
-        { scaleX: 1, duration: STEP_DURATION * 4, ease: "none" },
+        { scaleX: 1, duration: 4 * STEP_DURATION, ease: "none" },
         0,
       );
-    else timeline.to({ value: 0 }, { value: 1, duration: STEP_DURATION * 4 }, 0);
-    timeline.seek(phaseRef.current * STEP_DURATION + 0.01, false);
+    clock.seek(phaseRef.current * STEP_DURATION + 0.01, true);
     const sync = () => {
-      if (reduced.matches) {
-        timeline.pause();
-        element.dataset.running = "false";
-        if (!manuallySelected.current) {
-          phaseRef.current = 3;
-          updatePhase(3);
-        }
-        if (progress.current) gsap.set(progress.current, { scaleX: 1 });
-        return;
+      setReduced(media.matches);
+      if (media.matches && !manual.current) {
+        phaseRef.current = 3;
+        updatePhase(3);
       }
-      const running = visible && !document.hidden && playing && !paused;
-      element.dataset.running = String(running);
-      if (running) timeline.play();
-      else timeline.pause();
+      const active = visible && !document.hidden && !media.matches && !paused && playing;
+      setRunning(active);
+      element.dataset.running = String(active);
+      if (active) clock.play();
+      else clock.pause();
+      if (media.matches && progress.current)
+        gsap.set(progress.current, { scaleX: (phaseRef.current + 1) / 4 });
     };
     const observer = new IntersectionObserver(
       ([entry]) => {
-        visible = entry?.isIntersecting ?? false;
+        visible = !!entry?.isIntersecting;
         sync();
       },
       { threshold: 0.15 },
     );
     observer.observe(element);
+    media.addEventListener("change", sync);
     document.addEventListener("visibilitychange", sync);
-    reduced.addEventListener("change", sync);
     sync();
     return () => {
-      timeline.kill();
-      timelineRef.current = null;
+      clock.kill();
+      timeline.current = null;
       observer.disconnect();
+      media.removeEventListener("change", sync);
       document.removeEventListener("visibilitychange", sync);
-      reduced.removeEventListener("change", sync);
     };
   }, [paused, playing, revision]);
-  useEffect(() => {
-    if (!root.current || paused || window.matchMedia("(prefers-reduced-motion: reduce)").matches)
-      return;
-    const context = gsap.context(() => {
-      gsap.fromTo(
-        "[data-arrival]",
-        { opacity: 0, y: 9 },
-        {
-          opacity: 1,
-          y: 0,
-          duration: phase === 0 ? 0.55 : 0.45,
-          stagger: 0.07,
-          ease: "power2.out",
-          clearProps: "all",
-        },
-      );
-    }, root);
-    return () => context.revert();
-  }, [phase, paused]);
-  return { root, progress, phase, setPhase, playing, setPlaying, restart };
+  return {
+    root,
+    progress,
+    phase,
+    playing,
+    setPlaying,
+    running,
+    reduced,
+    revision,
+    select,
+    restart,
+  };
 }
 
-function StageDetail({ index, phase }: { index: number; phase: number }) {
-  const stage = demoStages[index]?.[phase];
-  if (!stage) return null;
-  return (
-    <div className="operation-stage-detail" key={`${index}-${phase}`} data-arrival>
-      <div className="stage-route">
-        <span>{stage.from}</span>
-        <ArrowRight size={12} />
-        <strong>{stage.to}</strong>
-      </div>
-      <div className="stage-detail-heading">
-        <span>{String(phase + 1).padStart(2, "0")} / 04</span>
-        <h5>{stage.title}</h5>
-      </div>
-      <dl>
-        {stage.facts.map(([label, value]) => (
-          <div key={label}>
-            <dt>{label}</dt>
-            <dd>{value}</dd>
-          </div>
-        ))}
-      </dl>
-      {stage.message && (
-        <div className="stage-message">
-          <Mail size={15} />
-          <p>{stage.message}</p>
-        </div>
-      )}
-    </div>
-  );
-}
-function StageNarrative({
+function Workspace({
   index,
   phase,
   hero = false,
+  still,
+  running,
 }: {
   index: number;
   phase: number;
   hero?: boolean;
+  still: boolean;
+  running: boolean;
 }) {
+  const root = useRef<HTMLDivElement>(null);
+  const actionTimeline = useRef<gsap.core.Timeline | null>(null);
+  const example = processExamples[index] ?? processExamples[0];
   const stage = demoStages[index]?.[phase];
-  if (!stage) return null;
-  return (
-    <div className={`stage-narrative ${hero ? "hero-stage-narrative" : ""}`}>
-      <span className="stage-narrative-number">
-        {String(phase + 1).padStart(2, "0")}
-        <small>/ 04</small>
-      </span>
-      <div key={`${index}-${phase}`} data-arrival>
-        <strong>{stage.title}</strong>
-        <p>{hero ? heroExplanations[phase] : stage.explanation}</p>
-      </div>
-    </div>
-  );
-}
+  useLayoutEffect(() => {
+    const element = root.current;
+    if (!element) return;
+    if (still) {
+      element.dataset.complete = "true";
+      return;
+    }
+    const context = gsap.context(() => {
+      element.dataset.complete = "false";
+      const pointer = element.querySelector(".flow-pointer");
+      const target = element.querySelector("[data-action-target]");
+      const ring = element.querySelector(".flow-click-ring");
+      const track = element.querySelector<HTMLElement>(".flow-track");
+      if (!pointer || !target || !ring || !track) return;
+      const rect = element.getBoundingClientRect();
+      const aim = target.getBoundingClientRect();
+      const x = aim.x - rect.x + aim.width * 0.6;
+      const y = aim.y - rect.y + aim.height * 0.5;
+      const fillingRecord = phase === 1 && index !== 2;
+      const clickAt = fillingRecord ? 2.45 : 1.3;
+      const transferAt = fillingRecord ? 3 : 2.5;
+      const completeAt = fillingRecord ? 4.25 : 3.75;
+      const tl = gsap.timeline({ paused: true });
+      actionTimeline.current = tl;
+      tl.set(pointer, { x: rect.width * 0.28, y: rect.height * 0.32, opacity: 0 });
+      tl.set(ring, { x, y, scale: 0.2, opacity: 0 });
+      tl.set(".flow-packet", { x: 0, opacity: 0 });
+      tl.set(".flow-toast", { opacity: 0, y: 5 });
+      tl.fromTo(
+        "[data-fill]",
+        { clipPath: "inset(0 100% 0 0)" },
+        { clipPath: "inset(0 0% 0 0)", duration: 0.65, stagger: 0.24, ease: "power2.out" },
+        fillingRecord ? 0.35 : 1.5,
+      );
+      if (element.querySelector(".flow-field > svg"))
+        tl.fromTo(
+          ".flow-field > svg",
+          { opacity: 0, scale: 0.4 },
+          { opacity: 1, scale: 1, duration: 0.3, stagger: 0.24 },
+          fillingRecord ? 0.95 : 2.1,
+        );
+      tl.to(pointer, { opacity: 1, duration: 0.25 }, 0.35);
+      tl.to(pointer, { x, y, duration: 0.85, ease: "power2.inOut" }, clickAt - 0.85);
+      tl.to(ring, { opacity: 0.8, scale: 1, duration: 0.18 }, clickAt);
+      tl.to(ring, { opacity: 0, scale: 2.1, duration: 0.65 }, clickAt + 0.18);
+      tl.to(pointer, { opacity: 0, duration: 0.35 }, clickAt + 0.6);
+      tl.to(".flow-packet", { opacity: 1, duration: 0.15 }, transferAt - 0.05);
+      tl.to(
+        ".flow-packet",
+        { x: () => track.clientWidth - 8, duration: 1.15, ease: "power1.inOut" },
+        transferAt,
+      );
+      tl.to(".flow-packet", { opacity: 0, duration: 0.2 }, transferAt + 1.15);
+      if (element.querySelector(".flow-moving-card"))
+        tl.fromTo(
+          ".flow-moving-card",
+          { x: -100, opacity: 0.4 },
+          { x: 0, opacity: 1, duration: 1.05, ease: "power3.inOut" },
+          1.7,
+        );
+      if (element.querySelector(".flow-reservation"))
+        tl.fromTo(
+          ".flow-reservation",
+          { scaleY: 0.12, opacity: 0.25, transformOrigin: "top" },
+          { scaleY: 1, opacity: 1, duration: 0.85, ease: "power3.out" },
+          1.75,
+        );
+      tl.set(element, { attr: { "data-complete": "true" } }, completeAt);
+      tl.to(".flow-toast", { opacity: 1, y: 0, duration: 0.45, ease: "power2.out" }, completeAt);
+    }, element);
+    return () => {
+      context.revert();
+      actionTimeline.current = null;
+    };
+  }, [still, phase, index]);
+  useEffect(() => {
+    if (running && !still) actionTimeline.current?.play();
+    else actionTimeline.current?.pause();
+  }, [running, still]);
 
-function IncomingMessage({
-  example,
-  phase,
-  compact = false,
-}: {
-  example: Example;
-  phase: number;
-  compact?: boolean;
-}) {
+  if (!stage) return null;
+
+  const action = (
+    <span className="flow-action" data-action-target>
+      <span className="flow-action-ready">{example.commands[phase]}</span>
+      <span className="flow-action-done">
+        <Check size={12} />
+        {phase === 3 && index !== 0 ? "Agendado" : "Concluído"}
+      </span>
+      <ChevronRight size={13} />
+    </span>
+  );
   return (
     <div
-      className={`incoming-message ${compact ? "compact-message" : ""}`}
-      data-active={phase === 0}
+      ref={root}
+      className={`flow-workspace ${hero ? "flow-workspace-hero" : ""}`}
+      data-phase={phase}
+      data-complete={still}
     >
-      <span className="incoming-icon">
-        <Mail size={17} />
-      </span>
-      <div>
-        <span>{example.sender}</span>
-        <strong>{example.subject}</strong>
-        {!compact && <p>{example.message}</p>}
+      <div className="flow-app-bar">
+        <span>
+          <OrchestrMark id={`workspace-${hero ? "hero" : index}`} />
+          <strong>A sua empresa</strong>
+        </span>
+        <span className="flow-app-mode">
+          <span />
+          EXEMPLO
+        </span>
       </div>
-      <span className="message-time">agora</span>
+      <div className="flow-app-tabs" aria-hidden="true">
+        {example.tabs.map((tab, i) => (
+          <span key={tab} data-active={phase === i}>
+            {i < phase ? <Check size={10} /> : <span className="flow-tab-dot" />}
+            {tab}
+          </span>
+        ))}
+      </div>
+      <div className="flow-scene" key={`${index}-${phase}`}>
+        <div className="flow-scene-title">
+          <span>{String(phase + 1).padStart(2, "0")} / 04</span>
+          <strong>{example.after[phase]}</strong>
+          <span className="flow-state">
+            <i />
+            <span className="flow-state-before">
+              {phase === 0 ? "Recebido" : phase === 3 ? "Envio" : "Em curso"}
+            </span>
+            <span className="flow-state-after">
+              {phase === 0 ? "Lido" : phase === 3 && index !== 0 ? "Agendado" : "Concluído"}
+            </span>
+          </span>
+        </div>
+        {phase === 0 ? (
+          <div className="flow-email">
+            <div className="flow-email-sender">
+              <span className="flow-avatar">{index === 1 ? "EF" : "AN"}</span>
+              <div>
+                <strong>{example.sender}</strong>
+                <span>{index === 2 ? "Novo pedido de marcação" : "Caixa de entrada · Agora"}</span>
+              </div>
+              <Mail size={16} />
+            </div>
+            <h5>{example.subject}</h5>
+            <p data-fill>{example.message}</p>
+            <div className="flow-email-footer">
+              <span className="flow-pending-note">
+                <Clock3 size={12} />
+                {index === 1 ? "Venda aprovada" : "Novo pedido"}
+              </span>
+              {action}
+            </div>
+          </div>
+        ) : phase === 1 && index !== 2 ? (
+          <div className="flow-record">
+            <div className="flow-record-source">
+              <FileText size={14} />
+              <span>
+                {index === 0 ? "Dados do email da Ana" : "Dados da proposta 0182 e da ficha 0032"}
+              </span>
+              <span>Ligado</span>
+            </div>
+            <div className="flow-fields">
+              {stage.facts.map(([label, value]) => (
+                <div className="flow-field" key={label}>
+                  <span>{label}</span>
+                  <strong data-fill>{value}</strong>
+                  <Check size={12} />
+                </div>
+              ))}
+            </div>
+            <div className="flow-record-footer">
+              <span>
+                {index === 0 ? "Um registo para toda a equipa" : "Os mesmos dados, sem reescrever"}
+              </span>
+              {action}
+            </div>
+          </div>
+        ) : phase === 2 && index === 0 ? (
+          <div className="flow-production">
+            <div className="flow-board">
+              <div className="flow-board-column">
+                <span>
+                  <i />
+                  Por iniciar{" "}
+                  <b>
+                    <span className="flow-count-before">01</span>
+                    <span className="flow-count-after">00</span>
+                  </b>
+                </span>
+                <div className="flow-task-placeholder">
+                  <span className="flow-count-before">ENC-0250</span>
+                  <span className="flow-count-after">Sem pendentes</span>
+                </div>
+              </div>
+              <div className="flow-board-column">
+                <span>
+                  <i />
+                  Em produção{" "}
+                  <b>
+                    <span className="flow-count-before">12</span>
+                    <span className="flow-count-after">13</span>
+                  </b>
+                </span>
+                <div className="flow-moving-card">
+                  <span>ENC-0250</span>
+                  <strong>24 cadeiras</strong>
+                  <span>Atelier Norte · 20 nov.</span>
+                  <div>
+                    <span>PR</span>Equipa de produção
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="flow-record-footer">
+              <span>
+                <span className="flow-count" data-fill>
+                  12 → 13
+                </span>{" "}
+                pedidos ativos
+              </span>
+              {action}
+            </div>
+          </div>
+        ) : phase === 2 && index === 1 ? (
+          <div className="flow-invoice">
+            <div className="flow-invoice-top">
+              <FileText size={22} />
+              <div>
+                <span>DOCUMENTO PARA VALIDAÇÃO</span>
+                <strong>FT 2026 / 0148</strong>
+              </div>
+              <span className="flow-pending-note">A validar</span>
+            </div>
+            <div className="flow-invoice-client">
+              Estúdio Forma, Lda. <span>Cliente 0032</span>
+            </div>
+            <div className="flow-invoice-line">
+              <span>Serviços de instalação</span>
+              <strong data-fill>1 000,00 €</strong>
+            </div>
+            <div className="flow-invoice-line">
+              <span>IVA · 23%</span>
+              <span data-fill>230,00 €</span>
+            </div>
+            <div className="flow-invoice-total">
+              <span>Total</span>
+              <strong data-fill>1 230,00 €</strong>
+            </div>
+            <div className="flow-record-footer">
+              <span>Conferência pela equipa financeira</span>
+              {action}
+            </div>
+          </div>
+        ) : phase === 1 && index === 2 ? (
+          <div className="flow-calendar">
+            <div className="flow-calendar-days">
+              {["SEG 09", "TER 10", "QUA 11", "QUI 12", "SEX 13"].map((day, i) => (
+                <span key={day} data-selected={i === 3}>
+                  {day}
+                </span>
+              ))}
+            </div>
+            <div className="flow-calendar-slot">
+              <time>14:00</time>
+              <span>
+                Joana Ribeiro <small>Consulta de acompanhamento</small>
+              </span>
+            </div>
+            <div className="flow-calendar-slot flow-reservation">
+              <time>14:30</time>
+              <span>
+                <strong data-fill>Ana Martins</strong>
+                <small>Consulta inicial · 45 min. · até às 15:15</small>
+              </span>
+              <Check size={15} />
+            </div>
+            <div className="flow-record-footer">
+              <span>Agenda da equipa atualizada</span>
+              {action}
+            </div>
+          </div>
+        ) : (
+          <div className="flow-outbox">
+            <div className="flow-outbox-recipient">
+              {phase === 3 && index !== 0 ? <Bell size={17} /> : <Send size={17} />}
+              <div>
+                <span>
+                  {phase === 3 && index !== 0 ? "LEMBRETE POR EMAIL" : "CONFIRMAÇÃO POR EMAIL"}
+                </span>
+                <strong>
+                  {index === 1
+                    ? "Estúdio Forma"
+                    : `Ana · ${index === 0 ? "Atelier Norte" : "Consulta inicial"}`}
+                </strong>
+              </div>
+              <span className="flow-status-done">
+                <CheckCheck size={13} />
+                {phase === 3 && index !== 0 ? "Agendado" : "Enviado"}
+              </span>
+            </div>
+            <p data-fill>
+              {stage.message ||
+                (index === 1
+                  ? "O lembrete da fatura FT 2026 / 0148 fica agendado para dois dias antes do vencimento. Valor: 1 230,00 €. Prazo: 30 dias."
+                  : "Olá, Ana. Recordamos a sua consulta de quinta-feira, dia 12, às 14:30. O lembrete será enviado 24 horas antes da marcação.")}
+            </p>
+            <div className="flow-record-footer">
+              <span>
+                {phase === 3 && index !== 0 ? (
+                  <>
+                    <Clock3 size={12} />
+                    {index === 1 ? "2 dias antes do vencimento" : "24 horas antes"}
+                  </>
+                ) : (
+                  "Mensagem ligada ao registo"
+                )}
+              </span>
+              {action}
+            </div>
+          </div>
+        )}
+      </div>
+      <div className="flow-transfer">
+        <span>{stage.from}</span>
+        <div className="flow-track" aria-hidden="true">
+          <i />
+          <span className="flow-packet" />
+          <ChevronRight size={12} />
+        </div>
+        <strong>{stage.to}</strong>
+      </div>
+      <div className="flow-toast">
+        <span>
+          <Check size={13} />
+        </span>
+        <strong>{example.confirmations[phase]}</strong>
+        <span className="flow-toast-end">Registado</span>
+      </div>
+      <div className="flow-pointer" aria-hidden="true">
+        <MousePointer2 size={23} fill="currentColor" />
+        <span>Orchestr</span>
+      </div>
+      <span className="flow-click-ring" aria-hidden="true" />
     </div>
   );
 }
@@ -276,7 +489,7 @@ function BeforeScene({
   index,
   phase,
 }: {
-  example: Example;
+  example: ProcessExample;
   index: number;
   phase: number;
 }) {
@@ -359,368 +572,181 @@ function BeforeScene({
   );
 }
 
-function OrdersApp({ phase }: { phase: number }) {
-  return (
-    <>
-      <div className="operation-heading">
-        <div>
-          <p>VISÃO DA OPERAÇÃO</p>
-          <h4>Encomendas</h4>
-        </div>
-        <span className="operation-filter">
-          Este mês
-          <ChevronDown size={11} />
-        </span>
-      </div>
-      <div className="operation-stats">
-        <div>
-          <span>Em produção</span>
-          <strong>{phase >= 2 ? "13" : "12"}</strong>
-        </div>
-        <div>
-          <span>Para entregar hoje</span>
-          <strong>04</strong>
-        </div>
-        <div>
-          <span>Pedidos por tratar</span>
-          <strong>{phase >= 1 ? "00" : "01"}</strong>
-        </div>
-      </div>
-      <div className="operation-table-wrap">
-        <table className="operation-table">
-          <thead>
-            <tr>
-              <th>Cliente / encomenda</th>
-              <th>Estado</th>
-              <th>Entrega</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr
-              className="new-order"
-              data-current={phase >= 1}
-              data-arrival={phase === 1 ? "true" : undefined}
-            >
-              <td>
-                <span className="client-initial">AN</span>
-                <span>
-                  <strong>{phase >= 1 ? "Atelier Norte" : "Novo pedido a chegar"}</strong>
-                  <small>
-                    {phase >= 1 ? "ENC-0250 · 24 cadeiras" : "Caixa de entrada · 1 mensagem"}
-                  </small>
-                </span>
-              </td>
-              <td>
-                <span className={`operation-badge ${phase >= 2 ? "badge-blue" : "badge-amber"}`}>
-                  {phase >= 2 ? "Em produção" : phase >= 1 ? "Registada" : "A receber"}
-                </span>
-              </td>
-              <td>20 nov.</td>
-            </tr>
-            <tr>
-              <td>
-                <span className="client-initial muted-initial">EF</span>
-                <span>
-                  <strong>Estúdio Forma</strong>
-                  <small>ENC-0249 · 12 mesas</small>
-                </span>
-              </td>
-              <td>
-                <span className="operation-badge badge-green">Pronta</span>
-              </td>
-              <td>12 nov.</td>
-            </tr>
-            <tr>
-              <td>
-                <span className="client-initial muted-initial">CA</span>
-                <span>
-                  <strong>Casa Alameda</strong>
-                  <small>ENC-0248 · 8 cadeiras</small>
-                </span>
-              </td>
-              <td>
-                <span className="operation-badge badge-neutral">Entregue</span>
-              </td>
-              <td>11 nov.</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </>
-  );
-}
-
-function InvoiceApp({ phase }: { phase: number }) {
-  return (
-    <>
-      <div className="operation-heading">
-        <div>
-          <p>VENDAS E FATURAÇÃO</p>
-          <h4>Uma venda, todos os dados.</h4>
-        </div>
-        <FileText size={21} />
-      </div>
-      <div className="invoice-document">
-        <div className="invoice-document-top">
-          <span>
-            FATURA <strong>FT 2026 / 0148</strong>
-          </span>
-          <span className={`operation-badge ${phase >= 2 ? "badge-green" : "badge-amber"}`}>
-            {phase >= 2 ? "Preparada" : "Em preparação"}
-          </span>
-        </div>
-        <div className="invoice-client">
-          <strong>{phase >= 1 ? "Estúdio Forma, Lda." : "A aguardar os dados da venda…"}</strong>
-          <span>
-            {phase >= 1 ? "Cliente 0032 · NIF de demonstração" : "Proposta aprovada · 0182"}
-          </span>
-        </div>
-        <div className="invoice-line">
-          <span>Serviços de instalação</span>
-          <strong>1 000,00 €</strong>
-        </div>
-        <div className="invoice-line">
-          <span>IVA · 23%</span>
-          <span>230,00 €</span>
-        </div>
-        <div className="invoice-total">
-          <span>Total</span>
-          <strong>1 230,00 €</strong>
-        </div>
-        <div className="invoice-due">
-          <CalendarDays size={13} />
-          <span>Vencimento a 30 dias</span>
-          <Check size={13} />
-        </div>
-      </div>
-    </>
-  );
-}
-
-function AppointmentsApp({ phase }: { phase: number }) {
-  return (
-    <>
-      <div className="operation-heading">
-        <div>
-          <p>QUINTA-FEIRA, 12 NOVEMBRO</p>
-          <h4>A sua agenda.</h4>
-        </div>
-        <span className="operation-filter">
-          Semana
-          <ChevronDown size={11} />
-        </span>
-      </div>
-      <div className="schedule-days">
-        {["SEG 09", "TER 10", "QUA 11", "QUI 12", "SEX 13"].map((day, i) => (
-          <span key={day} className={i === 3 ? "selected-day" : ""}>
-            {day}
-          </span>
-        ))}
-      </div>
-      <div className="schedule-body">
-        <div className="schedule-times">
-          <time>14:00</time>
-          <time>14:30</time>
-          <time>15:00</time>
-        </div>
-        <div className="schedule-lines">
-          <span className="calendar-existing">14:00 · Joana Ribeiro</span>
-          <div className="scheduled-appointment" data-booked={phase >= 1}>
-            <span>14:30 — 15:15</span>
-            <strong>{phase >= 1 ? "Ana Martins" : "Horário disponível"}</strong>
-            <small>
-              {phase >= 2 ? (
-                <>
-                  <CheckCheck size={12} />
-                  Confirmada
-                </>
-              ) : phase >= 1 ? (
-                "Hora reservada"
-              ) : (
-                "Nova marcação a chegar"
-              )}
-            </small>
-          </div>
-        </div>
-      </div>
-    </>
-  );
-}
-
-function AfterScene({
-  example,
-  index,
-  phase,
+function PlaybackControls({
+  playing,
+  paused,
+  onToggle,
+  onRestart,
   hero = false,
 }: {
-  example: Example;
-  index: number;
-  phase: number;
+  playing: boolean;
+  paused: boolean;
+  onToggle: () => void;
+  onRestart: () => void;
   hero?: boolean;
 }) {
   return (
-    <div className={`operation-app ${hero ? "hero-operation-app" : ""}`} data-phase={phase}>
-      <div className="operation-toolbar">
-        <span className="operation-company">
-          <OrchestrMark
-            tone="on-light"
-            id={hero ? "hero-operation-mark" : `operation-mark-${index}`}
-          />
-          <strong>A sua empresa</strong>
-          <ChevronDown size={11} />
-        </span>
-        <span className="operation-user">CS</span>
-      </div>
-      <div className="operation-content" aria-hidden={!hero} inert={!hero}>
-        {index === 0 ? (
-          <OrdersApp phase={phase} />
-        ) : index === 1 ? (
-          <InvoiceApp phase={phase} />
-        ) : (
-          <AppointmentsApp phase={phase} />
-        )}
-      </div>
-      {!hero && <StageDetail index={index} phase={phase} />}
-      <div className="operation-activity" key={`${index}-${phase}`} data-arrival>
-        <span className={`activity-check ${phase === 3 ? "activity-complete" : ""}`}>
-          {phase === 3 ? <CheckCheck size={16} /> : <Check size={15} />}
-        </span>
-        <div>
-          <strong>{example.after[phase] ?? example.after[0]}</strong>
-          <span>
-            {phase === 3
-              ? example.result
-              : phase === 0
-                ? example.subject
-                : phase === 1
-                  ? "Informação disponível para toda a equipa"
-                  : "O processo avança sem voltar a escrever os dados"}
-          </span>
-        </div>
-        <span className="activity-time">{`${phase + 1} / 4`}</span>
-      </div>
+    <div className="flow-controls">
+      <button
+        type="button"
+        onClick={onToggle}
+        disabled={paused}
+        aria-label={
+          playing
+            ? hero
+              ? "Pausar demo do hero"
+              : "Pausar demonstração"
+            : hero
+              ? "Reproduzir demo do hero"
+              : "Reproduzir demonstração"
+        }
+        title={paused ? "Retome o movimento no controlo geral" : undefined}
+      >
+        {playing ? <Pause size={14} /> : <Play size={14} />}
+      </button>
+      {!hero && (
+        <button type="button" onClick={onRestart} aria-label="Recomeçar demonstração">
+          <RotateCcw size={14} />
+        </button>
+      )}
+    </div>
+  );
+}
+
+function Steps({
+  index,
+  phase,
+  onSelect,
+  hero = false,
+}: {
+  index: number;
+  phase: number;
+  onSelect: (value: number) => void;
+  hero?: boolean;
+}) {
+  return (
+    <div className={`flow-steps ${hero ? "flow-steps-hero" : ""}`}>
+      {processExamples[index]?.after.map((label, i) => (
+        <button
+          type="button"
+          key={label}
+          data-active={phase === i}
+          data-done={phase > i}
+          aria-pressed={phase === i}
+          aria-label={`Ver etapa: ${label}`}
+          onClick={() => onSelect(i)}
+        >
+          <span>{phase > i ? <Check size={10} /> : i + 1}</span>
+          <span>{label}</span>
+        </button>
+      ))}
     </div>
   );
 }
 
 export function HeroPreview({ paused }: { paused: boolean }) {
-  const { root, progress, phase, setPhase } = useSequence(paused);
-  const example = examples[0];
+  const sequence = useSequence(paused);
   return (
-    <div ref={root} className="hero-preview process-preview" data-phase={phase}>
+    <div className="hero-preview flow-hero" ref={sequence.root} data-phase={sequence.phase}>
       <div className="hero-preview-caption">
         <span>
           <span className="signal-dot" />
           DO PEDIDO À PRODUÇÃO
         </span>
-        <span>EXEMPLO ANIMADO</span>
+        <span>DEMONSTRAÇÃO ANIMADA</span>
       </div>
-      <div className="hero-app-stage">
-        <AfterScene example={example} index={0} phase={phase} hero />
-        <div className="hero-incoming" data-visible={phase === 0}>
-          <IncomingMessage example={example} phase={phase} compact />
+      <Workspace
+        index={0}
+        phase={sequence.phase}
+        hero
+        still={paused || !sequence.playing || sequence.reduced}
+        running={sequence.running}
+        key={`${sequence.phase}-${sequence.revision}`}
+      />
+      <div className="flow-hero-narration">
+        <span>
+          {String(sequence.phase + 1).padStart(2, "0")}
+          <small>/ 04</small>
+        </span>
+        <div>
+          <strong>{processExamples[0].after[sequence.phase]}</strong>
+          <p>{processExamples[0].hero[sequence.phase]}</p>
         </div>
+        <PlaybackControls
+          hero
+          paused={paused || sequence.reduced}
+          playing={sequence.playing}
+          onToggle={() => sequence.setPlaying(!sequence.playing)}
+          onRestart={sequence.restart}
+        />
       </div>
-      <StageNarrative index={0} phase={phase} hero />
-      <div className="hero-sequence">
-        {example.after.map((label, i) => (
-          <button
-            type="button"
-            key={label}
-            data-active={phase === i}
-            data-complete={phase > i}
-            aria-label={`Ver etapa: ${label}`}
-            aria-pressed={phase === i}
-            onClick={() => {
-              setPhase(i);
-            }}
-          >
-            <span>{phase > i ? <Check size={9} /> : i + 1}</span>
-            <span>{label}</span>
-          </button>
-        ))}
+      <Steps index={0} phase={sequence.phase} onSelect={sequence.select} hero />
+      <div className="sequence-progress flow-progress">
+        <span ref={sequence.progress} />
       </div>
-      <div className="sequence-progress">
-        <span ref={progress} />
-      </div>
-      <a href="#demonstracao" className="hero-preview-footer">
-        <span>Veja o antes e o depois dos seus processos</span>
-        <ArrowUpRight size={15} />
-      </a>
     </div>
   );
 }
 
 function DemoComparison({ index, motionPaused }: { index: number; motionPaused: boolean }) {
-  const { root, progress, phase, setPhase, playing, setPlaying, restart } =
-    useSequence(motionPaused);
-  const example = examples[index] ?? examples[0];
+  const sequence = useSequence(motionPaused);
+  const example = processExamples[index] ?? processExamples[0];
+  const stage = demoStages[index]?.[sequence.phase];
   return (
-    <div ref={root} className="demo-comparison process-preview" data-phase={phase}>
-      <div className="demo-comparison-heading">
+    <div className="flow-comparison" ref={sequence.root} data-phase={sequence.phase}>
+      <div className="flow-demo-heading">
         <div>
           <h3>{example.title}</h3>
           <p>{example.intro}</p>
         </div>
-        <div className="sequence-controls">
-          <button
-            type="button"
-            aria-label={playing ? "Pausar demonstração" : "Reproduzir demonstração"}
-            onClick={() => setPlaying(!playing)}
-          >
-            {playing ? <Pause size={16} /> : <Play size={16} />}
-          </button>
-          <button type="button" aria-label="Recomeçar demonstração" onClick={restart}>
-            <RotateCcw size={16} />
-          </button>
+        <PlaybackControls
+          playing={sequence.playing}
+          paused={motionPaused || sequence.reduced}
+          onToggle={() => sequence.setPlaying(!sequence.playing)}
+          onRestart={sequence.restart}
+        />
+      </div>
+      <div className="flow-story">
+        <span>
+          {String(sequence.phase + 1).padStart(2, "0")}
+          <small>/ 04</small>
+        </span>
+        <div>
+          <strong>{stage?.title}</strong>
+          <p>{stage?.explanation}</p>
         </div>
       </div>
-      <StageNarrative index={index} phase={phase} />
-      <div className="comparison-grid">
-        <div className="comparison-panel before-panel">
-          <div className="comparison-label">
+      <div className="flow-compare-grid">
+        <div className="flow-before">
+          <div className="flow-panel-label">
             <span>ANTES</span>
-            <strong>O processo depende de si.</strong>
-            <span className="comparison-label-note">Informação dispersa</span>
+            <strong>Informação dispersa.</strong>
+            <span>Intervenção manual</span>
           </div>
-          <BeforeScene example={example} index={index} phase={phase} />
+          <BeforeScene example={example} index={index} phase={sequence.phase} />
         </div>
-        <div className="comparison-panel after-panel">
-          <div className="comparison-label">
+        <div className="flow-after">
+          <div className="flow-panel-label">
             <span>DEPOIS</span>
-            <strong>O processo tem um caminho.</strong>
-            <span className="comparison-label-note">Informação ligada</span>
+            <strong>Um processo ligado.</strong>
+            <span>Ação demonstrada</span>
           </div>
-          <AfterScene example={example} index={index} phase={phase} />
+          <Workspace
+            index={index}
+            phase={sequence.phase}
+            still={motionPaused || !sequence.playing || sequence.reduced}
+            running={sequence.running}
+            key={`${sequence.phase}-${sequence.revision}`}
+          />
         </div>
       </div>
-      <div className="comparison-bottom">
-        <div className="comparison-steps">
-          {example.after.map((label, i) => (
-            <button
-              key={label}
-              type="button"
-              data-active={phase === i}
-              data-complete={phase > i}
-              aria-pressed={phase === i}
-              onClick={() => {
-                setPhase(i);
-                setPlaying(false);
-              }}
-            >
-              <span>{phase > i ? <Check size={12} /> : String(i + 1).padStart(2, "0")}</span>
-              {label}
-              {i < 3 && <ArrowRight size={13} />}
-            </button>
-          ))}
-        </div>
-        <div className="sequence-progress">
-          <span ref={progress} />
-        </div>
+      <Steps index={index} phase={sequence.phase} onSelect={sequence.select} />
+      <div className="sequence-progress flow-progress">
+        <span ref={sequence.progress} />
       </div>
-      <div className="comparison-note">
-        <p>{example.caption}</p>
-        <span>Demonstração animada · Dados ilustrativos</span>
+      <div className="flow-demo-footnote">
+        <span>{example.caption}</span>
+        <span>Exemplo ilustrativo · Sem dados reais</span>
       </div>
     </div>
   );
@@ -732,15 +758,15 @@ export function LiveDemo({ motionPaused }: { motionPaused: boolean }) {
   useEffect(() => {
     const select = (event: Event) => {
       const value = (event as CustomEvent<number>).detail;
-      if (Number.isInteger(value) && value >= 0 && value < examples.length) setIndex(value);
+      if (Number.isInteger(value) && value >= 0 && value < processExamples.length) setIndex(value);
     };
     window.addEventListener("orchestr:demo", select);
     return () => window.removeEventListener("orchestr:demo", select);
   }, []);
   return (
-    <div className="live-demo new-live-demo">
+    <div className="live-demo new-live-demo flow-demo">
       <div className="demo-selector" role="tablist" aria-label="Escolher demonstração">
-        {examples.map((example, i) => (
+        {processExamples.map((example, i) => (
           <button
             ref={(el) => {
               tabs.current[i] = el;
@@ -756,11 +782,11 @@ export function LiveDemo({ motionPaused }: { motionPaused: boolean }) {
             onClick={() => setIndex(i)}
             onKeyDown={(event) => {
               let next = i;
-              if (event.key === "ArrowRight") next = (i + 1) % examples.length;
+              if (event.key === "ArrowRight") next = (i + 1) % processExamples.length;
               else if (event.key === "ArrowLeft")
-                next = (i + examples.length - 1) % examples.length;
+                next = (i + processExamples.length - 1) % processExamples.length;
               else if (event.key === "Home") next = 0;
-              else if (event.key === "End") next = examples.length - 1;
+              else if (event.key === "End") next = processExamples.length - 1;
               else return;
               event.preventDefault();
               setIndex(next);
@@ -775,8 +801,8 @@ export function LiveDemo({ motionPaused }: { motionPaused: boolean }) {
       </div>
       <div
         role="tabpanel"
-        id={`panel-${examples[index]?.id}`}
-        aria-labelledby={`tab-${examples[index]?.id}`}
+        id={`panel-${processExamples[index]?.id}`}
+        aria-labelledby={`tab-${processExamples[index]?.id}`}
       >
         <DemoComparison key={index} index={index} motionPaused={motionPaused} />
       </div>

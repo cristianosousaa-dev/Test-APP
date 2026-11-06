@@ -2,18 +2,14 @@
 "use client";
 import { ArrowUpRight, Check, ChevronDown } from "lucide-react";
 import StarBorder from "@/components/react-bits/StarBorder";
+import { selectBriefContext } from "@/lib/brief-context";
 import { euros, plans } from "@/lib/site";
 
 const choosePlan = (id: string, plan: string) =>
-  window.dispatchEvent(
-    new CustomEvent("orchestr:brief", {
-      detail: {
-        service: id === "automacao" ? "Automação" : "Aplicação à medida",
-        workflow: id === "plataforma" ? "Portal de clientes" : undefined,
-        plan,
-      },
-    }),
-  );
+  selectBriefContext({
+    service: id === "automacao" ? "Automação e integrações" : "Software à medida",
+    plan,
+  });
 
 export function CompactPricing({ paused }: { paused: boolean }) {
   return (

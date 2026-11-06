@@ -1,3 +1,4 @@
+// biome-ignore-all lint/a11y/useValidAnchor: These links navigate to the contact section and carry the selected service.
 "use client";
 
 import {
@@ -20,12 +21,14 @@ import { useEffect, useRef, useState } from "react";
 import { BrandDefs } from "@/components/brand/BrandIcon";
 import { OrchestrLogo, OrchestrMark } from "@/components/brand/OrchestrLogo";
 import SpotlightCard from "@/components/react-bits/SpotlightCard";
+import { briefServices, selectBriefContext } from "@/lib/brief-context";
 import { founder } from "@/lib/site";
 import { AnimatedFaq } from "./AnimatedFaq";
 import { CompactPricing } from "./CompactPricing";
 import { ContactForm } from "./ContactForm";
 import { DynamicHeader } from "./DynamicHeader";
 import { ExperienceMotion } from "./ExperienceMotion";
+import { HeroConnections } from "./HeroConnections";
 import { IntegrationMarquee } from "./IntegrationMarquee";
 import { HeroPreview, LiveDemo } from "./LiveDemo";
 
@@ -123,11 +126,12 @@ export function Landing() {
       <main id="conteudo" tabIndex={-1}>
         <section id="top" className="hero-section" ref={hero} aria-labelledby="hero-title">
           <div className="hero-grid" aria-hidden="true" />
+          <HeroConnections paused={paused} />
           <div className="frame hero-layout">
             <div className="hero-copy">
               <p className="eyebrow hero-eyebrow">
                 <span className="signal-dot" />
-                SOFTWARE À MEDIDA PARA PME
+                SOFTWARE À MEDIDA PARA EMPRESAS
               </p>
               <h1 id="hero-title" aria-label="Orchestr o futuro da sua empresa.">
                 <span className="hero-wordmark" aria-hidden="true">
@@ -140,13 +144,16 @@ export function Landing() {
                 </span>
               </h1>
               <p className="hero-explanation">
-                Software, automação e experiências digitais.
-                <br />
-                Ligamos o que hoje está separado, para o seu negócio avançar.
+                Software e automação para ligar sistemas, simplificar processos e dar clareza à sua
+                operação.
               </p>
               <div className="hero-actions">
-                <a href="#contacto" className="action action-light">
-                  Pedir demonstração gratuita
+                <a
+                  href="#contacto"
+                  className="action action-light"
+                  onClick={() => selectBriefContext()}
+                >
+                  Pedir uma conversa
                   <ArrowUpRight size={19} />
                 </a>
                 <a href="#demonstracao" className="hero-demo-link">
@@ -201,8 +208,8 @@ export function Landing() {
                 <span>Uma nova forma de crescer.</span>
               </h2>
               <p>
-                O seu negócio não cabe numa solução igual para todos. Desenhamos a tecnologia à
-                volta do que o torna único.
+                Criamos soluções para a dimensão e os processos da sua empresa, com integração nos
+                sistemas que já utiliza.
               </p>
             </div>
             <div className="services-grid">
@@ -265,6 +272,7 @@ export function Landing() {
                       href="#contacto"
                       className="service-link"
                       aria-label={`Conversar sobre ${service.title.toLowerCase()}`}
+                      onClick={() => selectBriefContext({ service: briefServices[i] })}
                     >
                       Explorar possibilidades
                       <ArrowUpRight size={17} />
@@ -297,8 +305,8 @@ export function Landing() {
                 <span>a fluir.</span>
               </h2>
               <p>
-                Escolha um processo. Veja o que muda quando a informação deixa de estar espalhada e
-                começa a trabalhar em conjunto.
+                Escolha um processo e acompanhe cada ação: os dados entram, seguem para o sistema
+                certo e ficam disponíveis para a equipa.
               </p>
             </div>
             <div data-reveal>
@@ -310,7 +318,11 @@ export function Landing() {
                 <br />
                 <strong>e os dados da sua empresa.</strong>
               </p>
-              <a href="#contacto" className="text-link">
+              <a
+                href="#contacto"
+                className="text-link"
+                onClick={() => selectBriefContext({ service: "Automação e integrações" })}
+              >
                 Quero ver o meu processo
                 <ArrowUpRight size={18} />
               </a>
@@ -381,8 +393,8 @@ export function Landing() {
                 <span>Depois, construir.</span>
               </h2>
               <p>
-                Sem saltar diretamente para o código. Começamos por entender como trabalha e o que
-                precisa de mudar.
+                Cada projeto começa com uma análise da sua operação, dos sistemas existentes e dos
+                objetivos do negócio.
               </p>
               <a href="#contacto" className="text-link">
                 Começar uma conversa
@@ -398,6 +410,9 @@ export function Landing() {
               </div>
             </div>
             <div className="process-steps">
+              <span className="process-travel" aria-hidden="true">
+                <span />
+              </span>
               {[
                 {
                   title: "Ouvimos o seu negócio.",
@@ -450,9 +465,9 @@ export function Landing() {
             <SectionLabel index="04">UM INVESTIMENTO CLARO</SectionLabel>
             <div className="section-heading" data-reveal>
               <h2 id="pricing-title">
-                À medida do negócio.
+                Âmbito definido.
                 <br />
-                <span>Com os números na mesa.</span>
+                <span>Investimento transparente.</span>
               </h2>
               <p>
                 Comece pelo que traz mais valor. Estes são os pontos de partida; a proposta fixa o
@@ -467,7 +482,7 @@ export function Landing() {
               </p>
               <p>
                 Precisa de um site ou loja?{" "}
-                <a href="#contacto">
+                <a href="#contacto" onClick={() => selectBriefContext({ service: "Site ou loja" })}>
                   Peça uma proposta à medida <ArrowUpRight size={12} />
                 </a>
               </p>
@@ -589,9 +604,8 @@ export function Landing() {
                   <ArrowUpRight className="contact-big-arrow" strokeWidth={0.7} />
                 </h2>
                 <p>
-                  Conte-nos onde está hoje.
-                  <br />
-                  Exploramos consigo o que pode vir a seguir.
+                  Partilhe o desafio da sua empresa. Numa primeira conversa, avaliamos o contexto e
+                  os próximos passos.
                 </p>
                 <div className="contact-promises">
                   <span>

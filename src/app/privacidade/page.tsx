@@ -34,7 +34,7 @@ export default function Privacidade() {
             tema claro ou escuro fica guardada neste navegador; os dados do formulário não são
             guardados.
           </p>
-          <h2>Pedidos de demonstração</h2>
+          <h2>Pedidos de contacto</h2>
           <p>
             {isExample
               ? "Este é um preview. O formulário prepara uma mensagem apenas no seu navegador, para poder rever e copiar. Nenhum pedido é enviado. Os campos não são guardados quando atualiza ou fecha a página."
