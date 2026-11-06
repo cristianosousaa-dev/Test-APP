@@ -9,7 +9,7 @@ html {
   animation: none;
 }
 .section-label {
-  font-size: 10px;
+  font-size: 12px;
   letter-spacing: 0.045em;
   gap: 14px;
 }
@@ -17,7 +17,7 @@ html {
   border: 0;
   width: auto;
   height: auto;
-  font-size: 10px;
+  font-size: 12px;
   color: #7e8da5;
   opacity: 1;
 }
@@ -59,7 +59,7 @@ html {
   font-size: 14px;
 }
 .process-step .eyebrow {
-  font-size: 9px;
+  font-size: 11px;
 }
 .process-stamp {
   font-size: 13px;
@@ -239,7 +239,7 @@ html {
 }
 .mega-heading .eyebrow {
   color: #9aaac5;
-  font-size: 9px;
+  font-size: 11px;
 }
 .mega-heading > a {
   color: #c2cfec;
@@ -333,7 +333,7 @@ html {
   min-width: 0;
 }
 .hero-eyebrow {
-  font-size: 10px;
+  font-size: 12px;
   animation: none;
   color: #a2b2cc;
 }
@@ -397,7 +397,7 @@ html {
   height: 31px;
 }
 .hero-assurance {
-  font-size: 11px;
+  font-size: 12px;
   margin-top: 12px;
   color: #8e9cb4;
   animation: none;
@@ -407,15 +407,15 @@ html {
   margin-top: 0;
 }
 .hero-principles {
-  font-size: 10px;
+  font-size: 12px;
   color: #8c9ab0;
   gap: 12px;
 }
 .scroll-cue {
-  font-size: 8px;
+  font-size: 10px;
 }
 .motion-toggle {
-  font-size: 8px;
+  font-size: 10px;
   color: #9eabc1;
 }
 .brand-marquee {
@@ -433,7 +433,7 @@ html {
 }
 .marquee-inner > p {
   flex-shrink: 0;
-  font-size: 8px;
+  font-size: 10px;
   color: #b1bfd7;
   line-height: 1.9;
 }
@@ -475,7 +475,7 @@ html {
   justify-content: space-between;
   gap: 20px;
   font:
-    8px var(--font-martian),
+    10px var(--font-martian),
     monospace;
   color: #8d9fbe;
   letter-spacing: 0.05em;
@@ -487,7 +487,7 @@ html {
   align-items: center;
 }
 .hero-preview-caption > span:last-child {
-  font-size: 7px;
+  font-size: 9px;
   color: #8e9cb3;
 }
 .hero-app-stage {
@@ -542,7 +542,7 @@ html {
   border-radius: 50%;
   background: #e5eaf6;
   color: #4b608d;
-  font-size: 9px;
+  font-size: 11px;
 }
 .operation-content {
   padding: 21px 20px 0;
@@ -557,7 +557,7 @@ html {
 }
 .operation-heading p {
   font:
-    7px var(--font-martian),
+    9px var(--font-martian),
     monospace;
   letter-spacing: 0.035em;
   color: #5c6d89;
@@ -576,7 +576,7 @@ html {
   padding: 7px 9px;
   border: 1px solid #dce2ed;
   border-radius: 4px;
-  font-size: 9px;
+  font-size: 11px;
   color: #596d8d;
   white-space: nowrap;
 }
@@ -596,7 +596,7 @@ html {
 }
 .operation-stats span {
   display: block;
-  font-size: 9px;
+  font-size: 11px;
   color: #617089;
   line-height: 1.5;
 }
@@ -618,7 +618,7 @@ html {
 }
 .operation-table th {
   color: #616e85;
-  font-size: 8px;
+  font-size: 10px;
   padding-bottom: 10px;
   font-weight: 400;
 }
@@ -629,7 +629,7 @@ html {
 .operation-table td {
   border-top: 1px solid #e1e6ef;
   padding-block: 12px;
-  font-size: 10px;
+  font-size: 12px;
   color: #566985;
 }
 .operation-table td:first-child {
@@ -641,12 +641,12 @@ html {
 .operation-table td:first-child strong {
   display: block;
   color: #3c4f6d;
-  font-size: 10px;
+  font-size: 12px;
   font-weight: 550;
 }
 .operation-table small {
   display: block;
-  font-size: 8px;
+  font-size: 10px;
   margin-top: 4px;
   color: #606e82;
 }
@@ -656,7 +656,7 @@ html {
   display: grid;
   place-items: center;
   flex-shrink: 0;
-  font-size: 8px;
+  font-size: 10px;
   background: #dce6ff;
   border-radius: 5px;
   color: #3e5fae;
@@ -675,7 +675,7 @@ html {
   display: inline-block;
   padding: 4px 6px;
   border-radius: 4px;
-  font-size: 8px;
+  font-size: 10px;
   line-height: 1.5;
   white-space: nowrap;
 }
@@ -722,20 +722,20 @@ html {
 }
 .operation-activity strong {
   display: block;
-  font-size: 11px;
+  font-size: 12px;
   font-weight: 550;
   color: #3c537d;
 }
 .operation-activity div > span {
   display: block;
-  font-size: 9px;
+  font-size: 11px;
   color: #55698e;
   line-height: 1.6;
   margin-top: 3px;
 }
 .activity-time {
   font:
-    7px var(--font-martian),
+    9px var(--font-martian),
     monospace;
   margin-left: auto;
   color: #55698b;
@@ -779,7 +779,7 @@ html {
   color: #5074ca;
 }
 .incoming-message div > span {
-  font-size: 10px;
+  font-size: 12px;
   color: #61728e;
 }
 .incoming-message strong {
@@ -790,7 +790,7 @@ html {
 }
 .message-time {
   margin-left: auto;
-  font-size: 8px;
+  font-size: 10px;
   color: #62728c;
 }
 .hero-sequence {
@@ -805,7 +805,7 @@ html {
   gap: 6px;
   background: transparent;
   color: #9baac4;
-  font-size: 9px;
+  font-size: 11px;
   line-height: 1.65;
   padding: 4px 0;
   text-align: left;
@@ -814,7 +814,7 @@ html {
   border: 1px solid #7185aa66;
   width: 15px;
   height: 15px;
-  font-size: 7px;
+  font-size: 9px;
   display: grid;
   place-items: center;
   flex-shrink: 0;
@@ -853,7 +853,7 @@ html {
   justify-content: space-between;
   gap: 15px;
   padding-top: 13px;
-  font-size: 10px;
+  font-size: 12px;
   color: #96a9cd;
 }
 
@@ -863,7 +863,7 @@ html {
   padding: 22px 27px;
 }
 .new-live-demo .demo-selector .mono {
-  font-size: 9px;
+  font-size: 11px;
 }
 .demo-comparison-heading {
   display: flex;
@@ -920,7 +920,7 @@ html {
 }
 .comparison-label > span:first-child {
   font:
-    8px var(--font-martian),
+    10px var(--font-martian),
     monospace;
   letter-spacing: 0.06em;
   padding: 5px 7px;
@@ -938,7 +938,7 @@ html {
   color: #d0d8e6;
 }
 .comparison-label-note {
-  font-size: 10px;
+  font-size: 12px;
   color: #91a0ba;
   margin-left: auto;
 }
@@ -973,7 +973,7 @@ html {
   gap: 8px;
   border-bottom: 1px solid #d5d9dd;
   padding: 10px 13px;
-  font-size: 9px;
+  font-size: 11px;
   color: #5b6678;
   background: #e8ebee;
 }
@@ -988,7 +988,7 @@ html {
   padding: 16px;
 }
 .manual-message-body > span {
-  font-size: 10px;
+  font-size: 12px;
   color: #606a79;
 }
 .manual-message-body > strong {
@@ -998,7 +998,7 @@ html {
   margin-top: 6px;
 }
 .manual-message-body > p {
-  font-size: 11px;
+  font-size: 12px;
   color: #626d7e;
   line-height: 1.8;
   margin-top: 10px;
@@ -1007,7 +1007,7 @@ html {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  font-size: 9px;
+  font-size: 11px;
   margin-top: 12px;
   color: #7b5e3d;
 }
@@ -1031,7 +1031,7 @@ html {
   align-items: center;
   gap: 7px;
   padding: 9px 11px;
-  font-size: 9px;
+  font-size: 11px;
   background: #d8e2d9;
   color: #455b49;
 }
@@ -1051,7 +1051,7 @@ html {
 .manual-spreadsheet th,
 .manual-spreadsheet td {
   padding: 9px 8px;
-  font-size: 9px;
+  font-size: 11px;
   border: 1px solid #cbd5cc;
   font-weight: 400;
 }
@@ -1066,14 +1066,14 @@ html {
   display: flex;
   align-items: center;
   gap: 8px;
-  font-size: 11px;
+  font-size: 12px;
   color: #bcc5d5;
   margin-top: auto;
 }
 .manual-task > span:last-child {
   margin-left: auto;
   color: #d2b796;
-  font-size: 9px;
+  font-size: 11px;
   border: 1px solid #97816566;
   border-radius: 4px;
   padding: 4px 7px;
@@ -1113,14 +1113,14 @@ html {
 }
 .invoice-document-top > span:first-child {
   font:
-    7px var(--font-martian),
+    9px var(--font-martian),
     monospace;
   color: #607390;
 }
 .invoice-document-top strong {
   display: block;
   font:
-    11px var(--font-mona),
+    12px var(--font-mona),
     sans-serif;
   color: #344f76;
   margin-top: 5px;
@@ -1140,7 +1140,7 @@ html {
   display: block;
   color: #627797;
   margin-top: 5px;
-  font-size: 9px;
+  font-size: 11px;
 }
 .invoice-line {
   display: flex;
@@ -1148,7 +1148,7 @@ html {
   justify-content: space-between;
   gap: 15px;
   padding-top: 12px;
-  font-size: 10px;
+  font-size: 12px;
   color: #5f718d;
 }
 .invoice-line strong {
@@ -1161,7 +1161,7 @@ html {
   border-top: 1px solid #e0e6ef;
   margin-top: 14px;
   padding-top: 13px;
-  font-size: 11px;
+  font-size: 12px;
 }
 .invoice-total strong {
   font-family: var(--font-nohemi), sans-serif;
@@ -1173,7 +1173,7 @@ html {
   display: flex;
   gap: 6px;
   align-items: center;
-  font-size: 9px;
+  font-size: 11px;
   color: #607a68;
   padding-top: 13px;
 }
@@ -1189,20 +1189,20 @@ html {
 }
 .paper-heading {
   font:
-    7px var(--font-martian),
+    9px var(--font-martian),
     monospace;
   color: #756953;
 }
 .paper-agenda > div {
   display: flex;
   gap: 16px;
-  font-size: 10px;
+  font-size: 12px;
   color: #726654;
   border-bottom: 1px solid #d8cfbc;
   padding: 10px 0;
 }
 .paper-agenda time {
-  font-size: 9px;
+  font-size: 11px;
   color: #6a5d49;
 }
 .paper-agenda > .agenda-conflict {
@@ -1216,7 +1216,7 @@ html {
   padding-bottom: 14px;
   text-align: center;
   gap: 4px;
-  font-size: 9px;
+  font-size: 11px;
   color: #5c6f89;
 }
 .schedule-days .selected-day {
@@ -1235,7 +1235,7 @@ html {
   flex-direction: column;
   gap: 45px;
   color: #5f7088;
-  font-size: 8px;
+  font-size: 10px;
   padding-top: 5px;
 }
 .schedule-lines {
@@ -1256,7 +1256,7 @@ html {
   width: 33%;
   background: #e9edf5;
   color: #556888;
-  font-size: 8px;
+  font-size: 10px;
   padding: 8px;
   border-radius: 4px;
 }
@@ -1279,7 +1279,7 @@ html {
   border-color: #5b79d2;
 }
 .scheduled-appointment > span {
-  font-size: 9px;
+  font-size: 11px;
 }
 .scheduled-appointment > strong {
   font-size: 12px;
@@ -1292,7 +1292,7 @@ html {
   gap: 5px;
   align-items: center;
   margin-top: 14px;
-  font-size: 9px;
+  font-size: 11px;
 }
 .comparison-bottom {
   margin-top: 24px;
@@ -1316,7 +1316,7 @@ html {
   display: grid;
   place-items: center;
   font:
-    8px var(--font-martian),
+    10px var(--font-martian),
     monospace;
   width: 23px;
   height: 23px;
@@ -1353,7 +1353,7 @@ html {
 }
 .comparison-note > span {
   color: #9baac3;
-  font-size: 10px;
+  font-size: 12px;
 }
 
 /* Open, compact plans. The recommended action carries React Bits' travelling contour. */
@@ -1392,18 +1392,18 @@ html {
   display: flex;
   align-items: center;
   gap: 6px;
-  font-size: 9px;
-  color: #becfff;
+  font-size: 11px;
+  color: var(--signal);
 }
 .recommended-plan > span {
   width: 4px;
   height: 4px;
   border-radius: 50%;
-  background: #9ab7ff;
+  background: currentColor;
 }
 .plan-category {
   font:
-    7px var(--font-martian),
+    9px var(--font-martian),
     monospace;
   color: #58684e;
   letter-spacing: 0.07em;
@@ -1420,7 +1420,7 @@ html {
 }
 .compact-plan-price > span {
   display: block;
-  font-size: 10px;
+  font-size: 12px;
   color: #5c6a53;
 }
 .compact-plan-price > strong {
@@ -1433,7 +1433,7 @@ html {
   margin-top: 7px;
 }
 .compact-plan-price > p {
-  font-size: 11px;
+  font-size: 12px;
   color: #58694c;
   margin-top: 6px;
   line-height: 1.7;
@@ -1477,7 +1477,7 @@ html {
   padding: 13px 16px;
 }
 .compact-plan-action > p {
-  font-size: 10px;
+  font-size: 12px;
   text-align: center;
   color: #59684f;
   margin-top: 11px;
@@ -1510,7 +1510,7 @@ html {
   list-style: none;
   align-items: center;
   justify-content: space-between;
-  font-size: 10px;
+  font-size: 12px;
   color: #54664a;
 }
 .plan-details > summary::-webkit-details-marker {
@@ -1531,7 +1531,7 @@ html {
   gap: 9px;
 }
 .plan-details li {
-  font-size: 11px;
+  font-size: 12px;
 }
 .compact-plan[data-featured="true"] .plan-details {
   border-color: #93a9d533;
@@ -1540,7 +1540,7 @@ html {
   color: #b8c9e8;
 }
 .pricing-footnote {
-  font-size: 11px;
+  font-size: 12px;
   line-height: 1.8;
 }
 .ownership-row {
@@ -1603,7 +1603,7 @@ html {
   font-size: 12px;
 }
 .founder-projects .eyebrow {
-  font-size: 8px;
+  font-size: 10px;
 }
 .founder-projects a {
   font-size: 13px;
@@ -1715,7 +1715,7 @@ html {
   display: flex;
   align-items: center;
   gap: 14px;
-  font-size: 11px;
+  font-size: 12px;
   color: #586986;
 }
 .brief-steps > span:not(.brief-step-line) {
@@ -1727,7 +1727,7 @@ html {
   display: grid;
   place-items: center;
   font:
-    8px var(--font-martian),
+    10px var(--font-martian),
     monospace;
   font-style: normal;
   border: 1px solid #9faec7;
@@ -1752,7 +1752,7 @@ html {
 }
 .brief-duration {
   font:
-    7px var(--font-martian),
+    9px var(--font-martian),
     monospace;
   color: #566a88;
   letter-spacing: 0.04em;
@@ -1762,7 +1762,7 @@ html {
   padding: 28px;
 }
 .brief-form-heading > .eyebrow {
-  font-size: 8px;
+  font-size: 10px;
   color: #586e8f;
 }
 .brief-form-heading h3 {
@@ -1829,13 +1829,13 @@ html {
   margin-bottom: 12px;
 }
 .brief-service-options strong {
-  font-size: 10px;
+  font-size: 12px;
   font-weight: 550;
   color: #395781;
   line-height: 1.6;
 }
 .brief-service-options > label > span {
-  font-size: 8px;
+  font-size: 10px;
   line-height: 1.7;
   color: #647a9c;
   margin-top: 4px;
@@ -1912,7 +1912,7 @@ html {
   margin-bottom: 21px;
 }
 .brief-examples > span {
-  font-size: 9px;
+  font-size: 11px;
   color: #607594;
   flex-basis: 100%;
   margin-bottom: 2px;
@@ -1923,7 +1923,7 @@ html {
   gap: 5px;
   background: transparent;
   color: #456597;
-  font-size: 10px;
+  font-size: 12px;
   padding: 5px 0;
   border-bottom: 1px solid #b9c9e3;
 }
@@ -1941,11 +1941,11 @@ html {
 }
 .brief-form-bottom > span {
   color: #596f8e;
-  font-size: 9px;
+  font-size: 11px;
   line-height: 1.8;
 }
 .brief-form-bottom > span > strong {
-  font-size: 9px;
+  font-size: 11px;
   font-weight: 400;
   color: #4a658c;
 }
@@ -1961,7 +1961,7 @@ html {
   display: flex;
   flex-wrap: wrap;
   gap: 5px 14px;
-  font-size: 9px;
+  font-size: 11px;
   line-height: 1.8;
   color: #5b6f8b;
   margin-top: 17px;
@@ -1999,14 +1999,14 @@ html {
 }
 .brief-project-summary div > span {
   display: block;
-  font-size: 10px;
+  font-size: 12px;
   color: #597299;
   margin-top: 5px;
 }
 .brief-project-summary > button {
   background: transparent;
   color: #456a9f;
-  font-size: 11px;
+  font-size: 12px;
   text-decoration: underline;
   text-underline-offset: 4px;
   margin-left: auto;
@@ -2105,11 +2105,11 @@ html {
   margin-top: 18px;
 }
 .footer-bottom {
-  font-size: 10px;
+  font-size: 12px;
 }
 .footer-bottom > span:nth-child(2) {
   font:
-    10px var(--font-mona),
+    12px var(--font-mona),
     sans-serif;
   letter-spacing: 0;
   color: #97a9c9;
@@ -2175,18 +2175,18 @@ html {
     gap: 17px;
   }
   .hero-actions .action {
-    font-size: 11px;
+    font-size: 12px;
     gap: 14px;
     padding-inline: 14px;
   }
   .hero-demo-link {
-    font-size: 11px;
+    font-size: 12px;
   }
   .hero-explanation {
     font-size: 14px;
   }
   .hero-principles {
-    font-size: 9px;
+    font-size: 11px;
   }
   .operation-content {
     padding-inline: 16px;
@@ -2207,7 +2207,7 @@ html {
     display: none;
   }
   .hero-preview-caption > span:last-child {
-    font-size: 6px;
+    font-size: 8px;
   }
   .comparison-label-note {
     display: none;
@@ -2234,7 +2234,7 @@ html {
     font-size: 25px;
   }
   .recommended-plan {
-    font-size: 8px;
+    font-size: 10px;
   }
   .compact-plan-price > strong {
     font-size: 43px;
@@ -2308,7 +2308,7 @@ html {
   }
   .mobile-navigation > p {
     color: #a1b5d8;
-    font-size: 8px;
+    font-size: 10px;
     margin-bottom: 20px;
   }
   .mobile-navigation nav > a,
@@ -2361,7 +2361,7 @@ html {
     padding-top: 22px;
     margin-top: 30px;
     color: #a5b8d9;
-    font-size: 11px;
+    font-size: 12px;
   }
   .mobile-nav-footer > span {
     max-width: 220px;
@@ -2379,7 +2379,7 @@ html {
     font-size: 57px;
   }
   .hero-eyebrow {
-    font-size: 8px;
+    font-size: 10px;
   }
   .hero-explanation {
     font-size: 13px;
@@ -2403,11 +2403,11 @@ html {
     font-size: 12px;
   }
   .hero-assurance {
-    font-size: 10px;
+    font-size: 12px;
     max-width: 250px;
   }
   .hero-preview-caption {
-    font-size: 7px;
+    font-size: 9px;
   }
   .hero-preview-caption > span:last-child {
     display: none;
@@ -2426,7 +2426,7 @@ html {
     font-size: 21px;
   }
   .operation-filter {
-    font-size: 8px;
+    font-size: 10px;
     padding: 5px;
     gap: 4px;
   }
@@ -2437,31 +2437,31 @@ html {
     padding: 10px 7px;
   }
   .operation-stats span {
-    font-size: 8px;
+    font-size: 10px;
   }
   .operation-stats strong {
     font-size: 27px;
   }
   .operation-company strong {
-    font-size: 10px;
+    font-size: 12px;
   }
   .operation-company > svg:last-child {
     margin-left: 2px;
   }
   .operation-table th {
-    font-size: 7px;
+    font-size: 9px;
   }
   .operation-table td {
-    font-size: 9px;
+    font-size: 11px;
   }
   .operation-table td:first-child strong {
-    font-size: 9px;
+    font-size: 11px;
   }
   .operation-table small {
-    font-size: 7px;
+    font-size: 9px;
   }
   .operation-badge {
-    font-size: 7px;
+    font-size: 9px;
     padding: 4px;
   }
   .operation-activity {
@@ -2470,10 +2470,10 @@ html {
     gap: 7px;
   }
   .operation-activity strong {
-    font-size: 10px;
+    font-size: 12px;
   }
   .operation-activity div > span {
-    font-size: 8px;
+    font-size: 10px;
   }
   .activity-time {
     display: none;
@@ -2492,10 +2492,10 @@ html {
     gap: 8px;
   }
   .incoming-message strong {
-    font-size: 10px;
+    font-size: 12px;
   }
   .incoming-message div > span {
-    font-size: 9px;
+    font-size: 11px;
   }
   .incoming-icon {
     width: 27px;
@@ -2510,10 +2510,10 @@ html {
     margin-top: 15px;
   }
   .hero-sequence button {
-    font-size: 8px;
+    font-size: 10px;
   }
   .hero-preview-footer {
-    font-size: 9px;
+    font-size: 11px;
   }
   .brand-marquee {
     height: 96px;
@@ -2522,7 +2522,7 @@ html {
     gap: 25px;
   }
   .marquee-inner > p {
-    font-size: 7px;
+    font-size: 9px;
   }
   .marquee-brand {
     font-size: 18px;
@@ -2549,15 +2549,15 @@ html {
     font-size: 12px;
   }
   .manual-message-body > p {
-    font-size: 10px;
+    font-size: 12px;
   }
   .manual-spreadsheet th,
   .manual-spreadsheet td {
-    font-size: 8px;
+    font-size: 10px;
     padding-inline: 5px;
   }
   .manual-task {
-    font-size: 10px;
+    font-size: 12px;
   }
   .after-panel .operation-app {
     min-height: 453px;
@@ -2573,7 +2573,7 @@ html {
     font-size: 14px;
   }
   .comparison-steps > button {
-    font-size: 10px;
+    font-size: 12px;
     gap: 7px;
   }
   .comparison-steps > button > svg {
@@ -2585,7 +2585,7 @@ html {
     gap: 10px;
   }
   .comparison-note > span {
-    font-size: 10px;
+    font-size: 12px;
   }
   .compact-pricing {
     gap: 0;
@@ -2600,10 +2600,10 @@ html {
     min-height: 68px;
   }
   .plan-category {
-    font-size: 7px;
+    font-size: 9px;
   }
   .recommended-plan {
-    font-size: 8px;
+    font-size: 10px;
   }
   .compact-plan-summary {
     min-height: 65px;
@@ -2613,10 +2613,10 @@ html {
     font-size: 37px;
   }
   .compact-plan-price > p {
-    font-size: 10px;
+    font-size: 12px;
   }
   .compact-plan li {
-    font-size: 11px;
+    font-size: 12px;
   }
   .compact-plan-action > a {
     font-size: 12px;
@@ -2637,7 +2637,7 @@ html {
     font-size: 17px;
   }
   .founder-signature div > span {
-    font-size: 11px;
+    font-size: 12px;
   }
   .faq-disclosure h3 > button {
     font-size: 15px;
@@ -2680,7 +2680,7 @@ html {
     font-size: 12px;
   }
   .brief-service-options > label > span {
-    font-size: 10px;
+    font-size: 12px;
   }
   .brief-field {
     font-size: 13px;
@@ -2691,7 +2691,7 @@ html {
     font-size: 14px;
   }
   .brief-duration {
-    font-size: 8px;
+    font-size: 10px;
   }
   .brief-form-heading > p {
     font-size: 14px;
@@ -2705,12 +2705,12 @@ html {
     padding-block: 70px;
   }
   .section-label {
-    font-size: 9px;
+    font-size: 11px;
     gap: 10px;
     line-height: 1.7;
   }
   .label-index {
-    font-size: 9px;
+    font-size: 11px;
   }
   .section-heading > p {
     font-size: 15px;
@@ -2734,7 +2734,7 @@ html {
     font-size: 12px;
   }
   .solutions-note > p {
-    font-size: 11px;
+    font-size: 12px;
   }
   .manifesto-details > p {
     font-size: 15px;
@@ -2750,7 +2750,7 @@ html {
     font-size: 12px;
   }
   .process-step .eyebrow {
-    font-size: 8px;
+    font-size: 10px;
   }
   .process-stamp {
     font-size: 12px;
@@ -2770,7 +2770,7 @@ html {
     height: 24px;
   }
   .nav-cta {
-    font-size: 10px;
+    font-size: 12px;
     gap: 12px;
     padding: 10px 12px;
     min-height: 41px;
@@ -2799,7 +2799,7 @@ html {
     padding: 23px;
   }
   .mobile-navigation > p {
-    font-size: 7px;
+    font-size: 9px;
   }
   .mobile-navigation nav > a,
   .mobile-services > button {
@@ -2807,7 +2807,7 @@ html {
     padding-block: 17px;
   }
   .mobile-nav-footer {
-    font-size: 10px;
+    font-size: 12px;
   }
   .hero-section {
     min-height: calc(100svh - 156px);
@@ -2828,7 +2828,7 @@ html {
     margin-bottom: 2px;
   }
   .hero-eyebrow {
-    font-size: 7px;
+    font-size: 9px;
   }
   .hero-explanation {
     font-size: 12px;
@@ -2847,12 +2847,12 @@ html {
   }
   .hero-actions .action {
     min-height: 43px;
-    font-size: 10px;
+    font-size: 12px;
     padding: 12px 13px;
     gap: 14px;
   }
   .hero-demo-link {
-    font-size: 10px;
+    font-size: 12px;
     gap: 7px;
   }
   .hero-demo-link > span {
@@ -2867,11 +2867,11 @@ html {
   }
   .hero-preview-caption {
     margin-bottom: 10px;
-    font-size: 6px;
+    font-size: 8px;
   }
   .hero-preview-caption > span:last-child {
     display: block;
-    font-size: 5px;
+    font-size: 7px;
   }
   .hero-operation-app {
     transform: none;
@@ -2888,12 +2888,12 @@ html {
     height: 17px;
   }
   .hero-operation-app .operation-company strong {
-    font-size: 9px;
+    font-size: 11px;
   }
   .hero-operation-app .operation-user {
     width: 20px;
     height: 20px;
-    font-size: 7px;
+    font-size: 9px;
   }
   .hero-operation-app .operation-content {
     padding: 12px 12px 0;
@@ -2903,14 +2903,14 @@ html {
     margin-bottom: 10px;
   }
   .hero-operation-app .operation-heading p {
-    font-size: 5px;
+    font-size: 7px;
     margin-bottom: 4px;
   }
   .hero-operation-app .operation-heading h4 {
     font-size: 17px;
   }
   .hero-operation-app .operation-filter {
-    font-size: 7px;
+    font-size: 9px;
     padding: 4px;
   }
   .hero-operation-app .operation-stats {
@@ -2920,32 +2920,32 @@ html {
     padding: 7px 9px;
   }
   .hero-operation-app .operation-stats span {
-    font-size: 6px;
+    font-size: 8px;
   }
   .hero-operation-app .operation-stats strong {
     font-size: 22px;
     margin-top: 3px;
   }
   .hero-operation-app .operation-table th {
-    font-size: 6px;
+    font-size: 8px;
     padding-bottom: 5px;
   }
   .hero-operation-app .operation-table td {
     padding-block: 7px;
-    font-size: 7px;
+    font-size: 9px;
   }
   .hero-operation-app .operation-table td:first-child strong {
-    font-size: 8px;
+    font-size: 10px;
   }
   .hero-operation-app .operation-table small {
-    font-size: 6px;
+    font-size: 8px;
     margin-top: 2px;
   }
   .hero-operation-app .operation-table tbody > tr:last-child {
     display: none;
   }
   .hero-operation-app .operation-badge {
-    font-size: 6px;
+    font-size: 8px;
     padding: 3px 4px;
   }
   .hero-operation-app .operation-activity {
@@ -2955,10 +2955,10 @@ html {
     gap: 7px;
   }
   .hero-operation-app .operation-activity strong {
-    font-size: 8px;
+    font-size: 10px;
   }
   .hero-operation-app .operation-activity div > span {
-    font-size: 6px;
+    font-size: 8px;
   }
   .hero-operation-app .activity-check {
     width: 21px;
@@ -2973,13 +2973,13 @@ html {
     margin-top: 10px;
   }
   .hero-sequence button {
-    font-size: 6px;
+    font-size: 8px;
     gap: 4px;
   }
   .hero-sequence button > span:first-child {
     width: 12px;
     height: 12px;
-    font-size: 6px;
+    font-size: 8px;
   }
   .hero-preview .sequence-progress {
     margin-top: 6px;
@@ -2997,10 +2997,10 @@ html {
     border-radius: 7px;
   }
   .incoming-message strong {
-    font-size: 9px;
+    font-size: 11px;
   }
   .incoming-message div > span {
-    font-size: 8px;
+    font-size: 10px;
   }
   .incoming-icon {
     width: 25px;
@@ -3014,13 +3014,13 @@ html {
     margin-top: 10px;
   }
   .scroll-cue {
-    font-size: 5px;
+    font-size: 7px;
   }
   .scroll-cue > svg {
     width: 12px;
   }
   .motion-toggle {
-    font-size: 5px;
+    font-size: 7px;
     gap: 5px;
   }
   .motion-toggle > svg {
@@ -3034,7 +3034,7 @@ html {
   }
   .marquee-inner > p {
     display: flex;
-    font-size: 5px;
+    font-size: 7px;
     gap: 7px;
     line-height: 1.4;
     margin-bottom: 12px;
@@ -3056,7 +3056,7 @@ html {
     padding: 18px 7px;
   }
   .new-live-demo .demo-selector > button > .mono {
-    font-size: 6px;
+    font-size: 8px;
   }
   .new-live-demo .demo-selector > button > svg {
     width: 13px;
@@ -3094,7 +3094,7 @@ html {
     margin-bottom: 12px;
   }
   .comparison-label > span:first-child {
-    font-size: 7px;
+    font-size: 9px;
   }
   .comparison-label > strong {
     font-size: 13px;
@@ -3111,25 +3111,25 @@ html {
     font-size: 12px;
   }
   .manual-message-body > p {
-    font-size: 11px;
+    font-size: 12px;
   }
   .manual-message-body > span {
-    font-size: 9px;
+    font-size: 11px;
   }
   .manual-window-title {
     padding: 9px 12px;
   }
   .manual-message-status {
-    font-size: 9px;
+    font-size: 11px;
     margin-top: 9px;
   }
   .manual-spreadsheet th,
   .manual-spreadsheet td {
     padding: 8px 7px;
-    font-size: 9px;
+    font-size: 11px;
   }
   .manual-task {
-    font-size: 11px;
+    font-size: 12px;
     padding-top: 2px;
   }
   .after-panel .operation-app {
@@ -3139,7 +3139,7 @@ html {
     padding: 13px 15px;
   }
   .operation-company strong {
-    font-size: 11px;
+    font-size: 12px;
   }
   .operation-content {
     padding: 20px 15px 0;
@@ -3149,10 +3149,10 @@ html {
     font-size: 23px;
   }
   .operation-heading p {
-    font-size: 6px;
+    font-size: 8px;
   }
   .operation-stats span {
-    font-size: 8px;
+    font-size: 10px;
   }
   .operation-stats strong {
     font-size: 29px;
@@ -3161,19 +3161,19 @@ html {
     padding: 11px 9px;
   }
   .operation-table th {
-    font-size: 8px;
-  }
-  .operation-table td {
-    font-size: 9px;
-  }
-  .operation-table td:first-child strong {
     font-size: 10px;
   }
+  .operation-table td {
+    font-size: 11px;
+  }
+  .operation-table td:first-child strong {
+    font-size: 12px;
+  }
   .operation-table small {
-    font-size: 8px;
+    font-size: 10px;
   }
   .operation-badge {
-    font-size: 8px;
+    font-size: 10px;
   }
   .operation-activity {
     margin: 12px 15px 15px;
@@ -3181,10 +3181,10 @@ html {
     gap: 8px;
   }
   .operation-activity strong {
-    font-size: 10px;
+    font-size: 12px;
   }
   .operation-activity div > span {
-    font-size: 9px;
+    font-size: 11px;
   }
   .activity-check {
     width: 27px;
@@ -3195,13 +3195,13 @@ html {
     gap: 10px 15px;
   }
   .comparison-steps > button {
-    font-size: 10px;
+    font-size: 12px;
     min-height: 44px;
   }
   .comparison-steps > button > span {
     width: 22px;
     height: 22px;
-    font-size: 7px;
+    font-size: 9px;
   }
   .comparison-note {
     gap: 10px;
@@ -3212,7 +3212,7 @@ html {
     line-height: 1.7;
   }
   .comparison-note > span {
-    font-size: 9px;
+    font-size: 11px;
   }
   .invoice-document {
     padding: 14px;
@@ -3221,10 +3221,10 @@ html {
     font-size: 13px;
   }
   .invoice-line {
-    font-size: 11px;
+    font-size: 12px;
   }
   .schedule-days {
-    font-size: 8px;
+    font-size: 10px;
   }
   .scheduled-appointment {
     padding: 11px;
@@ -3233,7 +3233,7 @@ html {
     font-size: 12px;
   }
   .scheduled-appointment > small {
-    font-size: 9px;
+    font-size: 11px;
   }
   .compact-pricing {
     grid-template-columns: 1fr;
@@ -3256,10 +3256,10 @@ html {
     font-size: 29px;
   }
   .recommended-plan {
-    font-size: 10px;
+    font-size: 12px;
   }
   .plan-category {
-    font-size: 8px;
+    font-size: 10px;
   }
   .compact-plan-summary {
     min-height: 0;
@@ -3273,7 +3273,7 @@ html {
     font-size: 47px;
   }
   .compact-plan-price > span {
-    font-size: 11px;
+    font-size: 12px;
   }
   .compact-plan-price > p {
     font-size: 12px;
@@ -3291,17 +3291,17 @@ html {
     padding-inline: 16px;
   }
   .compact-plan-action > p {
-    font-size: 11px;
+    font-size: 12px;
   }
   .plan-details > summary {
-    font-size: 11px;
+    font-size: 12px;
     padding-block: 4px;
   }
   .plan-details li {
     font-size: 12px;
   }
   .pricing-footnote {
-    font-size: 11px;
+    font-size: 12px;
   }
   .ownership-row {
     font-size: 12px;
@@ -3335,7 +3335,7 @@ html {
     font-size: 14px;
   }
   .founder-signature div > span {
-    font-size: 10px;
+    font-size: 12px;
   }
   .founder-projects a {
     font-size: 12px;
@@ -3383,19 +3383,19 @@ html {
     gap: 7px;
   }
   .brief-steps {
-    font-size: 10px;
+    font-size: 12px;
     gap: 9px;
   }
   .brief-steps i {
     width: 21px;
     height: 21px;
-    font-size: 7px;
+    font-size: 9px;
   }
   .brief-step-line {
     width: 15px;
   }
   .brief-duration {
-    font-size: 6px;
+    font-size: 8px;
   }
   .advanced-contact-form {
     padding: 23px 20px;
@@ -3404,7 +3404,7 @@ html {
     font-size: 28px;
   }
   .brief-form-heading > .eyebrow {
-    font-size: 7px;
+    font-size: 9px;
   }
   .brief-form-heading > p {
     font-size: 13px;
@@ -3416,7 +3416,7 @@ html {
     padding: 12px 8px;
   }
   .brief-service-options strong {
-    font-size: 10px;
+    font-size: 12px;
   }
   .brief-service-options > label > span {
     display: none;
@@ -3450,17 +3450,17 @@ html {
     min-height: 125px;
   }
   .brief-examples > span {
-    font-size: 10px;
+    font-size: 12px;
   }
   .brief-examples button {
-    font-size: 11px;
+    font-size: 12px;
     padding-block: 7px;
   }
   .brief-form-bottom {
     margin-top: 23px;
   }
   .brief-form-bottom > span {
-    font-size: 9px;
+    font-size: 11px;
   }
   .brief-form-bottom > span > strong {
     display: none;
@@ -3471,7 +3471,7 @@ html {
     gap: 17px;
   }
   .brief-privacy {
-    font-size: 9px;
+    font-size: 11px;
     gap: 8px;
     margin-top: 17px;
   }
@@ -3496,16 +3496,16 @@ html {
     gap: 15px;
   }
   .brief-result-actions .action {
-    font-size: 11px;
+    font-size: 12px;
   }
   .brief-save {
-    font-size: 11px;
+    font-size: 12px;
   }
   .footer-bottom {
-    font-size: 9px;
+    font-size: 11px;
   }
   .footer-bottom > span:nth-child(2) {
-    font-size: 10px;
+    font-size: 12px;
   }
   .footer-links,
   .footer-social {
@@ -3524,47 +3524,47 @@ html {
     gap: 12px;
   }
   .hero-actions .action {
-    font-size: 9px;
+    font-size: 11px;
     gap: 8px;
     padding-inline: 11px;
   }
   .hero-demo-link {
-    font-size: 9px;
+    font-size: 11px;
   }
   .hero-eyebrow {
-    font-size: 6px;
+    font-size: 8px;
   }
   .hero-explanation {
-    font-size: 11px;
+    font-size: 12px;
     margin-top: 13px;
   }
   .hero-preview-caption {
-    font-size: 5px;
+    font-size: 7px;
   }
   .hero-preview-caption > span:last-child {
-    font-size: 4px;
+    font-size: 6px;
   }
   .hero-sequence button {
-    font-size: 5px;
+    font-size: 7px;
   }
   .hero-bottom {
     min-height: 35px;
     margin-top: 5px;
   }
   .operation-table td:first-child strong {
-    font-size: 9px;
+    font-size: 11px;
   }
   .operation-table small {
-    font-size: 7px;
+    font-size: 9px;
   }
   .new-live-demo .demo-selector > button {
-    font-size: 11px;
+    font-size: 12px;
   }
   .comparison-label > strong {
     font-size: 12px;
   }
   .nav-cta {
-    font-size: 9px;
+    font-size: 11px;
     gap: 8px;
     padding-inline: 9px;
   }
@@ -3727,7 +3727,7 @@ html {
   font-size: 13px;
 }
 .brief-service-options > label > span {
-  font-size: 10px;
+  font-size: 12px;
 }
 .brief-service-fieldset > legend,
 .brief-field {
@@ -3765,10 +3765,10 @@ html {
 }
 @media (max-width: 700px) {
   .brief-service-options strong {
-    font-size: 11px;
+    font-size: 12px;
   }
   .brief-steps {
-    font-size: 10px;
+    font-size: 12px;
   }
   .brief-field,
   .brief-service-fieldset > legend {

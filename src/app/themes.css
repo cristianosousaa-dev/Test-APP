@@ -950,7 +950,7 @@ h2 > span,
   align-items: center;
   flex-wrap: wrap;
   color: var(--app-muted);
-  font-size: 10px;
+  font-size: 12px;
   line-height: 1.6;
 }
 .stage-route strong {
@@ -967,7 +967,7 @@ h2 > span,
   flex-shrink: 0;
   padding-top: 2px;
   font:
-    8px / 1.7 var(--font-martian),
+    10px / 1.7 var(--font-martian),
     monospace;
   color: var(--app-muted);
 }
@@ -989,7 +989,7 @@ h2 > span,
 }
 .operation-stage-detail dt {
   color: var(--app-muted);
-  font-size: 10px;
+  font-size: 12px;
   line-height: 1.6;
 }
 .operation-stage-detail dd {
@@ -1043,7 +1043,7 @@ h2 > span,
 }
 .stage-narrative-number small {
   font:
-    8px / 1.4 var(--font-martian),
+    10px / 1.4 var(--font-martian),
     monospace;
   color: var(--text-muted);
 }
@@ -1074,7 +1074,7 @@ h2 > span,
   font-size: 12px;
 }
 .hero-stage-narrative p {
-  font-size: 11px;
+  font-size: 12px;
   line-height: 1.65;
   margin-top: 4px;
 }
@@ -1085,7 +1085,7 @@ h2 > span,
   margin-top: 12px;
 }
 .hero-sequence button {
-  font-size: 10px;
+  font-size: 12px;
 }
 
 /* A useful editable brief, already prepared for the selected project or pricing plan. */
@@ -1220,7 +1220,7 @@ h2 > span,
   margin-top: 2px;
 }
 .brief-prefill-note p {
-  font-size: 11px;
+  font-size: 12px;
   line-height: 1.8;
   color: var(--text-muted);
 }
@@ -1252,7 +1252,7 @@ h2 > span,
 }
 .brief-system-fieldset legend > span {
   display: block;
-  font-size: 10px;
+  font-size: 12px;
   color: var(--text-muted);
   margin-top: 5px;
   font-weight: 400;
@@ -1272,7 +1272,7 @@ h2 > span,
   min-height: 36px;
   border: 1px solid var(--line-theme);
   border-radius: 5px;
-  font-size: 11px;
+  font-size: 12px;
   color: var(--text-muted);
   cursor: pointer;
 }
@@ -1424,7 +1424,7 @@ h2 > span,
     min-height: 110px;
   }
   .hero-sequence button {
-    font-size: 8px;
+    font-size: 10px;
   }
   .operation-stage-detail {
     left: 13px;
@@ -1435,7 +1435,7 @@ h2 > span,
     font-size: 16px;
   }
   .stage-message p {
-    font-size: 11px;
+    font-size: 12px;
   }
 }
 @media (max-width: 700px) {
@@ -1469,7 +1469,7 @@ h2 > span,
   }
   .nav-cta {
     min-height: 42px;
-    font-size: 10px;
+    font-size: 12px;
     padding: 10px 12px;
   }
   .nav-mobile-toggle {
@@ -1504,23 +1504,23 @@ h2 > span,
     gap: 10px;
   }
   .hero-stage-narrative strong {
-    font-size: 11px;
+    font-size: 12px;
   }
   .hero-stage-narrative p {
-    font-size: 10px;
+    font-size: 12px;
     line-height: 1.6;
   }
   .hero-stage-narrative .stage-narrative-number {
     font-size: 17px;
   }
   .hero-stage-narrative .stage-narrative-number small {
-    font-size: 6px;
+    font-size: 8px;
   }
   .hero-sequence {
     margin-top: 8px;
   }
   .hero-sequence button {
-    font-size: 7px;
+    font-size: 9px;
   }
   .stage-narrative:not(.hero-stage-narrative) {
     padding: 15px;
@@ -1567,47 +1567,47 @@ h2 > span,
     font-size: 12px;
   }
   .operation-table td:first-child strong {
-    font-size: 11px;
+    font-size: 12px;
   }
   .operation-table small {
-    font-size: 9px;
+    font-size: 11px;
   }
   .operation-table td {
-    font-size: 10px;
+    font-size: 12px;
   }
   .operation-table th {
-    font-size: 9px;
+    font-size: 11px;
   }
   .operation-badge {
-    font-size: 8px;
+    font-size: 10px;
     padding-inline: 4px;
   }
   .operation-table td:first-child {
     gap: 5px;
   }
   .hero-operation-app .operation-table td:first-child strong {
-    font-size: 8px;
+    font-size: 10px;
   }
   .hero-operation-app .operation-table small {
-    font-size: 6px;
+    font-size: 8px;
   }
   .hero-operation-app .operation-table td {
-    font-size: 7px;
+    font-size: 9px;
   }
   .hero-operation-app .operation-table th {
-    font-size: 6px;
+    font-size: 8px;
   }
   .brief-prefill-note {
     padding: 11px;
   }
   .brief-prefill-note p {
-    font-size: 11px;
+    font-size: 12px;
   }
   .brief-system-fieldset legend {
     font-size: 12px;
   }
   .brief-system-options label {
-    font-size: 11px;
+    font-size: 12px;
     min-height: 38px;
     padding-inline: 9px;
   }
@@ -1617,7 +1617,7 @@ h2 > span,
     font-size: 16px;
   }
   .brief-system-fieldset legend > span {
-    font-size: 10px;
+    font-size: 12px;
   }
 }
 @media (max-width: 480px) {
@@ -1660,7 +1660,7 @@ h2 > span,
     min-height: 103px;
   }
   .hero-sequence button {
-    font-size: 6px;
+    font-size: 8px;
   }
   .stage-narrative:not(.hero-stage-narrative) {
     min-height: 187px;
@@ -1674,13 +1674,13 @@ h2 > span,
     font-size: 16px;
   }
   .operation-stage-detail dd {
-    font-size: 11px;
+    font-size: 12px;
   }
   .stage-message {
     padding: 9px;
   }
   .stage-message p {
-    font-size: 11px;
+    font-size: 12px;
   }
 }
 @media (prefers-reduced-motion: reduce) {

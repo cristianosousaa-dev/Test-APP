@@ -4,6 +4,7 @@ import { ArrowUpRight, Check, ChevronDown } from "lucide-react";
 import StarBorder from "@/components/react-bits/StarBorder";
 import { selectBriefContext } from "@/lib/brief-context";
 import { euros, plans } from "@/lib/site";
+import { useTheme } from "@/lib/theme";
 
 const choosePlan = (id: string, plan: string) =>
   selectBriefContext({
@@ -12,6 +13,7 @@ const choosePlan = (id: string, plan: string) =>
   });
 
 export function CompactPricing({ paused }: { paused: boolean }) {
+  const lightButton = useTheme() === "dark";
   return (
     <div className="compact-pricing">
       {plans.map((plan) => {
@@ -68,14 +70,16 @@ export function CompactPricing({ paused }: { paused: boolean }) {
                   onClick={() => choosePlan(plan.id, plan.name)}
                   className="featured-plan-button"
                   radius={12}
-                  thickness={1}
-                  duration={12}
+                  thickness={1.5}
+                  duration={14}
                   hover="brighten"
-                  trailLength={0.45}
-                  glow={0.5}
+                  trailLength={0.5}
+                  glow={0.3}
                   sparkle={false}
-                  color="#c4d0e6"
-                  trailColor="#8d9bb3"
+                  clickPulse={false}
+                  theme={lightButton ? "light" : "dark"}
+                  color={lightButton ? "#456bb8" : "#b9d0ff"}
+                  trailColor={lightButton ? "#9aaed7" : "#507bc8"}
                   backgroundColor="var(--button-surface)"
                   textColor="var(--button-text)"
                   borderColor="var(--button-track)"

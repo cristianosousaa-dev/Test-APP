@@ -12,7 +12,7 @@ Retain light/dark mode, the Orchestr symbol in the hero title, the small framed 
 the approved service, purpose and process sections, compact pricing, the coloured
 marquee in the initial viewport and the Strict.Dev development credit. The portrait
 only gains colour on hover. Physical buttons stay still. The middle plan's React Bits
-StarBorder remains a 12-second contour with a brightness effect on hover.
+StarBorder uses a 14-second contour with a brightness effect on hover.
 
 ## A short conversation form
 
@@ -131,7 +131,7 @@ The demonstrations now have one toolbar for the section title and scenario tabs,
 one compact explanation row with playback controls, aligned before/after panes,
 selectable stages and an inline conversation link. Repeated titles and the separate
 closing CTA have been removed. The application data, four stages and action timelines
-remain intact. Desktop section height is 586–619 px in the verified 1024–1440 px
+remain intact. With the larger small text, desktop section height is 597–631 px in the verified 1024–1440 px
 widths; the entire section fits below the header at 1280×720. Mobile stacks the panes
 and retains readable records rather than forcing a desktop-height presentation.
 
@@ -184,3 +184,31 @@ Browser checks cover seven widths (320–1562 px), both themes, aligned content 
 uniform hover surfaces, stationary button bounds, moving/returning arrows, header
 state reset, 1 px underline and reduced motion. Four focused axe audits of the
 service section report zero violations on desktop/mobile in both themes.
+
+## Small text, window frames and the featured plan
+
+Small typography increases by 1–2 px across the responsive styles: labels, statuses,
+demo stages, miniature applications, plan metadata, contact notes, footer and legal
+navigation. Existing headings and body copy already at least 12 px retain their sizes. Paddings,
+column definitions and fixed demo-panel dimensions are unchanged. Dense miniature
+records use adjusted line heights so their larger text stays inside the same panels.
+
+Demo windows now have an adaptive neutral contour, a distinct title bar and a soft
+outer shadow. The before-state window receives the same framing treatment. Dark
+title bars use a matching readable text colour.
+
+The featured plan's React Bits contour now follows the button surface rather than
+using dark-surface additive blending in both page themes. On the light button it
+uses a restrained blue trail with normal compositing; the dark button gets a pale
+blue trail. The stroke is 1.5 px, its lap lasts 14 seconds, its glow is softer and
+click pulses are disabled. The button surface keeps its colour during hover.
+
+Verification compares the previous committed styles against the same rendered DOM:
+150 small-text nodes increase by exactly 1–2 px, larger text retains its size and
+all measured paddings are identical. Both themes pass all four hero stages and all
+three/four-stage comparisons at 320, 390, 1024, 1280, 1366 and 1440 px, without
+clipped demo panels or page overflow. The compact desktop section still fits at
+1280×720. The optimized build passes the same matrix, live contour motion/visibility,
+stationary CTA bounds and the five legal routes at desktop/mobile widths. All 44
+axe audits report zero violations. The final window contour is explicitly checked
+as a visible 1 px border in the hero and comparison, in both themes.

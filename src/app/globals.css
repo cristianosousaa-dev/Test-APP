@@ -107,7 +107,7 @@ section {
 .footer-bottom,
 .portrait-label {
   font-family: var(--font-martian), monospace;
-  font-size: 9px;
+  font-size: 11px;
   font-weight: 400;
   line-height: 1.7;
   letter-spacing: 0.08em;
@@ -138,7 +138,7 @@ h2 > span {
   display: flex;
   align-items: center;
   gap: 13px;
-  font-size: 9px;
+  font-size: 11px;
   letter-spacing: 0.07em;
 }
 .label-index {
@@ -149,7 +149,7 @@ h2 > span {
   display: grid;
   place-items: center;
   letter-spacing: 0;
-  font-size: 8px;
+  font-size: 10px;
 }
 .section-heading {
   display: flex;
@@ -262,7 +262,7 @@ h2 > span {
 }
 .desktop-nav a {
   position: relative;
-  font-size: 11px;
+  font-size: 12px;
   color: #a7aab1;
   padding-block: 30px;
   transition: color 0.2s;
@@ -281,7 +281,7 @@ h2 > span {
   left: 50%;
 }
 .header-cta {
-  font-size: 11px;
+  font-size: 12px;
   display: inline-flex;
   align-items: center;
   justify-content: space-between;
@@ -338,7 +338,7 @@ h2 > span {
   align-items: center;
   gap: 10px;
   color: #b7bac3;
-  font-size: 9px;
+  font-size: 11px;
 }
 .hero-section h1 {
   position: relative;
@@ -380,7 +380,7 @@ h2 > span {
   display: inline-flex;
   align-items: center;
   gap: 10px;
-  font-size: 11px;
+  font-size: 12px;
   white-space: nowrap;
 }
 .hero-demo-link > span {
@@ -399,7 +399,7 @@ h2 > span {
 .hero-assurance {
   margin-top: 12px;
   color: #737b88;
-  font-size: 10px;
+  font-size: 12px;
 }
 .hero-art {
   position: absolute;
@@ -440,7 +440,7 @@ h2 > span {
   gap: 10px;
   color: #a2a8b2;
   font-family: var(--font-martian), monospace;
-  font-size: 8px;
+  font-size: 10px;
   letter-spacing: 0.09em;
 }
 .orbit-caption > span {
@@ -466,7 +466,7 @@ h2 > span {
   bottom: 8%;
   left: 41%;
   color: #5f6877;
-  font-size: 7px;
+  font-size: 9px;
 }
 .hero-coordinate {
   position: absolute;
@@ -479,7 +479,7 @@ h2 > span {
   gap: 12px;
 }
 .hero-coordinate span {
-  font-size: 7px;
+  font-size: 9px;
   letter-spacing: 0.05em;
 }
 .coordinate-one {
@@ -501,7 +501,7 @@ h2 > span {
   align-items: center;
   gap: 17px;
   font-family: var(--font-martian), monospace;
-  font-size: 8px;
+  font-size: 10px;
   letter-spacing: 0.06em;
   color: #9a9fab;
 }
@@ -513,7 +513,7 @@ h2 > span {
   align-items: center;
   gap: 17px;
   color: #8d949f;
-  font-size: 10px;
+  font-size: 12px;
 }
 .hero-principles i {
   width: 2px;
@@ -527,7 +527,7 @@ h2 > span {
   gap: 8px;
   background: transparent;
   font-family: var(--font-martian), monospace;
-  font-size: 7px;
+  font-size: 9px;
   padding: 10px 0 10px 10px;
   color: #9399a4;
 }
@@ -546,7 +546,7 @@ h2 > span {
 .integration-inner > p {
   flex-shrink: 0;
   color: #a3a8b3;
-  font-size: 7px;
+  font-size: 9px;
   line-height: 1.9;
 }
 .integration-inner > p > span {
@@ -589,7 +589,7 @@ h2 > span {
 }
 .integration-tools .more-tools {
   font-family: var(--font-martian), monospace;
-  font-size: 7px;
+  font-size: 9px;
   letter-spacing: 0.02em;
   font-weight: 400;
   color: #636c7b;
@@ -627,7 +627,7 @@ h2 > span {
   color: #7c7f7a;
 }
 .service-card-top .mono {
-  font-size: 9px;
+  font-size: 11px;
 }
 .service-card h3 {
   font-size: 26px;
@@ -652,7 +652,7 @@ h2 > span {
   display: flex;
   align-items: center;
   gap: 9px;
-  font-size: 11px;
+  font-size: 12px;
   color: #555c58;
 }
 .service-card li svg {
@@ -664,7 +664,7 @@ h2 > span {
   justify-content: space-between;
   border-top: 1px solid #d3d3ce;
   padding-top: 18px;
-  font-size: 11px;
+  font-size: 12px;
 }
 .service-link svg {
   transition: transform 0.25s;
@@ -678,7 +678,7 @@ h2 > span {
   align-items: center;
   gap: 20px;
   padding-top: 25px;
-  font-size: 11px;
+  font-size: 12px;
   color: #63695f;
 }
 .solutions-note > span {
@@ -890,7 +890,7 @@ h2 > span {
     background 0.2s;
 }
 .demo-selector > button .mono {
-  font-size: 8px;
+  font-size: 10px;
   color: #7a8393;
 }
 .demo-selector > button svg {
@@ -941,7 +941,7 @@ h2 > span {
   padding: 10px 13px;
   background: transparent;
   color: #828a98;
-  font-size: 10px;
+  font-size: 12px;
 }
 .view-switch button[aria-pressed="true"] {
   background: #e3e7f0;
@@ -969,7 +969,7 @@ h2 > span {
     0 0 0 7px #ffffff04,
     0 20px 50px #00000055;
   font-family: var(--font-mona), sans-serif;
-  font-size: 10px;
+  font-size: 12px;
   text-align: left;
 }
 .app-sidebar {
@@ -985,7 +985,7 @@ h2 > span {
   align-items: center;
   gap: 7px;
   padding-inline: 6px;
-  font-size: 11px;
+  font-size: 12px;
   font-weight: 600;
 }
 .app-brand svg {
@@ -993,7 +993,7 @@ h2 > span {
   height: 21px;
 }
 .workspace-name {
-  font-size: 8px;
+  font-size: 10px;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -1006,7 +1006,7 @@ h2 > span {
   gap: 9px;
   padding: 10px;
   color: #636a76;
-  font-size: 9px;
+  font-size: 11px;
   border-radius: 4px;
 }
 .app-nav-item.active {
@@ -1028,13 +1028,13 @@ h2 > span {
   align-items: center;
   margin-top: auto;
   padding-top: 50px;
-  font-size: 8px;
+  font-size: 10px;
 }
 .sidebar-bottom small {
   display: block;
   color: #646972;
   margin-top: 2px;
-  font-size: 7px;
+  font-size: 9px;
 }
 .sidebar-bottom svg {
   margin-left: auto;
@@ -1049,7 +1049,7 @@ h2 > span {
   background: #e0e5f0;
   border-radius: 50%;
   color: #546282;
-  font-size: 8px;
+  font-size: 10px;
   flex-shrink: 0;
 }
 .app-main {
@@ -1061,7 +1061,7 @@ h2 > span {
   align-items: center;
   padding: 13px 23px;
   border-bottom: 1px solid #e8ebf0;
-  font-size: 8px;
+  font-size: 10px;
   color: #69707a;
 }
 .app-topbar > span > span {
@@ -1072,7 +1072,7 @@ h2 > span {
   display: flex;
   align-items: center;
   gap: 5px;
-  font-size: 7px;
+  font-size: 9px;
   color: #67717e;
 }
 .app-sandbox > span {
@@ -1089,7 +1089,7 @@ h2 > span {
   align-items: center;
 }
 .app-date {
-  font-size: 6px;
+  font-size: 8px;
   color: #68707b;
   letter-spacing: 0.04em;
 }
@@ -1100,7 +1100,7 @@ h2 > span {
   letter-spacing: -0.035em;
 }
 .app-heading p {
-  font-size: 8px;
+  font-size: 10px;
   color: #6a7079;
   margin-top: 3px;
 }
@@ -1124,7 +1124,7 @@ h2 > span {
 .app-metrics span {
   display: block;
   color: #6c737d;
-  font-size: 8px;
+  font-size: 10px;
 }
 .app-metrics strong {
   font-weight: 500;
@@ -1134,7 +1134,7 @@ h2 > span {
   margin-block: 4px 3px;
 }
 .app-metrics small {
-  font-size: 7px;
+  font-size: 9px;
   color: #67746d;
 }
 .orders-board {
@@ -1148,7 +1148,7 @@ h2 > span {
   margin-bottom: 11px;
 }
 .board-heading > strong {
-  font-size: 10px;
+  font-size: 12px;
   font-weight: 500;
 }
 .demo-search {
@@ -1163,7 +1163,7 @@ h2 > span {
 }
 .demo-search input {
   width: 100px;
-  font-size: 7px;
+  font-size: 9px;
   color: #495467;
   background: transparent;
   border: 0;
@@ -1182,18 +1182,18 @@ h2 > span {
   border-bottom: 1px solid #e8ecf2;
   background: transparent;
   text-align: left;
-  font-size: 9px;
+  font-size: 11px;
   color: #657083;
 }
 .order-row b {
   display: block;
-  font-size: 9px;
+  font-size: 11px;
   color: #3d4858;
   font-weight: 500;
 }
 .order-row small {
   display: block;
-  font-size: 7px;
+  font-size: 9px;
   color: #696f78;
   margin-top: 3px;
 }
@@ -1201,7 +1201,7 @@ h2 > span {
   color: #9fa7b5;
 }
 .table-head {
-  font-size: 7px;
+  font-size: 9px;
   color: #6a707a;
   padding: 0 0 7px;
 }
@@ -1210,7 +1210,7 @@ h2 > span {
   padding: 4px 7px;
   border: 1px solid #dce3f8;
   border-radius: 4px;
-  font-size: 7px;
+  font-size: 9px;
   white-space: nowrap;
   background: #eef2ff;
   color: #5b6992;
@@ -1231,14 +1231,14 @@ h2 > span {
 .empty-search {
   padding: 32px 0;
   color: #828c9a;
-  font-size: 10px;
+  font-size: 12px;
 }
 .order-detail {
   display: flex;
   align-items: center;
   gap: 8px;
   padding: 10px;
-  font-size: 8px;
+  font-size: 10px;
   color: #43664f;
   background: #eaf5ee;
 }
@@ -1268,11 +1268,11 @@ h2 > span {
 }
 .automation-feed strong {
   display: block;
-  font-size: 8px;
+  font-size: 10px;
   font-weight: 500;
 }
 .automation-feed div > span {
-  font-size: 7px;
+  font-size: 9px;
   color: #646a76;
   margin-top: 2px;
   display: block;
@@ -1308,7 +1308,7 @@ h2 > span {
   color: #8da0d4;
 }
 .invoice-preview .mono {
-  font-size: 6px;
+  font-size: 8px;
   color: #697181;
 }
 .invoice-preview h5 {
@@ -1316,7 +1316,7 @@ h2 > span {
   font-weight: 500;
 }
 .invoice-preview p {
-  font-size: 8px;
+  font-size: 10px;
   color: #6c727c;
   margin-top: 5px;
 }
@@ -1331,7 +1331,7 @@ h2 > span {
   position: absolute;
   right: 20px;
   bottom: 25px;
-  font-size: 8px;
+  font-size: 10px;
   color: #5c7866;
   display: flex;
   align-items: center;
@@ -1348,7 +1348,7 @@ h2 > span {
   display: grid;
   grid-template-columns: repeat(5, 1fr);
   text-align: center;
-  font-size: 7px;
+  font-size: 9px;
   color: #6c7179;
   border-bottom: 1px solid #e9ecf2;
   padding-bottom: 10px;
@@ -1370,7 +1370,7 @@ h2 > span {
 .calendar-time {
   position: absolute;
   top: 13px;
-  font-size: 7px;
+  font-size: 9px;
   color: #b0b7c2;
 }
 .appointment {
@@ -1385,11 +1385,11 @@ h2 > span {
   color: #526599;
 }
 .appointment > span {
-  font-size: 6px;
+  font-size: 8px;
 }
 .appointment strong {
   display: block;
-  font-size: 8px;
+  font-size: 10px;
   margin-top: 4px;
   font-weight: 500;
 }
@@ -1398,7 +1398,7 @@ h2 > span {
   align-items: center;
   gap: 3px;
   margin-top: 6px;
-  font-size: 6px;
+  font-size: 8px;
 }
 .demo-timeline {
   display: flex;
@@ -1421,7 +1421,7 @@ h2 > span {
   align-items: center;
   gap: 9px;
   padding: 21px 17px;
-  font-size: 9px;
+  font-size: 11px;
   color: #7b8697;
   background: #14171d;
   border-right: 1px solid #ffffff0a;
@@ -1433,7 +1433,7 @@ h2 > span {
   width: 20px;
   height: 20px;
   font:
-    7px var(--font-martian),
+    9px var(--font-martian),
     monospace;
   border-radius: 50%;
   border: 1px solid #ffffff22;
@@ -1467,7 +1467,7 @@ h2 > span {
   justify-content: space-between;
   gap: 20px;
   color: #788292;
-  font-size: 9px;
+  font-size: 11px;
   margin-top: 15px;
 }
 .demo-footnote > span:first-child {
@@ -1527,17 +1527,17 @@ h2 > span {
   background: #52665a;
   color: #e3eae4;
   padding: 11px 14px;
-  font-size: 10px;
+  font-size: 12px;
 }
 .sheet-title > span {
   margin-left: auto;
-  font-size: 7px;
+  font-size: 9px;
   color: #dfe5e0;
 }
 .sheet-grid {
   display: grid;
   grid-template-columns: 25px 1.5fr 1.1fr 1fr;
-  font-size: 9px;
+  font-size: 11px;
 }
 .sheet-grid > span {
   padding: 10px 7px;
@@ -1548,7 +1548,7 @@ h2 > span {
   background: #e2e6e2;
   color: #8a958c;
   text-align: center;
-  font-size: 8px;
+  font-size: 10px;
 }
 .floating-note {
   position: absolute;
@@ -1560,7 +1560,7 @@ h2 > span {
   color: #6d665d;
   border: 1px solid #a19c91;
   box-shadow: 0 10px 30px #00000022;
-  font-size: 10px;
+  font-size: 12px;
   transform: rotate(4deg);
 }
 .floating-note strong {
@@ -1569,7 +1569,7 @@ h2 > span {
 }
 .floating-note span {
   display: block;
-  font-size: 8px;
+  font-size: 10px;
   margin-top: 4px;
   color: #6d685e;
 }
@@ -1618,7 +1618,7 @@ h2 > span {
 }
 .manifesto-layout > div > .eyebrow {
   color: #8e99ae;
-  font-size: 8px;
+  font-size: 10px;
 }
 .manifesto-layout h2 {
   font-size: clamp(50px, 5.25vw, 80px);
@@ -1652,7 +1652,7 @@ h2 > span {
 }
 .benefit-row > span {
   color: #8596b3;
-  font-size: 8px;
+  font-size: 10px;
   padding-top: 4px;
 }
 .benefit-row h3 {
@@ -1700,7 +1700,7 @@ h2 > span {
   border-top: 1px solid #cfcfc7;
   padding-top: 24px;
   margin-top: 50px;
-  font-size: 11px;
+  font-size: 12px;
   line-height: 1.7;
   color: #666a61;
 }
@@ -1729,7 +1729,7 @@ h2 > span {
   letter-spacing: -0.04em;
 }
 .process-step .eyebrow {
-  font-size: 7px;
+  font-size: 9px;
   color: #656962;
   margin-bottom: 12px;
 }
@@ -1749,7 +1749,7 @@ h2 > span {
   align-items: center;
   gap: 8px;
   color: #515e49;
-  font-size: 10px;
+  font-size: 12px;
   margin-top: 18px;
 }
 .process-deliverable svg {
@@ -1790,7 +1790,7 @@ h2 > span {
 }
 .price-tag {
   color: #a9b9ed;
-  font-size: 6px;
+  font-size: 8px;
   letter-spacing: 0.035em;
 }
 .price-card h3 {
@@ -1806,7 +1806,7 @@ h2 > span {
   max-width: 235px;
 }
 .price-from {
-  font-size: 7px;
+  font-size: 9px;
   color: #616657;
   margin-top: 35px;
 }
@@ -1824,12 +1824,12 @@ h2 > span {
 }
 .monthly-price {
   color: #5c6751;
-  font-size: 10px;
+  font-size: 12px;
   margin-top: 7px;
   line-height: 1.7;
 }
 .monthly-price > span {
-  font-size: 9px;
+  font-size: 11px;
 }
 .price-card .action {
   margin-top: 26px;
@@ -1837,7 +1837,7 @@ h2 > span {
   min-height: 45px;
   padding: 13px 14px;
   gap: 10px;
-  font-size: 10px;
+  font-size: 12px;
 }
 .price-includes {
   padding-top: 30px;
@@ -1850,7 +1850,7 @@ h2 > span {
   display: flex;
   align-items: flex-start;
   gap: 8px;
-  font-size: 10px;
+  font-size: 12px;
   line-height: 1.7;
   color: #606b54;
 }
@@ -1863,7 +1863,7 @@ h2 > span {
   padding-top: 20px;
   margin-top: auto;
   font-family: var(--font-martian), monospace;
-  font-size: 6.5px;
+  font-size: 8.5px;
   color: #5e6754;
   border-top: 1px solid #c4c9bb;
   letter-spacing: 0.01em;
@@ -1903,7 +1903,7 @@ h2 > span {
   justify-content: space-between;
   gap: 40px;
   margin-top: 23px;
-  font-size: 9px;
+  font-size: 11px;
   color: #5d6654;
   line-height: 1.8;
 }
@@ -1929,7 +1929,7 @@ h2 > span {
   margin-top: 45px;
   padding-top: 29px;
   color: #59664d;
-  font-size: 10px;
+  font-size: 12px;
 }
 .ownership-row > span {
   display: flex;
@@ -1977,7 +1977,7 @@ h2 > span {
   bottom: 21px;
   left: 22px;
   color: #e5e8ec;
-  font-size: 7px;
+  font-size: 9px;
   z-index: 1;
 }
 .founder-photo::after {
@@ -2026,7 +2026,7 @@ h2 > span {
   display: block;
   color: #6f809b;
   margin-top: 5px;
-  font-size: 10px;
+  font-size: 12px;
 }
 .founder-signature > a {
   display: flex;
@@ -2046,13 +2046,13 @@ h2 > span {
   color: #7485a0;
 }
 .founder-projects .eyebrow {
-  font-size: 6px;
+  font-size: 8px;
 }
 .founder-projects a {
   display: flex;
   align-items: center;
   gap: 7px;
-  font-size: 11px;
+  font-size: 12px;
 }
 
 /* Questions */
@@ -2079,7 +2079,7 @@ h2 > span {
   line-height: 1.8;
 }
 .faq-layout .text-link {
-  font-size: 11px;
+  font-size: 12px;
   color: #a9bbd9;
   margin-top: 24px;
 }
@@ -2162,7 +2162,7 @@ h2 > span {
   gap: 12px;
   margin-top: 32px;
   color: #526383;
-  font-size: 11px;
+  font-size: 12px;
 }
 .contact-promises > span {
   display: flex;
@@ -2172,7 +2172,7 @@ h2 > span {
 .contact-form legend,
 .contact-form > label,
 .form-row > label {
-  font-size: 11px;
+  font-size: 12px;
   font-weight: 500;
   display: block;
   width: 100%;
@@ -2193,7 +2193,7 @@ h2 > span {
   position: relative;
   cursor: pointer;
   border: 1px solid #b9c4db;
-  font-size: 9px;
+  font-size: 11px;
   color: #55627a;
   display: inline-flex;
   align-items: center;
@@ -2252,7 +2252,7 @@ h2 > span {
 }
 .form-error {
   color: #a4374d;
-  font-size: 11px;
+  font-size: 12px;
   margin-top: 12px;
 }
 .form-submit {
@@ -2262,7 +2262,7 @@ h2 > span {
   margin-top: 30px;
 }
 .form-submit .action {
-  font-size: 11px;
+  font-size: 12px;
   min-height: 48px;
   padding-inline: 16px;
   gap: 15px;
@@ -2273,12 +2273,12 @@ h2 > span {
   background: #3158dd;
 }
 .form-submit > p {
-  font-size: 9px;
+  font-size: 11px;
   color: #586276;
   line-height: 1.7;
 }
 .form-privacy {
-  font-size: 8px;
+  font-size: 10px;
   color: #596272;
   margin-top: 15px;
   line-height: 1.8;
@@ -2300,12 +2300,12 @@ h2 > span {
   font-weight: 500;
 }
 .prepared-request p {
-  font-size: 11px;
+  font-size: 12px;
   margin-top: 7px;
 }
 .prepared-request pre {
   font-family: inherit;
-  font-size: 11px;
+  font-size: 12px;
   white-space: pre-wrap;
   overflow-wrap: anywhere;
   padding: 15px;
@@ -2313,7 +2313,7 @@ h2 > span {
   background: #ffffff55;
 }
 .prepared-request .text-link {
-  font-size: 11px;
+  font-size: 12px;
   margin-top: 8px;
 }
 
@@ -2343,14 +2343,14 @@ h2 > span {
   grid-template-columns: 1fr 1fr;
   gap: 14px 35px;
   color: #8c98ab;
-  font-size: 10px;
+  font-size: 12px;
   margin-left: 45px;
 }
 .footer-social {
   display: inline-flex;
   align-items: center;
   gap: 25px;
-  font-size: 10px;
+  font-size: 12px;
   color: #8c98ab;
   margin-left: auto;
 }
@@ -2361,11 +2361,11 @@ h2 > span {
   justify-content: space-between;
   gap: 20px;
   color: #748093;
-  font-size: 7px;
+  font-size: 9px;
   letter-spacing: 0.02em;
 }
 .footer-bottom > span:nth-child(2) {
-  font-size: 6px;
+  font-size: 8px;
   letter-spacing: 0.08em;
 }
 .back-top {
@@ -2423,7 +2423,7 @@ h2 > span {
   margin-top: 18px;
 }
 .privacy-page article > .eyebrow {
-  font-size: 8px;
+  font-size: 10px;
   margin-bottom: 25px;
 }
 .privacy-page article a {
@@ -2526,7 +2526,7 @@ h2 > span {
   }
   .hero-principles {
     gap: 10px;
-    font-size: 8px;
+    font-size: 10px;
   }
   .integration-inner {
     gap: 35px;
@@ -2564,7 +2564,7 @@ h2 > span {
     min-height: 490px;
   }
   .demo-steps > button {
-    font-size: 8px;
+    font-size: 10px;
     gap: 6px;
     padding: 18px 11px;
   }
@@ -2617,7 +2617,7 @@ h2 > span {
   }
   .header-cta {
     margin-left: auto;
-    font-size: 10px;
+    font-size: 12px;
   }
   .menu-toggle {
     display: block;
@@ -2636,7 +2636,7 @@ h2 > span {
   }
   .mobile-menu > p {
     color: #7284a6;
-    font-size: 7px;
+    font-size: 9px;
   }
   .mobile-menu nav {
     margin-top: 30px;
@@ -2653,7 +2653,7 @@ h2 > span {
   }
   .mobile-menu nav .mono {
     color: #6077a2;
-    font-size: 8px;
+    font-size: 10px;
     letter-spacing: 0;
   }
   .mobile-menu nav svg {
@@ -2662,7 +2662,7 @@ h2 > span {
   }
   .mobile-menu-note {
     color: #657a9f;
-    font-size: 10px;
+    font-size: 12px;
     margin-top: auto;
     padding-top: 40px;
   }
@@ -2747,7 +2747,7 @@ h2 > span {
     padding: 24px 17px !important;
   }
   .service-card li {
-    font-size: 9px;
+    font-size: 11px;
     gap: 5px;
   }
   .service-art {
@@ -2797,14 +2797,14 @@ h2 > span {
     height: 16px;
   }
   .service-link {
-    font-size: 9px;
+    font-size: 11px;
   }
   .demo-story {
     align-items: flex-start;
   }
   .demo-story p {
     max-width: 400px;
-    font-size: 11px;
+    font-size: 12px;
   }
   .demo-story h3 {
     font-size: 21px;
@@ -2814,7 +2814,7 @@ h2 > span {
   }
   .view-switch button {
     padding: 8px 10px;
-    font-size: 9px;
+    font-size: 11px;
   }
   .demo-stage {
     padding: 28px 3% 0;
@@ -2828,10 +2828,10 @@ h2 > span {
     padding-inline: 8px;
   }
   .app-brand {
-    font-size: 9px;
+    font-size: 11px;
   }
   .app-nav-item {
-    font-size: 8px;
+    font-size: 10px;
     gap: 7px;
   }
   .app-metrics {
@@ -2860,20 +2860,20 @@ h2 > span {
     font-size: 21px;
   }
   .app-metrics span {
-    font-size: 7px;
+    font-size: 9px;
   }
   .demo-steps > button {
     flex-direction: column;
     align-items: flex-start;
     gap: 7px;
     padding: 14px;
-    font-size: 8px;
+    font-size: 10px;
   }
   .demo-steps > button > svg {
     display: none;
   }
   .demo-footnote {
-    font-size: 8px;
+    font-size: 10px;
   }
   .manifesto-section {
     padding-block: 95px;
@@ -2909,16 +2909,16 @@ h2 > span {
     font-size: 23px;
   }
   .process-step h3 + p {
-    font-size: 11px;
+    font-size: 12px;
   }
   .process-number {
     font-size: 25px;
   }
   .process-step .eyebrow {
-    font-size: 6px;
+    font-size: 8px;
   }
   .process-deliverable {
-    font-size: 9px;
+    font-size: 11px;
   }
   .price-card {
     padding: 24px 17px;
@@ -2927,38 +2927,38 @@ h2 > span {
     font-size: 25px;
   }
   .price-tag {
-    font-size: 5px;
+    font-size: 7px;
     letter-spacing: 0;
   }
   .price-summary {
-    font-size: 11px;
+    font-size: 12px;
     min-height: 57px;
   }
   .price-value {
     font-size: 34px;
   }
   .price-includes > div {
-    font-size: 9px;
+    font-size: 11px;
   }
   .price-card .action {
-    font-size: 9px;
+    font-size: 11px;
     padding-inline: 11px;
   }
   .price-card .action svg {
     width: 14px;
   }
   .monthly-price {
-    font-size: 9px;
+    font-size: 11px;
   }
   .price-from {
-    font-size: 6px;
+    font-size: 8px;
   }
   .price-lead {
-    font-size: 5.5px;
+    font-size: 7.5px;
   }
   .ownership-row {
     gap: 25px;
-    font-size: 9px;
+    font-size: 11px;
   }
   .founder-layout,
   .faq-layout {
@@ -2981,13 +2981,13 @@ h2 > span {
     gap: 17px;
   }
   .founder-projects .eyebrow {
-    font-size: 5px;
+    font-size: 7px;
   }
   .founder-projects a {
-    font-size: 9px;
+    font-size: 11px;
   }
   .founder-signature div > span {
-    font-size: 8px;
+    font-size: 10px;
   }
   .faq-layout h2 {
     font-size: 35px;
@@ -2996,7 +2996,7 @@ h2 > span {
     font-size: 12px;
   }
   .faq-list details > p {
-    font-size: 11px;
+    font-size: 12px;
   }
   .contact-layout {
     gap: 50px;
@@ -3015,10 +3015,10 @@ h2 > span {
   .contact-form legend,
   .contact-form > label,
   .form-row > label {
-    font-size: 10px;
+    font-size: 12px;
   }
   .contact-options label {
-    font-size: 8px;
+    font-size: 10px;
   }
   .footer-top {
     flex-wrap: wrap;
@@ -3034,10 +3034,10 @@ h2 > span {
     margin-left: 0;
   }
   .footer-bottom {
-    font-size: 6px;
+    font-size: 8px;
   }
   .footer-bottom > span:nth-child(2) {
-    font-size: 5px;
+    font-size: 7px;
   }
 }
 @media (max-width: 700px) {
@@ -3057,7 +3057,7 @@ h2 > span {
   .header-cta {
     padding: 9px 11px;
     gap: 13px;
-    font-size: 9px;
+    font-size: 11px;
   }
   .header-cta svg {
     width: 13px;
@@ -3084,7 +3084,7 @@ h2 > span {
     letter-spacing: -0.052em;
   }
   .hero-eyebrow {
-    font-size: 7px;
+    font-size: 9px;
     letter-spacing: 0.04em;
   }
   .hero-description {
@@ -3105,11 +3105,11 @@ h2 > span {
   .hero-actions .action {
     padding: 14px 15px;
     gap: 18px;
-    font-size: 10px;
+    font-size: 12px;
     min-height: 47px;
   }
   .hero-demo-link {
-    font-size: 10px;
+    font-size: 12px;
     gap: 7px;
   }
   .hero-demo-link > span {
@@ -3117,7 +3117,7 @@ h2 > span {
     height: 25px;
   }
   .hero-assurance {
-    font-size: 8px;
+    font-size: 10px;
     margin-top: 12px;
   }
   .hero-art {
@@ -3159,7 +3159,7 @@ h2 > span {
     left: 10%;
   }
   .orbit-caption {
-    font-size: 6px;
+    font-size: 8px;
     gap: 6px;
   }
   .orbit-caption-a {
@@ -3178,14 +3178,14 @@ h2 > span {
     display: none;
   }
   .scroll-cue {
-    font-size: 6px;
+    font-size: 8px;
     gap: 9px;
   }
   .scroll-cue svg {
     width: 14px;
   }
   .motion-toggle {
-    font-size: 6px;
+    font-size: 8px;
     gap: 6px;
   }
   .integration-inner {
@@ -3193,7 +3193,7 @@ h2 > span {
     padding-block: 24px;
   }
   .integration-inner > p {
-    font-size: 6px;
+    font-size: 8px;
   }
   .integration-tools {
     justify-content: flex-start;
@@ -3214,14 +3214,14 @@ h2 > span {
     display: none;
   }
   .section-label {
-    font-size: 7px;
+    font-size: 9px;
     gap: 10px;
     letter-spacing: 0.03em;
   }
   .label-index {
     width: 20px;
     height: 20px;
-    font-size: 7px;
+    font-size: 9px;
   }
   .section-heading {
     margin-top: 29px;
@@ -3273,7 +3273,7 @@ h2 > span {
   .service-card > p {
     grid-column: 1;
     min-height: 0;
-    font-size: 11px;
+    font-size: 12px;
     line-height: 1.8;
     margin-top: 12px;
   }
@@ -3287,29 +3287,29 @@ h2 > span {
     margin-bottom: 20px;
   }
   .service-card li {
-    font-size: 9px;
+    font-size: 11px;
   }
   .service-link {
     grid-column: 1 / -1;
-    font-size: 10px;
+    font-size: 12px;
   }
   .solutions-note {
     flex-direction: column;
     align-items: flex-start;
     gap: 8px;
-    font-size: 10px;
+    font-size: 12px;
   }
   .solutions-note > p {
     margin-left: 26px;
-    font-size: 9px;
+    font-size: 11px;
   }
   .demo-selector > button {
-    font-size: 10px;
+    font-size: 12px;
     gap: 7px;
     padding: 15px 9px;
   }
   .demo-selector > button .mono {
-    font-size: 6px;
+    font-size: 8px;
   }
   .demo-selector > button > svg {
     width: 12px;
@@ -3322,7 +3322,7 @@ h2 > span {
     font-size: 22px;
   }
   .demo-story p {
-    font-size: 11px;
+    font-size: 12px;
     max-width: 100%;
   }
   .view-switch {
@@ -3330,7 +3330,7 @@ h2 > span {
     margin-top: 20px;
   }
   .view-switch button {
-    font-size: 9px;
+    font-size: 11px;
     padding: 8px 12px;
   }
   .demo-stage {
@@ -3348,19 +3348,19 @@ h2 > span {
   }
   .app-topbar {
     padding: 11px 12px;
-    font-size: 7px;
+    font-size: 9px;
   }
   .app-heading {
     padding: 18px 13px 16px;
   }
   .app-date {
-    font-size: 5px;
+    font-size: 7px;
   }
   .app-heading h4 {
     font-size: 18px;
   }
   .app-heading p {
-    font-size: 7px;
+    font-size: 9px;
   }
   .app-metrics {
     gap: 6px;
@@ -3370,23 +3370,23 @@ h2 > span {
     padding: 11px 9px;
   }
   .app-metrics span {
-    font-size: 6px;
+    font-size: 8px;
   }
   .app-metrics strong {
     font-size: 22px;
   }
   .app-metrics small {
-    font-size: 6px;
+    font-size: 8px;
   }
   .orders-board {
     margin-inline: 13px;
     margin-top: 20px;
   }
   .board-heading > strong {
-    font-size: 9px;
+    font-size: 11px;
   }
   .demo-search input {
-    font-size: 6px;
+    font-size: 8px;
     width: 83px;
   }
   .demo-search {
@@ -3395,21 +3395,21 @@ h2 > span {
   .order-row {
     grid-template-columns: 1.5fr 1fr 0.95fr 10px;
     gap: 5px;
-    font-size: 8px;
+    font-size: 10px;
     padding-block: 11px;
   }
   .order-row b {
-    font-size: 8px;
+    font-size: 10px;
   }
   .order-row small {
-    font-size: 6px;
+    font-size: 8px;
   }
   .order-state {
-    font-size: 6px;
+    font-size: 8px;
     padding: 4px;
   }
   .table-head {
-    font-size: 6px;
+    font-size: 8px;
     padding-bottom: 7px;
   }
   .automation-feed {
@@ -3419,10 +3419,10 @@ h2 > span {
     gap: 7px;
   }
   .automation-feed strong {
-    font-size: 7px;
+    font-size: 9px;
   }
   .automation-feed div > span {
-    font-size: 6px;
+    font-size: 8px;
   }
   .feed-symbol {
     width: 23px;
@@ -3442,7 +3442,7 @@ h2 > span {
     flex-basis: 50%;
     flex-direction: row;
     align-items: center;
-    font-size: 7px;
+    font-size: 9px;
     padding: 13px 7px;
     border-bottom: 1px solid #ffffff0a;
     gap: 5px;
@@ -3450,7 +3450,7 @@ h2 > span {
   .demo-steps > button > span {
     width: 16px;
     height: 16px;
-    font-size: 6px;
+    font-size: 8px;
   }
   .demo-play {
     width: 26px;
@@ -3461,7 +3461,7 @@ h2 > span {
   .demo-footnote {
     flex-direction: column;
     gap: 8px;
-    font-size: 7px;
+    font-size: 9px;
     line-height: 1.8;
   }
   .demo-footnote > span:first-child {
@@ -3478,7 +3478,7 @@ h2 > span {
     font-size: 19px;
   }
   .demo-closing .text-link {
-    font-size: 11px;
+    font-size: 12px;
   }
   .invoice-preview {
     margin-inline: 13px;
@@ -3489,10 +3489,10 @@ h2 > span {
   .invoice-preview p {
     max-width: 115px;
     line-height: 1.7;
-    font-size: 7px;
+    font-size: 9px;
   }
   .invoice-preview h5 {
-    font-size: 11px;
+    font-size: 12px;
   }
   .invoice-preview > strong {
     font-size: 17px;
@@ -3503,7 +3503,7 @@ h2 > span {
   }
   .invoice-status {
     right: 10px;
-    font-size: 7px;
+    font-size: 9px;
   }
   .calendar-preview {
     margin-inline: 13px;
@@ -3518,16 +3518,16 @@ h2 > span {
     padding: 7px 5px;
   }
   .appointment strong {
-    font-size: 7px;
+    font-size: 9px;
   }
   .appointment small {
-    font-size: 5px;
+    font-size: 7px;
   }
   .appointment > span {
-    font-size: 5px;
+    font-size: 7px;
   }
   .calendar-week {
-    font-size: 6px;
+    font-size: 8px;
   }
   .before-scene {
     min-height: 410px;
@@ -3536,7 +3536,7 @@ h2 > span {
     width: 100%;
   }
   .sheet-title {
-    font-size: 8px;
+    font-size: 10px;
     padding-inline: 10px;
   }
   .sheet-title > span {
@@ -3544,18 +3544,18 @@ h2 > span {
   }
   .sheet-grid {
     grid-template-columns: 20px 1.4fr 1fr 1fr;
-    font-size: 6px;
+    font-size: 8px;
   }
   .sheet-grid > span {
     padding: 9px 5px;
   }
   .floating-note {
     padding: 12px;
-    font-size: 8px;
+    font-size: 10px;
     gap: 9px;
   }
   .floating-note span {
-    font-size: 6px;
+    font-size: 8px;
   }
   .note-one {
     top: 11%;
@@ -3566,7 +3566,7 @@ h2 > span {
     left: -5px;
   }
   .before-caption {
-    font-size: 11px;
+    font-size: 12px;
     bottom: 20px;
   }
   .manifesto-section {
@@ -3581,7 +3581,7 @@ h2 > span {
     margin-top: 29px;
   }
   .manifesto-layout > div > .eyebrow {
-    font-size: 7px;
+    font-size: 9px;
   }
   .manifesto-details {
     padding-top: 0;
@@ -3621,7 +3621,7 @@ h2 > span {
   }
   .process-stamp {
     margin-top: 28px;
-    font-size: 10px;
+    font-size: 12px;
     padding-top: 20px;
   }
   .process-step {
@@ -3636,14 +3636,14 @@ h2 > span {
     font-size: 25px;
   }
   .process-step .eyebrow {
-    font-size: 6px;
+    font-size: 8px;
     line-height: 1.8;
   }
   .process-step h3 + p {
     font-size: 12px;
   }
   .process-deliverable {
-    font-size: 10px;
+    font-size: 12px;
   }
   .pricing-grid {
     grid-template-columns: 1fr;
@@ -3658,10 +3658,10 @@ h2 > span {
     margin-bottom: 23px;
   }
   .price-topline .mono {
-    font-size: 9px;
+    font-size: 11px;
   }
   .price-tag {
-    font-size: 6px;
+    font-size: 8px;
     letter-spacing: 0.03em;
   }
   .price-card h3 {
@@ -3675,17 +3675,17 @@ h2 > span {
   }
   .price-from {
     margin-top: 29px;
-    font-size: 7px;
+    font-size: 9px;
   }
   .price-value {
     font-size: 48px;
   }
   .monthly-price {
-    font-size: 11px;
+    font-size: 12px;
   }
   .price-card .action {
     min-height: 47px;
-    font-size: 11px;
+    font-size: 12px;
     padding: 13px 16px;
   }
   .price-includes {
@@ -3693,16 +3693,16 @@ h2 > span {
     gap: 12px;
   }
   .price-includes > div {
-    font-size: 11px;
+    font-size: 12px;
   }
   .price-lead {
-    font-size: 7px;
+    font-size: 9px;
     padding-top: 19px;
   }
   .pricing-footnote {
     flex-direction: column;
     gap: 17px;
-    font-size: 9px;
+    font-size: 11px;
   }
   .pricing-footnote > p:last-child {
     text-align: left;
@@ -3711,7 +3711,7 @@ h2 > span {
     flex-direction: column;
     gap: 18px;
     align-items: flex-start;
-    font-size: 11px;
+    font-size: 12px;
     margin-top: 30px;
     padding-top: 25px;
   }
@@ -3741,17 +3741,17 @@ h2 > span {
     margin-top: 25px;
   }
   .founder-signature div > span {
-    font-size: 9px;
+    font-size: 11px;
   }
   .founder-projects {
     gap: 25px;
     margin-top: 29px;
   }
   .founder-projects .eyebrow {
-    font-size: 6px;
+    font-size: 8px;
   }
   .founder-projects a {
-    font-size: 11px;
+    font-size: 12px;
   }
   .faq-layout {
     grid-template-columns: 1fr;
@@ -3799,16 +3799,16 @@ h2 > span {
   }
   .contact-promises {
     margin-top: 25px;
-    font-size: 10px;
+    font-size: 12px;
     gap: 11px;
   }
   .contact-form legend,
   .contact-form > label,
   .form-row > label {
-    font-size: 11px;
+    font-size: 12px;
   }
   .contact-options label {
-    font-size: 9px;
+    font-size: 11px;
     padding: 10px 12px;
   }
   .contact-form fieldset {
@@ -3819,7 +3819,7 @@ h2 > span {
     gap: 20px;
   }
   .form-row input {
-    font-size: 10px;
+    font-size: 12px;
   }
   .contact-form textarea {
     font-size: 12px;
@@ -3827,17 +3827,17 @@ h2 > span {
   }
   .form-submit .action {
     min-height: 50px;
-    font-size: 11px;
+    font-size: 12px;
     width: 100%;
   }
   .form-submit {
     margin-top: 25px;
   }
   .form-submit > p {
-    font-size: 9px;
+    font-size: 11px;
   }
   .form-privacy {
-    font-size: 8px;
+    font-size: 10px;
   }
   .site-footer {
     padding-block: 45px 25px;
@@ -3852,28 +3852,28 @@ h2 > span {
     height: 27px !important;
   }
   .footer-top > p {
-    font-size: 11px;
+    font-size: 12px;
     margin-left: 0;
     line-height: 1.7;
   }
   .footer-links {
-    font-size: 11px;
+    font-size: 12px;
     gap: 16px;
   }
   .footer-social {
     align-self: flex-end;
     gap: 18px;
-    font-size: 11px;
+    font-size: 12px;
   }
   .footer-bottom {
     flex-wrap: wrap;
-    font-size: 7px;
+    font-size: 9px;
     gap: 20px;
   }
   .footer-bottom > span:nth-child(2) {
     order: 3;
     flex-basis: 100%;
-    font-size: 5px;
+    font-size: 7px;
   }
   .footer-bottom > a {
     margin-left: auto;
@@ -3894,7 +3894,7 @@ h2 > span {
     height: 24px;
   }
   .privacy-header > a:last-child {
-    font-size: 10px;
+    font-size: 12px;
   }
   .privacy-page article > p {
     font-size: 13px;
@@ -3908,7 +3908,7 @@ h2 > span {
     gap: 14px;
   }
   .header-cta {
-    font-size: 8px;
+    font-size: 10px;
     gap: 8px;
     padding-inline: 8px;
   }
@@ -3916,11 +3916,11 @@ h2 > span {
     gap: 13px;
   }
   .hero-actions .action {
-    font-size: 9px;
+    font-size: 11px;
     gap: 12px;
   }
   .hero-demo-link {
-    font-size: 9px;
+    font-size: 11px;
   }
   .hero-art {
     height: 335px;
@@ -3932,13 +3932,13 @@ h2 > span {
     font-size: 21px;
   }
   .service-card > p {
-    font-size: 10px;
+    font-size: 12px;
   }
   .section-label {
-    font-size: 6px;
+    font-size: 8px;
   }
   .demo-selector > button {
-    font-size: 9px;
+    font-size: 11px;
     padding-inline: 5px;
   }
   .contact-copy h2 {
@@ -4034,14 +4034,14 @@ h2 > span {
 .pricing-footnote,
 .form-privacy,
 .demo-footnote {
-  font-size: 10px;
+  font-size: 12px;
 }
 .contact-options label {
   min-height: 40px;
-  font-size: 10px;
+  font-size: 12px;
 }
 .form-submit > p {
-  font-size: 11px;
+  font-size: 12px;
 }
 @media (max-width: 700px) {
   .header-cta {
@@ -4067,7 +4067,7 @@ h2 > span {
     font-size: 12px;
   }
   .service-card li {
-    font-size: 10px;
+    font-size: 12px;
   }
   .service-card > p {
     grid-column: 1 / -1;
