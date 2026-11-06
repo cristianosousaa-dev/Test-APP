@@ -1473,7 +1473,7 @@ html {
 }
 .compact-plan-action > a {
   width: 100%;
-  border-radius: 7px;
+  border-radius: 12px;
   min-height: 47px;
   display: flex;
   align-items: center;
@@ -1490,8 +1490,8 @@ html {
 }
 .featured-plan-button,
 .static-featured-button {
-  background: #26385e;
-  color: #f4f6ff;
+  background: var(--button-surface);
+  color: var(--button-text);
 }
 .static-featured-button {
   border: 1px solid #809ce8;

@@ -241,9 +241,9 @@ export function Landing() {
                   <SpotlightCard
                     className="service-card"
                     theme="light"
-                    spotlightColor="#587bff"
-                    intensity={0.15}
-                    borderGlow={0.3}
+                    spotlightColor="#9caec6"
+                    intensity={0.08}
+                    borderGlow={0.12}
                     proximity={0}
                     style={
                       {

@@ -236,6 +236,7 @@ function Workspace({
       className={`flow-workspace ${hero ? "flow-workspace-hero" : ""}`}
       data-phase={phase}
       data-complete={still}
+      data-running={running && !still}
     >
       <div className="flow-app-bar">
         <span>
@@ -468,12 +469,22 @@ function Workspace({
         </div>
         <strong>{stage.to}</strong>
       </div>
-      <div className="flow-toast">
-        <span>
-          <Check size={13} />
-        </span>
-        <strong>{example.confirmations[phase]}</strong>
-        <span className="flow-toast-end">Registado</span>
+      <div className="flow-feedback">
+        <div className="flow-feedback-pending">
+          <span className="flow-wait-dots" aria-hidden="true">
+            <i />
+            <i />
+            <i />
+          </span>
+          <span>{running ? "A executar esta etapa…" : "Demonstração em pausa"}</span>
+        </div>
+        <div className="flow-toast">
+          <span>
+            <Check size={13} />
+          </span>
+          <strong>{example.confirmations[phase]}</strong>
+          <span className="flow-toast-end">Registado</span>
+        </div>
       </div>
       <div className="flow-pointer" aria-hidden="true">
         <MousePointer2 size={23} fill="currentColor" />

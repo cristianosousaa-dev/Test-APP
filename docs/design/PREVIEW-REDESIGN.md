@@ -76,6 +76,24 @@ backgrounds; dark mode stays charcoal and navy. The headline remains exactly
 «Orchestr o futuro da sua empresa.» General copy and metadata now address companies
 and emphasise the first conversation.
 
+## Adaptive surface refinement
+
+The shared light/dark palette now uses neutral, low-opacity separators instead of blue
+outlines. Navigation, demo panels, fields, pricing and the form share soft depth, quiet
+highlights and continuous rounded corners. Subtle glass uses blur with near-opaque
+backgrounds; reduced-transparency and unsupported-filter fallbacks use solid surfaces.
+Semantic transfer/pending/completed colours remain in the demonstrations.
+
+The service subject is a custom themed combobox/listbox, with pointer, arrow keys,
+Home/End, typeahead, Enter, Escape, Tab and outside dismissal. Its menu fits narrow
+viewports and opens upwards when space below is limited. Keyboard focus remains visible
+with a neutral ring. No new dependency is added.
+
+The project-stage numbers had stretched to roughly 190–215 px on mobile, exposing tall
+background strips. They now align to the start at their 25–32 px text height with a
+transparent background. The scroll thread runs beside the text, without crossing it.
+The demo footer displays an in-progress state until its confirmation appears.
+
 ## Verification
 
 TypeScript, the optimized Next build and the changed TS/TSX Biome checks are required.
@@ -87,8 +105,9 @@ Responsive checks cover both themes at 320×800, 390×844, 768×900, 1024×800, 
 and 1440×900, including all four hero phases. No horizontal overflow, clipped demo
 content or hidden initial marquee is accepted in those formats.
 
-Axe reports zero WCAG A/AA violations in 33 audited states: all 24 desktop demo stages,
-the collapsed and expanded form in both themes, the result, and four mobile demo states.
+Axe reports zero WCAG A/AA violations in 37 audited states: all 24 desktop demo stages,
+the collapsed and expanded form in both themes, the result, four mobile demo states,
+and the open custom service menu at desktop/mobile sizes in both themes.
 These automated checks do not replace an assistive-technology review.
 
 The per-request CSP nonce, prepaint theme selection, preview noindex setting and existing
@@ -96,6 +115,12 @@ production separation remain. No new dependency or external contact service is a
 
 Final verification: optimized build and TypeScript pass; all changed TS/TSX files pass
 Biome. The browser flows, animation timings, scroll progression and responsive matrix
-above pass. The optimized server responds 200 with a CSP nonce; theme persistence,
+above pass. The combobox keyboard/pointer flows, fixed process label dimensions, popup
+viewport bounds, pending demo feedback and reduced-transparency fallback also pass.
+The optimized server responds 200 with a CSP nonce; theme persistence,
 an actual animated transfer and the complete compact form/download flow work on mobile,
 without browser errors or POST requests.
+The final optimized-server check also covers both colours of the live animated pricing
+button, the menu's upward placement, touch selection and the complete contact flow.
+The former hardcoded pricing-button background and radius were removed at their source,
+so the animated and paused variants now share the same adaptive material.

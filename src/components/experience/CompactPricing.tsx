@@ -67,18 +67,18 @@ export function CompactPricing({ paused }: { paused: boolean }) {
                   href="#contacto"
                   onClick={() => choosePlan(plan.id, plan.name)}
                   className="featured-plan-button"
-                  radius={8}
-                  thickness={1.5}
+                  radius={12}
+                  thickness={1}
                   duration={12}
                   hover="brighten"
                   trailLength={0.45}
-                  glow={0.8}
+                  glow={0.5}
                   sparkle={false}
-                  color="#a9bdff"
-                  trailColor="#5476ff"
-                  backgroundColor="#26385e"
-                  textColor="#f4f6ff"
-                  borderColor="#809ce870"
+                  color="#c4d0e6"
+                  trailColor="#8d9bb3"
+                  backgroundColor="var(--button-surface)"
+                  textColor="var(--button-text)"
+                  borderColor="var(--button-track)"
                 >
                   Pedir proposta
                   <ArrowUpRight size={17} />

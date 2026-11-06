@@ -4,6 +4,7 @@ import { ArrowLeft, ArrowUpRight, Check, Copy, Download, MessageSquare, Plus } f
 import { useEffect, useId, useRef, useState } from "react";
 import { type BriefContext, briefServices } from "@/lib/brief-context";
 import { contactHref, site } from "@/lib/site";
+import { ServiceSelect } from "./ServiceSelect";
 
 export function ContactForm() {
   const id = useId();
@@ -122,17 +123,15 @@ export function ContactForm() {
             </div>
           </div>
           <div className="conversation-context">
-            <label htmlFor={`${id}-service`}>Sobre</label>
-            <select
+            <span className="conversation-context-label" id={`${id}-service-label`}>
+              Sobre
+            </span>
+            <ServiceSelect
               id={`${id}-service`}
+              labelledBy={`${id}-service-label`}
               value={context.service || ""}
-              onChange={(event) => setContext({ service: event.target.value || undefined })}
-            >
-              <option value="">Explorar uma solução</option>
-              {briefServices.map((service) => (
-                <option key={service}>{service}</option>
-              ))}
-            </select>
+              onChange={(value) => setContext({ service: value || undefined })}
+            />
             {context.plan && <span className="conversation-plan">{context.plan}</span>}
           </div>
           <div className="conversation-fields">
