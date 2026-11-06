@@ -52,27 +52,15 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: "#fbfcfb",
-  colorScheme: "light dark",
+  themeColor: "#0c0e11",
+  colorScheme: "dark",
 };
 
 export default async function RootLayout({ children }: { children: ReactNode }) {
-  // Set by src/proxy.ts; the CSP only lets scripts carrying this nonce run.
-  const nonce = (await headers()).get("x-nonce") ?? undefined;
+  // Keep rendering per request: Next must stamp its scripts with the proxy's CSP nonce.
+  await headers();
   return (
-    <html
-      lang="pt-PT"
-      className={`${mona.variable} ${mono.variable} ${nohemi.variable}`}
-      suppressHydrationWarning
-    >
-      <head>
-        {/* Scroll reveals hide content only when JS is available to show it again. */}
-        <script nonce={nonce}>
-          {
-            "document.documentElement.classList.add('js');try{var t=localStorage.getItem('theme');document.documentElement.dataset.theme=t==='dark'?'dark':'light'}catch(e){document.documentElement.dataset.theme='light'}"
-          }
-        </script>
-      </head>
+    <html lang="pt-PT" className={`${mona.variable} ${mono.variable} ${nohemi.variable}`}>
       <body className="min-h-dvh">
         <a
           href="#conteudo"

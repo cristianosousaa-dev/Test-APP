@@ -5,10 +5,10 @@
 export const site = {
   // Brand name (see docs/brand/BRAND.md). Run a trademark search (INPI/EUIPO) before launch.
   name: "Orchestr",
-  tagline: "Software à medida para PME.",
+  tagline: "Software à medida. Negócios em sintonia.",
   // ≈140 characters: search engines truncate descriptions past ~155.
   description:
-    "A Orchestr desenvolve software, automação e sites para PME. Coordena pessoas, processos e programas, poupa horas e abre novas oportunidades.",
+    "Software, automação e sites à medida para PME. Ligamos pessoas, processos e programas. Veja uma demonstração gratuita antes de decidir.",
   // Production domain comes from NEXT_PUBLIC_SITE_URL (e.g. https://orchestr.pt).
   url: process.env.NEXT_PUBLIC_SITE_URL ?? "https://example.com",
   // TODO: real contact email (example.com is a reserved placeholder domain).
@@ -106,7 +106,7 @@ export const plans: readonly Plan[] = [
 ] as const;
 
 /* Until a real domain is configured, the site asks search engines not to index it. */
-export const isLive = !site.url.includes("example.com");
+export const isLive = process.env.VERCEL_ENV !== "preview" && !site.url.includes("example.com");
 
 /* pt-PT does not group four-digit numbers by default; prices read better as "2 400 €". */
 export const euros = (n: number) => `${n.toLocaleString("pt-PT", { useGrouping: "always" })} €`;

@@ -1,50 +1,69 @@
 import type { Metadata } from "next";
-import { LinkButton } from "@/components/ui/Button";
-import { Container } from "@/components/ui/Container";
+import { OrchestrLogo } from "@/components/brand/OrchestrLogo";
 import { site } from "@/lib/site";
 
 export const metadata: Metadata = {
   title: "Política de privacidade",
-  description: `Como a ${site.name} trata os dados pessoais enviados através deste site.`,
+  description: `Como a ${site.name} trata os dados pessoais neste site.`,
   alternates: { canonical: "/privacidade" },
 };
 
-/*
- * Describes what the site actually does today: no forms posted to a server, no cookies, no
- * analytics. TODO: add the controller's legal name, NIF and address before launch.
- */
 export default function Privacidade() {
+  const isExample = site.email.endsWith("@example.com");
   return (
-    <main id="conteudo" className="py-24 sm:py-32">
-      <Container>
-        <div className="max-w-[44rem]">
-          <LinkButton href="/" variant="mist" size="md" arrow={false}>
-            ← Voltar ao site
-          </LinkButton>
-          <h1 className="h2 mt-8">Política de privacidade</h1>
-          <div className="mt-10 space-y-6 text-[16px] leading-[1.7] text-fg-2">
-            <p>
-              Este site não utiliza cookies, ferramentas de análise nem formulários que enviem dados
-              para os nossos servidores.
-            </p>
-            <p>
-              Quando descreve uma tarefa e pede uma proposta, o site abre o seu programa de email
-              (ou o WhatsApp) com a mensagem já escrita. Os dados só nos chegam se decidir enviar
-              essa mensagem e são usados apenas para responder ao seu pedido.
-            </p>
-            <p>
-              Conservamos a correspondência enquanto for necessária para preparar a proposta e
-              acompanhar o projeto. Pode pedir, a qualquer momento, o acesso, a retificação ou a
-              eliminação dos seus dados através de{" "}
-              <a className="text-fg underline underline-offset-4" href={`mailto:${site.email}`}>
-                {site.email}
-              </a>
-              . Tem ainda o direito de apresentar reclamação à Comissão Nacional de Proteção de
-              Dados (CNPD).
-            </p>
-          </div>
+    <main id="conteudo" className="privacy-page">
+      <div className="frame">
+        <div className="privacy-header">
+          <a href="/" aria-label="Orchestr — início">
+            <OrchestrLogo id="privacy-logo" />
+          </a>
+          <a href="/">← Voltar ao site</a>
         </div>
-      </Container>
+        <article>
+          <p className="eyebrow">ORCHESTR · PRIVACIDADE</p>
+          <h1>
+            Os seus dados.
+            <br />
+            Com clareza.
+          </h1>
+          <h2>O que este site guarda</h2>
+          <p>
+            Este site não utiliza cookies de publicidade, ferramentas de análise nem formulários que
+            enviem dados para os nossos servidores. As demonstrações usam dados fictícios. A
+            pesquisa, os separadores e as opções de movimento funcionam apenas no seu navegador.
+          </p>
+          <h2>Pedidos de demonstração</h2>
+          <p>
+            {isExample
+              ? "Este é um preview. O formulário prepara uma mensagem apenas no seu navegador, para poder rever e copiar. Nenhum pedido é enviado. Os campos não são guardados quando atualiza ou fecha a página."
+              : "O formulário abre o seu programa de email com o pedido preenchido. Só recebemos os dados se decidir enviar a mensagem. Utilizamos essa correspondência para responder ao pedido e preparar a proposta."}
+          </p>
+          <h2>Serviços externos</h2>
+          <p>
+            As fontes e imagens são servidas pelo próprio site. Ao seguir uma ligação externa, como
+            o LinkedIn, BOOKLIN ou Strict.Dev, aplicam-se as políticas de privacidade desse serviço.
+            Ao copiar um pedido, o texto fica na área de transferência do seu dispositivo.
+          </p>
+          <h2>Contacto</h2>
+          <p>
+            {isExample ? (
+              <>
+                O endereço <span>{site.email}</span> é meramente ilustrativo e não recebe pedidos
+                neste preview.
+              </>
+            ) : (
+              <>
+                Pode pedir acesso, retificação ou eliminação dos dados enviados por email através de{" "}
+                <a href={`mailto:${site.email}`}>{site.email}</a>. Conservamos a correspondência
+                apenas pelo tempo necessário à resposta e ao acompanhamento do projeto.
+              </>
+            )}
+          </p>
+          <p>
+            Tem o direito de apresentar reclamação à Comissão Nacional de Proteção de Dados (CNPD).
+          </p>
+        </article>
+      </div>
     </main>
   );
 }

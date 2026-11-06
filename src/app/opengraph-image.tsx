@@ -17,7 +17,7 @@ export default function OpengraphImage() {
         justifyContent: "space-between",
         padding: 80,
         background:
-          "radial-gradient(60% 70% at 8% 110%, rgba(43,91,255,0.35), transparent 70%), #0b0f0e",
+          "radial-gradient(60% 70% at 85% 75%, rgba(84,118,255,0.18), transparent 70%), #0c0e11",
         color: "#ffffff",
         fontFamily: "sans-serif",
       }}
@@ -25,14 +25,16 @@ export default function OpengraphImage() {
       <div
         style={{ display: "flex", alignItems: "center", gap: 18, fontSize: 40, fontWeight: 600 }}
       >
-        <div style={{ width: 22, height: 22, background: "#2f5e50" }} />
+        <div style={{ width: 22, height: 22, background: "#5476ff" }} />
         {site.name.toLowerCase()}
       </div>
       <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
         <div style={{ fontSize: 72, lineHeight: 1.05, letterSpacing: -2, maxWidth: 940 }}>
-          Orchestr, o futuro da sua empresa.
+          O seu negócio. Em sintonia.
         </div>
-        <div style={{ fontSize: 30, color: "#a9b2ae" }}>Software à medida para PME.</div>
+        <div style={{ fontSize: 30, color: "#98a5be" }}>
+          Software, automação e experiências digitais.
+        </div>
       </div>
     </div>,
     size,
