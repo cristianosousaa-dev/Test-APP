@@ -1,72 +1,67 @@
-# Orchestr — Em sintonia
+# Orchestr — preview refinement
 
-Preview branch: `preview/orchestr-redesign`. Production branch: `main` (not changed).
+Branch: `preview/orchestr-redesign`. Production branch `main` is not changed.
 
-## Direction
+## Direction retained
 
-A full redesign, informed by the spacious typography and chapter-based presentation of
-https://www.endurosat.com/space-service/. The orbital sculpture represents people,
-processes and technology as interdependent parts of one business. It is original canvas
-geometry; no EnduroSat artwork, assets or copy were reused.
+Charcoal, warm paper and signal blue. The structure of «O que construímos»,
+«Tecnologia com um propósito claro» and «Do seu processo ao seu software» is retained,
+with larger reading text and GSAP scroll reveals. The original Orchestr symbol and
+wordmark remain the basis of the identity.
 
-The identity retains the Orchestr symbol and wordmark. Charcoal, warm paper, muted silver
-and signal blue replace the previous green system. Nohemi is used for display type, Mona
-Sans for reading and interface text, and Martian Mono for metadata. Fonts are self-hosted.
+## Requested refinements
 
-## Narrative and behavior
+- The hero reads «Orchestr o futuro da sua empresa.» The symbol replaces the initial O.
+- The abstract 3D sculpture is removed. A real process preview shows an incoming email,
+  an order being registered, production being notified and the client being informed.
+- React Bits LogoLoop runs a coloured integration marquee in the initial viewport.
+  Actual icons from the existing open-library brand assets are used without grayscale:
+  Excel, Outlook, WhatsApp, Shopify, Gmail, Google Calendar, Slack, Stripe and WooCommerce.
+- The three examples each show a simultaneous before / after, with a shared animated
+  four-stage sequence. Orders, billing and appointments use normal business interfaces,
+  without AI icons or chat-assistant UI. All records are illustrative.
+- Service dropdown: three service areas and direct links to the three examples.
+  The header contracts into a floating bar on scroll and shows reading progress.
+- The portrait is reduced to a small framed photograph (200 px desktop, 124 px mobile).
+- Pricing is more compact, with four key inclusions and full details on demand.
+  The middle plan uses React Bits StarBorder's moving contour. Existing prices remain.
+- The contact area is a two-step project brief: service, process and timing, then name,
+  company and email. Existing example-contact mode prepares the request locally,
+  supports copying / downloading a text file, and sends no data.
+- FAQ buttons animate their answer panels open and closed. Closed panels are inert.
+- Section indices are plain numbers without square borders.
+- The footer credits «Desenvolvido por Strict.Dev» with https://strict-dev.com/.
 
-1. A clear service and benefit: software, automations and digital experiences for SMEs.
-2. Integrations named as tools, without suggesting they are customers or partners.
-3. Three service areas: software, processes, and websites / commerce.
-4. An interactive illustrative preview: orders, billing and appointments, with a before / after
-   comparison, keyboard tabs, step selection, pause / replay, client search and order details.
-5. Business benefits, followed by the four-step delivery process.
-6. Existing entry prices, monthly costs and inclusions; no fabricated ROI or testimonials.
-7. The real founder and existing links to his work.
-8. Shared FAQ data drives both visible questions and JSON-LD.
-9. A single closing contact form. `ola@example.com` is retained at the owner's request.
-   Example mode prepares a message locally and supports copying it. It does not send a
-   request, persist personal data, or pretend an email has been delivered.
-10. A privacy page describing the actual preview behavior.
+## Motion
 
-## React Bits
+GSAP + ScrollTrigger and Lenis share a ticker for smooth anchor navigation, section
+reveals, the initial demo entrance and header progress. Each process preview has its
+own GSAP timeline. It pauses outside the viewport and while the tab is hidden.
+Manual phase selection, pause and replay are supported. Global pause stops Lenis,
+reveals, demo playback, the logo loop and the animated pricing contour. Reduced motion
+shows final demo states, avoids Lenis and disables transitions.
 
-The existing vendored React Bits components are used directly in the new design:
-- Magnet: restrained pointer response on the primary hero action.
-- SpotlightCard: subtle pointer light across the service panels.
+Content remains readable while paused. The mobile menu supports Escape and focus return,
+with keyboard focus contained while open. Demo tabs support arrow keys, Home and End.
 
-Source: https://reactbits.dev/get-started/index
-Official SpotlightCard source reviewed during implementation:
-https://github.com/DavidHDev/react-bits/tree/main/src/ts-default/Components/SpotlightCard
-Existing upstream notices and license references remain in the vendored files.
+## Security and preview
 
-## Motion and accessibility
+Keep the layout request-rendered so the existing CSP nonce stamps Next's scripts.
+Preview deployments remain excluded from indexing. No production deployment, contact
+service, tracker, external model or new dependency is introduced.
 
-- The global movement control pauses the sculpture, CSS loops and demo playback.
-- Reveals always resolve to readable content while paused. Content is visible without JS.
-- `prefers-reduced-motion` disables loops and transitions and shows the demo's final state.
-- Canvas stops drawing outside the viewport and while the browser tab is hidden.
-- Demo playback runs only while visible. Pointer effects are disabled while globally paused.
-- The mobile navigation supports Escape, keyboard focus return and focus cycling.
-- Native FAQ disclosures, labeled form controls, validation and an explicit local preview state.
-- No remote image/model, trackers, new animation dependency or backend was introduced.
+## Verification
 
-## Deployment / security
+Validate TypeScript, the optimized Next build, browser interactions, motion / pause,
+mobile navigation, the full brief flow, local file download, contrast and responsive
+layouts. Check that the coloured marquee fits in the initial viewport, including
+1440×900, 1366×768, 390×844 and 320×800.
 
-Deploy the feature branch only to Vercel Preview. Keep per-request rendering in the layout
-so the existing nonce-based Content Security Policy can stamp Next's runtime scripts.
-Preview deployments are excluded from indexing even when a real site URL is configured.
-
-## Validation
-
-- TypeScript and optimized Next build.
-- Browser checks at 320, 390, 768, 1024 and 1440 px without horizontal overflow.
-- Interactive demo tabs, keyboard arrows / Home, stages, before / after, search and details.
-- Mobile menu, Escape / focus return, form error / success, and reduced motion.
-- Axe WCAG A/AA checks and visual review of desktop / mobile layouts.
-- Production browser checks for hydration, CSP and interactive behavior before handoff.
-
-Final local results: optimized build successful; seven external Next scripts carry the
-request nonce; no browser runtime or CSP errors; all six demo states pass the automated
-WCAG 2 A/AA + 2.1 A/AA axe rule set with zero violations. Automated accessibility checks
-cover detectable issues and do not replace a full assistive-technology review.
+Final results: optimized build and TypeScript pass; changed TSX files pass Biome.
+Browser user flows pass, including actual anchor navigation through Lenis, automatic
+phase advancement, global pause, FAQ expansion/collapse, validation, the two-step brief,
+text download, mobile navigation and reduced motion. No runtime errors were observed.
+The marquee fits the initial viewport in the four formats above without horizontal overflow.
+The final production build responds 200, with CSP and nonces on its runtime scripts.
+Axe reports zero WCAG A/AA violations in the six audited demo states and contact step two.
+Automated checks cover detectable issues and do not replace an assistive-technology review.

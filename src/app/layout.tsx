@@ -5,6 +5,7 @@ import { headers } from "next/headers";
 import type { ReactNode } from "react";
 import { isLive, site } from "@/lib/site";
 import "./globals.css";
+import "./refinements.css";
 
 /* Mona Sans: one variable family. Light display weights, regular for reading, semibold labels. */
 const mona = Mona_Sans({

@@ -2,7 +2,6 @@
 
 import {
   ArrowDown,
-  ArrowDownRight,
   ArrowUpRight,
   Check,
   CircleCheck,
@@ -10,32 +9,26 @@ import {
   Database,
   Globe2,
   Layers3,
-  Menu,
   Pause,
   Play,
   Plus,
   ShieldCheck,
   Workflow,
-  X,
 } from "lucide-react";
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
-import { BrandDefs, BrandIcon } from "@/components/brand/BrandIcon";
+import { BrandDefs } from "@/components/brand/BrandIcon";
 import { OrchestrLogo, OrchestrMark } from "@/components/brand/OrchestrLogo";
 import Magnet from "@/components/react-bits/Magnet";
 import SpotlightCard from "@/components/react-bits/SpotlightCard";
-import { FAQS } from "@/lib/faq";
-import { euros, founder, plans } from "@/lib/site";
+import { founder } from "@/lib/site";
+import { AnimatedFaq } from "./AnimatedFaq";
+import { CompactPricing } from "./CompactPricing";
 import { ContactForm } from "./ContactForm";
-import { LiveDemo } from "./LiveDemo";
-import { OrbitalSculpture } from "./OrbitalSculpture";
-
-const links = [
-  { href: "#servicos", label: "Soluções" },
-  { href: "#demonstracao", label: "Em ação" },
-  { href: "#processo", label: "Processo" },
-  { href: "#precos", label: "Investimento" },
-];
+import { DynamicHeader } from "./DynamicHeader";
+import { ExperienceMotion } from "./ExperienceMotion";
+import { IntegrationMarquee } from "./IntegrationMarquee";
+import { HeroPreview, LiveDemo } from "./LiveDemo";
 
 function SectionLabel({ index, children }: { index: string; children: React.ReactNode }) {
   return (
@@ -43,117 +36,6 @@ function SectionLabel({ index, children }: { index: string; children: React.Reac
       <span className="label-index">{index}</span>
       <span>{children}</span>
     </div>
-  );
-}
-
-function Header() {
-  const [open, setOpen] = useState(false);
-  const [active, setActive] = useState("");
-  const panel = useRef<HTMLDivElement>(null);
-  const toggle = useRef<HTMLButtonElement>(null);
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        for (const entry of entries) if (entry.isIntersecting) setActive(`#${entry.target.id}`);
-      },
-      { rootMargin: "-15% 0px -65% 0px" },
-    );
-    for (const link of links) {
-      const el = document.querySelector(link.href);
-      if (el) observer.observe(el);
-    }
-    return () => observer.disconnect();
-  }, []);
-  useEffect(() => {
-    if (!open) return;
-    const previous = document.body.style.overflow;
-    document.body.style.overflow = "hidden";
-    panel.current?.querySelector<HTMLAnchorElement>("a")?.focus();
-    const keydown = (e: KeyboardEvent) => {
-      if (e.key === "Escape") {
-        setOpen(false);
-        toggle.current?.focus();
-      }
-      if (e.key !== "Tab") return;
-      const items = [
-        toggle.current,
-        ...Array.from(panel.current?.querySelectorAll<HTMLAnchorElement>("a") ?? []),
-      ].filter((el): el is HTMLButtonElement | HTMLAnchorElement => !!el);
-      const first = items[0];
-      const last = items[items.length - 1];
-      if (e.shiftKey && document.activeElement === first) {
-        e.preventDefault();
-        last?.focus();
-      } else if (!e.shiftKey && document.activeElement === last) {
-        e.preventDefault();
-        first?.focus();
-      }
-    };
-    const media = window.matchMedia("(min-width: 960px)");
-    const close = () => {
-      if (media.matches) setOpen(false);
-    };
-    media.addEventListener("change", close);
-    document.addEventListener("keydown", keydown);
-    return () => {
-      document.body.style.overflow = previous;
-      document.removeEventListener("keydown", keydown);
-      media.removeEventListener("change", close);
-    };
-  }, [open]);
-  return (
-    <header className={`site-header ${open ? "menu-open" : ""}`}>
-      <div className="header-inner frame">
-        <a href="#top" aria-label="Orchestr — início" className="brand-link">
-          <OrchestrLogo id="header-logo" />
-        </a>
-        <nav className="desktop-nav" aria-label="Navegação principal">
-          {links.map((link) => (
-            <a
-              key={link.href}
-              href={link.href}
-              aria-current={active === link.href ? "location" : undefined}
-            >
-              {link.label}
-            </a>
-          ))}
-        </nav>
-        <a className="header-cta" href="#contacto">
-          Vamos conversar
-          <ArrowUpRight size={15} />
-        </a>
-        <button
-          ref={toggle}
-          className="menu-toggle"
-          type="button"
-          aria-expanded={open}
-          aria-controls="mobile-menu"
-          aria-label={open ? "Fechar menu" : "Abrir menu"}
-          onClick={() => setOpen(!open)}
-        >
-          {open ? <X size={22} /> : <Menu size={22} />}
-        </button>
-      </div>
-      {open && (
-        <div ref={panel} id="mobile-menu" className="mobile-menu">
-          <p className="eyebrow">EM SINTONIA COM O SEU NEGÓCIO</p>
-          <nav aria-label="Navegação móvel">
-            {[
-              ...links,
-              { href: "#quem", label: "Quem constrói" },
-              { href: "#contacto", label: "Vamos conversar" },
-            ].map((link, i) => (
-              <a key={link.href} href={link.href} onClick={() => setOpen(false)}>
-                <span className="mono">0{i + 1}</span>
-                {link.label}
-                <ArrowUpRight size={22} />
-              </a>
-            ))}
-          </nav>
-          <span className="mobile-menu-note">Software à medida. Feito em Portugal.</span>
-        </div>
-      )}
-    </header>
   );
 }
 
@@ -225,26 +107,11 @@ export function Landing() {
   const [showTop, setShowTop] = useState(false);
   const hero = useRef<HTMLElement>(null);
   useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add("is-visible");
-            observer.unobserve(entry.target);
-          }
-        });
-      },
-      { threshold: 0.1 },
-    );
-    document.querySelectorAll("[data-reveal]").forEach((el) => {
-      observer.observe(el);
-    });
     const topObserver = new IntersectionObserver(([entry]) =>
       setShowTop(!(entry?.isIntersecting ?? true)),
     );
     if (hero.current) topObserver.observe(hero.current);
     return () => {
-      observer.disconnect();
       topObserver.disconnect();
     };
   }, []);
@@ -252,66 +119,49 @@ export function Landing() {
   return (
     <div className="orchestr-experience" data-motion={paused ? "paused" : "playing"}>
       <BrandDefs />
-      <Header />
+      <DynamicHeader />
+      <ExperienceMotion paused={paused} />
       <main id="conteudo" tabIndex={-1}>
         <section id="top" className="hero-section" ref={hero} aria-labelledby="hero-title">
           <div className="hero-grid" aria-hidden="true" />
-          <div className="hero-coordinate coordinate-one" aria-hidden="true">
-            +<span>38°43′ N / 09°08′ W</span>
-          </div>
-          <div className="hero-art" aria-hidden="true">
-            <div className="orbit-guide guide-one" />
-            <div className="orbit-guide guide-two" />
-            <OrbitalSculpture paused={paused} />
-            <div className="orbit-caption orbit-caption-a">
-              <span />
-              PESSOAS
-            </div>
-            <div className="orbit-caption orbit-caption-b">
-              <span />
-              PROCESSOS
-            </div>
-            <div className="orbit-caption orbit-caption-c">
-              <span />
-              TECNOLOGIA
-            </div>
-            <span className="sculpture-caption mono">INDEPENDENTES. INTERLIGADOS.</span>
-          </div>
-          <div className="frame hero-content">
-            <p className="eyebrow hero-eyebrow">
-              <span className="signal-dot" />
-              SOFTWARE À MEDIDA PARA PME
-            </p>
-            <h1 id="hero-title">
-              <span>O seu negócio.</span>
-              <span className="hero-second">
-                Em sintonia<span className="blue-period">.</span>
-              </span>
-            </h1>
-            <p className="hero-description">
-              Menos tarefas soltas.
-              <br />
-              Mais negócio a acontecer.
-            </p>
-            <p className="hero-explanation">
-              Criamos software, automações e experiências digitais que ligam as pessoas, os
-              processos e os programas da sua empresa.
-            </p>
-            <div className="hero-actions">
-              <Magnet padding={18} magnetStrength={8} maxOffset={4} disabled={paused}>
-                <a href="#contacto" className="action action-light">
-                  Pedir demonstração gratuita
-                  <ArrowUpRight size={19} />
-                </a>
-              </Magnet>
-              <a href="#demonstracao" className="hero-demo-link">
-                <span>
-                  <Play size={11} fill="currentColor" />
+          <div className="frame hero-layout">
+            <div className="hero-copy">
+              <p className="eyebrow hero-eyebrow">
+                <span className="signal-dot" />
+                SOFTWARE À MEDIDA PARA PME
+              </p>
+              <h1 id="hero-title" aria-label="Orchestr o futuro da sua empresa.">
+                <span className="hero-wordmark" aria-hidden="true">
+                  <OrchestrMark id="hero-title-mark" />
+                  <span>rchestr</span>
                 </span>
-                Ver em ação
-              </a>
+                <span>o futuro da</span>
+                <span className="hero-second">
+                  sua empresa<span className="blue-period">.</span>
+                </span>
+              </h1>
+              <p className="hero-explanation">
+                Software, automação e experiências digitais.
+                <br />
+                Ligamos o que hoje está separado, para o seu negócio avançar.
+              </p>
+              <div className="hero-actions">
+                <Magnet padding={18} magnetStrength={8} maxOffset={4} disabled={paused}>
+                  <a href="#contacto" className="action action-light">
+                    Pedir demonstração gratuita
+                    <ArrowUpRight size={19} />
+                  </a>
+                </Magnet>
+                <a href="#demonstracao" className="hero-demo-link">
+                  <span>
+                    <Play size={12} fill="currentColor" />
+                  </span>
+                  Ver em ação
+                </a>
+              </div>
+              <p className="hero-assurance">Primeiro vê o que é possível. Depois decide.</p>
             </div>
-            <p className="hero-assurance">Primeiro vê o que é possível. Depois decide.</p>
+            <HeroPreview paused={paused} />
           </div>
           <div className="hero-bottom frame">
             <a href="#servicos" className="scroll-cue">
@@ -338,38 +188,7 @@ export function Landing() {
           </div>
         </section>
 
-        <div className="integrations-strip">
-          <div className="frame integration-inner">
-            <p className="eyebrow">
-              O QUE JÁ UTILIZA.
-              <br />
-              <span>AGORA, EM CONJUNTO.</span>
-            </p>
-            <div className="integration-tools">
-              <span>
-                <BrandIcon brand="excel" />
-                Excel
-              </span>
-              <span>
-                <BrandIcon brand="outlook" />
-                Outlook
-              </span>
-              <span>
-                <BrandIcon brand="whatsapp" />
-                WhatsApp
-              </span>
-              <span className="tool-wordmark">
-                moloni<span className="tool-dot">.</span>
-              </span>
-              <span className="tool-wordmark phc">PHC</span>
-              <span>
-                <BrandIcon brand="shopify" />
-                Shopify
-              </span>
-              <span className="more-tools">+ O SEU SISTEMA</span>
-            </div>
-          </div>
-        </div>
+        <IntegrationMarquee paused={paused} />
 
         <section
           id="servicos"
@@ -410,7 +229,11 @@ export function Landing() {
                   icon: Globe2,
                 },
               ].map((service, i) => (
-                <div key={service.title} data-reveal>
+                <div
+                  id={`solucao-${["software", "automacao", "websites"][i]}`}
+                  key={service.title}
+                  data-reveal
+                >
                   <SpotlightCard
                     className="service-card"
                     theme="light"
@@ -639,47 +462,7 @@ export function Landing() {
                 âmbito e o investimento do seu projeto.
               </p>
             </div>
-            <div className="pricing-grid">
-              {plans.map((plan, i) => (
-                <article
-                  key={plan.id}
-                  className={`price-card ${plan.featured ? "featured" : ""}`}
-                  data-reveal
-                >
-                  <div className="price-topline">
-                    <span className="mono">0{i + 1}</span>
-                    {plan.featured && <span className="price-tag">UM PROCESSO, UMA APLICAÇÃO</span>}
-                  </div>
-                  <h3>{plan.name}</h3>
-                  <p className="price-summary">{plan.summary}</p>
-                  <p className="price-from">IMPLEMENTAÇÃO DESDE</p>
-                  <div className="price-value">
-                    {euros(plan.setup)}
-                    <ArrowDownRight size={23} />
-                  </div>
-                  <p className="monthly-price">
-                    + desde {euros(plan.monthly)}
-                    <span>/mês</span> de acompanhamento
-                  </p>
-                  <a
-                    href="#contacto"
-                    className={`action ${plan.featured ? "action-light" : "action-outline"}`}
-                  >
-                    Conversar sobre o projeto
-                    <ArrowUpRight size={17} />
-                  </a>
-                  <div className="price-includes">
-                    {plan.includes.map((item) => (
-                      <div key={item}>
-                        <Check size={13} />
-                        {item}
-                      </div>
-                    ))}
-                  </div>
-                  <p className="price-lead">{plan.lead}</p>
-                </article>
-              ))}
-            </div>
+            <CompactPricing paused={paused} />
             <div className="pricing-footnote">
               <p>
                 Valores sem IVA. Preços de entrada, sujeitos ao âmbito e às integrações. A
@@ -720,12 +503,8 @@ export function Landing() {
                 src={founder.photo}
                 alt="Cristiano Sousa, fundador da Orchestr"
                 fill
-                sizes="(min-width: 960px) 32vw, 90vw"
+                sizes="(min-width: 700px) 200px, 120px"
               />
-              <div className="portrait-label">
-                <span className="signal-dot" />
-                QUEM CONSTRÓI, ACOMPANHA.
-              </div>
             </div>
             <div className="founder-copy" data-reveal>
               <SectionLabel index="05">POR TRÁS DA ORCHESTR</SectionLabel>
@@ -792,17 +571,7 @@ export function Landing() {
                 <ArrowUpRight size={16} />
               </a>
             </div>
-            <div className="faq-list" data-reveal>
-              {FAQS.map((faq, i) => (
-                <details key={faq.q} name="perguntas" open={i === 0}>
-                  <summary>
-                    <span>{faq.q}</span>
-                    <Plus size={19} />
-                  </summary>
-                  <p>{faq.a}</p>
-                </details>
-              ))}
-            </div>
+            <AnimatedFaq />
           </div>
         </section>
 
@@ -873,7 +642,12 @@ export function Landing() {
           </div>
           <div className="footer-bottom">
             <span>© {new Date().getFullYear()} Orchestr</span>
-            <span>DESENHADO E DESENVOLVIDO EM PORTUGAL</span>
+            <span>
+              Desenvolvido por{" "}
+              <a href="https://strict-dev.com/" target="_blank" rel="noreferrer">
+                Strict.Dev ↗
+              </a>
+            </span>
             <a href="/privacidade">Privacidade</a>
           </div>
         </div>

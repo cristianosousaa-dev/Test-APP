@@ -29,8 +29,8 @@ export default function Privacidade() {
           <h2>O que este site guarda</h2>
           <p>
             Este site não utiliza cookies de publicidade, ferramentas de análise nem formulários que
-            enviem dados para os nossos servidores. As demonstrações usam dados fictícios. A
-            pesquisa, os separadores e as opções de movimento funcionam apenas no seu navegador.
+            enviem dados para os nossos servidores. As demonstrações usam dados fictícios. Os
+            separadores e as opções de movimento funcionam apenas no seu navegador.
           </p>
           <h2>Pedidos de demonstração</h2>
           <p>
@@ -42,7 +42,8 @@ export default function Privacidade() {
           <p>
             As fontes e imagens são servidas pelo próprio site. Ao seguir uma ligação externa, como
             o LinkedIn, BOOKLIN ou Strict.Dev, aplicam-se as políticas de privacidade desse serviço.
-            Ao copiar um pedido, o texto fica na área de transferência do seu dispositivo.
+            Ao copiar um pedido, o texto fica na área de transferência do seu dispositivo. Se optar
+            por guardar o pedido, é descarregado um ficheiro de texto para o seu dispositivo.
           </p>
           <h2>Contacto</h2>
           <p>

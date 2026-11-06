@@ -30,7 +30,7 @@ export default function OpengraphImage() {
       </div>
       <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
         <div style={{ fontSize: 72, lineHeight: 1.05, letterSpacing: -2, maxWidth: 940 }}>
-          O seu negócio. Em sintonia.
+          Orchestr, o futuro da sua empresa.
         </div>
         <div style={{ fontSize: 30, color: "#98a5be" }}>
           Software, automação e experiências digitais.
