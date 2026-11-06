@@ -13,7 +13,7 @@ import {
   PlugZap,
   X,
 } from "lucide-react";
-import { useEffect, useRef, useState } from "react";
+import { type PointerEvent as ReactPointerEvent, useEffect, useRef, useState } from "react";
 import { OrchestrLogo } from "@/components/brand/OrchestrLogo";
 import { selectBriefContext } from "@/lib/brief-context";
 import { ThemeSwitch } from "./ThemeSwitch";
@@ -43,6 +43,16 @@ const nav = [
   { href: "#processo", label: "Como trabalhamos" },
   { href: "#precos", label: "Preços" },
 ];
+
+const trackUnderline = (event: ReactPointerEvent<HTMLElement>) => {
+  const label = event.currentTarget.querySelector<HTMLElement>(".nav-label");
+  if (!label) return;
+  const rect = label.getBoundingClientRect();
+  label.style.setProperty(
+    "--underline-origin",
+    `${Math.max(0, Math.min(100, ((event.clientX - rect.left) / rect.width) * 100))}%`,
+  );
+};
 
 export function DynamicHeader() {
   const [open, setOpen] = useState(false);
@@ -173,9 +183,11 @@ export function DynamicHeader() {
                   className="services-toggle"
                   aria-expanded={servicesOpen}
                   aria-controls="services-dropdown"
+                  onPointerMove={trackUnderline}
+                  onPointerEnter={trackUnderline}
                   onClick={() => setServicesOpen(!servicesOpen)}
                 >
-                  Serviços
+                  <span className="nav-label">Serviços</span>
                   <ChevronDown size={15} />
                 </button>
               </div>
@@ -184,8 +196,10 @@ export function DynamicHeader() {
                   key={item.href}
                   href={item.href}
                   aria-current={active === item.href ? "location" : undefined}
+                  onPointerMove={trackUnderline}
+                  onPointerEnter={trackUnderline}
                 >
-                  {item.label}
+                  <span className="nav-label">{item.label}</span>
                 </a>
               ))}
             </nav>

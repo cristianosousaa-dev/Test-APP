@@ -3195,3 +3195,1152 @@
     background: var(--surface);
   }
 }
+
+/* One compact demonstration: shared toolbar, narrative, paired screens and controls. */
+.demo-section.section-space {
+  padding-block: 22px;
+}
+.flow-demo-toolbar {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-items: end;
+  gap: 30px;
+  margin-bottom: 12px;
+}
+.flow-demo-section-title .section-label {
+  font-size: 9px;
+  gap: 10px;
+}
+.flow-demo-section-title h2 {
+  font:
+    400 36px / 1.05 var(--font-nohemi),
+    sans-serif;
+  letter-spacing: -0.04em;
+  margin-top: 8px;
+  color: var(--text);
+}
+.flow-demo-section-title h2 > span {
+  color: var(--hero-second);
+}
+.flow-demo-toolbar .demo-selector {
+  margin: 0;
+  border: 0;
+  border-radius: 12px;
+  padding: 4px;
+  background: var(--surface-input);
+  gap: 3px;
+}
+.flow-demo-toolbar .demo-selector > button {
+  padding: 10px 12px;
+  min-height: 38px;
+  font-size: 13px;
+  border: 0;
+  border-radius: 9px;
+  gap: 10px;
+}
+.flow-demo-toolbar .demo-selector > button .mono {
+  font-size: 8px;
+}
+.flow-demo-toolbar .demo-selector > button.selected {
+  background: var(--surface);
+  box-shadow:
+    var(--inner-light),
+    0 2px 7px #00000005;
+}
+.flow-demo-toolbar .demo-selector > button > svg {
+  display: none;
+}
+.flow-comparison .flow-demo-heading {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+.flow-comparison .flow-story {
+  align-items: center;
+  min-height: 0;
+  padding: 9px 13px;
+  margin: 0 0 12px;
+  gap: 12px;
+  border-radius: 13px;
+}
+.flow-comparison .flow-story > span {
+  font-size: 19px;
+  gap: 2px;
+}
+.flow-comparison .flow-story > span > small {
+  font-size: 6px;
+}
+.flow-comparison .flow-story > div:nth-child(2) {
+  flex: 1;
+  min-width: 0;
+}
+.flow-comparison .flow-story > div > strong {
+  font-size: 12px;
+  line-height: 1.6;
+}
+.flow-comparison .flow-story > div > p {
+  display: inline;
+  font-size: 12px;
+  line-height: 1.65;
+  margin: 0 0 0 7px;
+}
+.flow-comparison .flow-story .flow-controls {
+  flex-direction: row;
+}
+.flow-comparison .flow-controls > button {
+  width: 30px;
+  height: 30px;
+}
+.flow-comparison .flow-compare-grid {
+  gap: 18px;
+}
+.flow-comparison .flow-panel-label {
+  margin-bottom: 7px;
+  gap: 8px;
+}
+.flow-comparison .flow-panel-label > strong {
+  font-size: 11px;
+}
+.flow-comparison .flow-panel-label > span:first-child {
+  padding: 3px 5px;
+  font-size: 6px;
+}
+.flow-comparison .flow-panel-label > span:last-child {
+  font-size: 8px;
+}
+.flow-comparison .flow-app-bar {
+  min-height: 31px;
+  padding: 7px 13px;
+}
+.flow-comparison .flow-app-bar > span:first-child {
+  gap: 7px;
+}
+.flow-comparison .flow-app-bar svg {
+  width: 18px;
+  height: 18px;
+}
+.flow-comparison .flow-app-bar strong {
+  font-size: 11px;
+}
+.flow-comparison .flow-app-tabs {
+  display: none;
+}
+.flow-comparison .flow-scene {
+  height: 211px;
+  padding: 10px 12px 0;
+}
+.flow-comparison .flow-scene-title {
+  margin-bottom: 7px;
+  gap: 7px;
+}
+.flow-comparison .flow-scene-title > strong {
+  font-size: 12px;
+}
+.flow-comparison
+  :is(.flow-email, .flow-record, .flow-production, .flow-invoice, .flow-calendar, .flow-outbox) {
+  height: 174px;
+  padding: 11px 12px;
+  border-radius: 12px;
+}
+.flow-comparison .flow-email-sender {
+  gap: 8px;
+}
+.flow-comparison .flow-avatar {
+  width: 26px;
+  height: 26px;
+  border-radius: 8px;
+  font-size: 8px;
+}
+.flow-comparison .flow-email-sender strong {
+  font-size: 11px;
+}
+.flow-comparison .flow-email-sender > div > span {
+  font-size: 9px;
+}
+.flow-comparison .flow-email h5 {
+  font-size: 13px;
+  margin-top: 8px;
+  line-height: 1.4;
+}
+.flow-comparison .flow-email p,
+.flow-comparison .flow-outbox > p {
+  font-size: 11px;
+  line-height: 1.65;
+  margin-top: 6px;
+}
+.flow-comparison .flow-email-footer,
+.flow-comparison .flow-record-footer {
+  padding-top: 6px;
+}
+.flow-comparison .flow-action {
+  min-height: 26px;
+  padding: 5px 8px;
+  font-size: 9px;
+}
+.flow-comparison .flow-record-footer > span:first-child {
+  font-size: 9px;
+}
+.flow-comparison .flow-record-source {
+  font-size: 9px;
+  margin-bottom: 7px;
+}
+.flow-comparison .flow-fields {
+  gap: 7px;
+}
+.flow-comparison .flow-field {
+  padding: 5px 24px 5px 8px;
+}
+.flow-comparison .flow-field > span {
+  font-size: 8px;
+  margin-bottom: 2px;
+}
+.flow-comparison .flow-field > strong {
+  font-size: 11px;
+}
+.flow-comparison .flow-field > svg {
+  right: 8px;
+  bottom: 9px;
+}
+.flow-comparison .flow-transfer {
+  margin: 0 12px 6px;
+  padding: 5px 7px;
+  font-size: 8px;
+}
+.flow-comparison .flow-toast {
+  margin: 0 12px 10px;
+  padding: 6px 8px;
+  min-height: 31px;
+}
+.flow-comparison .flow-toast strong {
+  font-size: 9px;
+}
+.flow-comparison .flow-feedback-pending {
+  inset: 0 12px 10px;
+  font-size: 9px;
+  padding: 6px 8px;
+}
+.flow-comparison .flow-board-column {
+  padding: 6px;
+}
+.flow-comparison .flow-task-placeholder,
+.flow-comparison .flow-moving-card {
+  min-height: 78px;
+  height: 78px;
+  margin-top: 5px;
+}
+.flow-comparison .flow-moving-card {
+  padding: 6px 8px;
+}
+.flow-comparison .flow-moving-card > strong {
+  font-size: 13px;
+  margin-block: 1px;
+}
+.flow-comparison .flow-moving-card > span {
+  font-size: 8px;
+}
+.flow-comparison .flow-moving-card > div {
+  font-size: 7px;
+  margin-top: 4px;
+}
+.flow-comparison .flow-moving-card > div > span {
+  width: 15px;
+  height: 15px;
+  font-size: 5px;
+}
+.flow-comparison .flow-invoice-top > svg {
+  width: 18px;
+  height: 18px;
+}
+.flow-comparison .flow-invoice-top > div > span {
+  font-size: 6px;
+}
+.flow-comparison .flow-invoice-top strong {
+  font-size: 11px;
+}
+.flow-comparison .flow-invoice-client {
+  font-size: 10px;
+  margin: 5px 0;
+  padding-bottom: 5px;
+}
+.flow-comparison .flow-invoice-line {
+  font-size: 10px;
+  margin-top: 3px;
+}
+.flow-comparison .flow-invoice-total {
+  margin-top: 5px;
+  padding-top: 5px;
+}
+.flow-comparison .flow-invoice-total > strong {
+  font-size: 18px;
+}
+.flow-comparison .flow-invoice .flow-record-footer {
+  padding-top: 4px;
+}
+.flow-comparison .flow-calendar-days {
+  margin-bottom: 6px;
+  font-size: 6px;
+}
+.flow-comparison .flow-calendar-days > span {
+  padding: 4px 3px;
+}
+.flow-comparison .flow-calendar-slot {
+  padding: 6px 9px;
+}
+.flow-comparison .flow-calendar-slot small {
+  font-size: 8px;
+}
+.flow-comparison .flow-outbox-recipient > svg {
+  padding: 6px;
+  width: 15px;
+  height: 15px;
+}
+.flow-comparison .flow-outbox-recipient strong {
+  font-size: 11px;
+}
+.flow-comparison .flow-before .manual-operation {
+  min-height: 321px;
+  padding: 12px;
+}
+.flow-comparison .manual-window-title {
+  padding: 8px 11px;
+}
+.flow-comparison .manual-message-body {
+  padding: 10px 12px;
+}
+.flow-comparison .manual-message-body > strong {
+  font-size: 12px;
+  margin-top: 6px;
+}
+.flow-comparison .manual-message-body > p {
+  font-size: 11px;
+  line-height: 1.65;
+  margin-top: 6px;
+}
+.flow-comparison .manual-message-status {
+  display: none;
+}
+.flow-comparison .manual-spreadsheet {
+  margin-top: 12px;
+}
+.flow-comparison .manual-spreadsheet :is(th, td) {
+  font-size: 8px;
+  padding: 6px 8px;
+}
+.flow-comparison .spreadsheet-title {
+  padding: 6px 8px;
+}
+.flow-comparison .paper-agenda {
+  margin-top: 10px;
+  padding: 9px 12px;
+}
+.flow-comparison .paper-agenda > div {
+  padding: 6px 0;
+}
+.flow-comparison .manual-task {
+  padding-top: 0;
+  margin-top: 12px;
+  font-size: 10px;
+}
+.flow-comparison .flow-steps {
+  margin-top: 12px;
+  padding-bottom: 5px;
+  gap: 12px;
+}
+.flow-comparison .flow-steps > button {
+  min-height: 29px;
+  font-size: 10px;
+  gap: 7px;
+}
+.flow-comparison .flow-steps > button > span:first-child {
+  width: 21px;
+  height: 21px;
+  font-size: 7px;
+}
+.flow-comparison .flow-progress {
+  margin-top: 4px;
+}
+.flow-comparison .flow-demo-footnote {
+  margin-top: 10px;
+  gap: 15px;
+  font-size: 10px;
+  line-height: 1.6;
+}
+.flow-comparison .flow-demo-footnote > span:nth-child(2) {
+  font-size: 8px;
+  margin-left: auto;
+}
+.flow-demo-footnote > a {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  font-size: 11px;
+  color: var(--text);
+  padding: 6px 8px;
+  border-radius: 7px;
+  white-space: nowrap;
+}
+@media (min-width: 960px) and (max-height: 800px) {
+  .demo-section.section-space {
+    padding-block: 15px;
+  }
+  .flow-demo-section-title h2 {
+    font-size: 31px;
+    margin-top: 6px;
+  }
+  .flow-demo-toolbar {
+    margin-bottom: 9px;
+  }
+  .flow-comparison .flow-story {
+    padding-block: 6px;
+    margin-bottom: 9px;
+  }
+  .flow-comparison .flow-story > div > p {
+    font-size: 11px;
+    line-height: 1.5;
+  }
+  .flow-comparison .flow-story > div > strong {
+    font-size: 12px;
+  }
+}
+@media (max-width: 959px) {
+  .flow-demo-toolbar {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+  .flow-demo-section-title h2 {
+    font-size: 36px;
+  }
+  .flow-comparison .flow-story > div > p {
+    display: block;
+    margin: 4px 0 0;
+  }
+  .flow-comparison .flow-demo-footnote {
+    flex-wrap: wrap;
+  }
+}
+@media (max-width: 700px) {
+  .demo-section.section-space {
+    padding-block: 42px;
+  }
+  .flow-demo-section-title h2 {
+    font-size: 34px;
+  }
+  .flow-demo-toolbar .demo-selector > button {
+    font-size: 11px;
+    padding-inline: 9px;
+  }
+  .flow-comparison .flow-compare-grid {
+    grid-template-columns: 1fr;
+    gap: 18px;
+  }
+  .flow-comparison .flow-story {
+    padding: 12px;
+    align-items: flex-start;
+    gap: 9px;
+  }
+  .flow-comparison .flow-story .flow-controls {
+    flex-direction: column;
+  }
+  .flow-comparison .flow-story > div > p {
+    font-size: 12px;
+  }
+  .flow-comparison .flow-scene {
+    height: 268px;
+  }
+  .flow-comparison
+    :is(.flow-email, .flow-record, .flow-production, .flow-invoice, .flow-calendar, .flow-outbox) {
+    height: 228px;
+    padding: 12px;
+  }
+  .flow-comparison .flow-fields {
+    gap: 9px;
+  }
+  .flow-comparison .flow-field {
+    padding-block: 9px;
+  }
+  .flow-comparison .flow-field > span {
+    font-size: 9px;
+  }
+  .flow-comparison .flow-field > strong {
+    font-size: 11px;
+  }
+  .flow-comparison .flow-email h5 {
+    font-size: 13px;
+  }
+  .flow-comparison .flow-email p,
+  .flow-comparison .flow-outbox > p {
+    font-size: 12px;
+    line-height: 1.75;
+  }
+  .flow-comparison .flow-email-sender strong {
+    font-size: 11px;
+  }
+  .flow-comparison .flow-record-footer > span:first-child {
+    max-width: 48%;
+  }
+  .flow-comparison .flow-before .manual-operation {
+    min-height: 0;
+  }
+  .flow-comparison .manual-message-status {
+    display: none;
+  }
+  .flow-comparison .flow-steps {
+    gap: 7px;
+  }
+  .flow-comparison .flow-steps > button {
+    flex-direction: column;
+    align-items: flex-start;
+    font-size: 9px;
+    gap: 6px;
+  }
+  .flow-comparison .flow-demo-footnote {
+    flex-direction: row;
+    align-items: center;
+    gap: 10px;
+  }
+  .flow-comparison .flow-demo-footnote > span:first-child {
+    display: none;
+  }
+  .flow-comparison .flow-demo-footnote > span:nth-child(2) {
+    margin-left: 0;
+    margin-right: auto;
+  }
+  .flow-demo-footnote > a {
+    font-size: 10px;
+  }
+}
+
+/* Visible interaction feedback, without moving the control or its card. */
+.nav-label {
+  position: relative;
+  display: inline-block;
+  --underline-origin: 50%;
+}
+.nav-label::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -7px;
+  height: 1.5px;
+  border-radius: 2px;
+  background: linear-gradient(
+    90deg,
+    color-mix(in srgb, currentColor 30%, transparent),
+    currentColor,
+    color-mix(in srgb, currentColor 30%, transparent)
+  );
+  background-size: 200% 100%;
+  background-position: var(--underline-origin) 50%;
+  transform: scaleX(0);
+  transform-origin: var(--underline-origin) 50%;
+  opacity: 0;
+  transition:
+    transform 0.3s cubic-bezier(0.22, 1, 0.36, 1),
+    opacity 0.25s,
+    background-position 0.15s;
+  pointer-events: none;
+}
+.primary-nav > a[aria-current] {
+  text-decoration: none;
+}
+.primary-nav :is(a, button):is(:hover, :focus-visible) .nav-label::after,
+.primary-nav > a[aria-current] .nav-label::after,
+.services-toggle[aria-expanded="true"] .nav-label::after {
+  transform: scaleX(1);
+  opacity: 1;
+}
+.primary-nav > a[aria-current]:not(:hover) .nav-label::after {
+  opacity: 0.45;
+}
+.orchestr-experience :is(a, button, summary),
+.legal-shell :is(a, button, summary) {
+  transition:
+    color 0.22s,
+    background-color 0.22s,
+    box-shadow 0.22s,
+    border-color 0.22s,
+    text-decoration-color 0.22s;
+}
+.orchestr-experience :is(button, a, summary):not(:disabled) {
+  -webkit-tap-highlight-color: transparent;
+}
+.hero-actions .action-light:hover {
+  background: color-mix(in srgb, var(--text) 89%, var(--page));
+  box-shadow:
+    inset 0 1px 0 #ffffff26,
+    0 4px 14px #0000000a;
+}
+:is(.conversation-submit, .conversation-result-actions) > .action:hover,
+.compact-plan-action > :is(.featured-plan-button, .static-featured-button):hover {
+  background: color-mix(in srgb, var(--button-surface) 90%, var(--button-text));
+  box-shadow:
+    inset 0 1px 0 #ffffff29,
+    0 3px 12px #0000000a;
+}
+.compact-plan-action > .action-outline:hover {
+  background: color-mix(in srgb, var(--text) 7%, transparent);
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--text) 9%, transparent);
+}
+.nav-cta:hover,
+.theme-switch:hover .theme-switch-track,
+.nav-mobile-toggle:hover {
+  background: color-mix(in srgb, var(--text) 7%, transparent);
+  box-shadow: var(--inner-light);
+}
+.nav-mobile-toggle {
+  border-radius: 10px;
+}
+.flow-controls > button:not(:disabled):hover {
+  background: color-mix(in srgb, var(--text) 9%, transparent);
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--text) 8%, transparent);
+}
+.flow-steps > button:hover {
+  color: var(--text);
+}
+.flow-steps > button:hover > span:first-child {
+  background: var(--surface-strong);
+  box-shadow: 0 0 0 3px var(--surface-input);
+}
+.demo-selector > button:not(.selected):hover {
+  background: color-mix(in srgb, var(--text) 6%, transparent);
+  color: var(--text);
+}
+:is(
+  .text-link,
+  .service-link,
+  .conversation-edit,
+  .conversation-download,
+  .mega-heading > a,
+  .mega-examples > a,
+  .footer-links > a,
+  .footer-social,
+  .footer-bottom a,
+  .pricing-footnote a,
+  .founder-projects > a,
+  .mobile-nav-footer > a,
+  .flow-demo-footnote > a
+):hover {
+  color: var(--text);
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 5px;
+  text-decoration-color: color-mix(in srgb, var(--text) 55%, transparent);
+}
+.service-link:hover,
+.flow-demo-footnote > a:hover {
+  background: var(--surface-hover);
+}
+:is(
+  .conversation-add-note,
+  .plan-details > summary,
+  .conversation-summary > summary,
+  .faq-disclosure h3 > button
+):hover {
+  color: var(--text);
+  background: var(--surface-hover);
+  border-radius: 8px;
+}
+:is(.brand-link, .footer-top > a:first-child, .legal-brand):hover {
+  opacity: 0.78;
+}
+:is(.mega-services > a, .mobile-navigation nav > a, .mobile-service-links a):hover {
+  background: color-mix(in srgb, var(--text) 6%, transparent);
+}
+.back-top:hover {
+  background: var(--surface-strong);
+  box-shadow:
+    var(--inner-light),
+    0 6px 18px #0000000b;
+}
+.founder-signature > a:hover {
+  background: var(--surface-hover);
+  box-shadow: var(--inner-light);
+}
+:is(a, button, summary):focus-visible {
+  outline: 2px solid var(--focus-ring);
+  outline-offset: 3px;
+}
+@media (prefers-reduced-motion: reduce) {
+  .nav-label::after,
+  .orchestr-experience :is(a, button, summary) {
+    transition: none;
+  }
+}
+.flow-comparison .flow-before .manual-operation {
+  gap: 8px;
+}
+.flow-comparison .manual-spreadsheet,
+.flow-comparison .paper-agenda,
+.flow-comparison .manual-task {
+  margin-top: 0;
+}
+
+/* Legal documents use the same adaptive surfaces, with a proper reading layout. */
+.legal-shell {
+  min-height: 100dvh;
+  background: var(--page);
+  color: var(--text);
+  font:
+    14px / 1.8 var(--font-mona),
+    sans-serif;
+}
+.legal-header {
+  position: sticky;
+  top: 0;
+  z-index: 40;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 17px 28px;
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  background: var(--header-bg);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--line-theme);
+}
+.legal-brand {
+  display: inline-flex;
+  border-radius: 5px;
+}
+.legal-brand svg {
+  height: 26px;
+  width: auto;
+}
+[data-theme="light"] .legal-brand svg > path {
+  fill: var(--text);
+}
+[data-theme="light"] .legal-brand svg > g {
+  stroke: var(--text);
+}
+.legal-back {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  color: var(--text-muted);
+  margin-left: auto;
+}
+.legal-header .theme-switch {
+  margin: 0;
+}
+.legal-main {
+  max-width: 1144px;
+  margin: 0 auto;
+  padding: 60px 28px 0;
+}
+.legal-heading {
+  max-width: 760px;
+}
+.legal-heading .eyebrow {
+  font-size: 9px;
+  color: var(--text-muted);
+}
+.legal-heading h1 {
+  font:
+    400 clamp(38px, 4.5vw, 60px) / 1.1 var(--font-nohemi),
+    sans-serif;
+  letter-spacing: -0.045em;
+  margin-top: 17px;
+}
+.legal-heading > p:not(.eyebrow) {
+  font-size: 16px;
+  line-height: 1.8;
+  margin-top: 20px;
+  color: var(--text-muted);
+}
+.legal-heading > span {
+  display: block;
+  margin-top: 14px;
+  font-size: 11px;
+  color: var(--text-quiet);
+}
+.legal-document-nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+  margin-top: 30px;
+  padding-bottom: 24px;
+  border-bottom: 1px solid var(--line-theme);
+}
+.legal-document-nav a {
+  display: block;
+  padding: 8px 12px;
+  border-radius: 9px;
+  color: var(--text-muted);
+  font-size: 12px;
+}
+.legal-document-nav a[aria-current] {
+  color: var(--text);
+  background: var(--surface-selected);
+  box-shadow: var(--inner-light);
+}
+.legal-document-nav a:hover {
+  background: var(--surface-hover);
+  color: var(--text);
+}
+.legal-preview-note {
+  border-radius: 15px;
+  background: var(--surface-soft);
+  padding: 17px 20px;
+  margin-top: 24px;
+  color: var(--text-muted);
+}
+.legal-preview-note > strong {
+  font-size: 12px;
+  font-weight: 550;
+  color: var(--text);
+}
+.legal-preview-note > p {
+  font-size: 12px;
+  line-height: 1.8;
+  margin-top: 5px;
+}
+.legal-preview-note a {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.legal-content-layout {
+  display: grid;
+  grid-template-columns: 210px minmax(0, 1fr);
+  gap: 55px;
+  margin-top: 36px;
+}
+.legal-content-layout > aside > nav {
+  position: sticky;
+  top: 108px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+}
+.legal-content-layout > aside nav > span {
+  font:
+    8px / 1.5 var(--font-martian),
+    monospace;
+  letter-spacing: 0.04em;
+  color: var(--text-quiet);
+  margin-bottom: 8px;
+}
+.legal-content-layout > aside a {
+  color: var(--text-muted);
+  font-size: 11px;
+  line-height: 1.6;
+  border-radius: 5px;
+}
+.legal-content-layout > aside a:hover {
+  color: var(--text);
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+.legal-content-layout article {
+  min-width: 0;
+}
+.legal-content-layout article > section {
+  padding: 0 0 28px;
+  margin-bottom: 28px;
+  border-bottom: 1px solid var(--line-theme);
+  scroll-margin-top: 105px;
+}
+.legal-content-layout h2 {
+  font:
+    500 24px / 1.3 var(--font-nohemi),
+    sans-serif;
+  letter-spacing: -0.025em;
+  color: var(--text);
+  margin-bottom: 15px;
+}
+.legal-content-layout p,
+.legal-content-layout li {
+  color: var(--text-muted);
+  font-size: 14px;
+  line-height: 1.9;
+}
+.legal-content-layout p + p {
+  margin-top: 14px;
+}
+.legal-content-layout ul {
+  padding-left: 19px;
+  margin: 15px 0;
+}
+.legal-content-layout li + li {
+  margin-top: 11px;
+}
+.legal-content-layout strong {
+  font-weight: 550;
+  color: var(--text);
+}
+.legal-content-layout article a {
+  color: var(--text);
+  text-decoration: underline;
+  text-decoration-color: color-mix(in srgb, var(--text) 35%, transparent);
+  text-underline-offset: 3px;
+  overflow-wrap: anywhere;
+}
+.legal-content-layout article a:hover {
+  text-decoration-color: var(--text);
+}
+.legal-identity {
+  margin: 16px 0;
+}
+.legal-identity > div {
+  display: grid;
+  grid-template-columns: minmax(100px, 0.85fr) 1.4fr;
+  gap: 16px;
+  padding: 11px 0;
+  border-bottom: 1px solid var(--line-theme);
+}
+.legal-identity dt {
+  color: var(--text-quiet);
+  font-size: 12px;
+}
+.legal-identity dd {
+  color: var(--text);
+  font-size: 13px;
+  overflow-wrap: anywhere;
+}
+.legal-table-wrap {
+  overflow-x: auto;
+  border-radius: 12px;
+  background: var(--surface-soft);
+}
+.legal-table-wrap table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 480px;
+  text-align: left;
+}
+.legal-table-wrap caption {
+  text-align: left;
+  padding: 14px 16px;
+  color: var(--text);
+  font-size: 12px;
+}
+.legal-table-wrap :is(th, td) {
+  padding: 12px 16px;
+  font-size: 12px;
+  line-height: 1.8;
+  color: var(--text-muted);
+  border-top: 1px solid var(--line-theme);
+  vertical-align: top;
+}
+.legal-table-wrap th {
+  color: var(--text);
+  font-weight: 550;
+}
+.legal-table-wrap code {
+  font:
+    10px / 1.7 var(--font-martian),
+    monospace;
+  color: var(--text);
+}
+.legal-preferences {
+  background: var(--surface-soft);
+  border-radius: 15px;
+  padding: 20px;
+  margin-top: 20px;
+}
+.legal-preferences > div {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+}
+.legal-preferences > div > svg {
+  color: var(--text-muted);
+  margin-top: 3px;
+  flex-shrink: 0;
+}
+.legal-preferences strong {
+  font-size: 14px;
+}
+.legal-preferences > div p {
+  font-size: 12px;
+  margin-top: 4px;
+}
+.legal-preferences > button {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 16px;
+  border-radius: 10px;
+  padding: 10px 12px;
+  font-size: 12px;
+  background: var(--button-surface);
+  color: var(--button-text);
+}
+.legal-preferences > button:hover {
+  background: color-mix(in srgb, var(--button-surface) 90%, var(--button-text));
+  box-shadow: var(--inner-light);
+}
+.legal-preferences .legal-preference-status {
+  display: flex;
+  align-items: flex-start;
+  gap: 7px;
+  margin-top: 12px;
+  font-size: 12px;
+}
+.legal-preference-status > svg {
+  flex-shrink: 0;
+  margin-top: 4px;
+}
+.legal-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 16px 0 32px;
+  margin-top: 8px;
+  color: var(--text-muted);
+  font-size: 11px;
+}
+.legal-footer a {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+.legal-back:hover,
+.legal-footer a:hover {
+  color: var(--text);
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+.footer-legal-links {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 10px 16px;
+}
+.footer-legal-links > a {
+  border-radius: 4px;
+}
+@media (max-width: 800px) {
+  .legal-main {
+    padding-top: 32px;
+  }
+  .legal-content-layout {
+    grid-template-columns: 1fr;
+    gap: 25px;
+  }
+  .legal-content-layout > aside > nav {
+    position: static;
+    flex-direction: row;
+    gap: 7px 14px;
+    flex-wrap: wrap;
+  }
+  .legal-content-layout > aside nav > span {
+    flex-basis: 100%;
+    margin-bottom: 0;
+  }
+  .legal-document-nav {
+    gap: 5px;
+  }
+  .legal-document-nav a {
+    padding: 7px 9px;
+    font-size: 11px;
+  }
+  .legal-heading > p:not(.eyebrow) {
+    font-size: 14px;
+  }
+  .legal-content-layout h2 {
+    font-size: 22px;
+  }
+  .footer-legal-links {
+    justify-content: flex-start;
+  }
+}
+@media (max-width: 480px) {
+  .legal-header {
+    padding: 10px 18px;
+    gap: 12px;
+  }
+  .legal-brand svg {
+    height: 23px;
+  }
+  .legal-back {
+    font-size: 10px;
+    gap: 5px;
+  }
+  .legal-back svg {
+    width: 12px;
+  }
+  .legal-main {
+    padding-inline: 20px;
+  }
+  .legal-heading h1 {
+    font-size: 38px;
+  }
+  .legal-preview-note {
+    padding: 15px;
+  }
+  .legal-content-layout p,
+  .legal-content-layout li {
+    font-size: 13px;
+  }
+  .legal-identity > div {
+    grid-template-columns: 1fr;
+    gap: 4px;
+  }
+  .legal-preferences {
+    padding: 16px;
+  }
+  .footer-legal-links {
+    gap: 10px 14px;
+    font-size: 10px;
+  }
+}
+.orchestr-experience :is(a, button, summary),
+.legal-shell :is(a, button, summary) {
+  transition:
+    opacity 0.22s,
+    color 0.22s,
+    background-color 0.22s,
+    box-shadow 0.22s,
+    border-color 0.22s,
+    text-decoration-color 0.22s;
+}
+.flow-steps > button > span:first-child {
+  transition:
+    background-color 0.22s,
+    color 0.22s,
+    box-shadow 0.22s,
+    border-color 0.22s;
+}
+@media (prefers-reduced-motion: reduce) {
+  .orchestr-experience :is(a, button, summary),
+  .legal-shell :is(a, button, summary),
+  .flow-steps > button > span:first-child {
+    transition: none;
+  }
+}
+:is(.motion-toggle, .mobile-services > button, .service-picker-trigger):hover {
+  background: color-mix(in srgb, var(--text) 6%, transparent);
+  color: var(--text);
+  border-radius: 8px;
+}
+.scroll-cue:hover {
+  color: var(--text);
+  text-decoration: underline;
+  text-underline-offset: 5px;
+}
+.demo-selector > button.selected:hover {
+  box-shadow:
+    var(--inner-light),
+    0 2px 9px #0000000c;
+}
+html:has(.legal-shell) {
+  scroll-behavior: smooth;
+}
+.legal-content-layout article > section {
+  scroll-margin-top: 8px;
+}
+@media (prefers-reduced-motion: reduce) {
+  html:has(.legal-shell) {
+    scroll-behavior: auto;
+  }
+}

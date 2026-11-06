@@ -14,12 +14,67 @@ export function ExperienceMotion({ paused }: { paused: boolean }) {
       const lenis = new Lenis({
         lerp: 0.085,
         autoRaf: false,
-        anchors: { offset: -100 },
+        anchors: false,
         stopInertiaOnNavigate: true,
       });
       const tick = (time: number) => lenis.raf(time * 1000);
       gsap.ticker.add(tick);
       lenis.on("scroll", ScrollTrigger.update);
+      // Own hash navigation: native jumps and Lenis must not scroll the same click twice.
+      // scroll-padding-top already supplies the header clearance.
+      const navigate = (event: MouseEvent) => {
+        if (
+          event.defaultPrevented ||
+          event.button !== 0 ||
+          event.metaKey ||
+          event.ctrlKey ||
+          event.shiftKey ||
+          event.altKey
+        )
+          return;
+        const anchor = event
+          .composedPath()
+          .find((node): node is HTMLAnchorElement => node instanceof HTMLAnchorElement);
+        if (!anchor || anchor.target === "_blank" || anchor.hasAttribute("download")) return;
+        const url = new URL(anchor.href);
+        if (
+          url.origin !== location.origin ||
+          url.pathname !== location.pathname ||
+          url.search !== location.search ||
+          !url.hash
+        )
+          return;
+        let target: HTMLElement | null = null;
+        try {
+          target = document.getElementById(decodeURIComponent(url.hash.slice(1)));
+        } catch {
+          return;
+        }
+        if (!target) return;
+        event.preventDefault();
+        const destination = target;
+        // Synchronise after native scrolling (browser restore, focus or scrollIntoView).
+        lenis.scrollTo(window.scrollY, { immediate: true, force: true });
+        const clearance =
+          Number.parseFloat(getComputedStyle(document.documentElement).scrollPaddingTop) || 0;
+        const margin = Number.parseFloat(getComputedStyle(destination).scrollMarginTop) || 0;
+        const top = destination.getBoundingClientRect().top + window.scrollY - clearance - margin;
+        if (location.hash !== url.hash) history.pushState(null, "", url.hash);
+        lenis.scrollTo(top, {
+          duration: 1.05,
+          easing: (t: number) => 1 - (1 - t) ** 3,
+          onComplete: () => {
+            if (!destination.hasAttribute("tabindex")) {
+              destination.setAttribute("tabindex", "-1");
+              destination.addEventListener("blur", () => destination.removeAttribute("tabindex"), {
+                once: true,
+              });
+            }
+            destination.focus({ preventScroll: true });
+          },
+        });
+      };
+      document.addEventListener("click", navigate);
       const context = gsap.context(() => {
         gsap.utils.toArray<HTMLElement>("[data-reveal]").forEach((element) => {
           if (element.getBoundingClientRect().top < innerHeight * 0.94) return;
@@ -133,6 +188,7 @@ export function ExperienceMotion({ paused }: { paused: boolean }) {
         alive = false;
         context.revert();
         gsap.ticker.remove(tick);
+        document.removeEventListener("click", navigate);
         lenis.destroy();
       };
     });

@@ -16,9 +16,10 @@ import {
   RotateCcw,
   Send,
 } from "lucide-react";
-import { useEffect, useLayoutEffect, useRef, useState } from "react";
+import { type ReactNode, useEffect, useLayoutEffect, useRef, useState } from "react";
 import { BrandIcon } from "@/components/brand/BrandIcon";
 import { OrchestrMark } from "@/components/brand/OrchestrLogo";
+import { selectBriefContext } from "@/lib/brief-context";
 import { demoStages } from "@/lib/demo-stages";
 import { gsap } from "@/lib/motion";
 import { type ProcessExample, processExamples } from "@/lib/process-examples";
@@ -710,12 +711,6 @@ function DemoComparison({ index, motionPaused }: { index: number; motionPaused: 
           <h3>{example.title}</h3>
           <p>{example.intro}</p>
         </div>
-        <PlaybackControls
-          playing={sequence.playing}
-          paused={motionPaused || sequence.reduced}
-          onToggle={() => sequence.setPlaying(!sequence.playing)}
-          onRestart={sequence.restart}
-        />
       </div>
       <div className="flow-story">
         <span>
@@ -726,6 +721,12 @@ function DemoComparison({ index, motionPaused }: { index: number; motionPaused: 
           <strong>{stage?.title}</strong>
           <p>{stage?.explanation}</p>
         </div>
+        <PlaybackControls
+          playing={sequence.playing}
+          paused={motionPaused || sequence.reduced}
+          onToggle={() => sequence.setPlaying(!sequence.playing)}
+          onRestart={sequence.restart}
+        />
       </div>
       <div className="flow-compare-grid">
         <div className="flow-before">
@@ -758,12 +759,26 @@ function DemoComparison({ index, motionPaused }: { index: number; motionPaused: 
       <div className="flow-demo-footnote">
         <span>{example.caption}</span>
         <span>Exemplo ilustrativo · Sem dados reais</span>
+        {/* biome-ignore lint/a11y/useValidAnchor: This link navigates to contact and carries the demo service. */}
+        <a
+          href="#contacto"
+          onClick={() => selectBriefContext({ service: "Automação e integrações" })}
+        >
+          Ver o meu processo
+          <ArrowUpRight size={14} />
+        </a>
       </div>
     </div>
   );
 }
 
-export function LiveDemo({ motionPaused }: { motionPaused: boolean }) {
+export function LiveDemo({
+  motionPaused,
+  children,
+}: {
+  motionPaused: boolean;
+  children?: ReactNode;
+}) {
   const [index, setIndex] = useState(0);
   const tabs = useRef<(HTMLButtonElement | null)[]>([]);
   useEffect(() => {
@@ -776,39 +791,42 @@ export function LiveDemo({ motionPaused }: { motionPaused: boolean }) {
   }, []);
   return (
     <div className="live-demo new-live-demo flow-demo">
-      <div className="demo-selector" role="tablist" aria-label="Escolher demonstração">
-        {processExamples.map((example, i) => (
-          <button
-            ref={(el) => {
-              tabs.current[i] = el;
-            }}
-            key={example.id}
-            type="button"
-            role="tab"
-            id={`tab-${example.id}`}
-            aria-selected={index === i}
-            aria-controls={`panel-${example.id}`}
-            tabIndex={index === i ? 0 : -1}
-            className={index === i ? "selected" : ""}
-            onClick={() => setIndex(i)}
-            onKeyDown={(event) => {
-              let next = i;
-              if (event.key === "ArrowRight") next = (i + 1) % processExamples.length;
-              else if (event.key === "ArrowLeft")
-                next = (i + processExamples.length - 1) % processExamples.length;
-              else if (event.key === "Home") next = 0;
-              else if (event.key === "End") next = processExamples.length - 1;
-              else return;
-              event.preventDefault();
-              setIndex(next);
-              tabs.current[next]?.focus();
-            }}
-          >
-            <span className="mono">0{i + 1}</span>
-            {example.label}
-            <ArrowUpRight size={17} />
-          </button>
-        ))}
+      <div className="flow-demo-toolbar">
+        <div className="flow-demo-section-title">{children}</div>
+        <div className="demo-selector" role="tablist" aria-label="Escolher demonstração">
+          {processExamples.map((example, i) => (
+            <button
+              ref={(el) => {
+                tabs.current[i] = el;
+              }}
+              key={example.id}
+              type="button"
+              role="tab"
+              id={`tab-${example.id}`}
+              aria-selected={index === i}
+              aria-controls={`panel-${example.id}`}
+              tabIndex={index === i ? 0 : -1}
+              className={index === i ? "selected" : ""}
+              onClick={() => setIndex(i)}
+              onKeyDown={(event) => {
+                let next = i;
+                if (event.key === "ArrowRight") next = (i + 1) % processExamples.length;
+                else if (event.key === "ArrowLeft")
+                  next = (i + processExamples.length - 1) % processExamples.length;
+                else if (event.key === "Home") next = 0;
+                else if (event.key === "End") next = processExamples.length - 1;
+                else return;
+                event.preventDefault();
+                setIndex(next);
+                tabs.current[next]?.focus();
+              }}
+            >
+              <span className="mono">0{i + 1}</span>
+              {example.label}
+              <ArrowUpRight size={17} />
+            </button>
+          ))}
+        </div>
       </div>
       <div
         role="tabpanel"

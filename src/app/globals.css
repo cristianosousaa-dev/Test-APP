@@ -869,9 +869,6 @@ h2 > span {
   right: 15%;
   color: var(--blue);
 }
-.service-card:hover .art-app {
-  transform: rotateX(10deg) rotateY(-10deg) rotateZ(-3deg) translateY(-4px);
-}
 
 /* Interactive product stage */
 .demo-section {

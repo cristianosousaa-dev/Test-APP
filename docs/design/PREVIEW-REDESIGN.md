@@ -124,3 +124,42 @@ The final optimized-server check also covers both colours of the live animated p
 button, the menu's upward placement, touch selection and the complete contact flow.
 The former hardcoded pricing-button background and radius were removed at their source,
 so the animated and paused variants now share the same adaptive material.
+
+## Compact demonstrations and interaction finish
+
+The demonstrations now have one toolbar for the section title and scenario tabs,
+one compact explanation row with playback controls, aligned before/after panes,
+selectable stages and an inline conversation link. Repeated titles and the separate
+closing CTA have been removed. The application data, four stages and action timelines
+remain intact. Desktop section height is 586–619 px in the verified 1024–1440 px
+widths; the entire section fits below the header at 1280×720. Mobile stacks the panes
+and retains readable records rather than forcing a desktop-height presentation.
+
+Header underlines grow from the pointer position and retain a quiet current-section
+indicator. Clickable controls use surface, highlight, shadow and underline feedback;
+buttons and cards do not translate on hover. Same-page navigation is handled once by
+Lenis, with native scroll synchronisation, header clearance and focus at the destination.
+
+## Legal information for this demonstration
+
+Privacy, terms of use, cookies/preferences, legal notice and accessibility have separate
+routes, shared navigation, section indexes, update dates and links from the footer.
+The owner confirmed that commercial identification is not applicable yet. No operator,
+tax number, address, complaints registration or dispute-resolution membership is
+invented. The preview notice explains its demonstration status and the example email.
+
+The cookie page documents the actual local storage keys and includes a working theme
+reset. No optional tracking tool is installed, so there is no simulated consent banner.
+See [LEGAL-PAGES.md](./LEGAL-PAGES.md) for implementation scope and primary references.
+
+The latest browser matrix covers all three examples and four stages in both themes
+at 320, 390, 1024, 1280, 1366 and 1440 px, plus all five legal routes on desktop and
+mobile. Section fit, content clipping, hover geometry, pointer underline, anchor
+alignment, legal indexes, preference reset and sitemap pass. An additional 44 axe
+audits report zero violations across the compact demos and legal pages; this is not
+an accessibility certification.
+
+The optimized server also passes: nonce-bearing CSP, actual header-to-demo alignment,
+visible moving transfer and completion, manual playback, the local contact result,
+all five legal routes, live theme reset and the 320 px footer. The exercised flow
+produces no browser errors, external application requests or POST requests.

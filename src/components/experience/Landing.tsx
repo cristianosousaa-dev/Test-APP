@@ -22,6 +22,7 @@ import { BrandDefs } from "@/components/brand/BrandIcon";
 import { OrchestrLogo, OrchestrMark } from "@/components/brand/OrchestrLogo";
 import SpotlightCard from "@/components/react-bits/SpotlightCard";
 import { briefServices, selectBriefContext } from "@/lib/brief-context";
+import { legalLinks } from "@/lib/legal/config";
 import { founder } from "@/lib/site";
 import { AnimatedFaq } from "./AnimatedFaq";
 import { CompactPricing } from "./CompactPricing";
@@ -297,35 +298,13 @@ export function Landing() {
           aria-labelledby="demo-title"
         >
           <div className="frame">
-            <SectionLabel index="02">MENOS EXPLICAÇÕES. MAIS DEMONSTRAÇÃO.</SectionLabel>
-            <div className="section-heading" data-reveal>
-              <h2 id="demo-title">
-                Veja o trabalho
-                <br />
-                <span>a fluir.</span>
-              </h2>
-              <p>
-                Escolha um processo e acompanhe cada ação: os dados entram, seguem para o sistema
-                certo e ficam disponíveis para a equipa.
-              </p>
-            </div>
             <div data-reveal>
-              <LiveDemo motionPaused={paused} />
-            </div>
-            <div className="demo-closing">
-              <p>
-                Imagine isto com os processos
-                <br />
-                <strong>e os dados da sua empresa.</strong>
-              </p>
-              <a
-                href="#contacto"
-                className="text-link"
-                onClick={() => selectBriefContext({ service: "Automação e integrações" })}
-              >
-                Quero ver o meu processo
-                <ArrowUpRight size={18} />
-              </a>
+              <LiveDemo motionPaused={paused}>
+                <SectionLabel index="02">MENOS EXPLICAÇÕES. MAIS DEMONSTRAÇÃO.</SectionLabel>
+                <h2 id="demo-title">
+                  Veja o trabalho <span>a fluir.</span>
+                </h2>
+              </LiveDemo>
             </div>
           </div>
         </section>
@@ -659,7 +638,13 @@ export function Landing() {
                 Strict.Dev ↗
               </a>
             </span>
-            <a href="/privacidade">Privacidade</a>
+            <nav className="footer-legal-links" aria-label="Informação legal">
+              {legalLinks.map((item) => (
+                <a href={`/${item.slug}`} key={item.slug}>
+                  {item.label}
+                </a>
+              ))}
+            </nav>
           </div>
         </div>
       </footer>
