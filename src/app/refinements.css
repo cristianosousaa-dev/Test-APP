@@ -1356,7 +1356,7 @@ html {
   font-size: 12px;
 }
 
-/* Open, compact plans. The recommended action carries React Bits' travelling contour. */
+/* Compact plans; the material and shared contours are defined in polish.css. */
 .pricing-section .section-heading {
   margin-bottom: 40px;
 }
@@ -1374,7 +1374,6 @@ html {
 }
 .compact-plan[data-featured="true"] {
   background: #1b2334;
-  border-top: 2px solid #7f9bdf;
   border-radius: 0 0 10px 10px;
   color: #f1f3fb;
 }

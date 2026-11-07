@@ -554,7 +554,7 @@ export function Landing() {
         </section>
 
         <section
-          id="contacto"
+          id="conversa"
           className="contact-section section-space"
           aria-labelledby="contact-title"
         >
@@ -563,10 +563,8 @@ export function Landing() {
             <div className="contact-layout">
               <div className="contact-copy" data-reveal>
                 <h2 id="contact-title">
-                  Vamos pôr
-                  <br />o seu negócio
-                  <br />
-                  <span>em sintonia.</span>
+                  Vamos pôr <br />o seu negócio <br />
+                  <span className="contact-title-ending">em sintonia.</span>
                   <ArrowUpRight className="contact-big-arrow" strokeWidth={0.7} />
                 </h2>
                 <p>
@@ -588,7 +586,7 @@ export function Landing() {
                   </span>
                 </div>
               </div>
-              <div data-reveal>
+              <div id="contacto" data-reveal>
                 <ContactForm />
               </div>
             </div>
