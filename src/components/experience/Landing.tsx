@@ -586,7 +586,7 @@ export function Landing() {
                   </span>
                 </div>
               </div>
-              <div id="contacto" data-reveal>
+              <div id="contacto" className="contact-form-panel">
                 <ContactForm />
               </div>
             </div>

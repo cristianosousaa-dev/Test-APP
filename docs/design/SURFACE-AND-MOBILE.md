@@ -79,3 +79,22 @@ breakpoint and widths from 320 to 1440 px. Captures at device pixel ratios 1, 2 
 cover both themes. Four whole-page axe audits pass. Optimized-build checks also
 exercise unpaused scroll motion and the service-to-contact flow in both themes on
 phone and desktop, with no illustration/text overlap, page overflow or browser errors.
+
+## Essential contact visibility
+
+The contact panel is no longer a `[data-reveal]` target, including on desktop. Its
+mobile/touch presentation uses a solid surface, native rounded corners and no
+backdrop filter or transform. The enclosing contact layout becomes a plain flex
+column on touch or narrow screens. The page-height wrapper also stops clipping on
+touch; decorative sections retain their own local clips. A ten-width check (320–1024 px)
+confirms that removing the wrapper clip does not introduce horizontal overflow.
+Content and local-example behavior are unchanged.
+
+The original `preview/orchestr-redesign` URL was still pointing at the pre-mobile-fix
+`52b622b` build; keep that stable preview branch updated with the tested release.
+
+Visibility checks use the iPhone 15 Pro Max profile (430×739, DPR 3) in Chromium:
+direct anchors, hero/menu links, theme changes, input hit targets, SSR without
+JavaScript and local submission in both themes. Four whole-page axe audits pass.
+The official WebKit download was denied by the environment's domain policy (403),
+so these checks do not establish real-device Safari rendering.
