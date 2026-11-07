@@ -1,0 +1,132 @@
+/* Approved A · Safira: blue glass, quiet optical depth and a stationary silhouette. */
+:is(.orchestr-experience, .legal-shell) svg:is(.orchestr-mark, .orchestr-logo) > g {
+  stroke: var(--text);
+}
+:is(.orchestr-experience, .legal-shell) svg:is(.orchestr-mark, .orchestr-logo) > circle {
+  fill: var(--signal);
+}
+:is(.orchestr-experience, .legal-shell) svg.orchestr-logo > path {
+  fill: var(--text);
+}
+
+@property --sapphire-optical-position {
+  syntax: "<percentage>";
+  initial-value: 50%;
+  inherits: true;
+}
+
+.orchestr-experience a.sapphire-button,
+.orchestr-experience a.sapphire-button:is(:hover, :focus-visible) {
+  --sapphire-light-rgb: 190, 214, 250;
+  --sapphire-x: 50%;
+  --sapphire-y: 12%;
+  --sapphire-presence: 0;
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  box-sizing: border-box;
+  border: 1px solid transparent;
+  border-radius: 12px;
+  color: #f8fbff;
+  background:
+    linear-gradient(166deg, #b4c8f01a, transparent 42%) padding-box,
+    linear-gradient(180deg, #26446ff5, #152b4cf7) padding-box,
+    linear-gradient(145deg, #9db5dc9e, #263c5d70 40%, #17253bba) border-box;
+  box-shadow:
+    inset 0 1px 0 #e4efff29,
+    inset 0 -1px 0 #030c1d80,
+    0 1px 2px #0d203229,
+    0 4px 10px #13263d1a;
+  backdrop-filter: blur(18px) saturate(1.12);
+  -webkit-tap-highlight-color: transparent;
+  transition:
+    filter 0.4s,
+    outline-color 0.4s;
+}
+.orchestr-experience a.sapphire-button:focus-visible {
+  outline: 2px solid var(--focus-ring);
+  outline-offset: 4px;
+}
+.orchestr-experience a.sapphire-button:active {
+  filter: brightness(0.97);
+}
+.sapphire-label,
+.sapphire-button > .sapphire-arrow {
+  position: relative;
+  z-index: 4;
+  pointer-events: none;
+}
+.orchestr-experience a.sapphire-button > .sapphire-arrow {
+  flex: none;
+  translate: none;
+  stroke-width: 1.7;
+  transition: translate 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.orchestr-experience a.sapphire-button:is(:hover, :focus-visible) > .sapphire-arrow {
+  translate: 2px -2px;
+}
+.sapphire-ambient,
+.sapphire-light,
+.sapphire-rim {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  border-radius: inherit;
+  pointer-events: none;
+}
+.sapphire-light {
+  background: radial-gradient(
+    ellipse 180px 66px at var(--sapphire-x) var(--sapphire-y),
+    rgb(183 212 255 / 23%),
+    transparent 72%
+  );
+  opacity: var(--sapphire-presence);
+  mix-blend-mode: screen;
+}
+.sapphire-rim {
+  inset: -1px;
+  z-index: 3;
+  padding: 1px;
+  background: radial-gradient(
+    ellipse 130px 35px at var(--sapphire-x) 0%,
+    rgba(var(--sapphire-light-rgb), 0.8),
+    transparent 85%
+  );
+  mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  mask-composite: exclude;
+  opacity: calc(0.18 + var(--sapphire-presence) * 0.62);
+}
+.sapphire-ambient {
+  background: radial-gradient(
+    ellipse 125px 42px at var(--sapphire-optical-position) -15px,
+    rgba(var(--sapphire-light-rgb), 0.2),
+    transparent 74%
+  );
+  opacity: 0.65;
+  animation: sapphire-optical-drift 12s ease-in-out infinite alternate;
+}
+.sapphire-button:is([data-motion-paused="true"], [data-dormant="true"]) .sapphire-ambient {
+  animation-play-state: paused;
+}
+@keyframes sapphire-optical-drift {
+  from {
+    --sapphire-optical-position: 18%;
+  }
+  to {
+    --sapphire-optical-position: 82%;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .orchestr-experience a.sapphire-button,
+  .orchestr-experience a.sapphire-button > .sapphire-arrow {
+    transition: none;
+  }
+  .sapphire-ambient {
+    animation: none;
+  }
+  .orchestr-experience a.sapphire-button:is(:hover, :focus-visible) > .sapphire-arrow {
+    translate: none;
+  }
+}

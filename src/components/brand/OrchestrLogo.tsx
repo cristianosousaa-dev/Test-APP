@@ -44,7 +44,7 @@ export function OrchestrMark({
 }) {
   const dark = tone === "on-dark";
   return (
-    <svg viewBox="0 0 32 32" className={cn("size-8 shrink-0", className)} aria-hidden>
+    <svg viewBox="0 0 32 32" className={cn("orchestr-mark size-8 shrink-0", className)} aria-hidden>
       {dark && <Gradient id={id} />}
       <SymbolShapes stroke={dark ? `url(#${id})` : "#17191C"} dot={dark ? "#6581FF" : "#5476FF"} />
     </svg>
@@ -69,7 +69,7 @@ export function OrchestrLogo({
     <svg
       viewBox={`0 0 ${WORDMARK.width} 32`}
       shapeRendering="geometricPrecision"
-      className={cn("h-7 w-auto shrink-0", className)}
+      className={cn("orchestr-logo h-7 w-auto shrink-0", className)}
       role={title ? "img" : undefined}
       aria-hidden={title ? undefined : true}
       aria-label={title}

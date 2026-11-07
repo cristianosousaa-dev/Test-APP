@@ -8,6 +8,7 @@ import "./globals.css";
 import "./refinements.css";
 import "./themes.css";
 import "./polish.css";
+import "./safira.css";
 
 /* Mona Sans: one variable family. Light display weights, regular for reading, semibold labels. */
 const mona = Mona_Sans({
@@ -55,7 +56,7 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: "#0c0e11",
+  themeColor: "#0a0f18",
   colorScheme: "light dark",
 };
 

@@ -4,10 +4,10 @@
   --flow-pending-bg: #fff2da;
   --flow-done: #28724e;
   --flow-done-bg: #e6f5ed;
-  --flow-blue: #355dc8;
-  --flow-blue-bg: #eaf0ff;
-  --demo-frame: #29456826;
-  --demo-titlebar: #e9edf4;
+  --flow-blue: #233f70;
+  --flow-blue-bg: #eaf0f8;
+  --demo-frame: #233f7026;
+  --demo-titlebar: #eaf0f8;
   --demo-shadow: 0 4px 12px #263c6106, 0 18px 42px #263c6112;
 }
 :root[data-theme="dark"] {
@@ -15,10 +15,10 @@
   --flow-pending-bg: #3a3021;
   --flow-done: #91dcba;
   --flow-done-bg: #183b31;
-  --flow-blue: #a1baff;
-  --flow-blue-bg: #233859;
-  --demo-frame: #d5e2ff26;
-  --demo-titlebar: #252b35;
+  --flow-blue: #95acd1;
+  --flow-blue-bg: #24334a;
+  --demo-frame: #95acd126;
+  --demo-titlebar: #24334a;
   --demo-shadow: 0 4px 12px #00000014, 0 18px 42px #00000030;
 }
 .orchestr-experience {
@@ -2481,7 +2481,7 @@
   --surface-float: linear-gradient(155deg, #ffffffef, #f9fafce3);
   --surface-input: #18243b04;
   --surface-hover: #18243b06;
-  --surface-selected: #667fa90b;
+  --surface-selected: #eaf0f8;
   --shadow-soft: 0 3px 8px #111b3003, 0 18px 50px -16px #111b3014;
   --shadow-float: 0 8px 18px -10px #111b3010, 0 24px 60px -20px #111b3021;
   --inner-light: inset 0 1px 0 #ffffffb8;
@@ -2492,8 +2492,8 @@
   --button-track: #ffffff17;
   --flow-pending-bg: #ad76210b;
   --flow-done-bg: #3183570a;
-  --flow-blue-bg: #4c71bc0a;
-  --flow-blue: #4669ac;
+  --flow-blue-bg: #eaf0f8;
+  --flow-blue: #233f70;
 }
 :root[data-theme="dark"] {
   --edge-light: #ffffff0b;
@@ -2502,7 +2502,7 @@
   --surface-float: linear-gradient(150deg, #2b3037f5, #20242bf5);
   --surface-input: #ffffff04;
   --surface-hover: #ffffff06;
-  --surface-selected: #ffffff08;
+  --surface-selected: #24334a;
   --shadow-soft: 0 3px 8px #00000005, 0 20px 60px -18px #00000030;
   --shadow-float: 0 8px 20px -8px #00000021, 0 24px 65px -18px #00000050;
   --inner-light: inset 0 1px 0 #ffffff09;
@@ -2513,8 +2513,8 @@
   --button-track: #15203312;
   --flow-pending-bg: #d5ab6310;
   --flow-done-bg: #81cfae0b;
-  --flow-blue-bg: #a4b6df0c;
-  --flow-blue: #acbee5;
+  --flow-blue-bg: #24334a;
+  --flow-blue: #95acd1;
 }
 :focus-visible {
   outline-color: var(--focus-ring);

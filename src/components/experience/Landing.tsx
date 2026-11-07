@@ -31,6 +31,7 @@ import { ExperienceMotion } from "./ExperienceMotion";
 import { HeroConnections } from "./HeroConnections";
 import { IntegrationMarquee } from "./IntegrationMarquee";
 import { HeroPreview, LiveDemo } from "./LiveDemo";
+import { SapphireLink } from "./SapphireLink";
 
 function SectionLabel({ index, children }: { index: string; children: React.ReactNode }) {
   return (
@@ -148,14 +149,15 @@ export function Landing() {
                 operação.
               </p>
               <div className="hero-actions">
-                <a
+                <SapphireLink
                   href="#contacto"
                   className="action action-light"
                   onClick={() => selectBriefContext()}
+                  paused={paused}
+                  iconSize={19}
                 >
                   Pedir uma conversa
-                  <ArrowUpRight size={19} />
-                </a>
+                </SapphireLink>
                 <a href="#demonstracao" className="hero-demo-link">
                   <span>
                     <Play size={12} fill="currentColor" />

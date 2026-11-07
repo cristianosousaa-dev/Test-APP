@@ -1,10 +1,9 @@
 // biome-ignore-all lint/a11y/useValidAnchor: These fragment links navigate to the brief and preselect the chosen plan.
 "use client";
 import { ArrowUpRight, Check, ChevronDown } from "lucide-react";
-import StarBorder from "@/components/react-bits/StarBorder";
 import { selectBriefContext } from "@/lib/brief-context";
 import { euros, plans } from "@/lib/site";
-import { useTheme } from "@/lib/theme";
+import { SapphireLink } from "./SapphireLink";
 
 const choosePlan = (id: string, plan: string) =>
   selectBriefContext({
@@ -13,7 +12,6 @@ const choosePlan = (id: string, plan: string) =>
   });
 
 export function CompactPricing({ paused }: { paused: boolean }) {
-  const lightButton = useTheme() === "dark";
   return (
     <div className="compact-pricing">
       {plans.map((plan) => {
@@ -63,35 +61,20 @@ export function CompactPricing({ paused }: { paused: boolean }) {
               )}
             </ul>
             <div className="compact-plan-action">
-              {plan.featured && !paused ? (
-                <StarBorder
-                  as="a"
+              {plan.featured ? (
+                <SapphireLink
                   href="#contacto"
                   onClick={() => choosePlan(plan.id, plan.name)}
-                  className="featured-plan-button"
-                  radius={12}
-                  thickness={1.5}
-                  duration={14}
-                  hover="brighten"
-                  trailLength={0.5}
-                  glow={0.3}
-                  sparkle={false}
-                  clickPulse={false}
-                  theme={lightButton ? "light" : "dark"}
-                  color={lightButton ? "#456bb8" : "#b9d0ff"}
-                  trailColor={lightButton ? "#9aaed7" : "#507bc8"}
-                  backgroundColor="var(--button-surface)"
-                  textColor="var(--button-text)"
-                  borderColor="var(--button-track)"
+                  className="action featured-plan-button"
+                  paused={paused}
                 >
                   Pedir proposta
-                  <ArrowUpRight size={17} />
-                </StarBorder>
+                </SapphireLink>
               ) : (
                 <a
                   href="#contacto"
                   onClick={() => choosePlan(plan.id, plan.name)}
-                  className={`action ${plan.featured ? "static-featured-button" : "action-outline"}`}
+                  className="action action-outline"
                 >
                   Pedir proposta
                   <ArrowUpRight size={17} />

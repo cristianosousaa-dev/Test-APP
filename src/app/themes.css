@@ -4,26 +4,27 @@
   color-scheme: light;
   --page: #ffffff;
   --surface: #ffffff;
-  --surface-soft: #f6f7f9;
+  --surface-soft: #f4f6fa;
   --surface-alt: #f4f6fa;
-  --surface-strong: #edf0f4;
-  --text: #17243c;
+  --surface-strong: #eaf0f8;
+  --text: #182338;
   --text-muted: #52627c;
   --text-quiet: #5a6d8b;
   --line-theme: #1720330d;
-  --signal: #355dc8;
-  --signal-soft: #5376ca0b;
-  --hero-second: #5c749b;
+  --signal: #233f70;
+  --blue: #233f70;
+  --signal-soft: #eaf0f8;
+  --hero-second: #4b6286;
   --marquee-surface: #ffffff;
-  --header-bg: #ffffffc4;
-  --header-docked: #ffffffbd;
+  --header-bg: #ffffffd9;
+  --header-docked: #ffffffd9;
   --header-shadow: #1720330b;
-  --app-surface: #f4f5f8;
-  --app-card: #ffffffeb;
-  --app-text: #283142;
+  --app-surface: #f4f6fa;
+  --app-card: #ffffff;
+  --app-text: #182338;
   --app-muted: #5e6b80;
   --app-line: #1720330c;
-  --app-selected: #5b7bb50c;
+  --app-selected: #eaf0f8;
   --app-success-bg: #e4f2eb;
   --app-success-text: #336548;
   --app-warning-bg: #fff2df;
@@ -31,39 +32,42 @@
   --nav-height: 84px;
   --marquee-height: 80px;
   --cream: #ffffff;
-  --ink: #17243c;
-  --color-fg: #17243c;
+  --ink: #182338;
+  --color-fg: #182338;
   --color-fg-2: #52627c;
 }
 :root[data-theme="dark"] {
   color-scheme: dark;
-  --page: #0c0e11;
-  --surface: #111317;
-  --surface-soft: #191c22;
-  --surface-alt: #15181e;
-  --surface-strong: #242830;
-  --text: #edf2fc;
+  --page: #0a0f18;
+  --surface: #0a0f18;
+  --surface-soft: #151f2e;
+  --surface-alt: #151f2e;
+  --surface-strong: #24334a;
+  --text: #edf2f8;
   --text-muted: #aab9d2;
   --text-quiet: #9bacca;
   --line-theme: #ffffff0c;
-  --signal: #9bb7ff;
-  --signal-soft: #9aafdf0c;
-  --hero-second: #a2b5d4;
-  --marquee-surface: #111317;
-  --header-bg: #15171cbd;
-  --header-docked: #1b1e24bf;
+  --signal: #95acd1;
+  --blue: #95acd1;
+  --signal-soft: #24334a;
+  --hero-second: #a0b3d1;
+  --marquee-surface: #0a0f18;
+  --header-bg: #0a0f18d9;
+  --header-docked: #0a0f18d9;
   --header-shadow: #00000020;
-  --app-surface: #171a20;
-  --app-card: #22262dcc;
-  --app-text: #e5e9f1;
+  --app-surface: #151f2e;
+  --app-card: #24334a;
+  --app-text: #edf2f8;
   --app-muted: #a8b0bf;
   --app-line: #ffffff0c;
-  --app-selected: #b7c5e010;
+  --app-selected: #24334a;
   --app-success-bg: #193b32;
   --app-success-text: #a1d7bc;
   --app-warning-bg: #3b3021;
   --app-warning-text: #efd09d;
-  --color-fg: #edf2fc;
+  --cream: #0a0f18;
+  --ink: #edf2f8;
+  --color-fg: #edf2f8;
   --color-fg-2: #aab9d2;
 }
 body {
@@ -360,12 +364,12 @@ h2 > span,
 }
 [data-theme="light"] :is(.brand-link, .privacy-header > a) svg > path,
 [data-theme="light"] .footer-logo > path {
-  fill: #17243c;
+  fill: var(--text);
 }
 [data-theme="light"] :is(.brand-link, .privacy-header > a) svg > g,
 [data-theme="light"] .footer-logo > g,
 [data-theme="light"] .hero-wordmark svg > g {
-  stroke: #17243c;
+  stroke: var(--text);
 }
 
 /* Stable geometry makes the header state change feel continuous. */

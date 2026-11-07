@@ -1,6 +1,6 @@
 # Orchestr — preview refinement
 
-Branch: `preview/orchestr-redesign`. Production branch `main` is not changed.
+Implementation branch: `preview/orchestr-redesign`. The owner approved A · Safira — Vidro azul and requested publication to production on 7 November 2026.
 
 ## Direction confirmed with the owner
 
@@ -11,8 +11,7 @@ businesses across sectors, from microbusinesses and SMEs to medium-sized compani
 Retain light/dark mode, the Orchestr symbol in the hero title, the small framed portrait,
 the approved service, purpose and process sections, compact pricing, the coloured
 marquee in the initial viewport and the Strict.Dev development credit. The portrait
-only gains colour on hover. Physical buttons stay still. The middle plan's React Bits
-StarBorder uses a 14-second contour with a brightness effect on hover.
+only gains colour on hover. Physical buttons stay still. The hero and featured plan now use the approved Safira material, described below; it replaces the rejected contour effect.
 
 ## A short conversation form
 
@@ -212,3 +211,36 @@ clipped demo panels or page overflow. The compact desktop section still fits at
 stationary CTA bounds and the five legal routes at desktop/mobile widths. All 44
 axe audits report zero violations. The final window contour is explicitly checked
 as a visible 1 px border in the hero and comparison, in both themes.
+
+## Approved Safira finish and production release
+
+A · Safira — Vidro azul is the selected proposal. Its exact semantic palette is
+white / `#f4f6fa` / `#eaf0f8`, with `#182338` text and `#233f70` accents in light
+mode; `#0a0f18` / `#151f2e` / `#24334a`, with `#edf2f8` text and `#95acd1` accents
+in dark mode. These tokens cover sections, app windows, selected states, navigation,
+legal pages and the Orchestr identity. Integration marks retain their real colours.
+The manifest, favicon and sharing image follow the same palette.
+
+The hero primary link and featured plan share `SapphireLink`: layered blue glass,
+a restrained upper-edge reflection, a twelve-second optical drift and an interpolated
+pointer light. Only the arrow moves (2 px); button bounds, existing paddings and
+plan alignment stay fixed. Pausing keeps the material intact. Offscreen/hidden
+animations suspend, keyboard focus receives the highlight, and reduced motion uses
+a static reflection with no arrow movement. The pointer light writes CSS properties
+without React renders, runs only while settling and removes its observers/listeners
+on unmount. The old StarBorder is no longer used by the pricing section.
+
+Verification of the optimized app: TypeScript and scoped Biome checks pass. Browser
+checks cover the precise palette in both themes, light interpolation, visible optical
+drift, stationary bounds, keyboard focus, global pause, offscreen suspension and
+reduced motion. Twelve responsive views (320–1440 px) cover all four hero stages and
+all three/four-stage comparisons without panel clipping or page overflow. Plan CTAs
+remain aligned and the compact demonstration fits at 1280×720. Four whole-page axe
+audits and 44 additional demo/legal audits report zero violations. The complete local contact flow, source plan selection,
+nonce CSP, all five legal routes and cookie/theme reset also pass without browser
+errors or POST requests.
+
+Publication uses the existing Git/Vercel integration and the repository's `main`
+production branch. The form intentionally remains a local example with
+`ola@example.com`, as instructed; the release does not add an email service or invent
+commercial identification.
