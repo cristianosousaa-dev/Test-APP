@@ -1,8 +1,8 @@
 /* Focused finish: existing composition, clearer actions, softer surfaces. */
 :root {
   --radius-panel: 28px;
-  --radius-window: 28px;
-  --radius-card: 16px;
+  --radius-window: 32px;
+  --radius-card: 18px;
   --radius-menu: 24px;
   --panel-edge: #1823380d;
   --flow-pending: #8c5a14;
@@ -14,6 +14,7 @@
   --demo-frame: #233f7020;
   --demo-titlebar: #eaf0f8;
   --demo-shadow: 0 12px 36px -14px #233f7024;
+  --demo-outline: 0 0 1.25px 0.5px var(--demo-frame);
 }
 :root[data-theme="dark"] {
   --flow-pending: #f0c77d;
@@ -88,11 +89,6 @@
 }
 .art-node {
   border-radius: 10px;
-}
-.art-app,
-.art-browser,
-.art-node {
-  backface-visibility: hidden;
 }
 .compact-pricing {
   border: 0;
@@ -2787,14 +2783,14 @@
   color: var(--button-text);
 }
 
-/* Separate demo surfaces by depth, rather than nested bright blue outlines. */
+/* Native rounded clips and a feathered contour soften the edge without blurring content. */
 .orchestr-experience .flow-workspace {
   isolation: isolate;
   border-radius: var(--radius-window);
   background: var(--app-surface);
-  background-clip: padding-box;
-  border-color: var(--demo-frame);
-  box-shadow: var(--demo-shadow);
+  background-clip: border-box;
+  border-color: transparent;
+  box-shadow: var(--demo-outline), var(--demo-shadow);
 }
 .flow-app-bar {
   background: var(--demo-titlebar);
@@ -2920,11 +2916,11 @@
 .orchestr-experience .flow-before .manual-operation {
   isolation: isolate;
   overflow: hidden;
-  border-color: var(--demo-frame);
+  border-color: transparent;
   border-radius: var(--radius-window);
   background: var(--app-surface);
-  background-clip: padding-box;
-  box-shadow: var(--demo-shadow);
+  background-clip: border-box;
+  box-shadow: var(--demo-outline), var(--demo-shadow);
 }
 .flow-before .manual-message {
   border-color: var(--app-line);
@@ -3158,17 +3154,8 @@
 
 @supports (corner-shape: superellipse(1.15)) {
   .conversation-card,
-  .flow-workspace,
   .flow-story,
   .compact-plan,
-  .manual-operation,
-  .manual-message,
-  .flow-email,
-  .flow-record,
-  .flow-production,
-  .flow-invoice,
-  .flow-calendar,
-  .flow-outbox,
   .service-card,
   .header-shell,
   .founder-photo,
@@ -3187,8 +3174,8 @@
   }
   :root {
     --radius-panel: 24px;
-    --radius-window: 24px;
-    --radius-card: 14px;
+    --radius-window: 28px;
+    --radius-card: 16px;
     --radius-menu: 20px;
   }
   .flow-workspace-hero
