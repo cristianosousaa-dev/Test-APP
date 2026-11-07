@@ -1,0 +1,927 @@
+.window {
+  --studio-surface: var(--surface);
+  --studio-panel: var(--surface-soft);
+  --studio-raised: color-mix(in srgb, var(--surface) 96%, var(--signal));
+  --studio-edge: color-mix(in srgb, var(--signal) 15%, transparent);
+  --studio-divider: color-mix(in srgb, var(--signal) 8%, transparent);
+  --studio-shadow: color-mix(in srgb, var(--text) 12%, transparent);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  isolation: isolate;
+  width: 100%;
+  min-width: 0;
+  overflow: hidden;
+  border: 1px solid var(--studio-edge);
+  border-radius: 24px;
+  background: var(--studio-surface);
+  color: var(--text);
+  box-shadow:
+    0 16px 40px -20px var(--studio-shadow),
+    0 2px 5px -2px var(--studio-shadow);
+  font-family: var(--font-mona), sans-serif;
+  font-size: 12px;
+  line-height: 1.5;
+  text-align: left;
+  transition:
+    background-color 0.5s,
+    border-color 0.5s,
+    box-shadow 0.5s;
+}
+.window * {
+  box-sizing: border-box;
+}
+.window :is(h4, p) {
+  margin: 0;
+}
+.window svg {
+  flex: none;
+}
+.titlebar {
+  flex: none;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 46px;
+  padding: 10px 15px;
+  background: linear-gradient(180deg, var(--studio-surface), var(--studio-panel));
+  box-shadow: inset 0 -1px 0 var(--studio-divider);
+}
+.traffic {
+  display: flex;
+  gap: 4px;
+  flex: none;
+}
+.traffic i {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--signal) 20%, transparent);
+}
+.appName {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 12px;
+  font-weight: 600;
+}
+.appName svg {
+  width: 18px;
+  height: 18px;
+}
+.windowMode {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 10px;
+  color: var(--text-muted);
+}
+.windowMode > i,
+.connectionDot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--app-success-text);
+  flex: none;
+}
+.profile {
+  display: grid;
+  place-items: center;
+  width: 23px;
+  height: 23px;
+  margin-left: 3px;
+  border-radius: 50%;
+  background: var(--surface-strong);
+  color: var(--signal);
+  font-size: 9px;
+}
+.layout {
+  flex: 1;
+  display: grid;
+  grid-template-columns: 52px minmax(0, 1fr);
+}
+.sidebar {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 16px 8px;
+  background: var(--studio-panel);
+  box-shadow: inset -1px 0 0 var(--studio-divider);
+}
+.sidebarItem {
+  display: grid;
+  place-items: center;
+  width: 31px;
+  height: 31px;
+  border-radius: 10px;
+  color: var(--text-quiet);
+}
+.sidebarItem[data-active="true"] {
+  background: var(--surface-strong);
+  color: var(--signal);
+  box-shadow: inset 0 1px 0 color-mix(in srgb, var(--surface) 60%, transparent);
+}
+.settings {
+  margin-top: auto;
+}
+.main {
+  padding: 17px;
+  min-width: 0;
+}
+.breadcrumb {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 14px;
+  min-height: 22px;
+  font-size: 11px;
+}
+.breadcrumb > span:first-child {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--text-muted);
+}
+.breadcrumb strong {
+  color: var(--signal);
+  font-weight: 500;
+}
+.status,
+.subtleBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 4px 7px;
+  border-radius: 7px;
+  font-size: 10px;
+  line-height: 1.4;
+  background: var(--surface-strong);
+  color: var(--signal);
+  white-space: nowrap;
+}
+.status[data-waiting="true"] {
+  background: var(--app-warning-bg);
+  color: var(--app-warning-text);
+}
+.scene {
+  min-height: 260px;
+}
+.card {
+  padding: 14px;
+  border-radius: 15px;
+  background: var(--studio-raised);
+  box-shadow:
+    inset 0 0 0 1px var(--studio-divider),
+    0 4px 15px -10px var(--studio-shadow);
+}
+.sender {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+}
+.sender > div {
+  min-width: 0;
+}
+.sender strong {
+  display: block;
+  font-size: 12px;
+  font-weight: 600;
+}
+.sender small {
+  display: block;
+  margin-top: 1px;
+  color: var(--text-muted);
+  font-size: 10px;
+}
+.sender > svg {
+  width: 19px;
+  height: 19px;
+  margin-left: auto;
+}
+.avatar {
+  display: grid;
+  place-items: center;
+  width: 31px;
+  height: 31px;
+  border-radius: 10px;
+  flex: none;
+  background: var(--surface-strong);
+  color: var(--signal);
+  font-size: 10px;
+  font-weight: 600;
+}
+.avatar[data-warm] {
+  background: color-mix(in srgb, #c9ae8f 19%, var(--studio-surface));
+  color: color-mix(in srgb, #ad8260 75%, var(--text));
+}
+.window .mailSubject {
+  margin: 19px 0 9px;
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: -0.4px;
+  line-height: 1.4;
+}
+.mailMessage {
+  color: var(--text-muted);
+  font-size: 12px;
+  line-height: 1.8;
+  min-height: 64px;
+}
+.cardFooter {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  margin-top: 17px;
+}
+.cardFooter > span {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  color: var(--text-muted);
+  font-size: 10px;
+}
+.window button.action {
+  display: grid;
+  grid-template-areas: "action";
+  align-items: center;
+  min-height: 32px;
+  padding: 7px 10px;
+  flex: none;
+  border: 0;
+  border-radius: 9px;
+  color: var(--surface);
+  background: var(--signal);
+  box-shadow: inset 0 1px 0 color-mix(in srgb, var(--surface) 18%, transparent);
+  font:
+    550 11px / 1.4 var(--font-mona),
+    sans-serif;
+  text-align: left;
+  cursor: pointer;
+  transform: none;
+  translate: none;
+  transition:
+    box-shadow 0.4s,
+    background-color 0.4s,
+    color 0.4s;
+}
+.action > span {
+  grid-area: action;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  transition: opacity 0.35s;
+}
+.actionReady {
+  opacity: 1;
+}
+.actionDone {
+  opacity: 0;
+  pointer-events: none;
+}
+.window button.action:is(:hover, :focus-visible),
+.window[data-clicked="true"] button.action {
+  background: color-mix(in srgb, var(--signal) 84%, var(--text));
+  box-shadow:
+    inset 0 1px 0 color-mix(in srgb, var(--surface) 24%, transparent),
+    0 0 0 3px var(--surface-strong);
+}
+.window button.action:focus-visible {
+  outline: 2px solid var(--signal);
+  outline-offset: 4px;
+}
+.actionReady > svg {
+  transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.window[data-complete="true"] .actionReady {
+  opacity: 0;
+}
+.window[data-complete="true"] .actionDone {
+  opacity: 1;
+}
+.window[data-complete="true"] button.action {
+  background: var(--surface-strong);
+  color: var(--signal);
+  box-shadow: none;
+}
+.window[data-complete="true"] button.action:hover {
+  background: color-mix(in srgb, var(--signal) 16%, var(--studio-surface));
+}
+.sceneHeading {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 13px;
+}
+.sceneHeading h4 {
+  font-family: var(--font-nohemi), var(--font-mona), sans-serif;
+  font-size: 18px;
+  font-weight: 450;
+  letter-spacing: -0.5px;
+  line-height: 1.2;
+}
+.sceneHeading p {
+  font-size: 10px;
+  color: var(--text-muted);
+  margin-top: 5px;
+}
+.subtleBadge {
+  font-size: 9px;
+  background: var(--studio-panel);
+}
+.fields {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 9px 11px;
+}
+.field {
+  min-width: 0;
+}
+.field > span {
+  display: block;
+  color: var(--text-muted);
+  font-size: 10px;
+  margin-bottom: 4px;
+}
+.field > div {
+  min-height: 30px;
+  position: relative;
+  display: flex;
+  align-items: center;
+  padding: 6px 8px;
+  border-radius: 9px;
+  background: var(--studio-panel);
+  box-shadow: inset 0 1px 2px color-mix(in srgb, var(--text) 3%, transparent);
+}
+.field strong {
+  min-width: 0;
+  font-size: 11px;
+  font-weight: 450;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  padding-right: 10px;
+}
+.fieldCheck {
+  position: absolute;
+  right: 7px;
+  color: var(--app-success-text);
+}
+.window [data-typing="true"]::after {
+  content: "";
+  display: inline-block;
+  width: 1px;
+  height: 11px;
+  margin-left: 1px;
+  vertical-align: -1px;
+  background: var(--signal);
+}
+.assignee {
+  margin-top: 12px;
+  padding: 11px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--studio-panel);
+  border-radius: 11px;
+}
+.assignee > div {
+  min-width: 0;
+}
+.assignee strong {
+  display: block;
+  font-size: 12px;
+  font-weight: 550;
+}
+.assignee small {
+  display: block;
+  color: var(--text-muted);
+  font-size: 10px;
+}
+.selected {
+  font-size: 9px;
+  color: var(--signal);
+  margin-left: auto;
+}
+.productionProgress {
+  display: flex;
+  gap: 5px;
+  margin-top: 17px;
+}
+.productionProgress i {
+  height: 3px;
+  flex: 1;
+  border-radius: 3px;
+  background: var(--surface-strong);
+  transform-origin: left;
+}
+.productionProgress i:nth-child(-n + 2) {
+  background: var(--signal);
+}
+.invoiceTitle {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+}
+.invoiceTitle > span:first-child {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.invoiceTitle strong {
+  font-size: 13px;
+  font-weight: 550;
+}
+.invoiceTitle > span:last-child {
+  font-size: 10px;
+  color: var(--text-muted);
+}
+.invoice > p {
+  font-size: 12px;
+  margin: 13px 0;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--studio-divider);
+}
+.invoice small {
+  display: block;
+  color: var(--text-muted);
+  font-size: 10px;
+  margin-top: 3px;
+}
+.invoiceLine {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  font-size: 12px;
+  margin-top: 7px;
+}
+.invoiceLine > span:first-child {
+  color: var(--text-muted);
+}
+.invoiceLine strong {
+  font-weight: 500;
+}
+.total {
+  margin-top: 12px;
+  padding-top: 11px;
+  border-top: 1px solid var(--studio-divider);
+}
+.total > strong {
+  font:
+    24px / 1 var(--font-nohemi),
+    sans-serif;
+  color: var(--signal);
+  letter-spacing: -0.5px;
+}
+.invoice .cardFooter {
+  padding-top: 4px;
+}
+.calendarDays {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 3px;
+  margin-bottom: 16px;
+  font-size: 9px;
+  color: var(--text-muted);
+}
+.calendarDays > span {
+  padding: 7px 3px;
+  border-radius: 8px;
+  text-align: center;
+}
+.calendarDays [data-selected="true"] {
+  background: var(--surface-strong);
+  color: var(--signal);
+}
+.calendarSlot {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  padding: 12px 9px;
+  border-radius: 10px;
+}
+.calendarSlot time {
+  font-size: 11px;
+  color: var(--text-muted);
+}
+.calendarSlot strong {
+  display: block;
+  font-size: 12px;
+  font-weight: 500;
+}
+.calendarSlot small {
+  display: block;
+  color: var(--text-muted);
+  font-size: 10px;
+  margin-top: 2px;
+}
+.calendarSlot > svg {
+  margin-left: auto;
+  color: var(--app-success-text);
+}
+.reservation {
+  margin-top: 6px;
+  background: var(--signal-soft);
+}
+.window[data-complete="true"] .reservation {
+  background: var(--app-success-bg);
+  transition: background-color 0.5s;
+}
+.messageBody {
+  padding: 13px;
+  background: var(--studio-panel);
+  border-radius: 11px;
+  margin-top: 14px;
+}
+.messageBody > strong {
+  display: block;
+  font-size: 12px;
+  font-weight: 600;
+}
+.messageBody > p {
+  font-size: 11px;
+  color: var(--text-muted);
+  line-height: 1.8;
+  min-height: 61px;
+  margin-top: 6px;
+}
+.feedback {
+  display: grid;
+  grid-template-areas: "feedback";
+  margin-top: 12px;
+  min-height: 47px;
+  font-size: 10px;
+}
+.feedback > div {
+  grid-area: feedback;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 9px 10px;
+  border-radius: 11px;
+  transition:
+    opacity 0.45s,
+    background-color 0.45s;
+}
+.feedbackPending {
+  color: var(--text-muted);
+}
+.feedbackPending > span:last-child {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  flex-wrap: wrap;
+}
+.connectionDot {
+  background: var(--signal);
+  box-shadow: 0 0 0 3px var(--surface-strong);
+}
+.feedbackDone {
+  opacity: 0;
+  visibility: hidden;
+  color: var(--app-success-text);
+  background: var(--app-success-bg);
+}
+.feedbackDone strong {
+  font-size: 11px;
+  font-weight: 550;
+  display: block;
+}
+.feedbackDone small {
+  font-size: 10px;
+  display: block;
+  margin-top: 1px;
+  opacity: 0.85;
+}
+.window[data-complete="true"] .feedbackPending {
+  opacity: 0;
+  visibility: hidden;
+}
+.window[data-complete="true"] .feedbackDone {
+  opacity: 1;
+  visibility: visible;
+}
+.pointer {
+  position: absolute;
+  left: 0;
+  top: 0;
+  opacity: 0;
+  pointer-events: none;
+  z-index: 5;
+  color: #1b304e;
+  filter: drop-shadow(1px 2px 2px #0003);
+}
+.pointer > svg {
+  width: 25px;
+  height: 25px;
+  stroke: #fff;
+}
+.ring {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 20px;
+  height: 20px;
+  border: 1px solid var(--signal);
+  border-radius: 50%;
+  opacity: 0;
+  z-index: 4;
+  pointer-events: none;
+}
+.action:hover .actionReady > svg {
+  transform: translateX(2px);
+}
+@media (min-width: 960px) {
+  .window[data-hero="true"] .scene {
+    min-height: 274px;
+  }
+}
+@media (max-width: 1200px) and (min-width: 960px) {
+  .layout {
+    grid-template-columns: 44px minmax(0, 1fr);
+  }
+  .main {
+    padding: 14px;
+  }
+  .sidebar {
+    padding-inline: 5px;
+  }
+  .titlebar {
+    gap: 8px;
+    padding-inline: 12px;
+  }
+  .windowMode {
+    font-size: 9px;
+  }
+  .profile {
+    display: none;
+  }
+  .card {
+    padding: 12px;
+  }
+  .cardFooter > span {
+    font-size: 9px;
+  }
+  .window button.action {
+    font-size: 10px;
+    padding-inline: 8px;
+  }
+  .subtleBadge {
+    font-size: 8px;
+  }
+}
+@media (max-width: 650px) {
+  .window {
+    border-radius: 21px;
+  }
+  .titlebar {
+    min-height: 43px;
+    padding: 10px 12px;
+    gap: 9px;
+  }
+  .appName {
+    font-size: 11px;
+  }
+  .windowMode {
+    font-size: 9px;
+    gap: 5px;
+  }
+  .profile {
+    display: none;
+  }
+  .traffic {
+    gap: 3px;
+  }
+  .traffic i {
+    width: 5px;
+    height: 5px;
+  }
+  .layout {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .sidebar {
+    flex-direction: row;
+    gap: 5px;
+    padding: 7px 12px;
+    box-shadow: inset 0 -1px 0 var(--studio-divider);
+  }
+  .sidebarItem {
+    width: 29px;
+    height: 27px;
+    border-radius: 8px;
+  }
+  .sidebarItem svg {
+    width: 14px;
+    height: 14px;
+  }
+  .settings {
+    margin-top: 0;
+    margin-left: auto;
+  }
+  .main {
+    padding: 14px 12px;
+  }
+  .breadcrumb {
+    margin-bottom: 14px;
+    font-size: 10px;
+  }
+  .status {
+    font-size: 9px;
+  }
+  .scene {
+    min-height: 270px;
+  }
+  .card {
+    padding: 13px;
+    border-radius: 14px;
+  }
+  .sender {
+    gap: 8px;
+  }
+  .sender strong {
+    font-size: 11px;
+  }
+  .sender small {
+    font-size: 10px;
+  }
+  .sender > svg {
+    width: 18px;
+    height: 18px;
+  }
+  .avatar {
+    width: 29px;
+    height: 29px;
+    border-radius: 9px;
+    font-size: 9px;
+  }
+  .window .mailSubject {
+    font-size: 14px;
+    margin-top: 18px;
+  }
+  .mailMessage {
+    font-size: 12px;
+    line-height: 1.75;
+  }
+  .cardFooter {
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 16px;
+  }
+  .cardFooter > span {
+    font-size: 10px;
+  }
+  .window button.action {
+    margin-left: auto;
+    font-size: 10px;
+    min-height: 34px;
+  }
+  .action > span {
+    gap: 8px;
+  }
+  .sceneHeading h4 {
+    font-size: 17px;
+  }
+  .sceneHeading p {
+    font-size: 10px;
+  }
+  .sceneHeading {
+    gap: 7px;
+    margin-bottom: 13px;
+  }
+  .subtleBadge {
+    font-size: 8px;
+    padding: 4px 5px;
+    gap: 4px;
+  }
+  .subtleBadge > svg {
+    display: none;
+  }
+  .fields {
+    gap: 10px 9px;
+  }
+  .field > span {
+    font-size: 10px;
+  }
+  .field > div {
+    min-height: 33px;
+    padding: 7px;
+    border-radius: 9px;
+  }
+  .field strong {
+    font-size: 11px;
+  }
+  .fieldCheck {
+    width: 10px;
+    height: 10px;
+    right: 6px;
+  }
+  .assignee {
+    padding: 10px;
+    gap: 7px;
+  }
+  .assignee strong {
+    font-size: 11px;
+  }
+  .assignee small {
+    font-size: 9px;
+  }
+  .selected {
+    font-size: 8px;
+  }
+  .messageBody {
+    padding: 12px;
+  }
+  .messageBody > p {
+    font-size: 11px;
+    min-height: 80px;
+  }
+  .feedback {
+    min-height: 50px;
+    margin-top: 12px;
+  }
+  .feedbackDone strong {
+    font-size: 10px;
+  }
+  .feedbackDone small {
+    font-size: 9px;
+  }
+  .calendarDays {
+    font-size: 8px;
+  }
+  .calendarSlot {
+    padding: 12px 8px;
+    gap: 10px;
+  }
+  .calendarSlot strong {
+    font-size: 11px;
+  }
+  .calendarSlot small {
+    font-size: 9px;
+  }
+}
+@media (max-width: 359px) {
+  .titlebar {
+    gap: 7px;
+    padding-inline: 10px;
+  }
+  .windowMode {
+    font-size: 8px;
+  }
+  .appName {
+    font-size: 10px;
+  }
+  .main {
+    padding-inline: 10px;
+  }
+  .card {
+    padding: 11px;
+  }
+  .sceneHeading h4 {
+    font-size: 16px;
+  }
+  .subtleBadge {
+    font-size: 7px;
+  }
+  .sceneHeading .subtleBadge {
+    max-width: 78px;
+    white-space: normal;
+  }
+  .selected {
+    display: none;
+  }
+  .field strong {
+    font-size: 10px;
+  }
+  .sender small {
+    font-size: 9px;
+  }
+  .sender strong {
+    font-size: 10px;
+  }
+  .feedbackDone small {
+    font-size: 9px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .window,
+  .window *,
+  .window *::after {
+    transition: none;
+    animation: none;
+  }
+  .pointer,
+  .ring {
+    display: none;
+  }
+  .window button.action:hover .actionReady > svg {
+    transform: none;
+  }
+}

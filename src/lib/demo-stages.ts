@@ -36,14 +36,14 @@ export const demoStages: readonly (readonly DemoStage[])[] = [
     {
       title: "A produção sabe o que preparar.",
       explanation:
-        "A tarefa chega à produção com quantidade e prazo. O estado muda para «Em produção» e o painel passa de 12 para 13 pedidos ativos.",
+        "O João recebe a tarefa com quantidade e prazo. A equipa acompanha o responsável e o estado da produção no mesmo registo.",
       from: "Encomendas",
       to: "Equipa de produção",
       facts: [
         ["Tarefa", "Preparar 24 cadeiras"],
         ["Prazo", "20 de novembro"],
         ["Novo estado", "Em produção"],
-        ["Pedidos ativos", "12 → 13"],
+        ["Responsável", "João Silva"],
       ],
     },
     {

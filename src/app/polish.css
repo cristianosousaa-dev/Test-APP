@@ -4715,3 +4715,41 @@ html:has(.legal-shell) {
     corner-shape: round;
   }
 }
+
+/* Studio comparisons: one quiet silhouette on either side, without stacked rims. */
+.orchestr-experience .flow-comparison[data-demo-design="studio"] .flow-compare-grid {
+  align-items: stretch;
+}
+.orchestr-experience .flow-comparison[data-demo-design="studio"] :is(.flow-before, .flow-after) {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+.orchestr-experience .flow-comparison[data-demo-design="studio"] .flow-panel-label {
+  flex: none;
+}
+.orchestr-experience .flow-comparison[data-demo-design="studio"] .flow-before .manual-operation {
+  flex: 1;
+  border: 1px solid color-mix(in srgb, var(--signal) 12%, transparent);
+  border-radius: 24px;
+  box-shadow: 0 14px 32px -20px color-mix(in srgb, var(--text) 12%, transparent);
+}
+.orchestr-experience
+  .flow-comparison[data-demo-design="studio"]
+  .flow-before
+  :is(.manual-message, .manual-spreadsheet, .paper-agenda) {
+  border: 0;
+  border-radius: 13px;
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--signal) 6%, transparent);
+}
+.orchestr-experience
+  .flow-comparison[data-demo-design="studio"]
+  .flow-after
+  > [data-studio-window] {
+  flex: 1;
+}
+@media (max-width: 650px) {
+  .orchestr-experience .flow-comparison[data-demo-design="studio"] .flow-before .manual-operation {
+    border-radius: 21px;
+  }
+}

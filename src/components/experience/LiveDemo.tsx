@@ -1,65 +1,67 @@
 "use client";
 
-import {
-  ArrowUpRight,
-  Bell,
-  Check,
-  CheckCheck,
-  ChevronRight,
-  Clock3,
-  FileText,
-  Mail,
-  MoreHorizontal,
-  MousePointer2,
-  Pause,
-  Play,
-  RotateCcw,
-  Send,
-} from "lucide-react";
-import { type ReactNode, useEffect, useLayoutEffect, useRef, useState } from "react";
+import { ArrowUpRight, Check, MoreHorizontal, Pause, Play, RotateCcw } from "lucide-react";
+import { type ReactNode, useEffect, useRef, useState } from "react";
 import { BrandIcon } from "@/components/brand/BrandIcon";
-import { OrchestrMark } from "@/components/brand/OrchestrLogo";
 import { selectBriefContext } from "@/lib/brief-context";
 import { demoStages } from "@/lib/demo-stages";
 import { gsap } from "@/lib/motion";
 import { type ProcessExample, processExamples } from "@/lib/process-examples";
+import { StudioPreview } from "./StudioPreview";
 
-const STEP_DURATION = 7.5;
+const STEP_DURATION = 9;
 
 function useSequence(paused: boolean) {
   const root = useRef<HTMLDivElement>(null);
   const progress = useRef<HTMLSpanElement>(null);
+  const clock = useRef<gsap.core.Timeline | null>(null);
+  const sync = useRef<() => void>(() => {});
   const phaseRef = useRef(0);
-  const manual = useRef(false);
-  const timeline = useRef<gsap.core.Timeline | null>(null);
+  const manualRef = useRef(false);
+  const options = useRef({ paused, playing: true });
   const [phase, updatePhase] = useState(0);
   const [playing, setPlaying] = useState(true);
   const [running, setRunning] = useState(false);
   const [reduced, setReduced] = useState(false);
+  const [manual, setManual] = useState(false);
   const [revision, setRevision] = useState(0);
   const select = (value: number) => {
-    manual.current = true;
+    manualRef.current = true;
+    setManual(true);
     phaseRef.current = value;
     updatePhase(value);
     setPlaying(false);
-    timeline.current?.pause().seek(value * STEP_DURATION + 0.01, true);
+    clock.current?.pause().seek((value + 1) * STEP_DURATION - 0.01, true);
+  };
+  const toggle = () => {
+    if (!playing && manualRef.current) {
+      manualRef.current = false;
+      setManual(false);
+      clock.current?.seek(phaseRef.current * STEP_DURATION + 0.01, true);
+    }
+    setPlaying(!playing);
   };
   const restart = () => {
-    manual.current = false;
+    manualRef.current = false;
+    setManual(false);
     phaseRef.current = 0;
     updatePhase(0);
     setPlaying(true);
     setRevision((value) => value + 1);
   };
   useEffect(() => {
+    options.current = { paused, playing };
+    sync.current();
+  }, [paused, playing]);
+  useEffect(() => {
     const element = root.current;
     if (!element) return;
     const media = window.matchMedia("(prefers-reduced-motion: reduce)");
     let visible = false;
-    const clock = gsap.timeline({ paused: true, repeat: -1, data: revision });
-    timeline.current = clock;
+    const sequence = gsap.timeline({ paused: true, repeat: -1, data: revision });
+    clock.current = sequence;
     for (let i = 0; i < 4; i++)
-      clock.call(
+      sequence.call(
         () => {
           phaseRef.current = i;
           updatePhase(i);
@@ -68,432 +70,66 @@ function useSequence(paused: boolean) {
         i * STEP_DURATION,
       );
     if (progress.current)
-      clock.fromTo(
+      sequence.fromTo(
         progress.current,
         { scaleX: 0 },
         { scaleX: 1, duration: 4 * STEP_DURATION, ease: "none" },
         0,
       );
-    clock.seek(phaseRef.current * STEP_DURATION + 0.01, true);
-    const sync = () => {
+    sequence.seek(phaseRef.current * STEP_DURATION + 0.01, true);
+    const synchronize = () => {
       setReduced(media.matches);
-      if (media.matches && !manual.current) {
+      if (media.matches && !manualRef.current) {
         phaseRef.current = 3;
         updatePhase(3);
       }
-      const active = visible && !document.hidden && !media.matches && !paused && playing;
+      const active =
+        visible &&
+        !document.hidden &&
+        !media.matches &&
+        !options.current.paused &&
+        options.current.playing;
       setRunning(active);
       element.dataset.running = String(active);
-      if (active) clock.play();
-      else clock.pause();
+      if (active) sequence.play();
+      else sequence.pause();
       if (media.matches && progress.current)
         gsap.set(progress.current, { scaleX: (phaseRef.current + 1) / 4 });
     };
+    sync.current = synchronize;
     const observer = new IntersectionObserver(
       ([entry]) => {
         visible = !!entry?.isIntersecting;
-        sync();
+        synchronize();
       },
-      { threshold: 0.15 },
+      { threshold: 0.08 },
     );
     observer.observe(element);
-    media.addEventListener("change", sync);
-    document.addEventListener("visibilitychange", sync);
-    sync();
+    media.addEventListener("change", synchronize);
+    document.addEventListener("visibilitychange", synchronize);
+    synchronize();
     return () => {
-      clock.kill();
-      timeline.current = null;
+      sequence.kill();
+      clock.current = null;
+      sync.current = () => {};
       observer.disconnect();
-      media.removeEventListener("change", sync);
-      document.removeEventListener("visibilitychange", sync);
+      media.removeEventListener("change", synchronize);
+      document.removeEventListener("visibilitychange", synchronize);
     };
-  }, [paused, playing, revision]);
+  }, [revision]);
   return {
     root,
     progress,
     phase,
     playing,
-    setPlaying,
     running,
     reduced,
     revision,
+    still: manual || reduced,
+    toggle,
     select,
     restart,
   };
-}
-
-function Workspace({
-  index,
-  phase,
-  hero = false,
-  still,
-  running,
-}: {
-  index: number;
-  phase: number;
-  hero?: boolean;
-  still: boolean;
-  running: boolean;
-}) {
-  const root = useRef<HTMLDivElement>(null);
-  const actionTimeline = useRef<gsap.core.Timeline | null>(null);
-  const example = processExamples[index] ?? processExamples[0];
-  const stage = demoStages[index]?.[phase];
-  useLayoutEffect(() => {
-    const element = root.current;
-    if (!element) return;
-    if (still) {
-      element.dataset.complete = "true";
-      return;
-    }
-    const context = gsap.context(() => {
-      element.dataset.complete = "false";
-      const pointer = element.querySelector(".flow-pointer");
-      const target = element.querySelector("[data-action-target]");
-      const ring = element.querySelector(".flow-click-ring");
-      const track = element.querySelector<HTMLElement>(".flow-track");
-      if (!pointer || !target || !ring || !track) return;
-      const rect = element.getBoundingClientRect();
-      const aim = target.getBoundingClientRect();
-      const x = aim.x - rect.x + aim.width * 0.6;
-      const y = aim.y - rect.y + aim.height * 0.5;
-      const fillingRecord = phase === 1 && index !== 2;
-      const clickAt = fillingRecord ? 2.45 : 1.3;
-      const transferAt = fillingRecord ? 3 : 2.5;
-      const completeAt = fillingRecord ? 4.25 : 3.75;
-      const tl = gsap.timeline({ paused: true });
-      actionTimeline.current = tl;
-      tl.set(pointer, { x: rect.width * 0.28, y: rect.height * 0.32, opacity: 0 });
-      tl.set(ring, { x, y, scale: 0.2, opacity: 0 });
-      tl.set(".flow-packet", { x: 0, opacity: 0 });
-      tl.set(".flow-toast", { opacity: 0, y: 5 });
-      tl.fromTo(
-        "[data-fill]",
-        { clipPath: "inset(0 100% 0 0)" },
-        { clipPath: "inset(0 0% 0 0)", duration: 0.65, stagger: 0.24, ease: "power2.out" },
-        fillingRecord ? 0.35 : 1.5,
-      );
-      if (element.querySelector(".flow-field > svg"))
-        tl.fromTo(
-          ".flow-field > svg",
-          { opacity: 0, scale: 0.4 },
-          { opacity: 1, scale: 1, duration: 0.3, stagger: 0.24 },
-          fillingRecord ? 0.95 : 2.1,
-        );
-      tl.to(pointer, { opacity: 1, duration: 0.25 }, 0.35);
-      tl.to(pointer, { x, y, duration: 0.85, ease: "power2.inOut" }, clickAt - 0.85);
-      tl.to(ring, { opacity: 0.8, scale: 1, duration: 0.18 }, clickAt);
-      tl.to(ring, { opacity: 0, scale: 2.1, duration: 0.65 }, clickAt + 0.18);
-      tl.to(pointer, { opacity: 0, duration: 0.35 }, clickAt + 0.6);
-      tl.to(".flow-packet", { opacity: 1, duration: 0.15 }, transferAt - 0.05);
-      tl.to(
-        ".flow-packet",
-        { x: () => track.clientWidth - 8, duration: 1.15, ease: "power1.inOut" },
-        transferAt,
-      );
-      tl.to(".flow-packet", { opacity: 0, duration: 0.2 }, transferAt + 1.15);
-      if (element.querySelector(".flow-moving-card"))
-        tl.fromTo(
-          ".flow-moving-card",
-          { x: -100, opacity: 0.4 },
-          { x: 0, opacity: 1, duration: 1.05, ease: "power3.inOut" },
-          1.7,
-        );
-      if (element.querySelector(".flow-reservation"))
-        tl.fromTo(
-          ".flow-reservation",
-          { scaleY: 0.12, opacity: 0.25, transformOrigin: "top" },
-          { scaleY: 1, opacity: 1, duration: 0.85, ease: "power3.out" },
-          1.75,
-        );
-      tl.set(element, { attr: { "data-complete": "true" } }, completeAt);
-      tl.to(".flow-toast", { opacity: 1, y: 0, duration: 0.45, ease: "power2.out" }, completeAt);
-    }, element);
-    return () => {
-      context.revert();
-      actionTimeline.current = null;
-    };
-  }, [still, phase, index]);
-  useEffect(() => {
-    if (running && !still) actionTimeline.current?.play();
-    else actionTimeline.current?.pause();
-  }, [running, still]);
-
-  if (!stage) return null;
-
-  const action = (
-    <span className="flow-action" data-action-target>
-      <span className="flow-action-ready">{example.commands[phase]}</span>
-      <span className="flow-action-done">
-        <Check size={12} />
-        {phase === 3 && index !== 0 ? "Agendado" : "Concluído"}
-      </span>
-      <ChevronRight size={13} />
-    </span>
-  );
-  return (
-    <div
-      ref={root}
-      className={`flow-workspace ${hero ? "flow-workspace-hero" : ""}`}
-      data-phase={phase}
-      data-complete={still}
-      data-running={running && !still}
-    >
-      <div className="flow-app-bar">
-        <span>
-          <OrchestrMark id={`workspace-${hero ? "hero" : index}`} />
-          <strong>A sua empresa</strong>
-        </span>
-        <span className="flow-app-mode">
-          <span />
-          EXEMPLO
-        </span>
-      </div>
-      <div className="flow-app-tabs" aria-hidden="true">
-        {example.tabs.map((tab, i) => (
-          <span key={tab} data-active={phase === i}>
-            {i < phase ? <Check size={10} /> : <span className="flow-tab-dot" />}
-            {tab}
-          </span>
-        ))}
-      </div>
-      <div className="flow-scene" key={`${index}-${phase}`}>
-        <div className="flow-scene-title">
-          <span>{String(phase + 1).padStart(2, "0")} / 04</span>
-          <strong>{example.after[phase]}</strong>
-          <span className="flow-state">
-            <i />
-            <span className="flow-state-before">
-              {phase === 0 ? "Recebido" : phase === 3 ? "Envio" : "Em curso"}
-            </span>
-            <span className="flow-state-after">
-              {phase === 0 ? "Lido" : phase === 3 && index !== 0 ? "Agendado" : "Concluído"}
-            </span>
-          </span>
-        </div>
-        {phase === 0 ? (
-          <div className="flow-email">
-            <div className="flow-email-sender">
-              <span className="flow-avatar">{index === 1 ? "EF" : "AN"}</span>
-              <div>
-                <strong>{example.sender}</strong>
-                <span>{index === 2 ? "Novo pedido de marcação" : "Caixa de entrada · Agora"}</span>
-              </div>
-              <Mail size={16} />
-            </div>
-            <h5>{example.subject}</h5>
-            <p data-fill>{example.message}</p>
-            <div className="flow-email-footer">
-              <span className="flow-pending-note">
-                <Clock3 size={12} />
-                {index === 1 ? "Venda aprovada" : "Novo pedido"}
-              </span>
-              {action}
-            </div>
-          </div>
-        ) : phase === 1 && index !== 2 ? (
-          <div className="flow-record">
-            <div className="flow-record-source">
-              <FileText size={14} />
-              <span>
-                {index === 0 ? "Dados do email da Ana" : "Dados da proposta 0182 e da ficha 0032"}
-              </span>
-              <span>Ligado</span>
-            </div>
-            <div className="flow-fields">
-              {stage.facts.map(([label, value]) => (
-                <div className="flow-field" key={label}>
-                  <span>{label}</span>
-                  <strong data-fill>{value}</strong>
-                  <Check size={12} />
-                </div>
-              ))}
-            </div>
-            <div className="flow-record-footer">
-              <span>
-                {index === 0 ? "Um registo para toda a equipa" : "Os mesmos dados, sem reescrever"}
-              </span>
-              {action}
-            </div>
-          </div>
-        ) : phase === 2 && index === 0 ? (
-          <div className="flow-production">
-            <div className="flow-board">
-              <div className="flow-board-column">
-                <span>
-                  <i />
-                  Por iniciar{" "}
-                  <b>
-                    <span className="flow-count-before">01</span>
-                    <span className="flow-count-after">00</span>
-                  </b>
-                </span>
-                <div className="flow-task-placeholder">
-                  <span className="flow-count-before">ENC-0250</span>
-                  <span className="flow-count-after">Sem pendentes</span>
-                </div>
-              </div>
-              <div className="flow-board-column">
-                <span>
-                  <i />
-                  Em produção{" "}
-                  <b>
-                    <span className="flow-count-before">12</span>
-                    <span className="flow-count-after">13</span>
-                  </b>
-                </span>
-                <div className="flow-moving-card">
-                  <span>ENC-0250</span>
-                  <strong>24 cadeiras</strong>
-                  <span>Atelier Norte · 20 nov.</span>
-                  <div>
-                    <span>PR</span>Equipa de produção
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div className="flow-record-footer">
-              <span>
-                <span className="flow-count" data-fill>
-                  12 → 13
-                </span>{" "}
-                pedidos ativos
-              </span>
-              {action}
-            </div>
-          </div>
-        ) : phase === 2 && index === 1 ? (
-          <div className="flow-invoice">
-            <div className="flow-invoice-top">
-              <FileText size={22} />
-              <div>
-                <span>DOCUMENTO PARA VALIDAÇÃO</span>
-                <strong>FT 2026 / 0148</strong>
-              </div>
-              <span className="flow-pending-note">A validar</span>
-            </div>
-            <div className="flow-invoice-client">
-              Estúdio Forma, Lda. <span>Cliente 0032</span>
-            </div>
-            <div className="flow-invoice-line">
-              <span>Serviços de instalação</span>
-              <strong data-fill>1 000,00 €</strong>
-            </div>
-            <div className="flow-invoice-line">
-              <span>IVA · 23%</span>
-              <span data-fill>230,00 €</span>
-            </div>
-            <div className="flow-invoice-total">
-              <span>Total</span>
-              <strong data-fill>1 230,00 €</strong>
-            </div>
-            <div className="flow-record-footer">
-              <span>Conferência pela equipa financeira</span>
-              {action}
-            </div>
-          </div>
-        ) : phase === 1 && index === 2 ? (
-          <div className="flow-calendar">
-            <div className="flow-calendar-days">
-              {["SEG 09", "TER 10", "QUA 11", "QUI 12", "SEX 13"].map((day, i) => (
-                <span key={day} data-selected={i === 3}>
-                  {day}
-                </span>
-              ))}
-            </div>
-            <div className="flow-calendar-slot">
-              <time>14:00</time>
-              <span>
-                Joana Ribeiro <small>Consulta de acompanhamento</small>
-              </span>
-            </div>
-            <div className="flow-calendar-slot flow-reservation">
-              <time>14:30</time>
-              <span>
-                <strong data-fill>Ana Martins</strong>
-                <small>Consulta inicial · 45 min. · até às 15:15</small>
-              </span>
-              <Check size={15} />
-            </div>
-            <div className="flow-record-footer">
-              <span>Agenda da equipa atualizada</span>
-              {action}
-            </div>
-          </div>
-        ) : (
-          <div className="flow-outbox">
-            <div className="flow-outbox-recipient">
-              {phase === 3 && index !== 0 ? <Bell size={17} /> : <Send size={17} />}
-              <div>
-                <span>
-                  {phase === 3 && index !== 0 ? "LEMBRETE POR EMAIL" : "CONFIRMAÇÃO POR EMAIL"}
-                </span>
-                <strong>
-                  {index === 1
-                    ? "Estúdio Forma"
-                    : `Ana · ${index === 0 ? "Atelier Norte" : "Consulta inicial"}`}
-                </strong>
-              </div>
-              <span className="flow-status-done">
-                <CheckCheck size={13} />
-                {phase === 3 && index !== 0 ? "Agendado" : "Enviado"}
-              </span>
-            </div>
-            <p data-fill>
-              {stage.message ||
-                (index === 1
-                  ? "O lembrete da fatura FT 2026 / 0148 fica agendado para dois dias antes do vencimento. Valor: 1 230,00 €. Prazo: 30 dias."
-                  : "Olá, Ana. Recordamos a sua consulta de quinta-feira, dia 12, às 14:30. O lembrete será enviado 24 horas antes da marcação.")}
-            </p>
-            <div className="flow-record-footer">
-              <span>
-                {phase === 3 && index !== 0 ? (
-                  <>
-                    <Clock3 size={12} />
-                    {index === 1 ? "2 dias antes do vencimento" : "24 horas antes"}
-                  </>
-                ) : (
-                  "Mensagem ligada ao registo"
-                )}
-              </span>
-              {action}
-            </div>
-          </div>
-        )}
-      </div>
-      <div className="flow-transfer">
-        <span>{stage.from}</span>
-        <div className="flow-track" aria-hidden="true">
-          <i />
-          <span className="flow-packet" />
-          <ChevronRight size={12} />
-        </div>
-        <strong>{stage.to}</strong>
-      </div>
-      <div className="flow-feedback">
-        <div className="flow-feedback-pending">
-          <span className="flow-wait-dots" aria-hidden="true">
-            <i />
-            <i />
-            <i />
-          </span>
-          <span>{running ? "A executar esta etapa…" : "Demonstração em pausa"}</span>
-        </div>
-        <div className="flow-toast">
-          <span>
-            <Check size={13} />
-          </span>
-          <strong>{example.confirmations[phase]}</strong>
-          <span className="flow-toast-end">Registado</span>
-        </div>
-      </div>
-      <div className="flow-pointer" aria-hidden="true">
-        <MousePointer2 size={23} fill="currentColor" />
-        <span>Orchestr</span>
-      </div>
-      <span className="flow-click-ring" aria-hidden="true" />
-    </div>
-  );
 }
 
 function BeforeScene({
@@ -667,12 +303,13 @@ export function HeroPreview({ paused }: { paused: boolean }) {
         </span>
         <span>DEMONSTRAÇÃO ANIMADA</span>
       </div>
-      <Workspace
+      <StudioPreview
         index={0}
         phase={sequence.phase}
         hero
-        still={paused || !sequence.playing || sequence.reduced}
+        still={sequence.still}
         running={sequence.running}
+        onComplete={() => sequence.select(sequence.phase)}
         key={`${sequence.phase}-${sequence.revision}`}
       />
       <div className="flow-hero-narration">
@@ -688,7 +325,7 @@ export function HeroPreview({ paused }: { paused: boolean }) {
           hero
           paused={paused || sequence.reduced}
           playing={sequence.playing}
-          onToggle={() => sequence.setPlaying(!sequence.playing)}
+          onToggle={sequence.toggle}
           onRestart={sequence.restart}
         />
       </div>
@@ -705,7 +342,12 @@ function DemoComparison({ index, motionPaused }: { index: number; motionPaused: 
   const example = processExamples[index] ?? processExamples[0];
   const stage = demoStages[index]?.[sequence.phase];
   return (
-    <div className="flow-comparison" ref={sequence.root} data-phase={sequence.phase}>
+    <div
+      className="flow-comparison"
+      data-demo-design="studio"
+      ref={sequence.root}
+      data-phase={sequence.phase}
+    >
       <div className="flow-demo-heading">
         <div>
           <h3>{example.title}</h3>
@@ -724,7 +366,7 @@ function DemoComparison({ index, motionPaused }: { index: number; motionPaused: 
         <PlaybackControls
           playing={sequence.playing}
           paused={motionPaused || sequence.reduced}
-          onToggle={() => sequence.setPlaying(!sequence.playing)}
+          onToggle={sequence.toggle}
           onRestart={sequence.restart}
         />
       </div>
@@ -743,11 +385,12 @@ function DemoComparison({ index, motionPaused }: { index: number; motionPaused: 
             <strong>Um processo ligado.</strong>
             <span>Ação demonstrada</span>
           </div>
-          <Workspace
+          <StudioPreview
             index={index}
             phase={sequence.phase}
-            still={motionPaused || !sequence.playing || sequence.reduced}
+            still={sequence.still}
             running={sequence.running}
+            onComplete={() => sequence.select(sequence.phase)}
             key={`${sequence.phase}-${sequence.revision}`}
           />
         </div>

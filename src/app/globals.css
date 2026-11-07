@@ -3265,7 +3265,6 @@ h2 > span {
     margin: 12px 0 16px;
     align-self: stretch;
     isolation: isolate;
-    overflow: hidden;
     overflow: clip;
   }
   .service-card h3 {
