@@ -57,3 +57,25 @@ fit at 1280×720 still pass. Four whole-page and 44 demo/legal axe audits report
 violations. The optimized complete flow checks nonce CSP, header navigation,
 animated transfer/completion, the local contact result, five legal routes, preference
 reset and the mobile footer without errors, external application requests or POSTs.
+
+## Service artwork and mock edge follow-up
+
+A remaining mobile rule placed each service illustration beside the heading, in a
+120 px grid row. The browser graphic extended roughly 31 px beyond that row into
+the paragraph. Remove the two-column placement and conflicting height override:
+each illustration now reserves its own 176 px row above the heading, clips its
+own decorative paint and leaves explicit spacing before the copy. A common minimum
+height also accommodates the desktop parallax range on narrower screens.
+
+Replace perspective/3D tilts with restrained 2D rotations and remove forced backface
+compositing from the decorative windows. Main demo windows use native round corners
+(32 px desktop / 28 px phone, with corresponding 18/16 px inset corners) and a lightly
+feathered contour instead of a hard perimeter. No blur filter is applied to content;
+text, records and controls remain sharp, and the Safira palette is unchanged.
+
+Verification measures all three illustrations and their individual painted bounds
+against the heading and paragraph in 30 theme/width views, including the 700/701 px
+breakpoint and widths from 320 to 1440 px. Captures at device pixel ratios 1, 2 and 3
+cover both themes. Four whole-page axe audits pass. Optimized-build checks also
+exercise unpaused scroll motion and the service-to-contact flow in both themes on
+phone and desktop, with no illustration/text overlap, page overflow or browser errors.

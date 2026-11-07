@@ -689,10 +689,11 @@ h2 > span {
 }
 .service-art {
   height: 190px;
+  min-height: 176px;
   position: relative;
   margin-top: 8px;
   margin-bottom: 6px;
-  perspective: 700px;
+  perspective: none;
 }
 .art-app {
   position: absolute;
@@ -705,7 +706,7 @@ h2 > span {
   border: 1px solid #a8aeae;
   box-shadow: -12px 17px 18px -15px #39425150;
   padding: 11px;
-  transform: rotateX(20deg) rotateY(-20deg) rotateZ(-6deg);
+  transform: rotate(-4deg);
   transition: transform 0.6s;
 }
 .art-app-back {
@@ -713,6 +714,7 @@ h2 > span {
   top: 18px;
   opacity: 0.5;
   background: #d8dfdf;
+  transform: rotate(-7deg);
 }
 .art-app > div:first-child {
   width: 24px;
@@ -773,7 +775,7 @@ h2 > span {
   height: 48px;
   z-index: 1;
   top: 64px;
-  transform: rotate(-8deg);
+  transform: rotate(-4deg);
 }
 .node-a {
   left: 10%;
@@ -816,7 +818,7 @@ h2 > span {
   border: 1px solid #aab1ba;
   background: #f8f8f4;
   padding: 11px;
-  transform: rotateX(10deg) rotateY(-17deg) rotateZ(-5deg);
+  transform: rotate(-4deg);
   box-shadow: -9px 18px 20px -20px #2c3759;
 }
 .browser-dots {
@@ -3250,23 +3252,25 @@ h2 > span {
     border-bottom: 1px solid var(--line-theme) !important;
     padding: 25px 0 23px !important;
     display: grid;
-    grid-template-columns: 1fr 1fr;
-    column-gap: 25px;
+    grid-template-columns: minmax(0, 1fr);
+    column-gap: 0;
   }
   .service-card-top {
     grid-column: 1 / -1;
   }
   .service-art {
-    grid-column: 2;
-    grid-row: 2 / 5;
-    height: 170px;
-    margin-top: 15px;
-    margin-bottom: 0;
-    align-self: center;
+    grid-column: 1;
+    grid-row: auto;
+    height: 176px;
+    margin: 12px 0 16px;
+    align-self: stretch;
+    isolation: isolate;
+    overflow: hidden;
+    overflow: clip;
   }
   .service-card h3 {
     grid-column: 1;
-    margin-top: 28px;
+    margin-top: 0;
     font-size: 24px;
     line-height: 1.12;
   }
@@ -3926,7 +3930,7 @@ h2 > span {
     height: 335px;
   }
   .service-card {
-    column-gap: 15px;
+    column-gap: 0;
   }
   .service-card h3 {
     font-size: 21px;
@@ -4061,7 +4065,7 @@ h2 > span {
     width: 36px;
   }
   .service-card {
-    column-gap: 15px;
+    column-gap: 0;
   }
   .service-card > p {
     font-size: 12px;
@@ -4073,14 +4077,9 @@ h2 > span {
     grid-column: 1 / -1;
     max-width: 100%;
   }
-  .service-art {
-    grid-row: 2;
-    height: 120px;
-    margin: 0;
-  }
   .service-card h3 {
-    align-self: center;
-    margin-top: 15px;
+    align-self: start;
+    margin-top: 0;
   }
   .demo-steps > button {
     min-height: 44px;
