@@ -5,6 +5,10 @@ import { headers } from "next/headers";
 import type { ReactNode } from "react";
 import { isLive, site } from "@/lib/site";
 import "./globals.css";
+import "./refinements.css";
+import "./themes.css";
+import "./polish.css";
+import "./safira.css";
 
 /* Mona Sans: one variable family. Light display weights, regular for reading, semibold labels. */
 const mona = Mona_Sans({
@@ -30,7 +34,7 @@ const nohemi = localFont({
   display: "swap",
 });
 
-const TITLE = `${site.name} | Software à medida para PME em Portugal`;
+const TITLE = `${site.name} | Software à medida e automação para empresas`;
 
 export const metadata: Metadata = {
   metadataBase: new URL(site.url),
@@ -52,24 +56,24 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: "#fbfcfb",
+  themeColor: "#0a0f18",
   colorScheme: "light dark",
 };
 
 export default async function RootLayout({ children }: { children: ReactNode }) {
-  // Set by src/proxy.ts; the CSP only lets scripts carrying this nonce run.
+  // Keep rendering per request: Next must stamp its scripts with the proxy's CSP nonce.
   const nonce = (await headers()).get("x-nonce") ?? undefined;
   return (
     <html
       lang="pt-PT"
-      className={`${mona.variable} ${mono.variable} ${nohemi.variable}`}
+      data-theme="dark"
       suppressHydrationWarning
+      className={`${mona.variable} ${mono.variable} ${nohemi.variable}`}
     >
       <head>
-        {/* Scroll reveals hide content only when JS is available to show it again. */}
         <script nonce={nonce}>
           {
-            "document.documentElement.classList.add('js');try{var t=localStorage.getItem('theme');document.documentElement.dataset.theme=t==='dark'?'dark':'light'}catch(e){document.documentElement.dataset.theme='light'}"
+            "try{var t=localStorage.getItem('orchestr-theme')||localStorage.getItem('theme');document.documentElement.dataset.theme=t==='light'||t==='dark'?t:matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light'}catch(e){document.documentElement.dataset.theme='dark'}"
           }
         </script>
       </head>

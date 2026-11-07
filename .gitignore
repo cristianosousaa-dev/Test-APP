@@ -16,3 +16,6 @@ test-results/
 
 # graphify output (rebuilds for free)
 graphify-out/
+
+# Local redesign research, browser QA and temporary assets
+work/

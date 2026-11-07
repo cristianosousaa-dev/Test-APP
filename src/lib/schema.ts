@@ -1,4 +1,4 @@
-import { FAQS } from "@/components/sections/Faq";
+import { FAQS } from "@/lib/faq";
 import { founder, plans, site } from "@/lib/site";
 
 /*
