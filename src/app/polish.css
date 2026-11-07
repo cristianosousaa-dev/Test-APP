@@ -1169,6 +1169,12 @@
 }
 
 /* One short conversation, with the source service captured automatically. */
+.contact-form-panel {
+  display: block;
+  position: relative;
+  width: 100%;
+  min-width: 0;
+}
 .conversation-card {
   border: 1px solid var(--line-theme);
   border-radius: 17px;
@@ -4678,5 +4684,34 @@ html:has(.legal-shell) {
     width: 100%;
     height: 100%;
     object-fit: cover;
+  }
+}
+
+/* Keep the essential form in a solid, untransformed paint layer on touch screens. */
+@media (max-width: 959px), (pointer: coarse) {
+  .orchestr-experience {
+    overflow: visible;
+  }
+  .contact-layout {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .contact-form-panel {
+    flex: 0 0 auto;
+    height: auto;
+    opacity: 1;
+    visibility: visible;
+    transform: none;
+  }
+  .contact-form-panel .conversation-card {
+    display: block;
+    position: relative;
+    width: 100%;
+    overflow: visible;
+    background: var(--surface);
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    corner-shape: round;
   }
 }
